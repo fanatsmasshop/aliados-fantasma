@@ -1,0 +1,14 @@
+ALIADOS FANTASMA — PÁGINAS CON LOGO OPTIMIZADO
+
+Sube juntos:
+- index.html
+- perfil.html
+- carpeta assets
+
+Pesos:
+Original: 623.4 KB
+WebP principal: 130.4 KB
+WebP pequeño: 41.8 KB
+Favicon: 21.4 KB
+
+No se usó Base64 porque aumenta el peso del contenido y dificulta reutilizar la imagen.
