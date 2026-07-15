@@ -1,14 +1,13 @@
-ALIADOS FANTASMA — PÁGINAS CON LOGO OPTIMIZADO
+ALIADOS FANTASMA — SIN CARPETAS
 
-Sube juntos:
-- index.html
-- perfil.html
-- carpeta assets
+Sube estos cinco archivos directamente a la raíz del repositorio:
 
-Pesos:
-Original: 623.4 KB
-WebP principal: 130.4 KB
-WebP pequeño: 41.8 KB
-Favicon: 21.4 KB
+1. index.html
+2. perfil.html
+3. logo-aliados.webp
+4. logo-aliados-small.webp
+5. favicon.png
 
-No se usó Base64 porque aumenta el peso del contenido y dificulta reutilizar la imagen.
+No necesitas crear ninguna carpeta.
+
+Las rutas de las imágenes ya están corregidas para funcionar desde la raíz.
