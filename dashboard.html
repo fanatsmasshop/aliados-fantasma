@@ -1,1 +1,60 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard | Aliados Fantasma Demo</title><link rel="stylesheet" href="app.css"></head><body><div class="demo-banner">🚧 DEMO PÚBLICA v0.1 — Algunas funciones siguen en desarrollo.</div><div class="app-layout"><aside id="sidebar" class="sidebar"><a class="sidebar-brand" href="dashboard.html"><span class="brand-mark small">AF</span><span><strong>Aliados Fantasma</strong><small>Administración</small></span></a><nav class="nav-list"><a class="nav-link active" href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav-link " href="negocios.html"><span>◇</span>Negocios</a><a class="nav-link " href="solicitudes.html"><span>✓</span>Solicitudes</a><a class="nav-link " href="promociones.html"><span>★</span>Promociones</a></nav><div class="sidebar-footer"><button id="logout-button" class="button secondary full">Cerrar sesión</button></div></aside><div><header class="topbar"><button id="menu-button" class="icon-button menu-button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Dashboard</h1></div><div class="user-chip"><span class="user-avatar" id="user-initial">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header><main class="content"><section class="page-head"><div><p class="eyebrow">RESUMEN GENERAL</p><h2>Centro de control</h2><p class="muted">Datos reales desde Supabase.</p></div><button id="refresh" class="button secondary">Actualizar</button></section><section class="stats-grid"><article class="stat-card"><p>Negocios</p><strong id="bc">—</strong><small id="ba" class="muted"></small></article><article class="stat-card"><p>Solicitudes pendientes</p><strong id="rc">—</strong></article><article class="stat-card"><p>Promociones activas</p><strong id="pc">—</strong></article><article class="stat-card"><p>Categorías</p><strong id="cc">—</strong></article></section><section class="dashboard-grid"><article class="panel"><h2>Solicitudes recientes</h2><div id="recent-r"></div></article><article class="panel"><h2>Últimos negocios</h2><div id="recent-b"></div></article></section></main></div></div><div id="overlay" class="overlay hidden"></div><script type="module" src="dashboard.js"></script></body></html>
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Dashboard | Aliados Fantasma Demo</title>
+<link href="app.css" rel="stylesheet"/>
+<link href="aliados-fantasma-icono.png" rel="icon" type="image/png"/><link href="logos.css" rel="stylesheet"/></head>
+<body>
+<div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+<a class="sidebar-brand" href="dashboard.html">
+<img alt="Aliados Fantasma" class="af-sidebar-logo" src="aliados-fantasma-icono.webp"/>
+<span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span>
+</a>
+<nav class="nav-list">
+<a class="nav-link active" href="dashboard.html"><span>▦</span>Dashboard</a>
+<a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
+<a class="nav-link" href="solicitudes.html"><span>✓</span>Solicitudes</a>
+<a class="nav-link" href="promociones.html"><span>★</span>Promociones</a>
+</nav>
+<div class="sidebar-footer" style="display:grid;gap:10px">
+<a class="button secondary full" href="index.html" rel="noopener" target="_blank">🌐 Ver sitio público</a>
+<button class="button secondary full" id="logout-button">Cerrar sesión</button>
+</div>
+</aside>
+<div class="app-main">
+<header class="topbar">
+<button class="icon-button menu-button" id="menu-button">☰</button>
+<div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Dashboard</h1></div>
+<div class="user-chip">
+<span class="user-avatar" id="user-initial">A</span>
+<span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span>
+</div>
+</header>
+<main class="content">
+<section class="page-head">
+<div><p class="eyebrow">RESUMEN GENERAL</p><h2>Centro de control</h2><p class="muted">Datos reales desde Supabase.</p></div>
+<button class="button secondary" id="refresh-button">Actualizar</button>
+</section>
+<div class="notice danger hidden" id="warning"></div>
+<section class="stats-grid">
+<article class="stat-card"><div class="stat-icon">◇</div><div><p>Negocios</p><strong id="business-count">—</strong><small id="active-business-count">— activos</small></div></article>
+<article class="stat-card"><div class="stat-icon">✓</div><div><p>Solicitudes pendientes</p><strong id="request-count">—</strong></div></article>
+<article class="stat-card"><div class="stat-icon">★</div><div><p>Promociones activas</p><strong id="promotion-count">—</strong></div></article>
+<article class="stat-card"><div class="stat-icon">▤</div><div><p>Categorías</p><strong id="category-count">—</strong></div></article>
+</section>
+<section class="dashboard-grid">
+<article class="panel"><h2>Solicitudes recientes</h2><div class="empty-state" id="requests-list">Cargando…</div></article>
+<article class="panel"><h2>Últimos negocios</h2><div class="empty-state" id="business-list">Cargando…</div></article>
+</section>
+</main>
+</div>
+</div>
+<div class="overlay hidden" id="overlay"></div>
+<script src="dashboard.js" type="module"></script>
+</body>
+</html>

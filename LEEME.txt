@@ -1,13 +1,28 @@
-ALIADOS FANTASMA - RED SOCIAL LOCAL - ETAPA 1
+ALIADOS FANTASMA — LOGOS INTEGRADOS
 
-Sube todos los archivos a la raíz de GitHub.
+Archivos para reemplazar:
+- index.html
+- login.html
+- dashboard.html
+- negocios.html
+- solicitudes.html
+- promociones.html
+- perfil.html
 
-Páginas:
-index.html = feed
-explorar.html = categorías
-negocios.html = directorio
-fantasmas-bikers-shop.html = perfil oficial
-carnitas-el-compadre.html = demo ficticia
-registro/login/publicar/panel/admin = módulos en desarrollo
+Archivos nuevos para subir:
+- logos.css
+- aliados-fantasma-icono.webp
+- aliados-fantasma-icono.png
+- aliados-fantasma-logo.webp
+- aliados-fantasma-logo.png
 
-La Etapa 2 conectará Supabase para cuentas y publicaciones reales.
+No se modificaron:
+- JavaScript
+- config.js
+- Supabase
+- Base de datos
+- app.css
+- inicio.css
+
+La versión WebP se usa dentro de las páginas por ser más ligera.
+La versión PNG queda incluida como respaldo y para favicon.

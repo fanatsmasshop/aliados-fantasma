@@ -1,1 +1,47 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Solicitudes | Aliados Fantasma Demo</title><link rel="stylesheet" href="app.css"></head><body><div class="demo-banner">🚧 DEMO PÚBLICA v0.1 — Algunas funciones siguen en desarrollo.</div><div class="app-layout"><aside id="sidebar" class="sidebar"><a class="sidebar-brand" href="dashboard.html"><span class="brand-mark small">AF</span><span><strong>Aliados Fantasma</strong><small>Administración</small></span></a><nav class="nav-list"><a class="nav-link " href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav-link " href="negocios.html"><span>◇</span>Negocios</a><a class="nav-link active" href="solicitudes.html"><span>✓</span>Solicitudes</a><a class="nav-link " href="promociones.html"><span>★</span>Promociones</a></nav><div class="sidebar-footer"><button id="logout-button" class="button secondary full">Cerrar sesión</button></div></aside><div><header class="topbar"><button id="menu-button" class="icon-button menu-button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Solicitudes</h1></div><div class="user-chip"><span class="user-avatar" id="user-initial">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header><main class="content"><section class="page-head"><div><p class="eyebrow">MODERACIÓN</p><h2>Solicitudes de cambio</h2></div><button id="refresh" class="button secondary">Actualizar</button></section><div class="panel"><div class="toolbar"><input id="search" class="search" placeholder="Buscar"><select id="state"><option value="">Todos</option><option>pendiente</option><option>en_revision</option><option>requiere_cambios</option><option>aprobada</option><option>rechazada</option></select></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Solicitud</th><th>Negocio</th><th>Recurso</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="body"></tbody></table></div></div><div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><h2 id="title">Solicitud</h2><button id="close" class="icon-button">✕</button></div><h3>Datos actuales</h3><pre id="current" class="detail-card"></pre><h3>Datos propuestos</h3><pre id="proposed" class="detail-card"></pre><label><span>Comentario</span><textarea id="comment"></textarea></label><div class="actions"><button id="changes" class="button secondary">Solicitar cambios</button><button id="reject" class="button danger">Rechazar</button><button id="approve" class="button success">Aprobar</button></div></div></div></main></div></div><div id="overlay" class="overlay hidden"></div><script type="module" src="solicitudes.js"></script></body></html>
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Solicitudes | Aliados Fantasma Demo</title>
+<link href="app.css" rel="stylesheet"/>
+<link href="aliados-fantasma-icono.png" rel="icon" type="image/png"/><link href="logos.css" rel="stylesheet"/></head>
+<body>
+<div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+<a class="sidebar-brand" href="dashboard.html">
+<img alt="Aliados Fantasma" class="af-sidebar-logo" src="aliados-fantasma-icono.webp"/>
+<span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span>
+</a>
+<nav class="nav-list"><a class="nav-link" href="dashboard.html"><span>▦</span>Dashboard</a>
+<a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
+<a class="nav-link active" href="solicitudes.html"><span>✓</span>Solicitudes</a>
+<a class="nav-link" href="promociones.html"><span>★</span>Promociones</a></nav>
+<div class="sidebar-footer" style="display:grid;gap:10px">
+<a class="button secondary full" href="index.html" rel="noopener" target="_blank">🌐 Ver sitio público</a>
+<button class="button secondary full" id="logout-button">Cerrar sesión</button>
+</div>
+</aside>
+<div class="app-main">
+<header class="topbar">
+<button class="icon-button menu-button" id="menu-button">☰</button>
+<div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Solicitudes</h1></div>
+<div class="user-chip">
+<span class="user-avatar" id="user-initial">A</span>
+<span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span>
+</div>
+</header>
+<main class="content">
+<section class="page-head">
+<div><p class="eyebrow">MODERACIÓN</p><h2>Solicitudes de cambio</h2><p class="muted">Módulo en demostración.</p></div>
+</section>
+<div class="panel"><div class="empty-state">El flujo completo de aprobación se integrará en una siguiente versión.</div></div>
+</main>
+</div>
+</div>
+<div class="overlay hidden" id="overlay"></div>
+<script src="solicitudes.js" type="module"></script>
+</body>
+</html>

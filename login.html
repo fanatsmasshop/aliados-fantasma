@@ -1,1 +1,90 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Iniciar sesión | Aliados Fantasma Demo</title><link rel="stylesheet" href="app.css"></head><body class="login-page"><div class="demo-banner">🚧 DEMO PÚBLICA v0.1 — Algunas funciones siguen en desarrollo.</div><main class="login-shell"><section class="login-brand"><div class="brand-mark">AF</div><p class="eyebrow">RED LOCAL DE NEGOCIOS</p><h1>Aliados Fantasma</h1><p>Administra negocios, promociones y solicitudes desde un solo lugar.</p><div class="feature-list"><span>Perfiles públicos</span><span>Revisión de cambios</span><span>Moderación</span></div></section><section class="login-card"><p class="eyebrow">PANEL PRIVADO</p><h2>Iniciar sesión</h2><form id="login-form" class="form-stack"><label><span>Correo</span><input id="email" type="email" required></label><label><span>Contraseña</span><div class="password-field"><input id="password" type="password" required><button id="toggle-password" type="button" class="icon-button">Ver</button></div></label><button id="login-button" class="button primary full"><span>Entrar al panel</span></button><p id="login-message" class="form-message"></p></form></section></main><script type="module" src="login.js"></script></body></html>
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Iniciar sesión | Aliados Fantasma Demo</title>
+<link href="app.css" rel="stylesheet"/>
+<style>
+    .page-back-link{
+      position:fixed;
+      top:52px;
+      left:24px;
+      z-index:120;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:.7rem .9rem;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      background:rgba(16,19,27,.88);
+      color:#f5f7fb;
+      font-size:.85rem;
+      font-weight:700;
+      backdrop-filter:blur(12px);
+      transition:transform .18s ease,border-color .18s ease;
+    }
+    .page-back-link:hover{
+      transform:translateY(-1px);
+      border-color:rgba(168,85,247,.5);
+    }
+    @media(max-width:600px){
+      .page-back-link{
+        position:static;
+        margin:14px 12px 0;
+      }
+    }
+  </style>
+<link href="aliados-fantasma-icono.png" rel="icon" type="image/png"/><link href="logos.css" rel="stylesheet"/></head>
+<body>
+<div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Versión en desarrollo de Aliados Fantasma.</small></div>
+<a aria-label="Volver al sitio público" class="page-back-link" href="index.html">
+    ← Volver al sitio
+  </a>
+<div class="login-page">
+<main class="login-shell">
+<section class="login-brand">
+<img alt="Aliados Fantasma" class="af-login-logo" src="aliados-fantasma-logo.webp"/>
+<p class="eyebrow">RED LOCAL DE NEGOCIOS</p>
+<h1>Aliados Fantasma</h1>
+<p class="login-intro">Administra negocios, promociones y solicitudes de edición desde un solo lugar.</p>
+<div class="feature-list">
+<span>Perfiles públicos</span>
+<span>Revisión de cambios</span>
+<span>Moderación centralizada</span>
+</div>
+</section>
+<section class="login-card">
+<div>
+<p class="eyebrow">PANEL PRIVADO</p>
+<h2>Iniciar sesión</h2>
+<p class="muted">Ingresa con una cuenta autorizada.</p>
+</div>
+<div class="notice warning hidden" id="config-warning">
+          Configura <code>config.js</code> antes de publicar.
+        </div>
+<form class="form-stack" id="login-form">
+<label>
+<span>Correo electrónico</span>
+<input autocomplete="email" id="email" required="" type="email"/>
+</label>
+<label>
+<span>Contraseña</span>
+<div class="password-field">
+<input autocomplete="current-password" id="password" required="" type="password"/>
+<button class="icon-button" id="toggle-password" type="button">Ver</button>
+</div>
+</label>
+<button class="button primary full" id="login-button">
+<span>Entrar al panel</span>
+</button>
+<p class="form-message" id="login-message"></p>
+</form>
+<p class="login-help">Esta es una demo pública. El registro de usuarios no está habilitado.</p>
+</section>
+</main>
+</div>
+<script src="login.js" type="module"></script>
+</body>
+</html>

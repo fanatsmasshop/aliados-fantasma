@@ -1,0 +1,66 @@
+/* Identidad visual oficial de Aliados Fantasma */
+.af-icon{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.af-brand-icon{
+  width:46px;
+  height:46px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));
+}
+.af-brand-icon.small{
+  width:44px;
+  height:44px;
+}
+.af-sidebar-logo{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  flex:0 0 auto;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));
+}
+.af-login-logo{
+  width:min(410px,100%);
+  max-height:330px;
+  margin:0 auto 20px;
+  display:block;
+  object-fit:contain;
+  filter:drop-shadow(0 18px 35px rgba(0,0,0,.35));
+}
+.af-hero-logo{
+  width:min(380px,76vw);
+  max-height:270px;
+  margin:0 0 24px;
+  display:block;
+  object-fit:contain;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,.3));
+}
+.af-preview-icon{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:8px;
+}
+.af-profile-nav-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+}
+.af-profile-nav-brand img{
+  width:38px;
+  height:38px;
+  object-fit:contain;
+}
+.af-footer-logo{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+}
+@media(max-width:800px){
+  .af-login-logo{max-height:240px}
+  .af-hero-logo{width:min(300px,72vw);margin-left:auto;margin-right:auto}
+}
