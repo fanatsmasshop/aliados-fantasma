@@ -15,16 +15,8 @@ body {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     background:
-        radial-gradient(
-            circle at top left,
-            rgba(7, 71, 255, 0.20),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at top right,
-            rgba(255, 45, 154, 0.18),
-            transparent 32%
-        ),
+        radial-gradient(circle at top left, rgba(7, 71, 255, 0.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(255, 45, 154, 0.16), transparent 32%),
         #07080c;
 }
 
@@ -50,13 +42,13 @@ img {
 .encabezado {
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: rgba(7, 8, 12, 0.90);
+    z-index: 20;
+    background: rgba(7, 8, 12, 0.92);
     border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .encabezado-contenido {
-    min-height: 75px;
+    min-height: 74px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -70,19 +62,20 @@ img {
 }
 
 .marca img {
-    width: 55px;
-    height: 55px;
+    width: 54px;
+    height: 54px;
     object-fit: contain;
 }
 
-.marca strong {
+.marca strong,
+.marca small {
     display: block;
 }
 
 .marca small {
-    display: block;
     margin-top: 3px;
     color: #b8bbc8;
+    font-size: 12px;
 }
 
 .menu {
@@ -96,19 +89,45 @@ img {
 
 
 /* ================================================= */
-/* INICIO */
+/* BOTONES */
 /* ================================================= */
 
-.inicio {
-    padding: 80px 0;
+.botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
 }
 
-.inicio-contenido {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+.boton {
+    min-height: 50px;
+    padding: 0 20px;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: bold;
 }
+
+.boton-principal {
+    background: linear-gradient(135deg, #0747ff, #ff2d9a);
+}
+
+.boton-secundario {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.boton-whatsapp {
+    background: #25d366;
+    color: #07130b;
+}
+
+
+/* ================================================= */
+/* ETIQUETAS */
+/* ================================================= */
 
 .etiqueta,
 .subtitulo {
@@ -122,9 +141,25 @@ img {
     font-weight: bold;
 }
 
+
+/* ================================================= */
+/* INDEX - INICIO */
+/* ================================================= */
+
+.inicio {
+    padding: 78px 0;
+}
+
+.inicio-contenido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
 .inicio h1 {
     margin: 20px 0;
-    font-size: 65px;
+    font-size: 64px;
     line-height: 1;
 }
 
@@ -135,53 +170,8 @@ img {
 .inicio-texto > p {
     color: #b8bbc8;
     font-size: 20px;
-    line-height: 1.6;
+    line-height: 1.65;
 }
-
-
-/* ================================================= */
-/* BOTONES */
-/* ================================================= */
-
-.botones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 28px;
-}
-
-.boton {
-    display: inline-flex;
-    min-height: 52px;
-    padding: 0 20px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.boton-principal {
-    background: linear-gradient(
-        135deg,
-        #0747ff,
-        #ff2d9a
-    );
-}
-
-.boton-secundario {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.boton-completo {
-    width: 100%;
-}
-
-
-/* ================================================= */
-/* VISTA PREVIA */
-/* ================================================= */
 
 .vista-previa {
     padding: 18px;
@@ -190,47 +180,20 @@ img {
     border-radius: 28px;
 }
 
-.telefono {
-    overflow: hidden;
-    background: #0a0b10;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 22px;
-}
-
-.telefono-superior {
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    color: #b8bbc8;
-    font-size: 12px;
-}
-
-.telefono-contenido {
-    padding: 22px;
-}
-
-.logo-vista-previa {
-    width: 150px;
+.vista-previa img {
+    width: 180px;
     display: block;
     margin: 0 auto 20px;
 }
 
-.telefono-contenido p {
+.vista-previa p {
     color: #b8bbc8;
     line-height: 1.6;
 }
 
-.promocion {
-    margin: 18px 0;
-    padding: 16px;
-    background: rgba(255, 45, 154, 0.10);
-    border: 1px solid rgba(255, 45, 154, 0.25);
-    border-radius: 16px;
-}
-
 
 /* ================================================= */
-/* SECCIONES */
+/* SECCIONES GENERALES */
 /* ================================================= */
 
 .seccion {
@@ -243,20 +206,15 @@ img {
 }
 
 .titulo-seccion h2 {
-    margin: 15px 0;
+    margin: 12px 0;
     font-size: 42px;
 }
 
 .titulo-seccion p {
     color: #b8bbc8;
     font-size: 17px;
-    line-height: 1.6;
+    line-height: 1.65;
 }
-
-
-/* ================================================= */
-/* TARJETAS */
-/* ================================================= */
 
 .tarjetas {
     display: grid;
@@ -265,123 +223,197 @@ img {
 }
 
 .tarjeta {
-    padding: 25px;
+    padding: 24px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 22px;
+}
+
+.tarjeta p {
+    color: #b8bbc8;
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* TARJETAS DE NEGOCIOS */
+/* ================================================= */
+
+.negocios {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.negocio {
+    overflow: hidden;
     background: rgba(18, 20, 29, 0.88);
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 24px;
 }
 
-.icono {
-    font-size: 32px;
+.negocio img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
 }
 
-.tarjeta h3 {
-    margin: 15px 0 10px;
+.negocio-contenido {
+    padding: 22px;
 }
 
-.tarjeta p {
-    margin: 0;
+.negocio-contenido p {
     color: #b8bbc8;
     line-height: 1.6;
 }
 
 
 /* ================================================= */
-/* MUESTRA */
+/* PERFIL DEL NEGOCIO */
 /* ================================================= */
 
-.muestra {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 25px;
-    padding: 24px;
-    background: rgba(18, 20, 29, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 28px;
+.perfil-portada {
+    padding: 35px 0 25px;
 }
 
-.muestra-imagen {
-    min-height: 360px;
-    padding: 30px;
+.portada-negocio {
+    min-height: 430px;
+    margin-top: 16px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background-size: cover;
+    background-position: center;
+}
+
+.portada-capa {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5, 6, 9, 0.97), rgba(5, 6, 9, 0.18));
+}
+
+.portada-contenido {
+    position: absolute;
+    right: 28px;
+    bottom: 28px;
+    left: 28px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(7, 71, 255, 0.40),
-            transparent 45%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(255, 45, 154, 0.35),
-            transparent 40%
-        ),
-        #11131b;
+    align-items: flex-end;
+    gap: 22px;
+}
+
+.logo-negocio {
+    width: 150px;
+    height: 150px;
+    padding: 10px;
+    object-fit: contain;
+    background: rgba(10, 12, 18, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 26px;
+}
+
+.portada-texto h1 {
+    margin: 12px 0 8px;
+    font-size: 60px;
+    line-height: 1;
+}
+
+.portada-texto p {
+    margin: 0;
+    color: #d4d7e3;
+    font-size: 18px;
+}
+
+.perfil-columnas {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 20px;
+}
+
+.bloque {
+    padding: 25px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 22px;
 }
 
-.muestra-imagen img {
-    width: 300px;
+.bloque + .bloque {
+    margin-top: 18px;
 }
 
-.muestra-informacion p {
+.bloque p {
     color: #b8bbc8;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
-.datos {
-    margin: 20px 0;
+.lista-productos {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
 
-.dato {
+.producto {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 14px;
 }
 
-.dato small {
+.promocion {
+    padding: 18px;
+    background: rgba(255, 45, 154, 0.10);
+    border: 1px solid rgba(255, 45, 154, 0.25);
+    border-radius: 16px;
+}
+
+.datos-contacto {
+    display: grid;
+    gap: 10px;
+}
+
+.dato-contacto {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+}
+
+.dato-contacto small {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     color: #b8bbc8;
 }
 
-
-/* ================================================= */
-/* LLAMADO FINAL */
-/* ================================================= */
-
-.seccion-final {
-    padding: 50px 0 80px;
+.botones-contacto {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
+.botones-contacto a {
+    padding: 14px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+}
+
+
+/* ================================================= */
+/* LLAMADO FINAL Y FOOTER */
+/* ================================================= */
+
 .llamado {
-    padding: 40px;
+    padding: 38px;
     text-align: center;
     background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 28px;
 }
-
-.llamado h2 {
-    margin-top: 0;
-    font-size: 40px;
-}
-
-.llamado p {
-    color: #b8bbc8;
-    font-size: 17px;
-    line-height: 1.6;
-}
-
-
-/* ================================================= */
-/* PIE DE PÁGINA */
-/* ================================================= */
 
 .pie {
     padding: 30px 0;
@@ -397,42 +429,56 @@ img {
 
 
 /* ================================================= */
-/* CELULARES Y TABLETAS */
+/* RESPONSIVE */
 /* ================================================= */
 
 @media (max-width: 850px) {
-
     .menu {
         display: none;
     }
 
     .inicio-contenido,
-    .muestra {
+    .perfil-columnas,
+    .negocios {
         grid-template-columns: 1fr;
-    }
-
-    .inicio h1 {
-        font-size: 48px;
     }
 
     .tarjetas {
         grid-template-columns: 1fr;
     }
 
+    .inicio h1 {
+        font-size: 48px;
+    }
 }
 
 @media (max-width: 550px) {
-
     .contenedor {
         width: 92%;
     }
 
-    .inicio {
-        padding: 50px 0;
+    .inicio h1,
+    .portada-texto h1 {
+        font-size: 40px;
     }
 
-    .inicio h1 {
-        font-size: 39px;
+    .portada-negocio {
+        min-height: 540px;
+    }
+
+    .portada-contenido {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo-negocio {
+        width: 120px;
+        height: 120px;
+    }
+
+    .lista-productos,
+    .botones-contacto {
+        grid-template-columns: 1fr;
     }
 
     .botones {
@@ -443,12 +489,7 @@ img {
         width: 100%;
     }
 
-    .datos {
-        grid-template-columns: 1fr;
-    }
-
     .pie-contenido {
         flex-direction: column;
     }
-
 }

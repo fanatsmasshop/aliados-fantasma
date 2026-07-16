@@ -1,37 +1,46 @@
-ALIADOS FANTASMA - PERFIL BÁSICO DE FANTASMAS
+ALIADOS FANTASMA - FASE 1 COMPLETA
 
-ARCHIVOS INCLUIDOS:
+ARCHIVOS PRINCIPALES:
 
-- perfil.html
-- perfil.css
+- index.html
+- plantilla.html
+- carnitas-el-compadre.html
+- fantasmas-bikers-shop.html
+- style.css
 - script.js
+
+IMÁGENES:
+
+- logo-aliados.webp
+- favicon.png
+- logo-carnitas.webp
+- portada-carnitas.webp
 - logo-fantasmas.webp
 
-PARA USARLO:
+CÓMO CREAR UN NUEVO NEGOCIO:
 
-1. Sube perfil.html.
-2. Sube perfil.css.
-3. Sube logo-fantasmas.webp.
-4. Conserva style.css del index.
-5. Conserva logo-aliados-small.webp.
-6. Conserva favicon.png.
+1. Haz una copia de plantilla.html.
+2. Renombra el archivo:
+   ejemplo: cafeteria-luna.html
+3. Abre el archivo y busca:
+   EDITAR AQUÍ
+4. Cambia:
+   - Nombre
+   - Categoría
+   - Descripción
+   - Logo
+   - Portada
+   - Productos
+   - Promoción
+   - Horarios
+   - WhatsApp
+   - Redes
+   - Ubicación
+5. Sube también el logo y portada del negocio.
+6. Agrega una tarjeta en index.html dentro de:
+   NEGOCIOS DE EJEMPLO
 
 IMPORTANTE:
 
-Agrega esta línea en el <head> de perfil.html si no aparece:
-
-<link rel="stylesheet" href="perfil.css">
-
-El archivo ya viene preparado con comentarios como:
-
-EDITAR AQUÍ:
-
-Busca esas palabras dentro del código para encontrar rápidamente:
-- Nombre
-- Descripción
-- Productos
-- Horarios
-- WhatsApp
-- Redes
-- Promoción
-- Enlaces
+Todos los archivos van directamente en la raíz de GitHub.
+No se necesitan carpetas.
