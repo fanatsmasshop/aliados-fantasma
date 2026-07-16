@@ -1,46 +1,13 @@
-ALIADOS FANTASMA - ETAPA 1 MOBILE FIRST
+ALIADOS FANTASMA - RED SOCIAL LOCAL - ETAPA 1
 
-QUÉ CAMBIÓ:
+Sube todos los archivos a la raíz de GitHub.
 
-- Toda la interfaz fue diseñada primero para celular.
-- El encabezado móvil es compacto.
-- Los botones son grandes y fáciles de tocar.
-- Los perfiles parecen una mini app.
-- Las acciones importantes aparecen antes que los textos largos.
-- En tableta y computadora el diseño se expande automáticamente.
+Páginas:
+index.html = feed
+explorar.html = categorías
+negocios.html = directorio
+fantasmas-bikers-shop.html = perfil oficial
+carnitas-el-compadre.html = demo ficticia
+registro/login/publicar/panel/admin = módulos en desarrollo
 
-ARCHIVOS:
-
-- index.html
-- fantasmas-bikers-shop.html
-- carnitas-el-compadre.html
-- registro.html
-- login.html
-- panel.html
-- admin.html
-- terminos.html
-- privacidad.html
-- style.css
-- isotipo-aliados.webp
-- logo-aliados.webp
-- logo-fantasmas.webp
-- logo-carnitas.webp
-- portada-carnitas.webp
-- favicon.png
-
-PUBLICACIÓN:
-
-1. Sube todos los archivos a la raíz de GitHub.
-2. Reemplaza los archivos anteriores.
-3. Espera a que Cloudflare termine el despliegue.
-4. Abre la página desde tu celular.
-5. Haz una recarga forzada si todavía ves la versión anterior.
-
-PRUEBAS RECOMENDADAS:
-
-- Celular vertical.
-- Celular horizontal.
-- WhatsApp WebView.
-- Chrome móvil.
-- Facebook/Instagram WebView.
-- Computadora.
+La Etapa 2 conectará Supabase para cuentas y publicaciones reales.
