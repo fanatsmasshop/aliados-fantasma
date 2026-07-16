@@ -1,13 +1,18 @@
-ALIADOS FANTASMA — SIN CARPETAS
+ALIADOS FANTASMA - INDEX CON ESTRUCTURA BÁSICA
 
-Sube estos cinco archivos directamente a la raíz del repositorio:
+Sube directamente a GitHub:
 
-1. index.html
-2. perfil.html
-3. logo-aliados.webp
-4. logo-aliados-small.webp
-5. favicon.png
+- index.html
+- style.css
+- script.js
+- logo-aliados.webp
+- logo-aliados-small.webp
+- favicon.png
 
-No necesitas crear ninguna carpeta.
+No necesitas carpetas.
 
-Las rutas de las imágenes ya están corregidas para funcionar desde la raíz.
+El archivo index.html ya apunta al perfil de Fantasmas:
+
+perfil.html?ref=fantasmas
+
+No borres perfil.html del repositorio.

@@ -1,0 +1,454 @@
+/* ================================================= */
+/* CONFIGURACIÓN GENERAL */
+/* ================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(7, 71, 255, 0.20),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at top right,
+            rgba(255, 45, 154, 0.18),
+            transparent 32%
+        ),
+        #07080c;
+}
+
+a {
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1120px;
+    margin: auto;
+}
+
+
+/* ================================================= */
+/* ENCABEZADO */
+/* ================================================= */
+
+.encabezado {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(7, 8, 12, 0.90);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.encabezado-contenido {
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.marca img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+}
+
+.marca strong {
+    display: block;
+}
+
+.marca small {
+    display: block;
+    margin-top: 3px;
+    color: #b8bbc8;
+}
+
+.menu {
+    display: flex;
+    gap: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+}
+
+
+/* ================================================= */
+/* INICIO */
+/* ================================================= */
+
+.inicio {
+    padding: 80px 0;
+}
+
+.inicio-contenido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.etiqueta,
+.subtitulo {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #d5e0ff;
+    background: rgba(7, 71, 255, 0.12);
+    border: 1px solid rgba(7, 71, 255, 0.30);
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.inicio h1 {
+    margin: 20px 0;
+    font-size: 65px;
+    line-height: 1;
+}
+
+.inicio h1 span {
+    color: #ff55ae;
+}
+
+.inicio-texto > p {
+    color: #b8bbc8;
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* BOTONES */
+/* ================================================= */
+
+.botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.boton {
+    display: inline-flex;
+    min-height: 52px;
+    padding: 0 20px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.boton-principal {
+    background: linear-gradient(
+        135deg,
+        #0747ff,
+        #ff2d9a
+    );
+}
+
+.boton-secundario {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.boton-completo {
+    width: 100%;
+}
+
+
+/* ================================================= */
+/* VISTA PREVIA */
+/* ================================================= */
+
+.vista-previa {
+    padding: 18px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 28px;
+}
+
+.telefono {
+    overflow: hidden;
+    background: #0a0b10;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 22px;
+}
+
+.telefono-superior {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    color: #b8bbc8;
+    font-size: 12px;
+}
+
+.telefono-contenido {
+    padding: 22px;
+}
+
+.logo-vista-previa {
+    width: 150px;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.telefono-contenido p {
+    color: #b8bbc8;
+    line-height: 1.6;
+}
+
+.promocion {
+    margin: 18px 0;
+    padding: 16px;
+    background: rgba(255, 45, 154, 0.10);
+    border: 1px solid rgba(255, 45, 154, 0.25);
+    border-radius: 16px;
+}
+
+
+/* ================================================= */
+/* SECCIONES */
+/* ================================================= */
+
+.seccion {
+    padding: 60px 0;
+}
+
+.titulo-seccion {
+    max-width: 760px;
+    margin-bottom: 30px;
+}
+
+.titulo-seccion h2 {
+    margin: 15px 0;
+    font-size: 42px;
+}
+
+.titulo-seccion p {
+    color: #b8bbc8;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* TARJETAS */
+/* ================================================= */
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.tarjeta {
+    padding: 25px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 24px;
+}
+
+.icono {
+    font-size: 32px;
+}
+
+.tarjeta h3 {
+    margin: 15px 0 10px;
+}
+
+.tarjeta p {
+    margin: 0;
+    color: #b8bbc8;
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* MUESTRA */
+/* ================================================= */
+
+.muestra {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 25px;
+    padding: 24px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 28px;
+}
+
+.muestra-imagen {
+    min-height: 360px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(7, 71, 255, 0.40),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(255, 45, 154, 0.35),
+            transparent 40%
+        ),
+        #11131b;
+    border-radius: 22px;
+}
+
+.muestra-imagen img {
+    width: 300px;
+}
+
+.muestra-informacion p {
+    color: #b8bbc8;
+    line-height: 1.6;
+}
+
+.datos {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.dato {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+}
+
+.dato small {
+    display: block;
+    margin-bottom: 5px;
+    color: #b8bbc8;
+}
+
+
+/* ================================================= */
+/* LLAMADO FINAL */
+/* ================================================= */
+
+.seccion-final {
+    padding: 50px 0 80px;
+}
+
+.llamado {
+    padding: 40px;
+    text-align: center;
+    background: rgba(18, 20, 29, 0.90);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 28px;
+}
+
+.llamado h2 {
+    margin-top: 0;
+    font-size: 40px;
+}
+
+.llamado p {
+    color: #b8bbc8;
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* ================================================= */
+/* PIE DE PÁGINA */
+/* ================================================= */
+
+.pie {
+    padding: 30px 0;
+    color: #b8bbc8;
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.pie-contenido {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+
+/* ================================================= */
+/* CELULARES Y TABLETAS */
+/* ================================================= */
+
+@media (max-width: 850px) {
+
+    .menu {
+        display: none;
+    }
+
+    .inicio-contenido,
+    .muestra {
+        grid-template-columns: 1fr;
+    }
+
+    .inicio h1 {
+        font-size: 48px;
+    }
+
+    .tarjetas {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .contenedor {
+        width: 92%;
+    }
+
+    .inicio {
+        padding: 50px 0;
+    }
+
+    .inicio h1 {
+        font-size: 39px;
+    }
+
+    .botones {
+        flex-direction: column;
+    }
+
+    .boton {
+        width: 100%;
+    }
+
+    .datos {
+        grid-template-columns: 1fr;
+    }
+
+    .pie-contenido {
+        flex-direction: column;
+    }
+
+}
