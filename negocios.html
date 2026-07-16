@@ -1,1 +1,88 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Negocios | Aliados Fantasma Demo</title><link rel="stylesheet" href="app.css"></head><body><div class="demo-banner">🚧 DEMO PÚBLICA v0.1 — Algunas funciones siguen en desarrollo.</div><div class="app-layout"><aside id="sidebar" class="sidebar"><a class="sidebar-brand" href="dashboard.html"><span class="brand-mark small">AF</span><span><strong>Aliados Fantasma</strong><small>Administración</small></span></a><nav class="nav-list"><a class="nav-link " href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav-link active" href="negocios.html"><span>◇</span>Negocios</a><a class="nav-link " href="solicitudes.html"><span>✓</span>Solicitudes</a><a class="nav-link " href="promociones.html"><span>★</span>Promociones</a></nav><div class="sidebar-footer"><button id="logout-button" class="button secondary full">Cerrar sesión</button></div></aside><div><header class="topbar"><button id="menu-button" class="icon-button menu-button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Negocios</h1></div><div class="user-chip"><span class="user-avatar" id="user-initial">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header><main class="content"><section class="page-head"><div><p class="eyebrow">DIRECTORIO</p><h2>Gestión de negocios</h2></div><button id="new" class="button primary">+ Nuevo negocio</button></section><div class="panel"><div class="toolbar"><input id="search" class="search" placeholder="Buscar"><select id="status"><option value="">Todos</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="body"></tbody></table></div></div><div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><h2 id="mt">Nuevo negocio</h2><button id="close" class="icon-button">✕</button></div><form id="form" class="form-grid"><input id="id" type="hidden"><label><span>Nombre *</span><input id="name" required></label><label><span>Slug *</span><input id="slug" required></label><label><span>Categoría</span><select id="cat"></select></label><label><span>WhatsApp</span><input id="wa"></label><label><span>Correo</span><input id="email" type="email"></label><label><span>Teléfono</span><input id="phone"></label><label class="wide"><span>Descripción corta</span><input id="short"></label><label class="wide"><span>Descripción</span><textarea id="desc"></textarea></label><label><span>Dirección</span><input id="address"></label><label><span>Colonia</span><input id="colony"></label><label><span>Municipio</span><input id="mun"></label><label><span>Código postal</span><input id="zip"></label><label class="wide"><span>Google Maps</span><input id="maps"></label><label><span>URL logo</span><input id="logo"></label><label><span>URL portada</span><input id="cover"></label><label><span>Color principal</span><input id="primary" value="#111111"></label><label><span>Color secundario</span><input id="secondary" value="#ffffff"></label><label><span><input id="active" type="checkbox" style="width:auto"> Activo</span></label><label><span><input id="featured" type="checkbox" style="width:auto"> Destacado</span></label><div class="wide actions"><button type="button" id="cancel" class="button secondary">Cancelar</button><button class="button primary">Guardar</button></div></form></div></div></main></div></div><div id="overlay" class="overlay hidden"></div><script type="module" src="negocios.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Negocios | Aliados Fantasma Demo</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar">
+      <a class="sidebar-brand" href="dashboard.html">
+        <span class="brand-mark small">AF</span>
+        <span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span>
+      </a>
+      <nav class="nav-list"><a class="nav-link " href="dashboard.html"><span>▦</span>Dashboard</a>
+<a class="nav-link active" href="negocios.html"><span>◇</span>Negocios</a>
+<a class="nav-link " href="solicitudes.html"><span>✓</span>Solicitudes</a>
+<a class="nav-link " href="promociones.html"><span>★</span>Promociones</a></nav>
+      <div class="sidebar-footer" style="display:grid;gap:10px">
+        <a class="button secondary full" href="index.html" target="_blank" rel="noopener">🌐 Ver sitio público</a>
+        <button id="logout-button" class="button secondary full">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button id="menu-button" class="icon-button menu-button">☰</button>
+        <div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Negocios</h1></div>
+        <div class="user-chip">
+          <span class="user-avatar" id="user-initial">A</span>
+          <span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span>
+        </div>
+      </header>
+      <main class="content">
+<section class="page-head">
+  <div><p class="eyebrow">DIRECTORIO</p><h2>Gestión de negocios</h2><p class="muted">Crea, edita, activa y revisa perfiles.</p></div>
+  <button id="new-business" class="button primary">+ Nuevo negocio</button>
+</section>
+<div class="panel">
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="Buscar por nombre, municipio o slug">
+    <select id="status-filter"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select>
+    <select id="category-filter"><option value="">Todas las categorías</option></select>
+  </div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Creación</th><th>Acciones</th></tr></thead>
+      <tbody id="business-body"><tr><td colspan="6">Cargando…</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<div id="business-modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><div><p class="eyebrow">FORMULARIO</p><h2 id="business-modal-title">Nuevo negocio</h2></div><button class="icon-button" data-close="#business-modal">✕</button></div>
+    <form id="business-form" class="form-grid">
+      <input id="business-id" type="hidden">
+      <label><span>Nombre *</span><input id="business-name" required></label>
+      <label><span>Slug *</span><input id="business-slug" required pattern="[a-z0-9-]+"></label>
+      <label><span>Categoría</span><select id="business-category"></select></label>
+      <label><span>WhatsApp</span><input id="business-whatsapp"></label>
+      <label><span>Correo</span><input id="business-email" type="email"></label>
+      <label><span>Teléfono</span><input id="business-phone"></label>
+      <label class="wide"><span>Descripción corta</span><input id="business-short"></label>
+      <label class="wide"><span>Descripción</span><textarea id="business-description"></textarea></label>
+      <label><span>Dirección</span><input id="business-address"></label>
+      <label><span>Colonia</span><input id="business-colony"></label>
+      <label><span>Municipio</span><input id="business-municipality"></label>
+      <label><span>Código postal</span><input id="business-zip"></label>
+      <label class="wide"><span>Google Maps</span><input id="business-maps" type="url"></label>
+      <label><span>URL del logo</span><input id="business-logo" type="url"></label>
+      <label><span>URL de portada</span><input id="business-cover" type="url"></label>
+      <label><span>Color principal</span><input id="business-primary" value="#111111"></label>
+      <label><span>Color secundario</span><input id="business-secondary" value="#ffffff"></label>
+      <label><span><input id="business-active" type="checkbox" style="width:auto"> Perfil activo</span></label>
+      <label><span><input id="business-featured" type="checkbox" style="width:auto"> Destacado</span></label>
+      <div class="wide actions"><button type="button" class="button secondary" data-close="#business-modal">Cancelar</button><button id="save-business" class="button primary">Guardar negocio</button></div>
+    </form>
+  </div>
+</div>
+</main>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+  <script type="module" src="negocios.js"></script>
+</body>
+</html>
