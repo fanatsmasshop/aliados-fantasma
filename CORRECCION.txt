@@ -1,0 +1,15 @@
+CORRECCIÓN VISUAL
+
+Se corrigió:
+
+- Encabezado con isotipo de Aliados Fantasma.
+- Tarjeta de Fantasmas con su logo real.
+- Tarjeta de Carnitas con logo ficticio propio.
+- Perfiles usando los logos correctos.
+- Se agregaron:
+  isotipo-aliados.webp
+  logo-fantasmas.webp
+  logo-carnitas.webp
+  portada-carnitas.webp
+
+Sube todos los archivos del ZIP y reemplaza los existentes.
