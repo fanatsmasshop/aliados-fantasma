@@ -13,71 +13,77 @@
 
 <body>
 
-    <header class="encabezado">
 
+    <header class="encabezado">
         <div class="contenedor encabezado-contenido">
 
             <a class="marca" href="index.html">
+                <img src="isotipo-aliados.webp" alt="Aliados Fantasma">
 
-                <img src="isotipo-aliados.webp" alt="Isotipo de Aliados Fantasma">
-
-                <div>
+                <div class="marca-texto">
                     <strong>Aliados Fantasma</strong>
-                    <small>Perfil público</small>
+                    <small>Perfil público oficial</small>
                 </div>
-
             </a>
 
+            <a class="boton-header" href="index.html">
+                Inicio
+            </a>
+
+            <nav class="menu-escritorio">
+                <a href="index.html#como-funciona">Cómo funciona</a>
+                <a href="index.html#negocios">Negocios</a>
+                <a href="terminos.html">Términos</a>
+                <a class="destacado" href="registro.html">Registrar negocio</a>
+            </nav>
+
         </div>
-
     </header>
-
+    
 
     <main>
 
-        <section class="inicio">
+        <!-- PORTADA -->
 
-            <div class="contenedor inicio-contenido">
+        <section class="perfil-portada">
 
-                <div class="inicio-texto">
+            <div class="contenedor">
 
-                    <span class="etiqueta">
-                        PERFIL OFICIAL
-                    </span>
+                <div
+                    class="portada-negocio"
+                    style="
+                        background-image:
+                            radial-gradient(circle at top left, rgba(0, 71, 255, 0.48), transparent 42%),
+                            radial-gradient(circle at bottom right, rgba(255, 45, 154, 0.42), transparent 40%),
+                            url('logo-fantasmas.webp');
+                    ">
 
-                    <h1>Fantasmas Biker's Shop</h1>
+                    <div class="portada-capa"></div>
 
-                    <p>Fantasmas Biker's Shop es el negocio fundador e impulsor de Aliados Fantasma. Su perfil completo será publicado con sus datos reales, redes, horarios, ubicación, productos y Fantasmas Rewards.</p>
+                    <div class="portada-contenido">
 
-                    <div class="botones">
+                        <img
+                            class="logo-negocio"
+                            src="logo-fantasmas.webp"
+                            alt="Fantasmas Biker's Shop">
 
-                        <a
-                            class="boton boton-principal"
-                            href="https://wa.me/525610329215"
-                            target="_blank"
-                            rel="noopener">
+                        <div class="portada-texto">
 
-                            WhatsApp
+                            <span class="estado">
+                                PERFIL OFICIAL · NEGOCIO FUNDADOR
+                            </span>
 
-                        </a>
+                            <h1>
+                                Fantasmas Biker's Shop
+                            </h1>
 
-                        <a class="boton boton-secundario" href="index.html">
-                            Volver a Aliados Fantasma
-                        </a>
+                            <p>
+                                Accesorios, estilo y regalos con identidad propia.
+                            </p>
+
+                        </div>
 
                     </div>
-
-                </div>
-
-
-                <div class="panel-logo">
-
-                    <img src="logo-fantasmas.webp" alt="Logo de Fantasmas Biker's Shop">
-
-                    <p>
-                        Este perfil será ampliado con logo, portada,
-                        productos, ubicación, redes y promociones.
-                    </p>
 
                 </div>
 
@@ -86,34 +92,204 @@
         </section>
 
 
+        <!-- ACCIONES RÁPIDAS -->
+
+        <section class="acciones-rapidas">
+
+            <div class="contenedor acciones-grid">
+
+                <a
+                    class="accion accion-whatsapp"
+                    href="https://wa.me/525610329215"
+                    target="_blank"
+                    rel="noopener">
+
+                    WhatsApp
+
+                </a>
+
+                <a
+                    class="accion"
+                    href="https://maps.app.goo.gl/NqPb7tJ6CNmK2Siq6"
+                    target="_blank"
+                    rel="noopener">
+
+                    Cómo llegar
+
+                </a>
+
+                <a
+                    class="accion"
+                    href="https://www.instagram.com/fantasmashop_cdazteca/"
+                    target="_blank"
+                    rel="noopener">
+
+                    Instagram
+
+                </a>
+
+                <a
+                    class="accion"
+                    href="https://linktr.ee/FANTASMASBIKERSCDAZTECA"
+                    target="_blank"
+                    rel="noopener">
+
+                    Más enlaces
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMACIÓN -->
+
         <section class="seccion">
 
-            <div class="contenedor">
+            <div class="contenedor perfil-columnas">
 
-                <div class="tarjetas">
+                <div>
 
-                    <article class="tarjeta">
-                        <h3>Información</h3>
+                    <article class="bloque">
+
+                        <h2>
+                            Sobre Fantasmas
+                        </h2>
+
                         <p>
-                            Datos generales y descripción del negocio.
+                            Fantasmas Biker's Shop es una tienda local ubicada
+                            en Cd. Azteca, Ecatepec. Encontrarás accesorios biker,
+                            ropa, regalos, cerámica, artículos decorativos y
+                            productos con estética gótica y alternativa.
                         </p>
+
                     </article>
 
-                    <article class="tarjeta">
-                        <h3>Productos y servicios</h3>
-                        <p>
-                            Catálogo resumido de lo que ofrece el establecimiento.
-                        </p>
+
+                    <article class="bloque">
+
+                        <h2>
+                            Productos y servicios
+                        </h2>
+
+                        <div class="lista-productos">
+
+                            <div class="producto">
+                                Accesorios biker
+                            </div>
+
+                            <div class="producto">
+                                Ropa alternativa
+                            </div>
+
+                            <div class="producto">
+                                Regalos y cerámica
+                            </div>
+
+                            <div class="producto">
+                                Cascos y protección
+                            </div>
+
+                            <div class="producto">
+                                Productos personalizados
+                            </div>
+
+                            <div class="producto">
+                                Sistema de apartado
+                            </div>
+
+                        </div>
+
                     </article>
 
-                    <article class="tarjeta">
-                        <h3>Contacto</h3>
-                        <p>
-                            WhatsApp, redes sociales, horarios y ubicación.
-                        </p>
+
+                    <article class="bloque">
+
+                        <h2>
+                            Fantasmas Rewards
+                        </h2>
+
+                        <div class="promocion">
+
+                            <strong>
+                                Acumula sellos con tus compras
+                            </strong>
+
+                            <p>
+                                Recibe un sello por cada $100 de compra
+                                y obtén una recompensa al completar 10 sellos.
+                            </p>
+
+                        </div>
+
                     </article>
 
                 </div>
+
+
+                <aside>
+
+                    <article class="bloque">
+
+                        <h2>
+                            Información
+                        </h2>
+
+                        <div class="datos-contacto">
+
+                            <div class="dato-contacto">
+                                <small>Ubicación</small>
+                                <strong>Cd. Azteca, Ecatepec, Estado de México</strong>
+                            </div>
+
+                            <div class="dato-contacto">
+                                <small>Horario</small>
+                                <strong>
+                                    Lunes a viernes: 9:00 a 18:00<br>
+                                    Sábado y domingo: 10:00 a 14:00
+                                </strong>
+                            </div>
+
+                            <div class="dato-contacto">
+                                <small>WhatsApp</small>
+                                <strong>56 10 32 92 15</strong>
+                            </div>
+
+                            <div class="dato-contacto">
+                                <small>Instagram</small>
+                                <strong>@fantasmashop_cdazteca</strong>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="bloque">
+
+                        <img
+                            class="sello-aliados"
+                            src="isotipo-aliados.webp"
+                            alt="Aliados Fantasma">
+
+                        <h2>
+                            Negocio fundador
+                        </h2>
+
+                        <p>
+                            Fantasmas Biker's Shop impulsa Aliados Fantasma
+                            como una iniciativa para apoyar la conexión
+                            entre comercios de nuestra comunidad.
+                        </p>
+
+                        <a class="boton boton-secundario" href="index.html">
+                            Conocer Aliados Fantasma
+                        </a>
+
+                    </article>
+
+                </aside>
 
             </div>
 
@@ -123,15 +299,20 @@
 
 
     <footer class="pie">
-
         <div class="contenedor pie-contenido">
 
-            <span>Fantasmas Biker's Shop</span>
-            <span>Perfil dentro de Aliados Fantasma</span>
+            <span>
+                Aliados Fantasma · Proyecto piloto local
+            </span>
+
+            <div class="pie-enlaces">
+                <a href="terminos.html">Términos</a>
+                <a href="privacidad.html">Privacidad</a>
+            </div>
 
         </div>
-
     </footer>
+    
 
 </body>
 

@@ -13,71 +13,72 @@
 
 <body>
 
-    <header class="encabezado">
 
+    <header class="encabezado">
         <div class="contenedor encabezado-contenido">
 
             <a class="marca" href="index.html">
+                <img src="isotipo-aliados.webp" alt="Aliados Fantasma">
 
-                <img src="isotipo-aliados.webp" alt="Isotipo de Aliados Fantasma">
-
-                <div>
+                <div class="marca-texto">
                     <strong>Aliados Fantasma</strong>
-                    <small>Perfil público</small>
+                    <small>Perfil demostrativo</small>
                 </div>
-
             </a>
 
+            <a class="boton-header" href="index.html">
+                Inicio
+            </a>
+
+            <nav class="menu-escritorio">
+                <a href="index.html#como-funciona">Cómo funciona</a>
+                <a href="index.html#negocios">Negocios</a>
+                <a href="terminos.html">Términos</a>
+                <a class="destacado" href="registro.html">Registrar negocio</a>
+            </nav>
+
         </div>
-
     </header>
-
+    
 
     <main>
 
-        <section class="inicio">
+        <!-- PORTADA -->
 
-            <div class="contenedor inicio-contenido">
+        <section class="perfil-portada">
 
-                <div class="inicio-texto">
+            <div class="contenedor">
 
-                    <span class="etiqueta">
-                        NEGOCIO FICTICIO · DEMOSTRACIÓN
-                    </span>
+                <div
+                    class="portada-negocio"
+                    style="background-image: url('portada-carnitas.webp');">
 
-                    <h1>Carnitas El Compadre</h1>
+                    <div class="portada-capa"></div>
 
-                    <p>Carnitas El Compadre es un negocio ficticio utilizado para mostrar cómo puede verse la página pública de un comercio de alimentos.</p>
+                    <div class="portada-contenido">
 
-                    <div class="botones">
+                        <img
+                            class="logo-negocio"
+                            src="logo-carnitas.webp"
+                            alt="Carnitas El Compadre">
 
-                        <a
-                            class="boton boton-principal"
-                            href="https://wa.me/525610329215"
-                            target="_blank"
-                            rel="noopener">
+                        <div class="portada-texto">
 
-                            WhatsApp
+                            <span class="estado estado-demo">
+                                NEGOCIO FICTICIO · DEMOSTRACIÓN
+                            </span>
 
-                        </a>
+                            <h1>
+                                Carnitas El Compadre
+                            </h1>
 
-                        <a class="boton boton-secundario" href="index.html">
-                            Volver a Aliados Fantasma
-                        </a>
+                            <p>
+                                Tradición, sabor y calidad en cada orden.
+                            </p>
+
+                        </div>
 
                     </div>
-
-                </div>
-
-
-                <div class="panel-logo">
-
-                    <img src="logo-carnitas.webp" alt="Logo de Carnitas El Compadre">
-
-                    <p>
-                        Este perfil será ampliado con logo, portada,
-                        productos, ubicación, redes y promociones.
-                    </p>
 
                 </div>
 
@@ -86,34 +87,170 @@
         </section>
 
 
+        <!-- ACCIONES RÁPIDAS -->
+
+        <section class="acciones-rapidas">
+
+            <div class="contenedor acciones-grid">
+
+                <a class="accion accion-whatsapp" href="#">
+                    WhatsApp
+                </a>
+
+                <a class="accion" href="#">
+                    Cómo llegar
+                </a>
+
+                <a class="accion" href="#">
+                    Facebook
+                </a>
+
+                <a class="accion" href="#">
+                    Ver menú
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMACIÓN -->
+
         <section class="seccion">
 
-            <div class="contenedor">
+            <div class="contenedor perfil-columnas">
 
-                <div class="tarjetas">
+                <div>
 
-                    <article class="tarjeta">
-                        <h3>Información</h3>
+                    <article class="bloque">
+
+                        <h2>
+                            Sobre nosotros
+                        </h2>
+
                         <p>
-                            Datos generales y descripción del negocio.
+                            Carnitas El Compadre es un negocio ficticio creado
+                            para demostrar cómo puede verse la página móvil
+                            de un establecimiento de comida local.
                         </p>
+
                     </article>
 
-                    <article class="tarjeta">
-                        <h3>Productos y servicios</h3>
-                        <p>
-                            Catálogo resumido de lo que ofrece el establecimiento.
-                        </p>
+
+                    <article class="bloque">
+
+                        <h2>
+                            Menú principal
+                        </h2>
+
+                        <div class="lista-productos">
+
+                            <div class="producto">
+                                Carnitas por kilo
+                            </div>
+
+                            <div class="producto">
+                                Tacos de carnitas
+                            </div>
+
+                            <div class="producto">
+                                Tortas
+                            </div>
+
+                            <div class="producto">
+                                Quesadillas
+                            </div>
+
+                            <div class="producto">
+                                Aguas frescas
+                            </div>
+
+                            <div class="producto">
+                                Paquetes familiares
+                            </div>
+
+                        </div>
+
                     </article>
 
-                    <article class="tarjeta">
-                        <h3>Contacto</h3>
-                        <p>
-                            WhatsApp, redes sociales, horarios y ubicación.
-                        </p>
+
+                    <article class="bloque">
+
+                        <h2>
+                            El Compadre Rewards
+                        </h2>
+
+                        <div class="promocion">
+
+                            <strong>
+                                Compra, acumula y recibe tacos
+                            </strong>
+
+                            <p>
+                                Por cada $100 de compra recibe un sello.
+                                Al completar 10, obtiene una orden de tacos gratis.
+                            </p>
+
+                        </div>
+
                     </article>
 
                 </div>
+
+
+                <aside>
+
+                    <article class="bloque">
+
+                        <h2>
+                            Información
+                        </h2>
+
+                        <div class="datos-contacto">
+
+                            <div class="dato-contacto">
+                                <small>Ubicación ficticia</small>
+                                <strong>Av. Revolución 123, Col. Centro</strong>
+                            </div>
+
+                            <div class="dato-contacto">
+                                <small>Horario</small>
+                                <strong>Lunes a domingo: 8:00 a 21:00</strong>
+                            </div>
+
+                            <div class="dato-contacto">
+                                <small>WhatsApp ficticio</small>
+                                <strong>722 123 4567</strong>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="bloque">
+
+                        <img
+                            class="sello-aliados"
+                            src="isotipo-aliados.webp"
+                            alt="Aliados Fantasma">
+
+                        <h2>
+                            Perfil de demostración
+                        </h2>
+
+                        <p>
+                            Esta página sirve para mostrar cómo se adaptará
+                            Aliados Fantasma a distintos giros comerciales.
+                        </p>
+
+                        <a class="boton boton-secundario" href="index.html">
+                            Volver al directorio
+                        </a>
+
+                    </article>
+
+                </aside>
 
             </div>
 
@@ -123,15 +260,20 @@
 
 
     <footer class="pie">
-
         <div class="contenedor pie-contenido">
 
-            <span>Carnitas El Compadre</span>
-            <span>Perfil dentro de Aliados Fantasma</span>
+            <span>
+                Aliados Fantasma · Proyecto piloto local
+            </span>
+
+            <div class="pie-enlaces">
+                <a href="terminos.html">Términos</a>
+                <a href="privacidad.html">Privacidad</a>
+            </div>
 
         </div>
-
     </footer>
+    
 
 </body>
 

@@ -1,5 +1,5 @@
 /* ================================================= */
-/* CONFIGURACIÓN GENERAL */
+/* 1. CONFIGURACIÓN GENERAL — MOBILE FIRST */
 /* ================================================= */
 
 * {
@@ -12,11 +12,11 @@ html {
 
 body {
     margin: 0;
-    color: white;
+    color: #ffffff;
     font-family: Arial, Helvetica, sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(0, 71, 255, 0.20), transparent 34%),
-        radial-gradient(circle at top right, rgba(255, 45, 154, 0.18), transparent 32%),
+        radial-gradient(circle at 10% 0%, rgba(0, 71, 255, 0.18), transparent 30%),
+        radial-gradient(circle at 90% 12%, rgba(255, 45, 154, 0.16), transparent 28%),
         #07080c;
 }
 
@@ -29,100 +29,101 @@ img {
 }
 
 .contenedor {
-    width: 90%;
+    width: calc(100% - 28px);
     max-width: 1120px;
     margin: auto;
 }
 
 
 /* ================================================= */
-/* ENCABEZADO */
+/* 2. ENCABEZADO MÓVIL */
 /* ================================================= */
 
 .encabezado {
     position: sticky;
     top: 0;
-    z-index: 30;
-    background: rgba(7, 8, 12, 0.92);
+    z-index: 50;
+    background: rgba(7, 8, 12, 0.94);
     border-bottom: 1px solid rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(14px);
 }
 
 .encabezado-contenido {
-    min-height: 76px;
+    min-height: 68px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
 }
 
 .marca {
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-decoration: none;
 }
 
 .marca img {
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
     object-fit: contain;
 }
 
-.marca strong,
+.marca-texto {
+    min-width: 0;
+}
+
+.marca strong {
+    display: block;
+    font-size: 15px;
+}
+
 .marca small {
     display: block;
-}
-
-.marca small {
-    margin-top: 3px;
+    margin-top: 2px;
+    overflow: hidden;
     color: #b8bbc8;
-    font-size: 12px;
+    font-size: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-.menu {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.menu a {
-    text-decoration: none;
-}
-
-.menu .menu-destacado {
-    padding: 11px 15px;
-    border-radius: 14px;
+.boton-header {
+    padding: 10px 12px;
+    border-radius: 12px;
     background: linear-gradient(135deg, #0047ff, #ff2d9a);
+    text-decoration: none;
+    font-size: 12px;
     font-weight: bold;
 }
 
+.menu-escritorio {
+    display: none;
+}
+
 
 /* ================================================= */
-/* BOTONES */
+/* 3. BOTONES */
 /* ================================================= */
 
 .botones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 26px;
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
 }
 
 .boton {
     min-height: 50px;
-    padding: 0 20px;
+    padding: 0 18px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
+    border-radius: 15px;
+    text-align: center;
     text-decoration: none;
     font-weight: bold;
-    transition: transform 0.20s ease;
-}
-
-.boton:hover {
-    transform: translateY(-2px);
 }
 
 .boton-principal {
@@ -135,181 +136,203 @@ img {
 }
 
 .boton-whatsapp {
+    color: #06150a;
     background: #25d366;
-    color: #07130b;
 }
 
 
 /* ================================================= */
-/* ETIQUETAS */
+/* 4. ETIQUETAS */
 /* ================================================= */
 
 .etiqueta,
 .subtitulo {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #d5e0ff;
-    background: rgba(0, 71, 255, 0.12);
+    display: inline-flex;
+    padding: 8px 11px;
     border: 1px solid rgba(0, 71, 255, 0.30);
-    border-radius: 30px;
-    font-size: 12px;
+    border-radius: 999px;
+    color: #dbe5ff;
+    background: rgba(0, 71, 255, 0.12);
+    font-size: 11px;
     font-weight: bold;
 }
 
 
 /* ================================================= */
-/* INICIO */
+/* 5. INICIO */
 /* ================================================= */
 
 .inicio {
-    padding: 82px 0 70px;
+    padding: 34px 0 42px;
 }
 
 .inicio-contenido {
     display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 42px;
-    align-items: center;
+    gap: 24px;
 }
 
 .inicio h1 {
-    margin: 20px 0;
-    font-size: 64px;
-    line-height: 1;
+    margin: 16px 0;
+    font-size: 39px;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
 }
 
 .inicio h1 span {
-    color: #ff55ae;
+    color: #ff63b5;
 }
 
 .inicio-texto > p {
-    color: #b8bbc8;
-    font-size: 20px;
+    margin: 0;
+    color: #c1c4ce;
+    font-size: 16px;
     line-height: 1.65;
 }
 
 .panel-logo {
-    padding: 26px;
+    padding: 20px;
     text-align: center;
     background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 28px;
+    border-radius: 24px;
 }
 
 .panel-logo img {
-    width: 320px;
-    max-height: 390px;
+    width: 220px;
+    max-height: 270px;
     object-fit: contain;
 }
 
 .panel-logo p {
+    margin-bottom: 0;
     color: #b8bbc8;
     line-height: 1.6;
 }
 
 
 /* ================================================= */
-/* SECCIONES GENERALES */
+/* 6. SECCIONES */
 /* ================================================= */
 
 .seccion {
-    padding: 62px 0;
+    padding: 42px 0;
 }
 
 .titulo-seccion {
-    max-width: 760px;
-    margin-bottom: 30px;
+    margin-bottom: 22px;
 }
 
 .titulo-seccion h2 {
-    margin: 12px 0;
-    font-size: 42px;
+    margin: 10px 0;
+    font-size: 31px;
+    line-height: 1.1;
 }
 
 .titulo-seccion p {
+    margin: 0;
     color: #b8bbc8;
-    font-size: 17px;
+    font-size: 15px;
     line-height: 1.65;
 }
 
 .tarjetas {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 14px;
 }
 
 .tarjeta {
-    padding: 24px;
-    background: rgba(18, 20, 29, 0.88);
+    padding: 20px;
+    background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 22px;
+    border-radius: 20px;
 }
 
 .tarjeta .icono {
-    font-size: 30px;
+    font-size: 28px;
+}
+
+.tarjeta h3 {
+    margin: 12px 0 8px;
 }
 
 .tarjeta p {
+    margin: 0;
     color: #b8bbc8;
     line-height: 1.6;
 }
 
 
 /* ================================================= */
-/* NEGOCIOS */
+/* 7. DIRECTORIO DE NEGOCIOS */
 /* ================================================= */
+
+.buscador-falso {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #8f93a0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 16px;
+}
 
 .negocios {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
 }
 
 .negocio {
     overflow: hidden;
-    background: rgba(18, 20, 29, 0.88);
+    background: rgba(18, 20, 29, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 24px;
+    border-radius: 22px;
 }
 
 .negocio-portada {
-    min-height: 240px;
-    padding: 24px;
+    min-height: 185px;
+    padding: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     background:
-        radial-gradient(circle at top left, rgba(0, 71, 255, 0.38), transparent 45%),
-        radial-gradient(circle at bottom right, rgba(255, 45, 154, 0.34), transparent 42%),
+        radial-gradient(circle at top left, rgba(0, 71, 255, 0.36), transparent 46%),
+        radial-gradient(circle at bottom right, rgba(255, 45, 154, 0.32), transparent 42%),
         #11131b;
 }
 
 .negocio-portada img {
-    width: 230px;
-    max-height: 210px;
+    width: 180px;
+    max-height: 165px;
     object-fit: contain;
-    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
 }
 
 .negocio-contenido {
-    padding: 22px;
+    padding: 18px;
+}
+
+.negocio-contenido h3 {
+    margin: 8px 0;
+    font-size: 21px;
 }
 
 .negocio-contenido p {
+    margin: 0;
     color: #b8bbc8;
-    line-height: 1.6;
+    line-height: 1.55;
 }
 
 .estado {
-    display: inline-block;
-    margin-bottom: 10px;
+    display: inline-flex;
     padding: 7px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: bold;
-    background: rgba(100, 225, 162, 0.12);
-    color: #8ff2bd;
     border: 1px solid rgba(100, 225, 162, 0.26);
+    border-radius: 999px;
+    color: #8ff2bd;
+    background: rgba(100, 225, 162, 0.12);
+    font-size: 10px;
+    font-weight: bold;
 }
 
 .estado-demo {
@@ -320,85 +343,249 @@ img {
 
 
 /* ================================================= */
-/* PÁGINAS DE MÓDULO EN DESARROLLO */
+/* 8. PERFIL DE NEGOCIO — MOBILE FIRST */
+/* ================================================= */
+
+.perfil-portada {
+    padding: 18px 0 14px;
+}
+
+.portada-negocio {
+    min-height: 420px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 24px;
+    background-size: cover;
+    background-position: center;
+}
+
+.portada-capa {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5, 6, 9, 0.98) 8%, rgba(5, 6, 9, 0.20) 72%);
+}
+
+.portada-contenido {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+}
+
+.logo-negocio {
+    width: 112px;
+    height: 112px;
+    padding: 8px;
+    object-fit: contain;
+    background: rgba(8, 10, 15, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 22px;
+}
+
+.portada-texto {
+    margin-top: 14px;
+}
+
+.portada-texto h1 {
+    margin: 10px 0 7px;
+    font-size: 35px;
+    line-height: 1.02;
+}
+
+.portada-texto p {
+    margin: 0;
+    color: #e1e3e9;
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+.acciones-rapidas {
+    padding: 0 0 14px;
+}
+
+.acciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.accion {
+    min-height: 50px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.accion-whatsapp {
+    color: #06150a;
+    background: #25d366;
+}
+
+.perfil-columnas {
+    display: grid;
+    gap: 14px;
+}
+
+.bloque {
+    padding: 20px;
+    background: rgba(18, 20, 29, 0.90);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 20px;
+}
+
+.bloque h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+}
+
+.bloque p {
+    color: #b8bbc8;
+    line-height: 1.7;
+}
+
+.lista-productos {
+    display: grid;
+    gap: 10px;
+}
+
+.producto {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+}
+
+.promocion {
+    padding: 17px;
+    background: rgba(255, 45, 154, 0.10);
+    border: 1px solid rgba(255, 45, 154, 0.25);
+    border-radius: 16px;
+}
+
+.promocion strong {
+    display: block;
+    margin-bottom: 7px;
+}
+
+.promocion p {
+    margin: 0;
+}
+
+.datos-contacto {
+    display: grid;
+    gap: 10px;
+}
+
+.dato-contacto {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 14px;
+}
+
+.dato-contacto small {
+    display: block;
+    margin-bottom: 4px;
+    color: #969aa6;
+}
+
+.sello-aliados {
+    width: 105px;
+    margin-bottom: 12px;
+}
+
+
+/* ================================================= */
+/* 9. PÁGINAS EN DESARROLLO */
 /* ================================================= */
 
 .proceso {
-    min-height: calc(100vh - 150px);
-    padding: 80px 0;
+    min-height: calc(100vh - 70px);
+    padding: 38px 0;
     display: flex;
     align-items: center;
 }
 
 .proceso-panel {
-    max-width: 760px;
-    margin: auto;
-    padding: 40px;
+    padding: 26px 20px;
     text-align: center;
-    background: rgba(18, 20, 29, 0.90);
+    background: rgba(18, 20, 29, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 28px;
+    border-radius: 24px;
 }
 
 .proceso-panel img {
-    width: 180px;
-    margin-bottom: 20px;
+    width: 135px;
 }
 
 .proceso-panel h1 {
-    margin: 10px 0 14px;
-    font-size: 46px;
+    margin: 14px 0;
+    font-size: 34px;
 }
 
 .proceso-panel p {
     color: #b8bbc8;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.7;
 }
 
 
 /* ================================================= */
-/* PÁGINAS LEGALES */
+/* 10. LEGALES */
 /* ================================================= */
 
 .legal {
-    padding: 60px 0 90px;
+    padding: 28px 0 60px;
 }
 
 .legal-contenido {
-    max-width: 860px;
-    margin: auto;
-    padding: 34px;
-    background: rgba(18, 20, 29, 0.88);
+    padding: 22px;
+    background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 24px;
+    border-radius: 22px;
 }
 
 .legal-contenido h1 {
     margin-top: 0;
+    font-size: 31px;
 }
 
 .legal-contenido h2 {
-    margin-top: 32px;
+    margin-top: 28px;
+    font-size: 22px;
 }
 
 .legal-contenido p,
 .legal-contenido li {
-    color: #c5c8d2;
+    color: #c4c7d1;
     line-height: 1.75;
 }
 
 
 /* ================================================= */
-/* LLAMADO FINAL */
+/* 11. LLAMADO FINAL Y FOOTER */
 /* ================================================= */
 
 .llamado {
-    padding: 40px;
+    padding: 28px 20px;
     text-align: center;
-    background: rgba(18, 20, 29, 0.90);
+    background: rgba(18, 20, 29, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 28px;
+    border-radius: 24px;
+}
+
+.llamado h2 {
+    margin-top: 0;
+    font-size: 29px;
 }
 
 .llamado p {
@@ -406,76 +593,181 @@ img {
     line-height: 1.65;
 }
 
-
-/* ================================================= */
-/* PIE DE PÁGINA */
-/* ================================================= */
-
 .pie {
-    padding: 30px 0;
+    padding: 26px 0;
     color: #b8bbc8;
     border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .pie-contenido {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    display: grid;
+    gap: 12px;
 }
 
 .pie-enlaces {
     display: flex;
-    gap: 16px;
     flex-wrap: wrap;
+    gap: 14px;
 }
 
 
 /* ================================================= */
-/* RESPONSIVE */
+/* 12. TABLETAS */
 /* ================================================= */
 
-@media (max-width: 850px) {
-    .menu {
-        display: none;
-    }
+@media (min-width: 700px) {
 
-    .inicio-contenido,
-    .negocios {
-        grid-template-columns: 1fr;
-    }
-
-    .tarjetas {
-        grid-template-columns: 1fr;
-    }
-
-    .inicio h1 {
-        font-size: 48px;
-    }
-}
-
-@media (max-width: 550px) {
     .contenedor {
-        width: 92%;
-    }
-
-    .inicio {
-        padding-top: 54px;
-    }
-
-    .inicio h1,
-    .proceso-panel h1 {
-        font-size: 39px;
+        width: calc(100% - 48px);
     }
 
     .botones {
-        flex-direction: column;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     .boton {
-        width: 100%;
+        width: auto;
+    }
+
+    .inicio {
+        padding: 56px 0;
+    }
+
+    .inicio-contenido {
+        grid-template-columns: 1fr 0.85fr;
+        align-items: center;
+    }
+
+    .inicio h1 {
+        font-size: 52px;
+    }
+
+    .tarjetas {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .negocios {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .perfil-columnas {
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: start;
+    }
+
+    .lista-productos {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .portada-contenido {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+    }
+
+    .portada-texto {
+        margin-top: 0;
+    }
+
+    .portada-texto h1 {
+        font-size: 50px;
+    }
+
+    .acciones-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .pie-contenido {
-        flex-direction: column;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+
+/* ================================================= */
+/* 13. COMPUTADORAS */
+/* ================================================= */
+
+@media (min-width: 980px) {
+
+    .encabezado-contenido {
+        min-height: 78px;
+    }
+
+    .marca img {
+        width: 56px;
+        height: 56px;
+        flex-basis: 56px;
+    }
+
+    .marca strong {
+        font-size: 17px;
+    }
+
+    .marca small {
+        font-size: 11px;
+    }
+
+    .boton-header {
+        display: none;
+    }
+
+    .menu-escritorio {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .menu-escritorio a {
+        text-decoration: none;
+    }
+
+    .menu-escritorio .destacado {
+        padding: 11px 15px;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #0047ff, #ff2d9a);
+        font-weight: bold;
+    }
+
+    .inicio {
+        padding: 76px 0;
+    }
+
+    .inicio h1 {
+        font-size: 68px;
+    }
+
+    .titulo-seccion h2 {
+        font-size: 43px;
+    }
+
+    .negocio-portada {
+        min-height: 235px;
+    }
+
+    .negocio-portada img {
+        width: 230px;
+        max-height: 210px;
+    }
+
+    .portada-negocio {
+        min-height: 470px;
+    }
+
+    .logo-negocio {
+        width: 150px;
+        height: 150px;
+    }
+
+    .portada-texto h1 {
+        font-size: 64px;
+    }
+
+    .legal-contenido {
+        max-width: 880px;
+        margin: auto;
+        padding: 36px;
     }
 }

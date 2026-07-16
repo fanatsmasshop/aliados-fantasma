@@ -1,41 +1,46 @@
-ALIADOS FANTASMA - ETAPA 1 PUBLICABLE
+ALIADOS FANTASMA - ETAPA 1 MOBILE FIRST
 
-ARCHIVOS PRINCIPALES:
+QUÉ CAMBIÓ:
+
+- Toda la interfaz fue diseñada primero para celular.
+- El encabezado móvil es compacto.
+- Los botones son grandes y fáciles de tocar.
+- Los perfiles parecen una mini app.
+- Las acciones importantes aparecen antes que los textos largos.
+- En tableta y computadora el diseño se expande automáticamente.
+
+ARCHIVOS:
 
 - index.html
-- style.css
-- favicon.png
-- logo-aliados.webp
-- logo-aliados-small.webp
-
-PERFILES:
-
 - fantasmas-bikers-shop.html
 - carnitas-el-compadre.html
-
-MÓDULOS DE ETAPA 2 EN DESARROLLO:
-
 - registro.html
 - login.html
 - panel.html
 - admin.html
-
-LEGALES PROVISIONALES:
-
 - terminos.html
 - privacidad.html
+- style.css
+- isotipo-aliados.webp
+- logo-aliados.webp
+- logo-fantasmas.webp
+- logo-carnitas.webp
+- portada-carnitas.webp
+- favicon.png
 
-CÓMO PUBLICAR:
+PUBLICACIÓN:
 
-1. Sube todos los archivos directamente a la raíz del repositorio.
-2. No crees carpetas.
-3. Espera a que Cloudflare despliegue el nuevo commit.
-4. Haz una recarga forzada con Ctrl + Shift + R.
+1. Sube todos los archivos a la raíz de GitHub.
+2. Reemplaza los archivos anteriores.
+3. Espera a que Cloudflare termine el despliegue.
+4. Abre la página desde tu celular.
+5. Haz una recarga forzada si todavía ves la versión anterior.
 
-IMPORTANTE:
+PRUEBAS RECOMENDADAS:
 
-- Fantasmas Biker's Shop aparece como perfil oficial.
-- Carnitas El Compadre aparece claramente como negocio ficticio.
-- Los botones de registro y administración no quedan rotos:
-  abren páginas profesionales de módulo en desarrollo.
-- Los términos y privacidad son provisionales para la etapa piloto.
+- Celular vertical.
+- Celular horizontal.
+- WhatsApp WebView.
+- Chrome móvil.
+- Facebook/Instagram WebView.
+- Computadora.
