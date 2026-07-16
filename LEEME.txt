@@ -1,18 +1,37 @@
-ALIADOS FANTASMA - INDEX CON ESTRUCTURA BÁSICA
+ALIADOS FANTASMA - PERFIL BÁSICO DE FANTASMAS
 
-Sube directamente a GitHub:
+ARCHIVOS INCLUIDOS:
 
-- index.html
-- style.css
+- perfil.html
+- perfil.css
 - script.js
-- logo-aliados.webp
-- logo-aliados-small.webp
-- favicon.png
+- logo-fantasmas.webp
 
-No necesitas carpetas.
+PARA USARLO:
 
-El archivo index.html ya apunta al perfil de Fantasmas:
+1. Sube perfil.html.
+2. Sube perfil.css.
+3. Sube logo-fantasmas.webp.
+4. Conserva style.css del index.
+5. Conserva logo-aliados-small.webp.
+6. Conserva favicon.png.
 
-perfil.html?ref=fantasmas
+IMPORTANTE:
 
-No borres perfil.html del repositorio.
+Agrega esta línea en el <head> de perfil.html si no aparece:
+
+<link rel="stylesheet" href="perfil.css">
+
+El archivo ya viene preparado con comentarios como:
+
+EDITAR AQUÍ:
+
+Busca esas palabras dentro del código para encontrar rápidamente:
+- Nombre
+- Descripción
+- Productos
+- Horarios
+- WhatsApp
+- Redes
+- Promoción
+- Enlaces

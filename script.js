@@ -1,15 +1,15 @@
 // =================================================
-// JAVASCRIPT BÁSICO
+// PERFIL DEL NEGOCIO
 // =================================================
 
-// Por ahora la página no necesita funciones complicadas.
+// Por ahora no se necesita JavaScript complicado.
 
 // Este archivo queda preparado para agregar después:
 //
-// - Animaciones.
-// - Menú para celular.
-// - Formularios.
-// - Contadores.
-// - Estadísticas.
+// - Galería de imágenes.
+// - Promociones dinámicas.
+// - Botón de menú en celular.
+// - Contador de visitas.
+// - Cambios de perfil mediante parámetros.
 
-console.log("Aliados Fantasma cargó correctamente.");
+console.log("Perfil de Fantasmas cargado correctamente.");

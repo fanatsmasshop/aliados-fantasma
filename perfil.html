@@ -3,6 +3,10 @@
 
 <head>
 
+    <!-- ================================================= -->
+    <!-- CONFIGURACIÓN GENERAL -->
+    <!-- ================================================= -->
+
     <meta charset="UTF-8">
 
     <meta
@@ -13,531 +17,104 @@
         name="theme-color"
         content="#07080c">
 
+    <meta
+        name="description"
+        content="Perfil público de Fantasmas Biker's Shop dentro de Aliados Fantasma.">
+
     <title>
-        Aliados Fantasma | Aliados Fantasma
+        Fantasmas Biker's Shop | Aliados Fantasma
     </title>
+
+
+    <!-- ================================================= -->
+    <!-- ICONO DE LA PÁGINA -->
+    <!-- ================================================= -->
+
+    <!-- NOTA:
+         Si quieres cambiar el icono de la pestaña,
+         reemplaza el archivo favicon.png.
+    -->
 
     <link
         rel="icon"
         href="favicon.png">
 
-    <style>
 
-        :root {
-            --background: #07080c;
-            --panel: rgba(18, 20, 29, 0.84);
-            --line: rgba(255, 255, 255, 0.10);
-            --text: #f7f7fb;
-            --muted: #b8bbc8;
-            --blue: #0747ff;
-            --pink: #ff2d9a;
-            --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
-        }
+    <!-- ================================================= -->
+    <!-- ARCHIVO DE ESTILOS -->
+    <!-- ================================================= -->
 
-        * {
-            box-sizing: border-box;
-        }
+    <link
+        rel="stylesheet"
+        href="style.css">
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            color: var(--text);
-            font-family: Arial, Helvetica, sans-serif;
-            background:
-                radial-gradient(
-                    circle at 10% 0%,
-                    rgba(7, 71, 255, 0.18),
-                    transparent 34%
-                ),
-                radial-gradient(
-                    circle at 90% 18%,
-                    rgba(255, 45, 154, 0.16),
-                    transparent 30%
-                ),
-                linear-gradient(
-                    180deg,
-                    #07080c,
-                    #0a0c12 55%,
-                    #06070a
-                );
-        }
-
-        a {
-            color: inherit;
-        }
-
-        .wrap {
-            width: min(1120px, calc(100% - 32px));
-            margin: auto;
-        }
-
-        .topbar {
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(7, 8, 12, 0.80);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--line);
-        }
-
-        .topbar-inner {
-            min-height: 74px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-        }
-
-        .brand {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .brand img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-        }
-
-        .brand small {
-            display: block;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav a {
-            padding: 10px 13px;
-            border-radius: 999px;
-            text-decoration: none;
-        }
-
-        .hero {
-            padding: 72px 0 48px;
-            display: grid;
-            grid-template-columns: 1.05fr 0.95fr;
-            gap: 34px;
-            align-items: center;
-        }
-
-        .badge,
-        .eyebrow {
-            display: inline-flex;
-            padding: 8px 12px;
-            border: 1px solid rgba(7, 71, 255, 0.28);
-            border-radius: 999px;
-            background: rgba(7, 71, 255, 0.09);
-            color: #b9d0ff;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .badge {
-            border-color: rgba(255, 45, 154, 0.28);
-            background: rgba(255, 45, 154, 0.10);
-            color: #ffd0e7;
-        }
-
-        h1 {
-            margin: 20px 0 18px;
-            font-size: clamp(42px, 7vw, 76px);
-            line-height: 0.96;
-            letter-spacing: -0.05em;
-        }
-
-        .gradient {
-            background: linear-gradient(
-                90deg,
-                #ffffff,
-                #7da1ff,
-                #ff78bd,
-                #ffffff
-            );
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .lead {
-            color: var(--muted);
-            font-size: clamp(17px, 2vw, 21px);
-            line-height: 1.65;
-        }
-
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 28px;
-        }
-
-        .btn {
-            min-height: 52px;
-            padding: 0 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid transparent;
-            border-radius: 16px;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .btn-primary {
-            background: linear-gradient(
-                135deg,
-                var(--blue),
-                var(--pink)
-            );
-        }
-
-        .btn-secondary {
-            border-color: var(--line);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .preview,
-        .card,
-        .showcase,
-        .info {
-            border: 1px solid var(--line);
-            border-radius: 26px;
-            background: var(--panel);
-            box-shadow: var(--shadow);
-        }
-
-        .preview {
-            padding: 18px;
-        }
-
-        .phone {
-            overflow: hidden;
-            border: 1px solid var(--line);
-            border-radius: 22px;
-            background: #0a0b10;
-        }
-
-        .phone-head {
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .phone-body {
-            padding: 20px;
-        }
-
-        .demo-logo {
-            width: 150px;
-            max-height: 150px;
-            margin: 12px auto 18px;
-            display: block;
-            object-fit: contain;
-        }
-
-        .promo {
-            margin: 18px 0;
-            padding: 16px;
-            border: 1px solid rgba(255, 45, 154, 0.22);
-            border-radius: 18px;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 45, 154, 0.13),
-                rgba(7, 71, 255, 0.10)
-            );
-        }
-
-        section {
-            padding: 44px 0;
-        }
-
-        .section-head {
-            max-width: 780px;
-            margin-bottom: 24px;
-        }
-
-        .section-head h2 {
-            margin: 0 0 12px;
-            font-size: clamp(30px, 4vw, 48px);
-        }
-
-        .section-head p,
-        .info p,
-        .card p {
-            color: var(--muted);
-            line-height: 1.65;
-        }
-
-        .grid-three {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .card {
-            padding: 24px;
-        }
-
-        .showcase {
-            padding: 22px;
-            display: grid;
-            grid-template-columns: 0.85fr 1.15fr;
-            gap: 22px;
-        }
-
-        .showcase-visual {
-            min-height: 360px;
-            padding: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 22px;
-            text-align: center;
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(6, 7, 10, 0.96),
-                    rgba(6, 7, 10, 0.30)
-                ),
-                radial-gradient(
-                    circle at 30% 20%,
-                    rgba(7, 71, 255, 0.42),
-                    transparent 34%
-                ),
-                radial-gradient(
-                    circle at 80% 70%,
-                    rgba(255, 45, 154, 0.35),
-                    transparent 30%
-                ),
-                #151824;
-        }
-
-        .showcase-visual img {
-            width: min(320px, 90%);
-            max-height: 310px;
-            object-fit: contain;
-        }
-
-        .details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .detail {
-            padding: 13px;
-            border: 1px solid var(--line);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .detail small {
-            display: block;
-            margin-bottom: 4px;
-            color: var(--muted);
-        }
-
-        .cta {
-            margin: 42px auto 70px;
-            padding: 38px;
-            border: 1px solid var(--line);
-            border-radius: 32px;
-            background: rgba(18, 20, 29, 0.88);
-            text-align: center;
-        }
-
-        footer {
-            padding: 28px 0 40px;
-            border-top: 1px solid var(--line);
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .footer-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
-            gap: 20px;
-        }
-
-        .info {
-            padding: 26px;
-        }
-
-        .services {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .service {
-            padding: 14px;
-            border: 1px solid var(--line);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .cover {
-            min-height: 430px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--line);
-            border-radius: 32px;
-            background:
-                linear-gradient(
-                    to top,
-                    rgba(5, 6, 9, 0.97),
-                    rgba(5, 6, 9, 0.12)
-                ),
-                radial-gradient(
-                    circle at 25% 20%,
-                    rgba(7, 71, 255, 0.50),
-                    transparent 35%
-                ),
-                radial-gradient(
-                    circle at 80% 68%,
-                    rgba(255, 45, 154, 0.42),
-                    transparent 30%
-                ),
-                #171a25;
-        }
-
-        .cover-content {
-            position: absolute;
-            right: 28px;
-            bottom: 28px;
-            left: 28px;
-            display: flex;
-            align-items: flex-end;
-            gap: 18px;
-        }
-
-        .cover-logo {
-            width: 120px;
-            height: 120px;
-            padding: 10px;
-            border: 1px solid var(--line);
-            border-radius: 26px;
-            background: rgba(10, 12, 18, 0.82);
-            object-fit: contain;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .contact-grid a {
-            padding: 15px;
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.06);
-            text-align: center;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        @media (max-width: 850px) {
-            .hero,
-            .showcase,
-            .profile-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .grid-three {
-                grid-template-columns: 1fr;
-            }
-
-            .nav {
-                display: none;
-            }
-        }
-
-        @media (max-width: 560px) {
-            .actions .btn {
-                width: 100%;
-            }
-
-            .details,
-            .services,
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cover-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .brand img {
-                width: 44px;
-                height: 44px;
-            }
-        }
-
-    </style>
+    <link
+        rel="stylesheet"
+        href="perfil.css">
 
 </head>
 
+
 <body>
 
-    <!-- =========================
-         ENCABEZADO
-    ========================== -->
 
-    <header class="topbar">
+    <!-- ================================================= -->
+    <!-- ENCABEZADO -->
+    <!-- ================================================= -->
 
-        <div class="wrap topbar-inner">
+    <header class="encabezado">
+
+        <div class="contenedor encabezado-contenido">
+
+
+            <!-- LOGO DE ALIADOS FANTASMA -->
 
             <a
-                class="brand"
+                class="marca"
                 href="index.html">
+
+                <!-- NOTA:
+                     Para cambiar este logo,
+                     reemplaza logo-aliados-small.webp.
+                -->
 
                 <img
                     src="logo-aliados-small.webp"
                     alt="Logo de Aliados Fantasma">
 
-                <span>
+                <div>
+
+                    <!-- EDITAR AQUÍ:
+                         Nombre del proyecto.
+                    -->
 
                     <strong>
                         Aliados Fantasma
                     </strong>
 
+                    <!-- EDITAR AQUÍ:
+                         Texto pequeño del encabezado.
+                    -->
+
                     <small>
-                        Perfil demo
+                        Perfil público de negocio aliado
                     </small>
 
-                </span>
+                </div>
 
             </a>
 
-            <nav class="nav">
+
+            <!-- MENÚ -->
+
+            <nav class="menu">
 
                 <a href="#informacion">
                     Información
                 </a>
 
-                <a href="#servicios">
-                    Servicios
+                <a href="#productos">
+                    Productos
                 </a>
 
                 <a href="#contacto">
@@ -551,55 +128,83 @@
     </header>
 
 
-    <!-- =========================
-         CONTENIDO PRINCIPAL
-    ========================== -->
+    <!-- ================================================= -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ================================================= -->
 
     <main>
 
+
+        <!-- ================================================= -->
         <!-- PORTADA DEL NEGOCIO -->
+        <!-- ================================================= -->
 
-        <section style="padding: 36px 0 28px;">
+        <section class="perfil-portada">
 
-            <div class="wrap">
+            <div class="contenedor">
 
-                <span class="badge">
-                    Página demo
+                <!-- EDITAR AQUÍ:
+                     Esta etiqueta puede decir:
+                     "Negocio aliado",
+                     "Negocio de ejemplo",
+                     "Miembro de Aliados Fantasma", etc.
+                -->
+
+                <span class="etiqueta">
+                    Negocio de ejemplo
                 </span>
 
-                <div
-                    class="cover"
-                    style="margin-top: 16px;">
 
-                    <div class="cover-content">
+                <div class="portada-negocio">
+
+                    <div class="portada-fondo"></div>
+
+
+                    <div class="portada-contenido">
+
+
+                        <!-- LOGO DEL NEGOCIO -->
+
+                        <!-- NOTA:
+                             Para cambiar el logo del negocio,
+                             reemplaza logo-fantasmas.webp.
+                        -->
 
                         <img
-                            class="cover-logo"
-                            src="logo-aliados.webp"
-                            alt="Logo del negocio">
+                            class="logo-negocio"
+                            src="logo-fantasmas.webp"
+                            alt="Logo de Fantasmas Biker's Shop">
 
-                        <div>
 
-                            <span
-                                class="eyebrow"
-                                id="category">
+                        <!-- INFORMACIÓN PRINCIPAL -->
 
-                                Giro del Negocio
+                        <div class="portada-texto">
 
+
+                            <!-- EDITAR AQUÍ:
+                                 Categoría del negocio.
+                            -->
+
+                            <span class="subtitulo">
+                                Tienda biker, gótica y de regalos
                             </span>
 
-                            <h1
-                                id="name"
-                                style="margin: 10px 0 6px;">
 
-                                Aliados Fantasma
+                            <!-- EDITAR AQUÍ:
+                                 Nombre del negocio.
+                            -->
 
+                            <h1>
+                                Fantasmas Biker's Shop
                             </h1>
 
-                            <p id="tagline">
 
-                                CONECTAMOS NEGOCIOS, CRECEMOS JUNTOS
+                            <!-- EDITAR AQUÍ:
+                                 Frase corta del negocio.
+                            -->
 
+                            <p>
+                                Accesorios, estilo y regalos con identidad propia.
                             </p>
 
                         </div>
@@ -613,137 +218,318 @@
         </section>
 
 
+        <!-- ================================================= -->
         <!-- INFORMACIÓN DEL NEGOCIO -->
+        <!-- ================================================= -->
 
-        <section id="informacion">
+        <section
+            class="seccion"
+            id="informacion">
 
-            <div class="wrap profile-grid">
+            <div class="contenedor perfil-columnas">
+
+
+                <!-- COLUMNA PRINCIPAL -->
 
                 <div>
 
+
+                    <!-- ================================================= -->
                     <!-- SOBRE NOSOTROS -->
+                    <!-- ================================================= -->
 
-                    <article class="info">
+                    <article class="bloque">
+
+
+                        <!-- EDITAR AQUÍ:
+                             Título de esta sección.
+                        -->
 
                         <h2>
-                            Sobre nosotros
+                            Sobre Fantasmas
                         </h2>
 
-                        <p id="description"></p>
+
+                        <!-- EDITAR AQUÍ:
+                             Descripción completa del negocio.
+                        -->
+
+                        <p>
+
+                            Fantasmas Biker's Shop es una tienda local
+                            ubicada en Cd. Azteca, Ecatepec.
+
+                            Encontrarás accesorios biker, ropa, regalos,
+                            cerámica, artículos decorativos y productos
+                            con una estética gótica, alternativa y con
+                            identidad propia.
+
+                        </p>
 
                     </article>
 
 
-                    <!-- SERVICIOS -->
+                    <!-- ================================================= -->
+                    <!-- PRODUCTOS Y SERVICIOS -->
+                    <!-- ================================================= -->
 
                     <article
-                        class="info"
-                        id="servicios"
-                        style="margin-top: 18px;">
+                        class="bloque"
+                        id="productos">
+
+
+                        <!-- EDITAR AQUÍ:
+                             Título de productos o servicios.
+                        -->
 
                         <h2>
-                            Servicios principales
+                            Productos y servicios
                         </h2>
 
-                        <div
-                            class="services"
-                            id="services">
+
+                        <div class="lista-productos">
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Puedes cambiar, quitar o agregar productos.
+                                 Para agregar otro, copia un bloque:
+                                 <div class="producto">Texto</div>
+                            -->
+
+                            <div class="producto">
+                                Accesorios biker
+                            </div>
+
+                            <div class="producto">
+                                Ropa y artículos alternativos
+                            </div>
+
+                            <div class="producto">
+                                Regalos y cerámica
+                            </div>
+
+                            <div class="producto">
+                                Cascos, guantes y protección
+                            </div>
+
+                            <div class="producto">
+                                Productos personalizados
+                            </div>
+
+                            <div class="producto">
+                                Sistema de apartado
+                            </div>
+
                         </div>
 
                     </article>
 
 
+                    <!-- ================================================= -->
                     <!-- PROMOCIÓN -->
+                    <!-- ================================================= -->
 
-                    <article
-                        class="info"
-                        style="margin-top: 18px;">
+                    <article class="bloque">
+
+
+                        <!-- EDITAR AQUÍ:
+                             Nombre de la promoción.
+                        -->
 
                         <h2>
-                            Promoción actual
+                            Fantasmas Rewards
                         </h2>
 
-                        <div class="promo">
 
-                            <strong id="promo-title"></strong>
+                        <div class="promocion">
 
-                            <p id="promo-text"></p>
+
+                            <!-- EDITAR AQUÍ:
+                                 Título de la promoción.
+                            -->
+
+                            <strong>
+                                Acumula sellos en tus compras
+                            </strong>
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Explicación de la promoción.
+                            -->
+
+                            <p>
+
+                                Recibe un sello por cada $100 de compra
+                                y obtén una recompensa al completar
+                                10 sellos.
+
+                            </p>
 
                         </div>
+
+
+                        <!-- EDITAR AQUÍ:
+                             Puedes cambiar el enlace del botón.
+                        -->
+
+                        <a
+                            class="boton boton-principal"
+                            href="https://linktr.ee/FANTASMASBIKERSCDAZTECA"
+                            target="_blank"
+                            rel="noopener">
+
+                            Conocer Fantasmas Rewards
+
+                        </a>
 
                     </article>
 
                 </div>
 
 
-                <!-- BARRA LATERAL -->
+                <!-- COLUMNA LATERAL -->
 
                 <aside>
 
-                    <!-- CONTACTO -->
+
+                    <!-- ================================================= -->
+                    <!-- DATOS DE CONTACTO -->
+                    <!-- ================================================= -->
 
                     <article
-                        class="info"
+                        class="bloque"
                         id="contacto">
 
                         <h2>
                             Información y contacto
                         </h2>
 
-                        <div
-                            class="details"
-                            style="grid-template-columns: 1fr;">
 
-                            <div class="detail">
+                        <div class="datos-contacto">
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Ubicación del negocio.
+                            -->
+
+                            <div class="dato-contacto">
 
                                 <small>
                                     Ubicación
                                 </small>
 
-                                <strong id="location"></strong>
+                                <strong>
+                                    Cd. Azteca, Ecatepec,
+                                    Estado de México
+                                </strong>
 
                             </div>
 
-                            <div class="detail">
+
+                            <!-- EDITAR AQUÍ:
+                                 Horarios del negocio.
+                            -->
+
+                            <div class="dato-contacto">
 
                                 <small>
                                     Horario
                                 </small>
 
-                                <strong id="hours"></strong>
+                                <strong>
+
+                                    Lunes a viernes:
+                                    9:00 a 18:00
+
+                                    <br>
+
+                                    Sábado y domingo:
+                                    10:00 a 14:00
+
+                                </strong>
 
                             </div>
 
-                            <div class="detail">
+
+                            <!-- EDITAR AQUÍ:
+                                 Número de WhatsApp.
+                            -->
+
+                            <div class="dato-contacto">
 
                                 <small>
-                                    Teléfono
+                                    WhatsApp
                                 </small>
 
-                                <strong id="phone"></strong>
+                                <strong>
+                                    56 10 32 92 15
+                                </strong>
 
                             </div>
 
                         </div>
 
-                        <div
-                            class="contact-grid"
-                            style="margin-top: 14px;">
 
-                            <a href="#">
+                        <!-- BOTONES DE CONTACTO -->
+
+                        <div class="botones-contacto">
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Cambia el número después de 52.
+                                 Escríbelo sin espacios.
+                            -->
+
+                            <a
+                                class="whatsapp"
+                                href="https://wa.me/525610329215"
+                                target="_blank"
+                                rel="noopener">
+
                                 WhatsApp
+
                             </a>
 
-                            <a href="#">
+
+                            <!-- EDITAR AQUÍ:
+                                 Enlace de Google Maps.
+                            -->
+
+                            <a
+                                href="https://maps.app.goo.gl/NqPb7tJ6CNmK2Siq6"
+                                target="_blank"
+                                rel="noopener">
+
                                 Cómo llegar
+
                             </a>
 
-                            <a href="#">
+
+                            <!-- EDITAR AQUÍ:
+                                 Enlace de Facebook.
+                            -->
+
+                            <a
+                                href="https://www.facebook.com/"
+                                target="_blank"
+                                rel="noopener">
+
                                 Facebook
+
                             </a>
 
-                            <a href="#">
+
+                            <!-- EDITAR AQUÍ:
+                                 Enlace de Instagram.
+                            -->
+
+                            <a
+                                href="https://www.instagram.com/fantasmashop_cdazteca/"
+                                target="_blank"
+                                rel="noopener">
+
                                 Instagram
+
                             </a>
 
                         </div>
@@ -751,44 +537,122 @@
                     </article>
 
 
-                    <!-- FANTASMAS BIKER'S SHOP -->
+                    <!-- ================================================= -->
+                    <!-- REDES SOCIALES -->
+                    <!-- ================================================= -->
 
-                    <article
-                        class="info"
-                        style="margin-top: 18px;">
-
-                        <img
-                            src="logo-aliados.webp"
-                            alt="Aliados Fantasma"
-                            style="
-                                width: 110px;
-                                display: block;
-                                margin-bottom: 14px;
-                            ">
-
-                        <span class="eyebrow">
-                            Colaboración local
-                        </span>
+                    <article class="bloque">
 
                         <h2>
-                            También conoce Fantasmas Biker's Shop
+                            Redes sociales
                         </h2>
+
+
+                        <div class="datos-contacto">
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Usuario de Instagram.
+                            -->
+
+                            <div class="dato-contacto">
+
+                                <small>
+                                    Instagram
+                                </small>
+
+                                <strong>
+                                    @fantasmashop_cdazteca
+                                </strong>
+
+                            </div>
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Usuario de TikTok.
+                            -->
+
+                            <div class="dato-contacto">
+
+                                <small>
+                                    TikTok
+                                </small>
+
+                                <strong>
+                                    @fantasmasbikershop
+                                </strong>
+
+                            </div>
+
+
+                            <!-- EDITAR AQUÍ:
+                                 Usuario de YouTube.
+                            -->
+
+                            <div class="dato-contacto">
+
+                                <small>
+                                    YouTube
+                                </small>
+
+                                <strong>
+                                    @FANTASMASBIKERSHOPCDAZTECA
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- ================================================= -->
+                    <!-- ALIADOS FANTASMA -->
+                    <!-- ================================================= -->
+
+                    <article class="bloque">
+
+
+                        <!-- LOGO DE ALIADOS -->
+
+                        <img
+                            class="logo-aliados-perfil"
+                            src="logo-aliados-small.webp"
+                            alt="Logo de Aliados Fantasma">
+
+
+                        <!-- EDITAR AQUÍ:
+                             Tipo de participación.
+                        -->
+
+                        <span class="subtitulo">
+                            Negocio impulsor
+                        </span>
+
+
+                        <h2>
+                            Parte de Aliados Fantasma
+                        </h2>
+
+
+                        <!-- EDITAR AQUÍ:
+                             Explicación de la colaboración.
+                        -->
 
                         <p>
 
-                            Este negocio participa en una prueba de
-                            promoción recíproca con Fantasmas
-                            Biker's Shop.
+                            Fantasmas Biker's Shop impulsa esta prueba
+                            de colaboración para ayudar a que negocios
+                            locales se conozcan y se recomienden entre sí.
 
                         </p>
 
-                        <a
-                            class="btn btn-secondary"
-                            href="https://linktr.ee/FANTASMASBIKERSCDAZTECA"
-                            target="_blank"
-                            rel="noopener">
 
-                            Visitar Fantasmas
+                        <a
+                            class="boton boton-secundario"
+                            href="index.html">
+
+                            Conocer el proyecto
 
                         </a>
 
@@ -801,53 +665,86 @@
         </section>
 
 
-        <!-- AVISO DE DEMOSTRACIÓN -->
+        <!-- ================================================= -->
+        <!-- LLAMADO FINAL -->
+        <!-- ================================================= -->
 
-        <div class="wrap">
+        <section class="seccion-final">
 
-            <section class="cta">
+            <div class="contenedor">
 
-                <h2>
-                    Esta es una muestra personalizable
-                </h2>
+                <div class="llamado">
 
-                <p style="color: var(--muted);">
 
-                    En una versión real se reemplazan los textos,
-                    fotografías, logo, enlaces y promociones por los
-                    datos oficiales del negocio.
+                    <!-- EDITAR AQUÍ:
+                         Título final.
+                    -->
 
-                </p>
+                    <h2>
+                        Conoce todo lo que tenemos para ti
+                    </h2>
 
-                <a
-                    class="btn btn-primary"
-                    href="index.html">
 
-                    Volver a la presentación
+                    <!-- EDITAR AQUÍ:
+                         Texto final.
+                    -->
 
-                </a>
+                    <p>
 
-            </section>
+                        Visita nuestras redes, consulta nuestros productos
+                        y conoce las promociones disponibles en
+                        Fantasmas Biker's Shop.
 
-        </div>
+                    </p>
+
+
+                    <!-- EDITAR AQUÍ:
+                         Enlace final.
+                    -->
+
+                    <a
+                        class="boton boton-principal"
+                        href="https://linktr.ee/FANTASMASBIKERSCDAZTECA"
+                        target="_blank"
+                        rel="noopener">
+
+                        Visitar todos nuestros enlaces
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 
 
-    <!-- =========================
-         PIE DE PÁGINA
-    ========================== -->
+    <!-- ================================================= -->
+    <!-- PIE DE PÁGINA -->
+    <!-- ================================================= -->
 
-    <footer>
+    <footer class="pie">
 
-        <div class="wrap footer-row">
+        <div class="contenedor pie-contenido">
+
+
+            <!-- EDITAR AQUÍ:
+                 Texto izquierdo del pie.
+            -->
 
             <span>
-                Perfil público de muestra
+                Fantasmas Biker's Shop · Cd. Azteca
             </span>
 
+
+            <!-- EDITAR AQUÍ:
+                 Texto derecho del pie.
+            -->
+
             <span>
-                Aliados Fantasma · Fantasmas Biker's Shop
+                Perfil dentro de Aliados Fantasma
             </span>
 
         </div>
@@ -855,174 +752,11 @@
     </footer>
 
 
-    <!-- =========================
-         DATOS DE LOS NEGOCIOS
-    ========================== -->
-
-    <script>
-
-        const aliados = {
-
-            spidernet: {
-
-                name: "Aliados Fantasma",
-
-                category: "CONECTAMOS NEGOCIOS, CRECEMOS JUNTOS",
-
-                tagline: "SCONECTAMOS NEGOCIOS, CRECEMOS JUNTOS",
-
-                description:
-                    "Ejemplo de perfil para un negocio de tecnología, " +
-                    "mantenimiento y atención local.",
-
-                location: "Zona UNITEC, Ecatepec",
-
-                hours: "Horario por confirmar",
-
-                phone: "Contacto por confirmar",
-
-                services: [
-
-                    "Aliados.",
-
-                    "Todos somos uno.",
-
-                    "Uniendo locatarios.",
-
-                    "Dando a conocer negocios."
-
-                ],
-
-                promoTitle:
-                    "Promoción especial de demostración",
-
-                promoText:
-                    "El establecimiento podrá definir una promoción " +
-                    "exclusiva, sus condiciones y vigencia."
-
-            },
-
-
-            barberia: {
-
-                name: "Barbería Local",
-
-                category: "Cortes, barba y estilo",
-
-                tagline: "Tu estilo, cerca de casa.",
-
-                description:
-                    "Ejemplo de perfil para una barbería local con " +
-                    "servicios, horarios, redes y promoción destacada.",
-
-                location: "Cd. Azteca, Ecatepec",
-
-                hours: "Horario por confirmar",
-
-                phone: "Contacto por confirmar",
-
-                services: [
-
-                    "Corte clásico",
-
-                    "Diseño de barba",
-
-                    "Perfilado",
-
-                    "Paquetes especiales"
-
-                ],
-
-                promoTitle:
-                    "Promoción de bienvenida",
-
-                promoText:
-                    "Beneficio de demostración para clientes que " +
-                    "llegan desde el QR."
-
-            }
-
-        };
-
-
-        /* OBTENER EL NEGOCIO DESDE LA URL */
-
-        const parametros =
-            new URLSearchParams(window.location.search);
-
-        const referencia =
-            (parametros.get("ref") || "spidernet").toLowerCase();
-
-        const aliado =
-            aliados[referencia] || aliados.spidernet;
-
-
-        /* CARGAR LOS DATOS EN LA PÁGINA */
-
-        const valores = {
-
-            name: aliado.name,
-
-            category: aliado.category,
-
-            tagline: aliado.tagline,
-
-            description: aliado.description,
-
-            location: aliado.location,
-
-            hours: aliado.hours,
-
-            phone: aliado.phone,
-
-            "promo-title": aliado.promoTitle,
-
-            "promo-text": aliado.promoText
-
-        };
-
-
-        Object.entries(valores).forEach(
-
-            ([id, valor]) => {
-
-                const elemento =
-                    document.getElementById(id);
-
-                if (elemento) {
-
-                    elemento.textContent = valor;
-
-                }
-
-            }
-
-        );
-
-
-        /* CARGAR LA LISTA DE SERVICIOS */
-
-        const contenedorServicios =
-            document.getElementById("services");
-
-        contenedorServicios.innerHTML =
-            aliado.services
-                .map(
-
-                    servicio => `
-
-                        <div class="service">
-
-                            ${servicio}
-
-                        </div>
-
-                    `
-
-                )
-                .join("");
-
-    </script>
+    <!-- ================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ================================================= -->
+
+    <script src="script.js"></script>
 
 </body>
 
