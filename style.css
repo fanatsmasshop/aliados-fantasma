@@ -15,8 +15,8 @@ body {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     background:
-        radial-gradient(circle at top left, rgba(7, 71, 255, 0.18), transparent 35%),
-        radial-gradient(circle at top right, rgba(255, 45, 154, 0.16), transparent 32%),
+        radial-gradient(circle at top left, rgba(0, 71, 255, 0.20), transparent 34%),
+        radial-gradient(circle at top right, rgba(255, 45, 154, 0.18), transparent 32%),
         #07080c;
 }
 
@@ -42,16 +42,18 @@ img {
 .encabezado {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 30;
     background: rgba(7, 8, 12, 0.92);
     border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(14px);
 }
 
 .encabezado-contenido {
-    min-height: 74px;
+    min-height: 76px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
 }
 
 .marca {
@@ -62,8 +64,8 @@ img {
 }
 
 .marca img {
-    width: 54px;
-    height: 54px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;
 }
 
@@ -81,10 +83,18 @@ img {
 .menu {
     display: flex;
     gap: 20px;
+    align-items: center;
 }
 
 .menu a {
     text-decoration: none;
+}
+
+.menu .menu-destacado {
+    padding: 11px 15px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0047ff, #ff2d9a);
+    font-weight: bold;
 }
 
 
@@ -108,10 +118,15 @@ img {
     border-radius: 14px;
     text-decoration: none;
     font-weight: bold;
+    transition: transform 0.20s ease;
+}
+
+.boton:hover {
+    transform: translateY(-2px);
 }
 
 .boton-principal {
-    background: linear-gradient(135deg, #0747ff, #ff2d9a);
+    background: linear-gradient(135deg, #0047ff, #ff2d9a);
 }
 
 .boton-secundario {
@@ -134,8 +149,8 @@ img {
     display: inline-block;
     padding: 8px 12px;
     color: #d5e0ff;
-    background: rgba(7, 71, 255, 0.12);
-    border: 1px solid rgba(7, 71, 255, 0.30);
+    background: rgba(0, 71, 255, 0.12);
+    border: 1px solid rgba(0, 71, 255, 0.30);
     border-radius: 30px;
     font-size: 12px;
     font-weight: bold;
@@ -143,17 +158,17 @@ img {
 
 
 /* ================================================= */
-/* INDEX - INICIO */
+/* INICIO */
 /* ================================================= */
 
 .inicio {
-    padding: 78px 0;
+    padding: 82px 0 70px;
 }
 
 .inicio-contenido {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 42px;
     align-items: center;
 }
 
@@ -173,20 +188,21 @@ img {
     line-height: 1.65;
 }
 
-.vista-previa {
-    padding: 18px;
-    background: rgba(18, 20, 29, 0.88);
+.panel-logo {
+    padding: 26px;
+    text-align: center;
+    background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 28px;
 }
 
-.vista-previa img {
-    width: 180px;
-    display: block;
-    margin: 0 auto 20px;
+.panel-logo img {
+    width: 320px;
+    max-height: 390px;
+    object-fit: contain;
 }
 
-.vista-previa p {
+.panel-logo p {
     color: #b8bbc8;
     line-height: 1.6;
 }
@@ -197,7 +213,7 @@ img {
 /* ================================================= */
 
 .seccion {
-    padding: 60px 0;
+    padding: 62px 0;
 }
 
 .titulo-seccion {
@@ -229,6 +245,10 @@ img {
     border-radius: 22px;
 }
 
+.tarjeta .icono {
+    font-size: 30px;
+}
+
 .tarjeta p {
     color: #b8bbc8;
     line-height: 1.6;
@@ -236,7 +256,7 @@ img {
 
 
 /* ================================================= */
-/* TARJETAS DE NEGOCIOS */
+/* NEGOCIOS */
 /* ================================================= */
 
 .negocios {
@@ -252,10 +272,22 @@ img {
     border-radius: 24px;
 }
 
-.negocio img {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
+.negocio-portada {
+    min-height: 240px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at top left, rgba(0, 71, 255, 0.38), transparent 45%),
+        radial-gradient(circle at bottom right, rgba(255, 45, 154, 0.34), transparent 42%),
+        #11131b;
+}
+
+.negocio-portada img {
+    width: 230px;
+    max-height: 220px;
+    object-fit: contain;
 }
 
 .negocio-contenido {
@@ -267,153 +299,116 @@ img {
     line-height: 1.6;
 }
 
-
-/* ================================================= */
-/* PERFIL DEL NEGOCIO */
-/* ================================================= */
-
-.perfil-portada {
-    padding: 35px 0 25px;
-}
-
-.portada-negocio {
-    min-height: 430px;
-    margin-top: 16px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    background-size: cover;
-    background-position: center;
-}
-
-.portada-capa {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(5, 6, 9, 0.97), rgba(5, 6, 9, 0.18));
-}
-
-.portada-contenido {
-    position: absolute;
-    right: 28px;
-    bottom: 28px;
-    left: 28px;
-    display: flex;
-    align-items: flex-end;
-    gap: 22px;
-}
-
-.logo-negocio {
-    width: 150px;
-    height: 150px;
-    padding: 10px;
-    object-fit: contain;
-    background: rgba(10, 12, 18, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 26px;
-}
-
-.portada-texto h1 {
-    margin: 12px 0 8px;
-    font-size: 60px;
-    line-height: 1;
-}
-
-.portada-texto p {
-    margin: 0;
-    color: #d4d7e3;
-    font-size: 18px;
-}
-
-.perfil-columnas {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 20px;
-}
-
-.bloque {
-    padding: 25px;
-    background: rgba(18, 20, 29, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 22px;
-}
-
-.bloque + .bloque {
-    margin-top: 18px;
-}
-
-.bloque p {
-    color: #b8bbc8;
-    line-height: 1.7;
-}
-
-.lista-productos {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.producto {
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 14px;
-}
-
-.promocion {
-    padding: 18px;
-    background: rgba(255, 45, 154, 0.10);
-    border: 1px solid rgba(255, 45, 154, 0.25);
-    border-radius: 16px;
-}
-
-.datos-contacto {
-    display: grid;
-    gap: 10px;
-}
-
-.dato-contacto {
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 14px;
-}
-
-.dato-contacto small {
-    display: block;
-    margin-bottom: 4px;
-    color: #b8bbc8;
-}
-
-.botones-contacto {
-    margin-top: 14px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.botones-contacto a {
-    padding: 14px;
-    text-align: center;
-    text-decoration: none;
+.estado {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 11px;
     font-weight: bold;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 14px;
+    background: rgba(100, 225, 162, 0.12);
+    color: #8ff2bd;
+    border: 1px solid rgba(100, 225, 162, 0.26);
+}
+
+.estado-demo {
+    color: #ffd0e7;
+    background: rgba(255, 45, 154, 0.10);
+    border-color: rgba(255, 45, 154, 0.24);
 }
 
 
 /* ================================================= */
-/* LLAMADO FINAL Y FOOTER */
+/* PÁGINAS DE MÓDULO EN DESARROLLO */
 /* ================================================= */
 
-.llamado {
-    padding: 38px;
+.proceso {
+    min-height: calc(100vh - 150px);
+    padding: 80px 0;
+    display: flex;
+    align-items: center;
+}
+
+.proceso-panel {
+    max-width: 760px;
+    margin: auto;
+    padding: 40px;
     text-align: center;
     background: rgba(18, 20, 29, 0.90);
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 28px;
 }
+
+.proceso-panel img {
+    width: 180px;
+    margin-bottom: 20px;
+}
+
+.proceso-panel h1 {
+    margin: 10px 0 14px;
+    font-size: 46px;
+}
+
+.proceso-panel p {
+    color: #b8bbc8;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+
+/* ================================================= */
+/* PÁGINAS LEGALES */
+/* ================================================= */
+
+.legal {
+    padding: 60px 0 90px;
+}
+
+.legal-contenido {
+    max-width: 860px;
+    margin: auto;
+    padding: 34px;
+    background: rgba(18, 20, 29, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 24px;
+}
+
+.legal-contenido h1 {
+    margin-top: 0;
+}
+
+.legal-contenido h2 {
+    margin-top: 32px;
+}
+
+.legal-contenido p,
+.legal-contenido li {
+    color: #c5c8d2;
+    line-height: 1.75;
+}
+
+
+/* ================================================= */
+/* LLAMADO FINAL */
+/* ================================================= */
+
+.llamado {
+    padding: 40px;
+    text-align: center;
+    background: rgba(18, 20, 29, 0.90);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 28px;
+}
+
+.llamado p {
+    color: #b8bbc8;
+    line-height: 1.65;
+}
+
+
+/* ================================================= */
+/* PIE DE PÁGINA */
+/* ================================================= */
 
 .pie {
     padding: 30px 0;
@@ -427,6 +422,12 @@ img {
     gap: 20px;
 }
 
+.pie-enlaces {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 
 /* ================================================= */
 /* RESPONSIVE */
@@ -438,7 +439,6 @@ img {
     }
 
     .inicio-contenido,
-    .perfil-columnas,
     .negocios {
         grid-template-columns: 1fr;
     }
@@ -457,28 +457,13 @@ img {
         width: 92%;
     }
 
+    .inicio {
+        padding-top: 54px;
+    }
+
     .inicio h1,
-    .portada-texto h1 {
-        font-size: 40px;
-    }
-
-    .portada-negocio {
-        min-height: 540px;
-    }
-
-    .portada-contenido {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .logo-negocio {
-        width: 120px;
-        height: 120px;
-    }
-
-    .lista-productos,
-    .botones-contacto {
-        grid-template-columns: 1fr;
+    .proceso-panel h1 {
+        font-size: 39px;
     }
 
     .botones {

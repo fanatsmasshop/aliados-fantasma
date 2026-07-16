@@ -1,46 +1,41 @@
-ALIADOS FANTASMA - FASE 1 COMPLETA
+ALIADOS FANTASMA - ETAPA 1 PUBLICABLE
 
 ARCHIVOS PRINCIPALES:
 
 - index.html
-- plantilla.html
-- carnitas-el-compadre.html
-- fantasmas-bikers-shop.html
 - style.css
-- script.js
-
-IMÁGENES:
-
-- logo-aliados.webp
 - favicon.png
-- logo-carnitas.webp
-- portada-carnitas.webp
-- logo-fantasmas.webp
+- logo-aliados.webp
+- logo-aliados-small.webp
 
-CÓMO CREAR UN NUEVO NEGOCIO:
+PERFILES:
 
-1. Haz una copia de plantilla.html.
-2. Renombra el archivo:
-   ejemplo: cafeteria-luna.html
-3. Abre el archivo y busca:
-   EDITAR AQUÍ
-4. Cambia:
-   - Nombre
-   - Categoría
-   - Descripción
-   - Logo
-   - Portada
-   - Productos
-   - Promoción
-   - Horarios
-   - WhatsApp
-   - Redes
-   - Ubicación
-5. Sube también el logo y portada del negocio.
-6. Agrega una tarjeta en index.html dentro de:
-   NEGOCIOS DE EJEMPLO
+- fantasmas-bikers-shop.html
+- carnitas-el-compadre.html
+
+MÓDULOS DE ETAPA 2 EN DESARROLLO:
+
+- registro.html
+- login.html
+- panel.html
+- admin.html
+
+LEGALES PROVISIONALES:
+
+- terminos.html
+- privacidad.html
+
+CÓMO PUBLICAR:
+
+1. Sube todos los archivos directamente a la raíz del repositorio.
+2. No crees carpetas.
+3. Espera a que Cloudflare despliegue el nuevo commit.
+4. Haz una recarga forzada con Ctrl + Shift + R.
 
 IMPORTANTE:
 
-Todos los archivos van directamente en la raíz de GitHub.
-No se necesitan carpetas.
+- Fantasmas Biker's Shop aparece como perfil oficial.
+- Carnitas El Compadre aparece claramente como negocio ficticio.
+- Los botones de registro y administración no quedan rotos:
+  abren páginas profesionales de módulo en desarrollo.
+- Los términos y privacidad son provisionales para la etapa piloto.
