@@ -28,7 +28,9 @@
 
   function setUnit(unit, value) {
     const formatted = pad(value);
-    elements[unit].textContent = formatted;
+    if (elements[unit]) {
+      elements[unit].textContent = formatted;
+    }
     mirror(unit, formatted);
   }
 
@@ -61,7 +63,9 @@
     ['days', 'hours', 'minutes', 'seconds'].forEach((unit) => setUnit(unit, 0));
 
     document.body.classList.add('locked');
-    elements.reveal.hidden = false;
+    if (elements.reveal) {
+      elements.reveal.hidden = false;
+    }
 
     window.setTimeout(() => {
       window.location.replace(OFFICIAL_PAGE);
@@ -71,8 +75,12 @@
   function animateProgress() {
     const progress = 85;
     window.requestAnimationFrame(() => {
-      elements.progressBar.style.width = `${progress}%`;
-      elements.progressLabel.textContent = `${progress}%`;
+      if (elements.progressBar) {
+        elements.progressBar.style.width = `${progress}%`;
+      }
+      if (elements.progressLabel) {
+        elements.progressLabel.textContent = `${progress}%`;
+      }
     });
   }
 
