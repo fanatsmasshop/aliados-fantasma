@@ -1,5 +1,5 @@
-import { supabase } from './supabase-client.js?v=20260717-1';
-import { esc } from './ui.js?v=20260717-1';
+import { supabase } from './supabase-client.js?v=20260717-2';
+import { esc } from './ui.js?v=20260717-2';
 
 const slug = new URLSearchParams(location.search).get('slug');
 const root = document.querySelector('#profile-root');

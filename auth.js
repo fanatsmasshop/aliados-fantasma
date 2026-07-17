@@ -1,5 +1,5 @@
-import { supabase } from './supabase-client.js?v=20260717-1';
-import { isConfigured } from './config.js?v=20260717-1';
+import { supabase } from './supabase-client.js?v=20260717-2';
+import { isConfigured } from './config.js?v=20260717-2';
 
 export async function requireAdmin() {
   if (!isConfigured || !supabase) {

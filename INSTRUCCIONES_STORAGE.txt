@@ -1,0 +1,55 @@
+ALIADOS FANTASMA — INTEGRACIÓN DE LOGO Y PORTADA v0.2
+
+Qué se agregó
+-------------
+- Selección de logo desde el celular o computadora.
+- Selección de portada.
+- Arrastrar y soltar.
+- Vista previa inmediata.
+- Validación de JPG, PNG y WebP.
+- Límite de 10 MB antes de optimizar.
+- Conversión automática a WebP.
+- Reducción automática de tamaño:
+  - Logo: máximo 900 x 900.
+  - Portada: máximo 1800 x 1000.
+- Subida a Supabase Storage.
+- Guardado automático de logo_url y portada_url.
+- Reemplazo de la imagen anterior.
+- El usuario ya no necesita pegar URLs.
+
+Configuración obligatoria en Supabase
+-------------------------------------
+1. Abre Storage.
+2. Presiona New bucket.
+3. Nombre exacto: negocios-media
+4. Activa Public bucket.
+5. File size limit: 10 MB.
+6. Allowed MIME types:
+   image/jpeg
+   image/png
+   image/webp
+7. Crea el bucket.
+8. Abre SQL Editor.
+9. Ejecuta 005_storage_negocios.sql.
+
+Publicación
+-----------
+Sube todos los archivos de este paquete a la raíz de GitHub.
+No mezcles negocios.html o negocios.js con versiones anteriores.
+
+Prueba recomendada
+------------------
+1. Entra al panel.
+2. Abre Negocios.
+3. Crea o edita un negocio.
+4. Selecciona un logo.
+5. Selecciona una portada.
+6. Guarda.
+7. Abre el perfil público.
+8. Confirma que ambas imágenes se muestran.
+
+Alcance actual
+--------------
+Esta primera integración funciona desde el panel administrativo.
+El mismo componente se reutilizará en el futuro panel de propietarios,
+cuando cada locatario tenga su propia cuenta y pueda proponer cambios.

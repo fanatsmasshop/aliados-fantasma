@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Negocios | Aliados Fantasma Demo</title>
   <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
-  <link rel="stylesheet" href="app.css?v=20260717-1">
-  <link rel="stylesheet" href="logos.css?v=20260717-1">
+  <link rel="stylesheet" href="app.css?v=20260717-2">
+  <link rel="stylesheet" href="logos.css?v=20260717-2">
+  <link rel="stylesheet" href="media-upload.css?v=20260717-2">
 </head>
 <body>
   <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
@@ -36,8 +37,60 @@
   <label class="wide"><span>Descripción corta</span><input id="business-short"></label><label class="wide"><span>Descripción</span><textarea id="business-description"></textarea></label>
   <label><span>Dirección</span><input id="business-address"></label><label><span>Colonia</span><input id="business-colony"></label>
   <label><span>Municipio</span><input id="business-municipality"></label><label><span>Código postal</span><input id="business-zip"></label>
-  <label class="wide"><span>Google Maps</span><input id="business-maps" type="url"></label><label><span>URL del logo</span><input id="business-logo" type="url"></label>
-  <label><span>URL de portada</span><input id="business-cover" type="url"></label><label><span>Color principal</span><input id="business-primary" value="#111111"></label>
+
+  <label class="wide"><span>Google Maps</span><input id="business-maps" type="url"></label>
+
+  <section class="wide media-section" aria-labelledby="media-title">
+    <div class="media-heading">
+      <div>
+        <p class="eyebrow">IMÁGENES DEL PERFIL</p>
+        <h3 id="media-title">Logo y portada</h3>
+      </div>
+      <small>JPG, PNG o WebP · máximo 10 MB por archivo</small>
+    </div>
+
+    <div class="media-grid">
+      <div class="media-field">
+        <span class="media-label">Logo del negocio</span>
+        <div id="logo-dropzone" class="upload-zone" tabindex="0" role="button" aria-label="Seleccionar logo">
+          <input id="business-logo-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <div id="logo-preview" class="media-preview logo-preview">
+            <span class="upload-icon">＋</span>
+          </div>
+          <div class="upload-copy">
+            <strong>Seleccionar logo</strong>
+            <span>También puedes arrastrarlo aquí</span>
+          </div>
+        </div>
+        <div class="media-actions">
+          <button id="remove-logo" class="button secondary small hidden" type="button">Quitar selección</button>
+          <small id="logo-status">Se optimizará automáticamente a WebP.</small>
+        </div>
+        <input id="business-logo" type="hidden">
+      </div>
+
+      <div class="media-field">
+        <span class="media-label">Portada del perfil</span>
+        <div id="cover-dropzone" class="upload-zone cover-zone" tabindex="0" role="button" aria-label="Seleccionar portada">
+          <input id="business-cover-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <div id="cover-preview" class="media-preview cover-preview">
+            <span class="upload-icon">＋</span>
+          </div>
+          <div class="upload-copy">
+            <strong>Seleccionar portada</strong>
+            <span>Recomendado: imagen horizontal</span>
+          </div>
+        </div>
+        <div class="media-actions">
+          <button id="remove-cover" class="button secondary small hidden" type="button">Quitar selección</button>
+          <small id="cover-status">Se optimizará automáticamente a WebP.</small>
+        </div>
+        <input id="business-cover" type="hidden">
+      </div>
+    </div>
+  </section>
+
+  <label><span>Color principal</span><input id="business-primary" value="#111111"></label>
   <label><span>Color secundario</span><input id="business-secondary" value="#ffffff"></label><label><span><input id="business-active" type="checkbox" style="width:auto"> Perfil activo</span></label>
   <label><span><input id="business-featured" type="checkbox" style="width:auto"> Destacado</span></label>
   <div class="wide actions"><button class="button secondary" data-close="#business-modal" type="button">Cancelar</button><button id="save-business" class="button primary" type="submit">Guardar negocio</button></div>
@@ -46,6 +99,6 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="negocios.js?v=20260717-1"></script>
+  <script type="module" src="negocios.js?v=20260717-2"></script>
 </body>
 </html>

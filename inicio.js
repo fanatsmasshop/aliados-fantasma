@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client.js?v=20260717-1';
+import { supabase } from './supabase-client.js?v=20260717-2';
 
 const grid = document.querySelector('#business-grid');
 const total = document.querySelector('#business-total');

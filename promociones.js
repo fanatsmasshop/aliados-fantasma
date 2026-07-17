@@ -1,6 +1,6 @@
-import { requireAdmin, logout } from './auth.js?v=20260717-1';
-import { supabase } from './supabase-client.js?v=20260717-1';
-import { shell, esc, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260717-1';
+import { requireAdmin, logout } from './auth.js?v=20260717-2';
+import { supabase } from './supabase-client.js?v=20260717-2';
+import { shell, esc, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260717-2';
 
 let promotions = [];
 const auth = await requireAdmin();
