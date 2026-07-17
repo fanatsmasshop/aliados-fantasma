@@ -1,47 +1,42 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Solicitudes | Aliados Fantasma Demo</title>
-<link href="app.css" rel="stylesheet"/>
-<link href="aliados-fantasma-icono.png" rel="icon" type="image/png"/><link href="logos.css" rel="stylesheet"/></head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Solicitudes | Aliados Fantasma Demo</title>
+  <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260717-1">
+  <link rel="stylesheet" href="logos.css?v=20260717-1">
+</head>
 <body>
-<div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
-<div class="app-layout">
-<aside class="sidebar" id="sidebar">
-<a class="sidebar-brand" href="dashboard.html">
-<img alt="Aliados Fantasma" class="af-sidebar-logo" src="aliados-fantasma-icono.webp"/>
-<span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span>
-</a>
-<nav class="nav-list"><a class="nav-link" href="dashboard.html"><span>▦</span>Dashboard</a>
-<a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
+  <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar">
+      <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span></a>
+      <nav class="nav-list"><a class="nav-link " href="dashboard.html"><span>▦</span>Dashboard</a>
+<a class="nav-link " href="negocios.html"><span>◇</span>Negocios</a>
 <a class="nav-link active" href="solicitudes.html"><span>✓</span>Solicitudes</a>
-<a class="nav-link" href="promociones.html"><span>★</span>Promociones</a></nav>
-<div class="sidebar-footer" style="display:grid;gap:10px">
-<a class="button secondary full" href="index.html" rel="noopener" target="_blank">🌐 Ver sitio público</a>
-<button class="button secondary full" id="logout-button">Cerrar sesión</button>
+<a class="nav-link " href="promociones.html"><span>★</span>Promociones</a></nav>
+      <div class="sidebar-footer"><a class="button secondary full" href="index.html" target="_blank" rel="noopener">🌐 Ver sitio público</a><button id="logout-button" class="button secondary full" type="button">Cerrar sesión</button></div>
+    </aside>
+    <div class="app-main">
+      <header class="topbar"><button id="menu-button" class="icon-button menu-button" type="button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Solicitudes</h1></div><div class="user-chip"><span id="user-initial" class="user-avatar">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header>
+      <main class="content">
+<section class="page-head"><div><p class="eyebrow">MODERACIÓN</p><h2>Solicitudes de cambio</h2><p class="muted">Revisa cambios propuestos antes de publicarlos.</p></div><button id="refresh-button" class="button secondary" type="button">Actualizar</button></section>
+<div class="notice warning">En esta demo, aprobar cambia el estado y registra el historial. La aplicación automática de los datos propuestos se desarrollará por tipo de recurso.</div>
+<div class="panel">
+  <div class="toolbar"><input id="search" class="search" placeholder="Buscar solicitud o negocio"><select id="state-filter"><option value="">Todos los estados</option><option value="pendiente">Pendiente</option><option value="en_revision">En revisión</option><option value="requiere_cambios">Requiere cambios</option><option value="aprobada">Aprobada</option><option value="rechazada">Rechazada</option><option value="cancelada">Cancelada</option></select></div>
+  <div class="table-wrap"><table class="data-table"><thead><tr><th>Solicitud</th><th>Negocio</th><th>Recurso</th><th>Estado</th><th>Fecha</th><th>Acción</th></tr></thead><tbody id="request-body"><tr><td colspan="6">Cargando…</td></tr></tbody></table></div>
 </div>
-</aside>
-<div class="app-main">
-<header class="topbar">
-<button class="icon-button menu-button" id="menu-button">☰</button>
-<div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Solicitudes</h1></div>
-<div class="user-chip">
-<span class="user-avatar" id="user-initial">A</span>
-<span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span>
-</div>
-</header>
-<main class="content">
-<section class="page-head">
-<div><p class="eyebrow">MODERACIÓN</p><h2>Solicitudes de cambio</h2><p class="muted">Módulo en demostración.</p></div>
-</section>
-<div class="panel"><div class="empty-state">El flujo completo de aprobación se integrará en una siguiente versión.</div></div>
+<div id="request-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">REVISIÓN</p><h2 id="request-title">Solicitud</h2></div><button class="icon-button" data-close="#request-modal" type="button">✕</button></div>
+<div id="request-meta" class="detail-card"></div><div class="compare-grid"><div><small class="muted">Datos actuales</small><pre id="current-data" class="code-block"></pre></div><div><small class="muted">Datos propuestos</small><pre id="proposed-data" class="code-block"></pre></div></div>
+<label><span>Comentario del administrador</span><textarea id="admin-comment" placeholder="Explica la decisión o la corrección solicitada"></textarea></label>
+<div class="actions"><button id="changes-button" class="button warning" type="button">Solicitar cambios</button><button id="reject-button" class="button danger" type="button">Rechazar</button><button id="approve-button" class="button success" type="button">Aprobar</button></div>
+</div></div>
 </main>
-</div>
-</div>
-<div class="overlay hidden" id="overlay"></div>
-<script src="solicitudes.js" type="module"></script>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+  <script type="module" src="solicitudes.js?v=20260717-1"></script>
 </body>
 </html>

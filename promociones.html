@@ -1,47 +1,36 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Promociones | Aliados Fantasma Demo</title>
-<link href="app.css" rel="stylesheet"/>
-<link href="aliados-fantasma-icono.png" rel="icon" type="image/png"/><link href="logos.css" rel="stylesheet"/></head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Promociones | Aliados Fantasma Demo</title>
+  <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260717-1">
+  <link rel="stylesheet" href="logos.css?v=20260717-1">
+</head>
 <body>
-<div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
-<div class="app-layout">
-<aside class="sidebar" id="sidebar">
-<a class="sidebar-brand" href="dashboard.html">
-<img alt="Aliados Fantasma" class="af-sidebar-logo" src="aliados-fantasma-icono.webp"/>
-<span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span>
-</a>
-<nav class="nav-list"><a class="nav-link" href="dashboard.html"><span>▦</span>Dashboard</a>
-<a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
-<a class="nav-link" href="solicitudes.html"><span>✓</span>Solicitudes</a>
+  <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar">
+      <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span></a>
+      <nav class="nav-list"><a class="nav-link " href="dashboard.html"><span>▦</span>Dashboard</a>
+<a class="nav-link " href="negocios.html"><span>◇</span>Negocios</a>
+<a class="nav-link " href="solicitudes.html"><span>✓</span>Solicitudes</a>
 <a class="nav-link active" href="promociones.html"><span>★</span>Promociones</a></nav>
-<div class="sidebar-footer" style="display:grid;gap:10px">
-<a class="button secondary full" href="index.html" rel="noopener" target="_blank">🌐 Ver sitio público</a>
-<button class="button secondary full" id="logout-button">Cerrar sesión</button>
-</div>
-</aside>
-<div class="app-main">
-<header class="topbar">
-<button class="icon-button menu-button" id="menu-button">☰</button>
-<div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Promociones</h1></div>
-<div class="user-chip">
-<span class="user-avatar" id="user-initial">A</span>
-<span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span>
-</div>
-</header>
-<main class="content">
-<section class="page-head">
-<div><p class="eyebrow">CAMPAÑAS</p><h2>Promociones</h2><p class="muted">Módulo en demostración.</p></div>
-</section>
-<div class="panel"><div class="empty-state">La gestión avanzada de promociones se integrará en una siguiente versión.</div></div>
+      <div class="sidebar-footer"><a class="button secondary full" href="index.html" target="_blank" rel="noopener">🌐 Ver sitio público</a><button id="logout-button" class="button secondary full" type="button">Cerrar sesión</button></div>
+    </aside>
+    <div class="app-main">
+      <header class="topbar"><button id="menu-button" class="icon-button menu-button" type="button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Promociones</h1></div><div class="user-chip"><span id="user-initial" class="user-avatar">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header>
+      <main class="content">
+<section class="page-head"><div><p class="eyebrow">CAMPAÑAS</p><h2>Promociones</h2><p class="muted">Crea y administra promociones de los negocios.</p></div><button id="new-promotion" class="button primary" type="button">+ Nueva promoción</button></section>
+<div class="panel"><div class="toolbar"><input id="search" class="search" placeholder="Buscar promoción o negocio"><select id="status-filter"><option value="">Todas</option><option value="active">Activas</option><option value="inactive">Inactivas</option></select></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Promoción</th><th>Negocio</th><th>Vigencia</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="promotion-body"><tr><td colspan="5">Cargando…</td></tr></tbody></table></div></div>
+<div id="promotion-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">PROMOCIÓN</p><h2 id="promotion-modal-title">Nueva promoción</h2></div><button class="icon-button" data-close="#promotion-modal" type="button">✕</button></div>
+<form id="promotion-form" class="form-grid"><input id="promotion-id" type="hidden"><label><span>Negocio *</span><select id="promotion-business" required></select></label><label><span>Título *</span><input id="promotion-title" required></label><label class="wide"><span>Descripción</span><textarea id="promotion-description"></textarea></label><label class="wide"><span>URL de imagen</span><input id="promotion-image" type="url"></label><label><span>Inicio</span><input id="promotion-start" type="datetime-local"></label><label><span>Fin</span><input id="promotion-end" type="datetime-local"></label><label><span><input id="promotion-active" type="checkbox" style="width:auto"> Activa</span></label><label><span><input id="promotion-featured" type="checkbox" style="width:auto"> Destacada</span></label><div class="wide actions"><button class="button secondary" data-close="#promotion-modal" type="button">Cancelar</button><button id="save-promotion" class="button primary" type="submit">Guardar promoción</button></div></form>
+</div></div>
 </main>
-</div>
-</div>
-<div class="overlay hidden" id="overlay"></div>
-<script src="promociones.js" type="module"></script>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+  <script type="module" src="promociones.js?v=20260717-1"></script>
 </body>
 </html>

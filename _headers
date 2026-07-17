@@ -1,0 +1,23 @@
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/*.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/*.css
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/dashboard
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/negocios
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/solicitudes
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/promociones
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/login
+  Cache-Control: no-cache, no-store, must-revalidate

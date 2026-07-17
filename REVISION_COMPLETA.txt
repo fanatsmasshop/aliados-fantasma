@@ -1,0 +1,57 @@
+ALIADOS FANTASMA — REVISIÓN COMPLETA DEL REPOSITORIO
+
+Fecha de revisión: 16 de julio de 2026
+Archivos HTML revisados: 17
+Archivos JavaScript revisados: 11
+
+PROBLEMAS PRINCIPALES ENCONTRADOS EN LA VERSIÓN RECIBIDA
+
+1. dashboard.html y dashboard.js pertenecían a versiones distintas.
+   El HTML usaba IDs como business-count, pero JavaScript buscaba bc.
+
+2. negocios.html y negocios.js también pertenecían a versiones distintas.
+   El formulario no podía conectarse porque todos sus IDs eran diferentes.
+
+3. solicitudes.html y promociones.html eran páginas provisionales, pero sus archivos JavaScript esperaban tablas, filtros, formularios y modales que ya no estaban presentes.
+
+4. perfil.html contenía profile-root, mientras perfil.js buscaba root.
+   Esto impedía cargar cualquier perfil público.
+
+5. Varias páginas públicas antiguas enlazaban a negocios.html, que ahora es un módulo administrativo protegido.
+
+6. Las páginas estáticas de ejemplo tenían enlaces vacíos (#).
+
+7. Existían varias versiones mezcladas del diseño, la navegación y los módulos.
+
+CORRECCIONES REALIZADAS
+
+- Se unificaron todos los HTML y JavaScript del panel.
+- Se restauró el módulo funcional de solicitudes.
+- Se restauró el módulo funcional de promociones.
+- Se corrigió el perfil público dinámico.
+- Se corrigieron todos los selectores entre HTML y JavaScript.
+- Se agregó manejo visible de errores de Supabase.
+- Se corrigieron rutas públicas y privadas.
+- explorar.html ahora abre el directorio público real.
+- admin.html ahora abre el login administrativo real.
+- Se eliminaron enlaces vacíos.
+- Se corrigieron enlaces reales de Fantasmas Biker's Shop.
+- Se agregó una página 404.
+- Se conservaron los logos oficiales y el aviso de demo.
+- Se mantuvo config.js con la configuración recibida.
+
+PRUEBAS AUTOMÁTICAS REALIZADAS
+
+- Verificación de sintaxis de todos los archivos JavaScript: APROBADA.
+- Verificación de IDs requeridos por JavaScript: APROBADA.
+- Verificación de archivos locales enlazados: APROBADA.
+- Verificación de IDs HTML duplicados: APROBADA.
+- Verificación de enlaces href="#": APROBADA.
+
+LIMITACIÓN CONOCIDA DE LA DEMO
+
+Aprobar una solicitud cambia su estado y registra el historial, pero todavía no aplica automáticamente datos_propuestos al perfil público. Esto requiere una función específica y validada para cada tipo de recurso. La interfaz lo indica claramente.
+
+RESULTADO DEL AUDITOR
+
+SIN ERRORES ESTÁTICOS DETECTADOS.

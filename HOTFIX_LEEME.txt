@@ -1,0 +1,35 @@
+ALIADOS FANTASMA — HOTFIX v0.1.1
+
+Problema corregido
+------------------
+Cloudflare/navegador estaba mezclando HTML nuevos con JavaScript antiguos
+que permanecían en caché. El síntoma exacto era:
+
+- El usuario administrador sí aparecía.
+- Dashboard quedaba con guiones.
+- Negocios quedaba en “Cargando…”.
+- Los botones o selectores no respondían correctamente.
+
+Corrección aplicada
+-------------------
+1. Se agregó una versión a todos los archivos JS y CSS.
+2. Se versionaron también los imports internos de JavaScript.
+3. Se añadió el archivo _headers para evitar caché obsoleta en Cloudflare Pages.
+4. Dashboard y Negocios ahora muestran el error real si Supabase tarda o falla.
+5. Se agregó tiempo máximo de espera de 15 segundos.
+
+Cómo publicar
+-------------
+1. Sustituye TODO el repositorio por el contenido de este paquete.
+2. No mezcles estos archivos con versiones anteriores.
+3. Espera a que Cloudflare termine el deployment.
+4. Abre la web en una ventana de incógnito.
+5. También puedes presionar Ctrl + Shift + R una vez.
+
+No se cambió
+------------
+- Tu base de datos.
+- Tus tablas.
+- Tu usuario administrador.
+- Tu Publishable Key.
+- El diseño general.
