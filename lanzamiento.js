@@ -20,9 +20,20 @@
     return String(Math.max(0, value)).padStart(2, '0');
   }
 
+  function mirror(unit, value) {
+    document.querySelectorAll(`[data-mirror="${unit}"]`).forEach((node) => {
+      node.textContent = value;
+    });
+  }
+
+  function setUnit(unit, value) {
+    const formatted = pad(value);
+    elements[unit].textContent = formatted;
+    mirror(unit, formatted);
+  }
+
   function updateCountdown() {
-    const now = new Date();
-    const remaining = LAUNCH_DATE.getTime() - now.getTime();
+    const remaining = LAUNCH_DATE.getTime() - Date.now();
 
     if (remaining <= 0) {
       showLaunch();
@@ -35,22 +46,19 @@
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
 
-    elements.days.textContent = pad(days);
-    elements.hours.textContent = pad(hours);
-    elements.minutes.textContent = pad(minutes);
-    elements.seconds.textContent = pad(seconds);
+    setUnit('days', days);
+    setUnit('hours', hours);
+    setUnit('minutes', minutes);
+    setUnit('seconds', seconds);
 
-    document.title = `${days}d ${pad(hours)}h | Lanzamiento Aliados Fantasma`;
+    document.title = `${days}d ${pad(hours)}h | Lanzamiento gratuito`;
   }
 
   function showLaunch() {
     if (hasLaunched) return;
     hasLaunched = true;
 
-    elements.days.textContent = '00';
-    elements.hours.textContent = '00';
-    elements.minutes.textContent = '00';
-    elements.seconds.textContent = '00';
+    ['days', 'hours', 'minutes', 'seconds'].forEach((unit) => setUnit(unit, 0));
 
     document.body.classList.add('locked');
     elements.reveal.hidden = false;
@@ -70,6 +78,5 @@
 
   updateCountdown();
   animateProgress();
-
   window.setInterval(updateCountdown, 1000);
 })();
