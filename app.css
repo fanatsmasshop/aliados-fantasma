@@ -148,12 +148,30 @@ textarea{min-height:105px;resize:vertical}
     radial-gradient(circle at 20% 20%,rgba(168,85,247,.34),transparent 38%),
     linear-gradient(135deg,#2b173f,#10222c);
   background-size:cover;
-  background-position:center;
+  background-position:center center;
   background-repeat:no-repeat;
   border-bottom:1px solid var(--line);
+  isolation:isolate;
 }
 .profile-cover.has-cover{
   min-height:570px;
+}
+.profile-cover.has-cover{
+  background-color:#080a0f;
+}
+.profile-cover.has-cover::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  z-index:0;
+  background-image:inherit;
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  transform:scale(1.01);
+}
+.profile-cover.has-cover .profile-cover-overlay{
+  z-index:1;
 }
 .profile-cover-overlay{
   position:absolute;
@@ -191,8 +209,11 @@ textarea{min-height:105px;resize:vertical}
 .profile-logo img{
   width:100%;
   height:100%;
-  object-fit:contain;
-  padding:5px;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  padding:0;
+  border-radius:inherit;
 }
 .profile-identity-text{
   max-width:780px;
