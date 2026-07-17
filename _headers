@@ -21,3 +21,13 @@
 
 /login
   Cache-Control: no-cache, no-store, must-revalidate
+
+
+/sistema-visual.css
+  Cache-Control: public, max-age=3600
+
+/lanzamiento.css
+  Cache-Control: public, max-age=3600
+
+/lanzamiento.js
+  Cache-Control: public, max-age=3600

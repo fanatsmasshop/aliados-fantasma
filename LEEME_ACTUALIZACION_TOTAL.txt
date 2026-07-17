@@ -1,0 +1,70 @@
+ALIADOS FANTASMA — PROYECTO UNIFICADO v0.6
+
+OBJETIVO
+-------
+Unificar visualmente TODO el proyecto para que la página de lanzamiento,
+la página oficial, perfiles públicos, formularios, paneles, páginas legales
+y módulos administrativos compartan la misma identidad visual premium.
+
+ARCHIVOS NUEVOS
+---------------
+- index-oficial.html
+- lanzamiento.css
+- lanzamiento.js
+- sistema-visual.css
+
+ARCHIVOS QUE DEBEN SUSTITUIRSE EN GITHUB
+----------------------------------------
+Sustituye TODO el contenido actual del repositorio por el contenido de este ZIP.
+No subas únicamente index.html, porque las páginas anteriores conservan estilos
+distintos si no se reemplazan también.
+
+ARCHIVOS HTML REVISADOS
+-----------------------
+- 404.html
+- admin.html
+- carnitas-el-compadre.html
+- dashboard.html
+- explorar.html
+- fantasmas-bikers-shop.html
+- index-oficial.html
+- index.html
+- login.html
+- negocios.html
+- panel.html
+- perfil.html
+- privacidad.html
+- promociones.html
+- publicar.html
+- registro.html
+- solicitudes.html
+- terminos.html
+
+CAMBIOS PRINCIPALES
+-------------------
+- Paleta unificada: negro, morado y cyan.
+- Tipografía unificada: Inter + Space Grotesk.
+- Mismos radios, bordes, fondos, botones, tarjetas y sombras.
+- Páginas tipo aplicación y páginas tipo web ahora comparten el mismo sistema.
+- Eliminación de “Demo” en títulos administrativos.
+- Perfiles públicos conservan la identidad de cada negocio, pero dentro del
+  mismo sistema estructural de Aliados Fantasma.
+- Adaptación responsive y protección contra desbordamientos.
+- Página de lanzamiento instalada como index.html.
+- Página oficial preservada como index-oficial.html.
+- Perfil público actualizado con el ajuste de portada/logotipo v0.2.2.
+- Se mantienen los scripts, Supabase, carga de imágenes y lógica existente.
+
+PUBLICACIÓN RECOMENDADA
+-----------------------
+1. Descarga y descomprime este ZIP.
+2. En GitHub, elimina los archivos anteriores o reemplázalos todos.
+3. Sube TODO el contenido de la carpeta, sin crear una subcarpeta.
+4. Espera el despliegue de Cloudflare Pages.
+5. Haz recarga forzada:
+   Windows: Ctrl + F5
+   Android/Chrome: borrar caché del sitio o abrir en incógnito.
+
+TOTAL DE ARCHIVOS DEL PAQUETE
+-----------------------------
+56
