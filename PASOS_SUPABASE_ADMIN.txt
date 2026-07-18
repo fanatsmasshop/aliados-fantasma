@@ -1,0 +1,25 @@
+ALIADOS FANTASMA — PASOS PARA ACTIVAR EL PANEL
+
+Esta versión conserva el diseño, logos, contador, animaciones y páginas de v0.7.1.
+No se reemplazó el index ni se retiró contenido.
+
+1. Sube TODOS los archivos directamente a la raíz de GitHub.
+   No crees carpetas.
+
+2. En Supabase, confirma que el proyecto use:
+   URL: https://cshjnpjqvflwmtypuyvc.supabase.co
+
+3. En Supabase > Authentication > Users, crea o confirma la cuenta:
+   fanatsmasbikersecatepec@gmail.com
+
+4. Abre Supabase > SQL Editor.
+
+5. Copia y ejecuta el contenido del archivo:
+   020_hacer_admin.sql
+
+6. Después abre login.html e inicia sesión con ese correo y su contraseña.
+
+IMPORTANTE:
+- No publiques ninguna service_role key en GitHub.
+- La clave incluida en config.js es la clave pública para el navegador.
+- Conserva todos los archivos juntos en la raíz.
