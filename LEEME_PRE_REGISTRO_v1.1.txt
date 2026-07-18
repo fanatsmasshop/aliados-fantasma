@@ -1,0 +1,30 @@
+ALIADOS FANTASMA — PRE-REGISTRO v1.1
+
+ESTA VERSIÓN ES EXCLUSIVAMENTE PARA PRE-REGISTRO.
+
+Conserva:
+- Página pública, contador, logos y animaciones.
+- Registro sencillo por pasos.
+- Verificación obligatoria del correo.
+- Inicio de sesión.
+- Recuperación y restablecimiento de contraseña.
+- Consulta del estado por parte del interesado.
+- Panel administrativo con búsqueda, filtros, notas y estados.
+
+Al aprobar:
+- Cambia el estado a "aprobado".
+- Guarda quién revisó y cuándo.
+- Conserva todos los datos.
+- NO crea un negocio.
+- NO publica un perfil.
+- NO activa un panel de propietario.
+
+INSTALACIÓN
+1. Sube todos los archivos directamente a la raíz de GitHub, sin carpetas.
+2. En Supabase > SQL Editor ejecuta TODO: 050_pre_registro_oficial.sql
+3. Espera el despliegue de Cloudflare Pages.
+4. Abre pre-registros.html y presiona Ctrl + F5.
+5. Confirma que aparezca LN Studio u otros registros.
+
+IMPORTANTE
+No es necesario volver a ejecutar 040_panel_admin_v1.sql. El archivo 050 reemplaza las funciones de aprobación anteriores y elimina el trigger que activaba propietarios.

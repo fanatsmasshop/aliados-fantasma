@@ -28,3 +28,7 @@ Demo v0.1 — julio de 2026.
 - Recuperación y cambio de contraseña.
 - Bandeja administrativa de pre-registros.
 - Ejecutar `030_pre_registro_auth.sql` antes de probar.
+
+
+## Fase actual: pre-registro
+Esta entrega administra únicamente el pre-registro. Aprobar una solicitud no publica negocios, no crea perfiles públicos y no habilita paneles de propietarios.
