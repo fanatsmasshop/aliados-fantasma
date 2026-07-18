@@ -1,22 +1,15 @@
-# Aliados Fantasma — Demo pública v0.1
+# Aliados Fantasma — versión sin carpetas
 
-Versión revisada y unificada de la demostración pública y el panel administrativo.
+Todos los archivos deben permanecer juntos en la raíz del repositorio.
 
-## Flujo público
-- `index.html`: presentación y directorio dinámico.
-- `perfil.html?slug=...`: perfil público dinámico.
-- `registro.html`: información para negocios interesados.
-- `privacidad.html` y `terminos.html`: textos provisionales.
+## Pasos
+1. Sube todos estos archivos directamente a GitHub, sin crear carpetas.
+2. Ejecuta `020_hacer_admin.sql` en Supabase > SQL Editor.
+3. Publica el repositorio en Cloudflare Pages.
 
-## Flujo privado
-- `login.html`: acceso administrativo.
-- `dashboard.html`: resumen del sistema.
-- `negocios.html`: alta, edición y activación de negocios.
-- `solicitudes.html`: revisión de solicitudes.
-- `promociones.html`: administración de promociones.
+## Acceso
+Correo configurado para administrador:
+fanatsmasbikersecatepec@gmail.com
 
-## Seguridad
-El navegador utiliza una Publishable Key de Supabase. Nunca agregues una Secret Key ni `service_role` al repositorio.
-
-## Estado
-Demo v0.1 — julio de 2026.
+## Importante
+No uses la clave service_role en el frontend.
