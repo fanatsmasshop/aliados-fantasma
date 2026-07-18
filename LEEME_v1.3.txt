@@ -1,0 +1,20 @@
+ALIADOS FANTASMA v1.3 — HOTFIX ESTADO DE CUENTA
+
+Este ajuste corrige el caso de LN Studio donde el pre-registro sí existe en Supabase,
+pero la página estado-cuenta.html no lo encontraba.
+
+CAUSA:
+La página buscaba únicamente pre_registros.id = auth.uid(). Algunos registros creados
+por versiones anteriores pueden estar asociados correctamente por correo, pero conservar
+un UUID diferente.
+
+PASOS:
+1. Sube todos los archivos de este ZIP a GitHub, sin carpetas y reemplazando los actuales.
+2. En Supabase > SQL Editor ejecuta completo: 052_hotfix_estado_cuenta.sql
+3. Espera el despliegue de Cloudflare Pages.
+4. Cierra sesión de la cuenta LN Studio y vuelve a iniciar sesión con:
+   lnstudio.eventos@gmail.com
+5. Abre estado-cuenta.html y presiona Ctrl + F5.
+
+Este hotfix NO crea negocios, NO activa perfiles públicos y NO cambia el alcance:
+continúa siendo únicamente la fase de pre-registro.
