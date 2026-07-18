@@ -13,7 +13,7 @@ if (!isConfigured || !supabase) {
   button.disabled = true;
 } else {
   const { data } = await supabase.auth.getSession();
-  if (data.session) location.replace('dashboard.html');
+  if (data.session) await redirectByRole(data.session.user);
 }
 
 document.querySelector('#toggle-password').addEventListener('click', () => {
@@ -22,6 +22,23 @@ document.querySelector('#toggle-password').addEventListener('click', () => {
   document.querySelector('#toggle-password').textContent = visible ? 'Ver' : 'Ocultar';
 });
 
+async function redirectByRole(user) {
+  const { data: profile, error } = await supabase
+    .from('perfiles')
+    .select('rol,activo,estado')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (!error && profile?.rol === 'administrador' && profile?.activo === true) {
+    location.replace('dashboard.html');
+    return true;
+  }
+
+  await supabase.auth.signOut();
+  message.textContent = 'Tu correo ya está verificado, pero el acceso al panel sigue pendiente de aprobación.';
+  return false;
+}
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   message.textContent = '';
@@ -29,16 +46,19 @@ form.addEventListener('submit', async (event) => {
   button.querySelector('span').textContent = 'Verificando…';
 
   try {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email.value.trim(),
       password: password.value
     });
 
     if (error) {
-      message.textContent = 'No fue posible iniciar sesión. Revisa el correo y la contraseña.';
+      message.textContent = error.message?.toLowerCase().includes('email not confirmed')
+        ? 'Primero confirma tu correo desde el mensaje que te enviamos.'
+        : 'No fue posible iniciar sesión. Revisa el correo y la contraseña.';
       return;
     }
-    location.replace('dashboard.html');
+
+    await redirectByRole(data.user);
   } catch (error) {
     console.error(error);
     message.textContent = 'No fue posible conectar con el servicio de acceso.';

@@ -20,3 +20,11 @@ El navegador utiliza una Publishable Key de Supabase. Nunca agregues una Secret 
 
 ## Estado
 Demo v0.1 — julio de 2026.
+
+
+## v0.7.2 — Pre-registro y acceso
+- Registro público con correo propio.
+- Confirmación de correo.
+- Recuperación y cambio de contraseña.
+- Bandeja administrativa de pre-registros.
+- Ejecutar `030_pre_registro_auth.sql` antes de probar.

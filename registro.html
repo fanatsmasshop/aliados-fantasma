@@ -1,2 +1,50 @@
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1.0" name="viewport"/><title>Participación de negocios | Aliados Fantasma</title><link href="favicon.png" rel="icon"/><link href="style.css?v=20260717-2" rel="stylesheet"/><link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head><body><header class="encabezado"><div class="contenedor encabezado-contenido"><a class="marca" href="index.html"><img alt="Aliados Fantasma" src="isotipo-aliados.webp"/><div><strong>Aliados Fantasma</strong><small>Módulo en desarrollo</small></div></a><a class="encabezado-accion" href="index.html">Inicio</a></div></header><main class="proceso"><div class="contenedor"><section class="proceso-panel"><img src="isotipo-aliados.webp"/><div><span class="etiqueta">Próximamente</span></div><h1>Participación de negocios</h1><p>Actualmente no existe un registro público ni creación automática de cuentas. Los negocios se incorporan únicamente por invitación, validación o acuerdo directo con el equipo de Aliados Fantasma.</p><div class="botones"><a class="boton boton-principal" href="index.html">Volver al inicio</a><a class="boton boton-secundario" href="https://wa.me/525610329215">Solicitar información</a></div></section></div></main><nav class="menu-inferior"><div class="menu-inferior-contenido"><a class="menu-item" href="index.html"><span>🏠</span><span>Inicio</span></a><a class="menu-item" href="index.html#negocios"><span>🔎</span><span>Explorar</span></a><a class="menu-item" href="index.html#negocios"><span>🏪</span><span>Negocios</span></a><a class="menu-item" href="publicar.html"><span>➕</span><span>Publicar</span></a><a class="menu-item activo" href="login.html"><span>👤</span><span>Cuenta</span></a></div></nav></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pre-registro de negocio | Aliados Fantasma</title>
+  <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260718-1">
+  <link rel="stylesheet" href="logos.css?v=20260717-2">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260717-1">
+</head>
+<body>
+  <div class="demo-banner">👻 PRE-REGISTRO <small>— Solicita un lugar en la red Aliados Fantasma.</small></div>
+  <a class="page-back-link" href="index.html">← Volver al sitio</a>
+  <div class="login-page">
+    <main class="register-shell">
+      <section class="register-brand">
+        <img class="af-login-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
+        <p class="eyebrow">RED LOCAL DE NEGOCIOS</p>
+        <h1>Pre-registra tu negocio</h1>
+        <p class="login-intro">Crea tu cuenta con un correo propio, verifica tu identidad y envíanos los datos básicos de tu negocio.</p>
+        <div class="feature-list"><span>Sin costo en esta etapa</span><span>Revisión manual</span><span>Perfil sujeto a aprobación</span></div>
+        <div class="auth-note" style="margin-top:22px"><strong>Importante:</strong> el pre-registro no publica automáticamente tu negocio. El equipo revisará la información antes de habilitar el acceso.</div>
+      </section>
+      <section class="register-card">
+        <div><p class="eyebrow">SOLICITUD DE PARTICIPACIÓN</p><h2>Datos del responsable y del negocio</h2><p class="muted">Todos los campos marcados son necesarios.</p></div>
+        <div id="config-warning" class="notice warning hidden">La conexión con Supabase no está configurada.</div>
+        <form id="register-form" class="form-stack">
+          <div class="register-grid">
+            <label><span>Nombre del responsable</span><input id="responsable" type="text" maxlength="100" required autocomplete="name"></label>
+            <label><span>Nombre del negocio</span><input id="negocio" type="text" maxlength="120" required></label>
+            <label><span>Giro o categoría</span><input id="categoria" type="text" maxlength="100" placeholder="Ej. comida, estética, tecnología" required></label>
+            <label><span>WhatsApp</span><input id="whatsapp" type="tel" maxlength="20" placeholder="55 1234 5678" required autocomplete="tel"></label>
+            <label><span>Municipio</span><input id="municipio" type="text" maxlength="100" value="Ecatepec" required></label>
+            <label><span>Colonia o zona</span><input id="colonia" type="text" maxlength="120" required></label>
+            <label class="wide"><span>Correo electrónico</span><input id="email" type="email" required autocomplete="email"></label>
+            <label><span>Contraseña</span><div class="password-field"><input id="password" type="password" minlength="8" required autocomplete="new-password"><button id="toggle-password" class="icon-button" type="button">Ver</button></div></label>
+            <label><span>Confirmar contraseña</span><input id="password-confirm" type="password" minlength="8" required autocomplete="new-password"></label>
+            <label class="wide checkbox-label"><input id="terms" type="checkbox" required><span>Acepto los <a href="terminos.html" target="_blank" rel="noopener">términos</a> y el <a href="privacidad.html" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label>
+          </div>
+          <button id="register-button" class="button primary full" type="submit"><span>Enviar pre-registro</span></button>
+          <p id="register-message" class="form-message" aria-live="polite"></p>
+        </form>
+        <p class="login-help">¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí.</a></p>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="registro.js?v=20260718-1"></script>
+</body>
+</html>

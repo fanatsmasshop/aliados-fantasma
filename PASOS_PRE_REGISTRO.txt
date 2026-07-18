@@ -1,0 +1,20 @@
+ALIADOS FANTASMA — ACTIVAR PRE-REGISTRO
+
+1. Sube todos los archivos de este ZIP a la raíz de GitHub (sin carpetas).
+2. En Supabase > SQL Editor ejecuta completo: 030_pre_registro_auth.sql
+3. En Supabase > Authentication > Sign In / Providers > Email:
+   - Activa Email provider.
+   - Activa Confirm email.
+4. En Supabase > Authentication > URL Configuration:
+   - Site URL: la URL pública principal de Aliados Fantasma.
+   - Redirect URLs: agrega la URL pública con /** al final.
+     Ejemplo: https://TU-SITIO.pages.dev/**
+5. Prueba registro.html con un correo DISTINTO al administrador.
+6. Confirma el mensaje recibido por correo.
+7. Entra como administrador y abre pre-registros.html.
+
+IMPORTANTE:
+- El correo administrador actual no se reemplaza.
+- Cada negocio podrá usar su propio correo para pre-registrarse.
+- El pre-registro no da acceso automático al panel ni publica negocios.
+- Para producción conviene configurar SMTP propio en Supabase antes de una campaña grande.
