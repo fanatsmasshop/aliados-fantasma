@@ -1,20 +1,18 @@
-ALIADOS FANTASMA — ACTIVAR PRE-REGISTRO
+ALIADOS FANTASMA v0.7.3 — ACTIVAR REGISTRO COMPLETO
 
-1. Sube todos los archivos de este ZIP a la raíz de GitHub (sin carpetas).
-2. En Supabase > SQL Editor ejecuta completo: 030_pre_registro_auth.sql
-3. En Supabase > Authentication > Sign In / Providers > Email:
-   - Activa Email provider.
-   - Activa Confirm email.
-4. En Supabase > Authentication > URL Configuration:
-   - Site URL: la URL pública principal de Aliados Fantasma.
-   - Redirect URLs: agrega la URL pública con /** al final.
-     Ejemplo: https://TU-SITIO.pages.dev/**
-5. Prueba registro.html con un correo DISTINTO al administrador.
-6. Confirma el mensaje recibido por correo.
-7. Entra como administrador y abre pre-registros.html.
+1. Sube todos los archivos a GitHub, directamente en la raíz.
+2. Ejecuta TODO el archivo 030_pre_registro_auth.sql en Supabase > SQL Editor. Puedes volver a ejecutarlo aunque ya hayas usado la versión anterior.
+3. Authentication > Sign In / Providers > Email:
+   - Email habilitado.
+   - Confirm email habilitado.
+4. Authentication > URL Configuration:
+   Site URL: https://TU-SITIO.pages.dev
+   Redirect URLs:
+   https://TU-SITIO.pages.dev/**
+5. Authentication > Email Templates:
+   Personaliza Confirm signup y Reset password usando {{ .ConfirmationURL }}.
+6. Prueba con un correo diferente al administrador:
+   registro.html > correo recibido > verificar > estado-cuenta.html > recuperar contraseña.
+7. En pre-registros.html cambia el estado a Aprobado. Al siguiente inicio de sesión, el negocio entrará a panel.html.
 
-IMPORTANTE:
-- El correo administrador actual no se reemplaza.
-- Cada negocio podrá usar su propio correo para pre-registrarse.
-- El pre-registro no da acceso automático al panel ni publica negocios.
-- Para producción conviene configurar SMTP propio en Supabase antes de una campaña grande.
+IMPORTANTE: Para uso real con muchos registros, configura SMTP propio en Supabase para mejorar entrega y límites de correo.

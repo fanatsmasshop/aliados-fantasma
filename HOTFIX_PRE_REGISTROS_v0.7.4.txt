@@ -1,0 +1,12 @@
+ALIADOS FANTASMA — HOTFIX v0.7.4
+
+Problema corregido:
+La página pre-registros.html se quedaba permanentemente en “Cargando…” porque pre-registros.js intentaba importar nombres que no existían en ui.js.
+
+PASOS:
+1. Sube todos los archivos de este ZIP a GitHub, reemplazando los anteriores.
+2. No uses carpetas.
+3. En Supabase > SQL Editor ejecuta 031_reparar_pre_registros.sql.
+4. Espera el despliegue de Cloudflare Pages.
+5. Abre pre-registros.html y presiona Ctrl + F5.
+6. La cuenta de prueba debe aparecer como Pendiente y con correo verificado.

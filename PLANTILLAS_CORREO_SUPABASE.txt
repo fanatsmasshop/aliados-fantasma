@@ -1,0 +1,21 @@
+PLANTILLAS SUGERIDAS PARA SUPABASE
+
+CONFIRM SIGNUP — Asunto:
+Confirma tu cuenta de Aliados Fantasma
+
+HTML:
+<h2>Confirma tu cuenta 👻</h2>
+<p>Gracias por iniciar tu pre-registro en Aliados Fantasma.</p>
+<p>Para verificar que este correo te pertenece, pulsa el siguiente botón:</p>
+<p><a href="{{ .ConfirmationURL }}">Confirmar mi cuenta</a></p>
+<p>Después podrás consultar el estado de tu solicitud.</p>
+<p>Si tú no realizaste este registro, ignora este mensaje.</p>
+
+RESET PASSWORD — Asunto:
+Recupera tu acceso a Aliados Fantasma
+
+HTML:
+<h2>Restablece tu contraseña 🔐</h2>
+<p>Recibimos una solicitud para cambiar la contraseña de tu cuenta.</p>
+<p><a href="{{ .ConfirmationURL }}">Crear una contraseña nueva</a></p>
+<p>Si no solicitaste este cambio, puedes ignorar el mensaje.</p>

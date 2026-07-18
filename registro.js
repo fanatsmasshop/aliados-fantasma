@@ -1,81 +1,17 @@
 import { supabase } from './supabase-client.js?v=20260717-2';
 import { isConfigured } from './config.js?v=20260717-2';
-
-const form = document.querySelector('#register-form');
-const button = document.querySelector('#register-button');
-const message = document.querySelector('#register-message');
-const warning = document.querySelector('#config-warning');
-const password = document.querySelector('#password');
-const passwordConfirm = document.querySelector('#password-confirm');
-
-if (!isConfigured || !supabase) {
-  warning.classList.remove('hidden');
-  button.disabled = true;
-}
-
-document.querySelector('#toggle-password').addEventListener('click', () => {
-  const visible = password.type === 'text';
-  password.type = visible ? 'password' : 'text';
-  passwordConfirm.type = visible ? 'password' : 'text';
-  document.querySelector('#toggle-password').textContent = visible ? 'Ver' : 'Ocultar';
-});
-
-function value(id) {
-  return document.querySelector(id).value.trim();
-}
-
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  message.textContent = '';
-
-  if (password.value !== passwordConfirm.value) {
-    message.textContent = 'Las contraseñas no coinciden.';
-    passwordConfirm.focus();
-    return;
-  }
-
-  if (password.value.length < 8) {
-    message.textContent = 'La contraseña debe tener al menos 8 caracteres.';
-    password.focus();
-    return;
-  }
-
-  button.disabled = true;
-  button.querySelector('span').textContent = 'Registrando…';
-
-  try {
-    const redirectUrl = new URL('verificar-correo.html', window.location.href).href;
-    const { error } = await supabase.auth.signUp({
-      email: value('#email').toLowerCase(),
-      password: password.value,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          tipo_registro: 'pre_registro_negocio',
-          nombre_responsable: value('#responsable'),
-          nombre_negocio: value('#negocio'),
-          categoria: value('#categoria'),
-          whatsapp: value('#whatsapp'),
-          municipio: value('#municipio'),
-          colonia: value('#colonia')
-        }
-      }
-    });
-
-    if (error) throw error;
-
-    sessionStorage.setItem('af_prereg_email', value('#email').toLowerCase());
-    location.href = 'registro-enviado.html';
-  } catch (error) {
-    console.error(error);
-    const raw = (error.message || '').toLowerCase();
-    message.textContent = raw.includes('rate limit')
-      ? 'Se hicieron demasiados intentos. Espera unos minutos y vuelve a probar.'
-      : raw.includes('password')
-        ? 'La contraseña no cumple los requisitos de seguridad.'
-        : 'No fue posible completar el pre-registro. Revisa tus datos o intenta con otro correo.';
-  } finally {
-    button.disabled = false;
-    button.querySelector('span').textContent = 'Enviar pre-registro';
-  }
-});
+const form=document.querySelector('#register-form'),button=document.querySelector('#register-button'),message=document.querySelector('#register-message'),warning=document.querySelector('#config-warning'),password=document.querySelector('#password'),confirm=document.querySelector('#password-confirm');let step=1;
+const fields={responsable:'#responsable',email:'#email',password:'#password','password-confirm':'#password-confirm',negocio:'#negocio',categoria:'#categoria',whatsapp:'#whatsapp',municipio:'#municipio',colonia:'#colonia',terms:'#terms'};
+if(!isConfigured||!supabase){warning.classList.remove('hidden');button.disabled=true}
+const el=id=>document.querySelector(fields[id]); const val=id=>el(id).value.trim();
+function setError(id,text=''){const out=document.querySelector(`[data-error-for="${id}"]`);if(out)out.textContent=text;el(id)?.setAttribute('aria-invalid',text?'true':'false')}
+function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)} function validPhone(v){return v.replace(/\D/g,'').length>=10}
+function scorePassword(v){let s=0;if(v.length>=8)s++;if(/[A-ZÁÉÍÓÚÑ]/.test(v))s++;if(/[a-záéíóúñ]/.test(v))s++;if(/\d/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;return s}
+function updateStrength(){const s=scorePassword(password.value),fill=document.querySelector('#password-meter-fill'),label=document.querySelector('#password-strength');fill.style.width=`${s*20}%`;const labels=['Muy débil','Débil','Aceptable','Buena','Fuerte','Muy fuerte'];label.textContent=password.value?labels[s]:'Usa 8 caracteres, una mayúscula y un número.';label.style.color=s>=4?'var(--success)':s>=3?'#ffd36b':'var(--danger)'} password.addEventListener('input',updateStrength);
+document.querySelector('#toggle-password').addEventListener('click',e=>{const show=password.type==='password';password.type=confirm.type=show?'text':'password';e.currentTarget.textContent=show?'Ocultar':'Ver'});
+function validateStep(n){let ok=true;const req=(id,msg)=>{setError(id,'');if(!val(id)){setError(id,msg);ok=false}};if(n===1){req('responsable','Escribe tu nombre.');req('email','Escribe tu correo.');if(val('email')&&!validEmail(val('email'))){setError('email','Escribe un correo válido.');ok=false}setError('password','');if(scorePassword(password.value)<3){setError('password','Usa al menos 8 caracteres, una mayúscula y un número.');ok=false}setError('password-confirm','');if(password.value!==confirm.value){setError('password-confirm','Las contraseñas no coinciden.');ok=false}}if(n===2){['negocio','categoria','municipio','colonia'].forEach(id=>req(id,'Este campo es obligatorio.'));req('whatsapp','Escribe tu WhatsApp.');if(val('whatsapp')&&!validPhone(val('whatsapp'))){setError('whatsapp','Escribe al menos 10 dígitos.');ok=false}}if(n===3){setError('terms','');if(!el('terms').checked){setError('terms','Debes aceptar los términos y el aviso de privacidad.');ok=false}}return ok}
+function renderSummary(){document.querySelector('#register-summary').innerHTML=[['Responsable',val('responsable')],['Correo',val('email')],['Negocio',val('negocio')],['Categoría',val('categoria')],['WhatsApp',val('whatsapp')],['Zona',`${val('colonia')}, ${val('municipio')}`]].map(([a,b])=>`<div class="summary-row"><span>${a}</span><strong>${escapeHtml(b)}</strong></div>`).join('')}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function go(n){step=n;document.querySelectorAll('.form-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===n));document.querySelectorAll('.auth-step').forEach(x=>{const k=Number(x.dataset.progress);x.classList.toggle('active',k===n);x.classList.toggle('done',k<n)});const titles={1:['Datos de acceso','Comienza con tu nombre, correo y contraseña.'],2:['Información del negocio','Cuéntanos lo básico para revisar tu solicitud.'],3:['Confirma tu información','Revisa tus datos antes de crear la cuenta.']};document.querySelector('#step-title').textContent=titles[n][0];document.querySelector('#step-subtitle').textContent=titles[n][1];if(n===3)renderSummary();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-next]').forEach(x=>x.addEventListener('click',()=>{if(validateStep(step))go(step+1)}));document.querySelectorAll('[data-prev]').forEach(x=>x.addEventListener('click',()=>go(step-1)));
+form.addEventListener('submit',async e=>{e.preventDefault();message.textContent='';if(!validateStep(3))return;button.disabled=true;button.querySelector('span').textContent='Creando cuenta…';try{const email=val('email').toLowerCase();const redirect=new URL('verificar-correo.html',location.href).href;const {data,error}=await supabase.auth.signUp({email,password:password.value,options:{emailRedirectTo:redirect,data:{tipo_registro:'pre_registro_negocio',nombre_responsable:val('responsable'),nombre_negocio:val('negocio'),categoria:val('categoria'),whatsapp:val('whatsapp'),municipio:val('municipio'),colonia:val('colonia')}}});if(error)throw error;sessionStorage.setItem('af_prereg_email',email);if(data?.session){location.href='estado-cuenta.html'}else location.href='registro-enviado.html'}catch(err){console.error(err);const raw=(err.message||'').toLowerCase();message.textContent=raw.includes('rate limit')?'Se hicieron demasiados intentos. Espera unos minutos.':raw.includes('already')||raw.includes('registered')?'Ese correo ya tiene una cuenta. Inicia sesión o recupera tu contraseña.':raw.includes('password')?'La contraseña no cumple los requisitos de seguridad.':'No pudimos crear la cuenta. Revisa tu conexión e inténtalo de nuevo.'}finally{button.disabled=false;button.querySelector('span').textContent='Crear mi cuenta'}});
