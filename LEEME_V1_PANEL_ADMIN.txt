@@ -1,0 +1,25 @@
+ALIADOS FANTASMA v1.0 — PANEL ADMINISTRATIVO
+
+ESTA VERSIÓN CONSERVA:
+- Contador y lanzamiento de la portada.
+- Logos, imágenes, animaciones y diseño público.
+- Registro, verificación de correo y recuperación de contraseña.
+- Todos los archivos en la raíz, SIN CARPETAS.
+
+PARA ACTIVAR EL PANEL V1.0:
+1. Sube y reemplaza TODOS los archivos en GitHub.
+2. En Supabase > SQL Editor, abre 040_panel_admin_v1.sql.
+3. Copia TODO su contenido y presiona Run.
+4. Espera el despliegue de Cloudflare Pages.
+5. Abre https://aliados-fantasma.pages.dev/pre-registros.html
+6. Presiona Ctrl + F5.
+
+AL APROBAR UNA SOLICITUD:
+- Verifica que el correo esté confirmado.
+- Activa el perfil del usuario como propietario.
+- Crea el negocio en estado borrador.
+- Asigna al usuario como propietario del negocio.
+- Guarda la relación con el pre-registro.
+
+NOTA:
+El envío de un correo automático de "negocio aprobado" requiere una función de servidor/Edge Function y un proveedor de correo. La aprobación y activación de la cuenta sí quedan funcionando sin ese correo adicional.

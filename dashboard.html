@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard | Aliados Fantasma</title>
   <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
-  <link rel="stylesheet" href="app.css?v=20260718-1">
+  <link rel="stylesheet" href="app.css?v=20260718-100">
   <link rel="stylesheet" href="logos.css?v=20260717-2">
 <link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head>
 <body>
-  <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Algunas funciones siguen en desarrollo.</small></div>
+  <div class="demo-banner">⚡ ALIADOS FANTASMA v1.0 <small>— Centro de control operativo</small></div>
   <div class="app-layout">
     <aside id="sidebar" class="sidebar">
-      <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span></a>
+      <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Administración central</small></span></a>
       <nav class="nav-list"><a class="nav-link active" href="dashboard.html"><span>▦</span>Dashboard</a>
 <a class="nav-link" href="pre-registros.html"><span>✉</span>Pre-registros</a>
 <a class="nav-link " href="negocios.html"><span>◇</span>Negocios</a>
@@ -27,9 +27,10 @@
 <div id="warning" class="notice danger hidden"></div>
 <section class="stats-grid">
   <article class="stat-card"><div class="stat-icon">◇</div><div><p>Negocios</p><strong id="business-count">—</strong><small id="active-business-count">— activos</small></div></article>
-  <article class="stat-card"><div class="stat-icon">✓</div><div><p>Solicitudes pendientes</p><strong id="request-count">—</strong><small>Requieren revisión</small></div></article>
+  <article class="stat-card"><div class="stat-icon">✉</div><div><p>Nuevos pre-registros</p><strong id="pre-count">—</strong><small><a href="pre-registros.html">Revisar ingresos</a></small></div></article>
+  <article class="stat-card"><div class="stat-icon">✓</div><div><p>Cambios pendientes</p><strong id="request-count">—</strong><small>Requieren revisión</small></div></article>
   <article class="stat-card"><div class="stat-icon">★</div><div><p>Promociones activas</p><strong id="promotion-count">—</strong><small>Publicadas</small></div></article>
-  <article class="stat-card"><div class="stat-icon">▤</div><div><p>Categorías</p><strong id="category-count">—</strong><small>Disponibles</small></div></article>
+  
 </section>
 <section class="dashboard-grid">
   <article class="panel"><h2>Solicitudes recientes</h2><div id="requests-list" class="empty-state">Cargando…</div></article>
@@ -39,6 +40,6 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="dashboard.js?v=20260717-2"></script>
+  <script type="module" src="dashboard.js?v=20260718-100"></script>
 </body>
 </html>

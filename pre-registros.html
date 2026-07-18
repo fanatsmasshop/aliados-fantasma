@@ -1,1 +1,55 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pre-registros | Aliados Fantasma</title><link rel="icon" href="aliados-fantasma-icono.png"><link rel="stylesheet" href="app.css?v=20260718-1"><link rel="stylesheet" href="logos.css?v=20260717-2"><link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head><body><div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Gestión de solicitudes de ingreso.</small></div><div class="app-layout"><aside id="sidebar" class="sidebar"><a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Demo administrativa</small></span></a><nav class="nav-list"><a class="nav-link" href="dashboard.html"><span>▦</span>Dashboard</a><a class="nav-link active" href="pre-registros.html"><span>✉</span>Pre-registros</a><a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a><a class="nav-link" href="solicitudes.html"><span>✓</span>Solicitudes</a><a class="nav-link" href="promociones.html"><span>★</span>Promociones</a></nav><div class="sidebar-footer"><a class="button secondary full" href="index.html" target="_blank">🌐 Ver sitio público</a><button id="logout-button" class="button secondary full" type="button">Cerrar sesión</button></div></aside><div class="app-main"><header class="topbar"><button id="menu-button" class="icon-button menu-button" type="button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Pre-registros</h1></div><div class="user-chip"><span id="user-initial" class="user-avatar">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header><main class="content"><section class="page-head"><div><p class="eyebrow">SOLICITUDES DE INGRESO</p><h2>Negocios interesados</h2><p class="muted">Correos verificados y datos enviados desde el formulario público.</p></div><button id="refresh-button" class="button secondary" type="button">Actualizar</button></section><div id="warning" class="notice danger hidden"></div><div class="toolbar"><input id="search" class="search" type="search" placeholder="Buscar negocio, responsable, correo o zona"><select id="status-filter"><option value="">Todos los estados</option><option value="pendiente">Pendiente</option><option value="contactado">Contactado</option><option value="aprobado">Aprobado</option><option value="rechazado">Rechazado</option></select></div><div class="table-wrap"><table class="data-table pre-table"><thead><tr><th>Negocio</th><th>Responsable</th><th>Contacto</th><th>Ubicación</th><th>Correo verificado</th><th>Estado</th><th>Fecha</th></tr></thead><tbody id="pre-body"><tr><td colspan="7" class="empty-state">Cargando…</td></tr></tbody></table></div></main></div></div><div id="overlay" class="overlay hidden"></div><script type="module" src="pre-registros.js?v=20260718-2"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Solicitudes de ingreso | Aliados Fantasma</title>
+  <link rel="icon" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260718-100">
+  <link rel="stylesheet" href="logos.css?v=20260717-2">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260717-1">
+</head>
+<body>
+  <div class="demo-banner">⚡ ALIADOS FANTASMA v1.0 <small>— Centro de incorporación de negocios</small></div>
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar">
+      <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Administración central</small></span></a>
+      <nav class="nav-list">
+        <a class="nav-link" href="dashboard.html"><span>▦</span>Dashboard</a>
+        <a class="nav-link active" href="pre-registros.html"><span>✉</span>Solicitudes de ingreso <b id="nav-pending" class="nav-count hidden">0</b></a>
+        <a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
+        <a class="nav-link" href="solicitudes.html"><span>✓</span>Cambios</a>
+        <a class="nav-link" href="promociones.html"><span>★</span>Promociones</a>
+      </nav>
+      <div class="sidebar-footer"><a class="button secondary full" href="index.html" target="_blank" rel="noopener">🌐 Ver sitio público</a><button id="logout-button" class="button secondary full" type="button">Cerrar sesión</button></div>
+    </aside>
+    <div class="app-main">
+      <header class="topbar"><button id="menu-button" class="icon-button menu-button" type="button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Solicitudes de ingreso</h1></div><div class="user-chip"><span id="user-initial" class="user-avatar">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header>
+      <main class="content">
+        <section class="page-head premium-head"><div><p class="eyebrow">NUEVOS ALIADOS</p><h2>Convierte interesados en negocios activos</h2><p class="muted">Revisa los datos, contacta al responsable y aprueba su acceso en un solo paso.</p></div><button id="refresh-button" class="button secondary" type="button">↻ Actualizar</button></section>
+        <div id="warning" class="notice danger hidden"></div>
+        <section class="mini-stats" aria-label="Resumen de solicitudes">
+          <article><span>Pendientes</span><strong id="pending-count">—</strong></article>
+          <article><span>Contactados</span><strong id="contacted-count">—</strong></article>
+          <article><span>Aprobados</span><strong id="approved-count">—</strong></article>
+          <article><span>Total</span><strong id="total-count">—</strong></article>
+        </section>
+        <div class="toolbar premium-toolbar"><label class="search-box"><span>⌕</span><input id="search" type="search" placeholder="Buscar negocio, responsable, correo o zona"></label><select id="status-filter"><option value="">Todos los estados</option><option value="pendiente">Pendientes</option><option value="contactado">Contactados</option><option value="aprobado">Aprobados</option><option value="rechazado">Rechazados</option></select></div>
+        <section id="pre-grid" class="application-grid"><div class="loading-card"><div class="spinner"></div><p>Cargando solicitudes…</p></div></section>
+      </main>
+    </div>
+  </div>
+  <div id="overlay" class="overlay hidden"></div>
+  <div id="decision-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="decision-modal">
+      <button id="modal-close" class="modal-x" type="button" aria-label="Cerrar">×</button>
+      <span id="modal-icon" class="decision-icon">✓</span>
+      <h2 id="modal-title">Confirmar acción</h2>
+      <p id="modal-description" class="muted"></p>
+      <label id="notes-field" class="field hidden"><span>Notas internas</span><textarea id="admin-notes" rows="4" placeholder="Motivo o seguimiento (opcional)"></textarea></label>
+      <div class="modal-actions"><button id="modal-cancel" class="button secondary" type="button">Cancelar</button><button id="modal-confirm" class="button primary" type="button">Confirmar</button></div>
+    </div>
+  </div>
+  <script type="module" src="pre-registros.js?v=20260718-100"></script>
+</body>
+</html>
