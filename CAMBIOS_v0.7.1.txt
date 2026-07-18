@@ -1,0 +1,9 @@
+ALIADOS FANTASMA v0.7.1 — CORRECCIÓN VERIFICADA
+
+1. privacidad.html reescrita completamente.
+2. terminos.html reescrita completamente.
+3. index.html ya no ofrece registro público ni creación automática de perfiles.
+4. registro.html aclara que la incorporación es por invitación, validación o acuerdo directo.
+5. Se conservaron exactamente las rutas privacidad.html y terminos.html.
+
+Para publicar en GitHub: sustituye los archivos del repositorio por el contenido de esta carpeta y espera el nuevo despliegue de Cloudflare Pages.
