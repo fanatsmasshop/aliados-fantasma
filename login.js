@@ -28,7 +28,7 @@ async function redirectByRole(user) {
     location.replace('dashboard.html');
     return;
   }
-  location.replace('estado-cuenta.html');
+  location.replace('panel.html');
 }
 
 form.addEventListener('submit', async event => {
