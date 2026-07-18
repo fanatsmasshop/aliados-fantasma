@@ -1,6 +1,6 @@
-import { supabase } from './supabase-client.js?v=20260718-110';
-import { requireAdmin, logout } from './auth.js?v=20260718-110';
-import { shell, esc, fmt, toast, setLoading } from './ui.js?v=20260718-110';
+import { supabase } from './supabase-client.js?v=20260718-120';
+import { requireAdmin, logout } from './auth.js?v=20260718-120';
+import { shell, esc, fmt, toast, setLoading } from './ui.js?v=20260718-120';
 
 let rows = [];
 let pendingAction = null;

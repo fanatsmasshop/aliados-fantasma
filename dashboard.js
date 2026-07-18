@@ -1,6 +1,6 @@
-import { requireAdmin, logout } from './auth.js?v=20260718-110';
-import { supabase } from './supabase-client.js?v=20260718-110';
-import { shell, esc, fmt } from './ui.js?v=20260718-110';
+import { requireAdmin, logout } from './auth.js?v=20260718-120';
+import { supabase } from './supabase-client.js?v=20260718-120';
+import { shell, esc, fmt } from './ui.js?v=20260718-120';
 
 const auth = await requireAdmin();
 if (auth) {

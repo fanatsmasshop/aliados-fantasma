@@ -1,0 +1,24 @@
+ALIADOS FANTASMA — PRE-REGISTRO v1.2
+
+Esta actualización conserva todo lo existente y corrige dos puntos:
+
+1. Restaura en el menú administrativo:
+   - Dashboard
+   - Pre-registros
+   - Negocios
+   - Solicitudes
+   - Promociones
+
+2. Corrige el error “No autorizado” del Dashboard y Pre-registros.
+
+IMPORTANTE
+- La fase actual sigue siendo únicamente PRE-REGISTRO.
+- Aprobar un pre-registro NO crea un negocio ni publica un perfil.
+- Los módulos Negocios, Solicitudes y Promociones se conservan visibles para no perder el trabajo anterior, pero no forman parte automática del flujo de pre-registro.
+
+PASOS
+1. Sube todos los archivos del ZIP a GitHub, sin carpetas, reemplazando los actuales.
+2. En Supabase > SQL Editor ejecuta completo: 051_hotfix_autorizacion_y_menu.sql
+3. Espera el despliegue de Cloudflare Pages.
+4. Cierra sesión e inicia sesión otra vez.
+5. Abre dashboard.html y presiona Ctrl + F5.
