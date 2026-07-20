@@ -38,3 +38,9 @@ Esta entrega administra únicamente el pre-registro. Aprobar una solicitud no pu
 - Antes del 24 de agosto de 2026, 2:30 p. m.: landing pública con contador; directorio y perfiles visibles únicamente para administradores autenticados.
 - Al llegar la fecha: la landing cambia automáticamente a modo producción, habilita Explorar negocios y permite abrir los perfiles publicados.
 - No requiere SQL adicional.
+
+## v1.7.1 — Hotfix de redes, espera de lanzamiento y bajas
+1. Ejecuta `062_hotfix_redes_espera_y_bajas.sql` después de `061_revision_publicacion.sql`.
+2. Los perfiles aprobados quedan en estado **Aprobado · en espera** hasta la fecha global de lanzamiento.
+3. La visibilidad pública continúa bloqueada; administradores conservan la vista privada.
+4. En `negocios.html`, **Dar de baja** retira el negocio sin borrar sus datos y permite reactivarlo.

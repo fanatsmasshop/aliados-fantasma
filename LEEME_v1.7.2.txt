@@ -1,0 +1,29 @@
+ALIADOS FANTASMA v1.7.2 — CHECK COMPLETO DEL DASHBOARD DE NEGOCIOS
+
+Esta actualización mejora el Centro de Configuración del negocio y no requiere ejecutar un SQL nuevo.
+
+CAMBIOS PRINCIPALES
+- Centro visible de estado del perfil.
+- Confirmación clara cuando un perfil fue enviado a revisión.
+- Estado "Cambios solicitados" con mensaje del administrador.
+- Estado "Aprobado · en espera" separado de "Publicado".
+- Aviso explícito de que el perfil seguirá privado hasta el 24 de agosto de 2026 a las 2:30 p. m.
+- Línea de progreso: Configurar > Enviar > Aprobación > Publicación.
+- Mensajes administrativos con fecha de revisión.
+- Botones y textos adaptados a cada estado.
+- Evita volver a enviar mientras una revisión está activa.
+- Si se modifica un perfil en revisión, aprobado o publicado, los cambios se guardan como una nueva versión y requieren nueva revisión.
+- Confirmación antes de enviar el perfil.
+- Aviso de cambios sin guardar al salir.
+- Estado de cuenta ahora también muestra el estado del perfil digital.
+- Se conserva la separación público/privado y la cuenta regresiva.
+
+ARCHIVOS MODIFICADOS
+- panel.html
+- panel.js
+- onboarding.css
+- estado-cuenta.html
+- estado-cuenta.js
+
+INSTALACIÓN
+Reemplaza los archivos anteriores en GitHub por todos los archivos de este ZIP. No ejecutes otro SQL para esta versión.
