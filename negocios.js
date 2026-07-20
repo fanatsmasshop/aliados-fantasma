@@ -116,9 +116,9 @@ function render() {
       <td><div class="business-cell"><span class="business-logo">${item.logo_url ? `<img src="${esc(item.logo_url)}" alt="">` : esc(item.nombre.charAt(0))}</span><div><strong>${esc(item.nombre)}</strong><small class="muted">/${esc(item.slug)}</small></div></div></td>
       <td>${esc(item.categorias?.nombre || 'Sin categoría')}</td>
       <td>${esc([item.colonia,item.municipio].filter(Boolean).join(', ') || 'Sin ubicación')}</td>
-      <td><span class="badge ${item.activo ? 'active' : 'inactive'}">${item.activo ? 'Activo' : 'Inactivo'}</span></td>
+      <td><span class="badge ${item.baja_at ? 'inactive' : item.activo ? 'active' : 'inactive'}">${item.baja_at ? 'Baja' : item.activo ? 'Activo' : 'Inactivo'}</span>${item.baja_at && item.motivo_baja ? `<small class="muted">${esc(item.motivo_baja)}</small>` : ''}</td>
       <td>${fmt(item.created_at)}</td>
-      <td><div class="row-actions"><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Perfil</a><button class="button ${item.activo ? 'danger' : 'success'} small" type="button" onclick="toggleBusiness('${item.id}',${!item.activo})">${item.activo ? 'Desactivar' : 'Activar'}</button></div></td>
+      <td><div class="row-actions"><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Perfil privado</a>${item.baja_at ? `<button class="button success small" type="button" onclick="reactivateBusiness('${item.id}')">Reactivar</button>` : `<button class="button danger small" type="button" onclick="deactivateBusiness('${item.id}')">Dar de baja</button>`}</div></td>
     </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin resultados</td></tr>';
 }
 
@@ -207,6 +207,27 @@ window.toggleBusiness = async (id, active) => {
   const { error } = await supabase.from('negocios').update({activo:active}).eq('id',id);
   if (error) return toast(error.message, 'error');
   toast(active ? 'Negocio activado' : 'Negocio desactivado');
+  await loadBusinesses();
+};
+
+window.deactivateBusiness = async (id) => {
+  const item = businesses.find(business => business.id === id);
+  if (!item) return;
+  const reason = window.prompt(`Motivo de la baja de ${item.nombre}:`, item.nombre.toLowerCase().includes('muestra') || item.nombre.toLowerCase().includes('demo') ? 'Perfil de demostración' : '');
+  if (reason === null) return;
+  if (!window.confirm(`¿Dar de baja a ${item.nombre}? Dejará de estar activo, pero sus datos se conservarán y podrá reactivarse.`)) return;
+  const { error } = await supabase.rpc('admin_dar_baja_negocio', { p_negocio_id: id, p_motivo: reason.trim() || null });
+  if (error) return toast(`${error.message}. Ejecuta 062_hotfix_redes_espera_y_bajas.sql.`, 'error');
+  toast('Negocio dado de baja');
+  await loadBusinesses();
+};
+
+window.reactivateBusiness = async (id) => {
+  const item = businesses.find(business => business.id === id);
+  if (!item || !window.confirm(`¿Reactivar a ${item.nombre}?`)) return;
+  const { error } = await supabase.rpc('admin_reactivar_negocio', { p_negocio_id: id });
+  if (error) return toast(`${error.message}. Ejecuta 062_hotfix_redes_espera_y_bajas.sql.`, 'error');
+  toast('Negocio reactivado');
   await loadBusinesses();
 };
 
