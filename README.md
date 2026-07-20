@@ -44,3 +44,13 @@ Esta entrega administra únicamente el pre-registro. Aprobar una solicitud no pu
 2. Los perfiles aprobados quedan en estado **Aprobado · en espera** hasta la fecha global de lanzamiento.
 3. La visibilidad pública continúa bloqueada; administradores conservan la vista privada.
 4. En `negocios.html`, **Dar de baja** retira el negocio sin borrar sus datos y permite reactivarlo.
+
+
+## v1.8.0 — Auditoría de lanzamiento
+- Fecha canónica centralizada: 24 de agosto de 2026, 14:30, Ciudad de México (`2026-08-24T20:30:00Z`).
+- Hora sincronizada con el encabezado `Date` de Cloudflare cuando está disponible; respaldo con el reloj del dispositivo.
+- Control global en Supabase con tres modos: automático, cerrado manual y abierto manual.
+- Panel administrativo con freno de emergencia y apertura manual.
+- Landing, directorio, perfiles y dashboard de negocios consumen una sola fuente de verdad.
+- Caché deshabilitada para HTML, JavaScript y control de lanzamiento.
+- Ejecutar `063_control_global_lanzamiento.sql` antes de publicar esta versión.

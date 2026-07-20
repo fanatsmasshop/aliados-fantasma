@@ -1,0 +1,9 @@
+ALIADOS FANTASMA v1.8.0 — AUDITORÍA DE LANZAMIENTO
+
+1. Ejecuta 063_control_global_lanzamiento.sql en Supabase SQL Editor.
+2. Sube todos los archivos del ZIP a GitHub.
+3. Entra al Dashboard administrativo y verifica Control de lanzamiento.
+4. Déjalo en AUTOMÁTICO para abrir el 24/08/2026 a las 14:30, hora de Ciudad de México.
+5. CERRADO es el freno de emergencia. ABIERTO permite adelantar la salida.
+
+La publicación de un negocio no rompe la espera: antes del lanzamiento solo los administradores y el dueño mediante vista previa pueden revisarlo.

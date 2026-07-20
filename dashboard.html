@@ -27,6 +27,16 @@
       <main class="content">
 <section class="page-head"><div><p class="eyebrow">FASE DE PRE-REGISTRO</p><h2>Centro de revisión</h2><p class="muted">Seguimiento real de personas y negocios interesados.</p></div><button id="refresh-button" class="button secondary" type="button">Actualizar</button></section>
 <div id="warning" class="notice danger hidden"></div>
+<section class="panel" style="margin-bottom:22px">
+  <div class="page-head" style="margin-bottom:14px"><div><p class="eyebrow">CONTROL DE LANZAMIENTO</p><h2>Disponibilidad pública</h2><p id="launch-control-description" class="muted">Consultando configuración…</p></div><span id="launch-control-badge" class="status-pill pending">Cargando</span></div>
+  <div class="form-grid" style="align-items:end">
+    <label><span>Modo global</span><select id="launch-mode"><option value="automatico">Automático · abrir en la fecha programada</option><option value="cerrado">Mantener cerrado manualmente</option><option value="abierto">Abrir manualmente ahora</option></select></label>
+    <button id="save-launch-mode" class="button primary" type="button">Guardar modo</button>
+  </div>
+  <p class="muted" style="margin-top:12px">Fecha automática: 24 de agosto de 2026, 2:30 p. m., hora de Ciudad de México. El modo cerrado funciona como freno de emergencia; el modo abierto permite una apertura anticipada.</p>
+  <p id="launch-control-message" class="form-message" aria-live="polite"></p>
+</section>
+
 <section class="stats-grid">
   <article class="stat-card"><div class="stat-icon">✉</div><div><p>Pendientes</p><strong id="pre-count">—</strong><small><a href="pre-registros.html">Revisar ahora</a></small></div></article>
   <article class="stat-card"><div class="stat-icon">☎</div><div><p>Contactados</p><strong id="contacted-count">—</strong><small>En seguimiento</small></div></article>
@@ -40,6 +50,6 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="dashboard.js?v=20260718-120"></script>
+  <script type="module" src="dashboard.js?v=20260720-600"></script>
 </body>
 </html>

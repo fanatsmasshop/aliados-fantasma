@@ -1,6 +1,7 @@
-import { supabase } from './supabase-client.js?v=20260720-410';
+import { supabase } from './supabase-client.js?v=20260720-600';
+import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260720-600';
 
-const LAUNCH_AT = new Date('2026-08-24T14:30:00-06:00');
+let launchOpen = false;
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 const stepNames = ['Identidad','Contacto','Ubicación','Horarios','Galería','Promociones','Revisión'];
 let currentStep = 0;
@@ -162,7 +163,7 @@ function updateProgress(){
 }
 
 function statusMeta(status){
-  const launchPassed = Date.now() >= LAUNCH_AT.getTime();
+  const launchPassed = launchOpen;
   const common = {
     borrador:{title:'Tu perfil está en preparación',description:'Completa la información, guarda tus avances y envíalo cuando esté listo.',badge:'Borrador',className:'draft',stage:1},
     en_revision:{title:'Recibimos tu perfil',description:'El equipo de Aliados Fantasma está revisando la información enviada. Te mostraremos aquí cualquier respuesta.',badge:'En revisión',className:'review',stage:2},
@@ -195,7 +196,7 @@ function renderProfileAccess(){
     return;
   }
   const url = canonicalProfileUrl();
-  const isPublic = draft.estado === 'publicado' && Date.now() >= LAUNCH_AT.getTime();
+  const isPublic = draft.estado === 'publicado' && launchOpen;
   card.classList.remove('hidden');
   const status = document.querySelector('#profile-access-status');
   status.textContent = isPublic ? 'Público' : 'En espera';
@@ -249,9 +250,9 @@ function renderWorkflow(){
   document.querySelector('[data-open-owner-profile]')?.addEventListener('click', openOwnerProfile);
 
   const launchWait = document.querySelector('#launch-wait');
-  if(draft.estado === 'aprobado' && Date.now() < LAUNCH_AT.getTime()){
+  if(draft.estado === 'aprobado' && !launchOpen){
     launchWait.classList.remove('hidden');
-    document.querySelector('#launch-wait-text').textContent = `Aunque ya está listo, seguirá oculto al público hasta el 24 de agosto de 2026 a las 2:30 p. m. Solo tú y los administradores pueden revisarlo antes de esa fecha.`;
+    document.querySelector('#launch-wait-text').textContent = `Aunque ya está listo, seguirá oculto al público hasta el ${LAUNCH_LABEL} Solo tú y los administradores pueden revisarlo antes de esa fecha.`;
   }else{
     launchWait.classList.add('hidden');
   }
@@ -344,7 +345,7 @@ async function uploadFile(file,kind){
 }
 
 function openOwnerProfile(){
-  if(draft.estado === 'publicado' && Date.now() >= LAUNCH_AT.getTime() && publishedBusiness?.slug){
+  if(draft.estado === 'publicado' && launchOpen && publishedBusiness?.slug){
     location.href = `perfil.html?slug=${encodeURIComponent(publishedBusiness.slug)}&from=panel`;
     return;
   }
@@ -373,6 +374,7 @@ async function previewProfile(){
 }
 
 async function init(){
+  launchOpen = (await getLaunchState()).open;
   const {data:{user:authenticatedUser}} = await supabase.auth.getUser();
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;

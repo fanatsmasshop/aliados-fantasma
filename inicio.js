@@ -1,22 +1,9 @@
-import { supabase } from './supabase-client.js?v=20260720-320';
+import { supabase } from './supabase-client.js?v=20260720-600';
+import { getLaunchState, canAccessPublicAreaBeforeLaunch } from './launch-control.js?v=20260720-600';
 
-const LAUNCH_DATE = new Date('2026-08-24T14:30:00-06:00');
-const launched = Date.now() >= LAUNCH_DATE.getTime();
-
-async function canViewBeforeLaunch() {
-  if (launched) return true;
-  try {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return false;
-    const { data: profile } = await supabase.from('perfiles').select('rol,activo').eq('id',user.id).maybeSingle();
-    return profile?.rol === 'administrador' && profile?.activo === true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-}
-
-if (!await canViewBeforeLaunch()) location.replace('index.html');
+const launchState = await getLaunchState();
+const launched = launchState.open;
+if (!await canAccessPublicAreaBeforeLaunch()) location.replace('index.html');
 
 const strip = document.querySelector('.demo-strip');
 if (strip) strip.textContent = launched ? '🌐 ALIADOS FANTASMA EN LÍNEA · Explora la red local de negocios.' : '🔐 VISTA PREVIA ADMINISTRATIVA · El público verá esta sección al finalizar la cuenta regresiva.';

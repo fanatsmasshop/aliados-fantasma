@@ -1,7 +1,9 @@
-(() => {
+import { getLaunchState, trustedNowMs } from './launch-control.js?v=20260720-600';
+
+await (async () => {
   'use strict';
 
-  const LAUNCH_DATE = new Date('2026-08-24T14:30:00-06:00');
+  let launchState = await getLaunchState();
   const elements = {
     days: document.querySelector('#days'),
     hours: document.querySelector('#hours'),
@@ -67,7 +69,7 @@
   }
 
   function updateCountdown() {
-    const remaining = LAUNCH_DATE.getTime() - Date.now();
+    const remaining = launchState.open ? 0 : launchState.launchAtMs - trustedNowMs();
     if (remaining <= 0) {
       setUnit('days', 0); setUnit('hours', 0); setUnit('minutes', 0); setUnit('seconds', 0);
       applyProductionMode();
