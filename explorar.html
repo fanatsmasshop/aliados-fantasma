@@ -1,1 +1,47 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=index.html#negocios"><title>Explorar negocios | Aliados Fantasma</title><link rel="icon" href="favicon.png"><link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head><body class="redirect-page"><p>Abriendo el directorio de negocios… <a href="index.html#negocios">Continuar</a></p></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Explorar negocios | Aliados Fantasma</title>
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260720-320">
+</head>
+<body class="redirect-page">
+  <main class="empty-state" style="max-width:720px;margin:12vh auto;padding:32px;text-align:center">
+    <img src="aliados-fantasma-icono.webp" alt="Aliados Fantasma" style="width:82px;height:82px;object-fit:contain">
+    <p class="eyebrow">ALIADOS FANTASMA</p>
+    <h1 id="gate-title">Comprobando acceso…</h1>
+    <p id="gate-message" class="muted">Estamos preparando el directorio público.</p>
+    <div id="gate-actions" class="actions" style="justify-content:center"></div>
+  </main>
+  <script type="module">
+    import { supabase } from './supabase-client.js?v=20260720-320';
+    const LAUNCH_DATE = new Date('2026-08-24T14:30:00-06:00');
+    const title = document.querySelector('#gate-title');
+    const message = document.querySelector('#gate-message');
+    const actions = document.querySelector('#gate-actions');
+
+    if (Date.now() >= LAUNCH_DATE.getTime()) {
+      location.replace('index-oficial.html#negocios');
+    } else {
+      let isAdmin = false;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase.from('perfiles').select('rol,activo').eq('id', user.id).maybeSingle();
+          isAdmin = profile?.rol === 'administrador' && profile?.activo === true;
+        }
+      } catch (error) { console.error(error); }
+
+      if (isAdmin) {
+        location.replace('index-oficial.html#negocios');
+      } else {
+        title.textContent = 'La red todavía está despertando.';
+        message.textContent = 'El directorio público se habilitará automáticamente el 24 de agosto de 2026 a las 2:30 p. m. Mientras tanto, los negocios pueden registrarse y preparar su perfil.';
+        actions.innerHTML = '<a class="button primary" href="registro.html">Registrar negocio</a><a class="button secondary" href="index.html">Volver al inicio</a>';
+      }
+    }
+  </script>
+</body>
+</html>

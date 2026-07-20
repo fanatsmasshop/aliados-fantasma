@@ -17,6 +17,20 @@ function socialUrl(platform,value){
 
 
 const previewMode = params.get('preview') === '1';
+const LAUNCH_DATE = new Date('2026-08-24T14:30:00-06:00');
+
+async function publicProfilesAvailable() {
+  if (Date.now() >= LAUNCH_DATE.getTime()) return true;
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
+    const { data: profile } = await supabase.from('perfiles').select('rol,activo').eq('id',user.id).maybeSingle();
+    return profile?.rol === 'administrador' && profile?.activo === true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
 
 if (previewMode || adminPreviewId) {
   const { data: { user } } = await supabase.auth.getUser();
@@ -35,6 +49,8 @@ if (previewMode || adminPreviewId) {
       <div class="actions">${b.whatsapp?`<a class="button primary" href="https://wa.me/${String(b.whatsapp).replace(/\D/g,'')}" target="_blank">WhatsApp</a>`:''}${b.maps?`<a class="button secondary" href="${esc(b.maps)}" target="_blank">Cómo llegar</a>`:''}${adminPreviewId?'':`<a class="button secondary" href="panel.html">Editar perfil</a>`}</div></section>
       <main class="profile-content"><div class="profile-grid"><article class="panel"><h2>Conoce el negocio</h2><p class="muted">${esc(b.descripcion||b.descripcion_corta||'Sin descripción disponible.')}</p><h3>Galería</h3><div class="gallery-editor">${(b.galeria||[]).map((u,i)=>`<div class="gallery-item"><img src="${esc(u)}" alt="Galería ${i+1}"></div>`).join('')||'<p class="muted">Sin fotografías todavía.</p>'}</div><h3>Promociones</h3>${(b.promociones||[]).map(x=>`<div class="detail-card"><strong>${esc(x.titulo)}</strong><p class="muted">${esc(x.descripcion||'')}</p></div>`).join('')||'<p class="muted">Sin promociones.</p>'}</article><aside class="panel"><h2>Información</h2><div class="detail-card"><small>Dirección</small><strong>${esc([b.direccion,b.colonia,b.municipio].filter(Boolean).join(', ')||'No disponible')}</strong></div><h3>Redes</h3>${social.map(x=>`<a class="detail-card" style="display:block" href="${esc(socialUrl(x[0],x[1]))}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('')||'<p class="muted">Sin redes registradas.</p>'}<h3>Horarios</h3>${(b.horarios||[]).map(x=>`<div class="detail-card"><small>${esc(x.dia)}</small><strong>${x.cerrado?'Cerrado':`${esc(x.abre)} - ${esc(x.cierra)}`}</strong></div>`).join('')||'<p class="muted">Sin horarios.</p>'}</aside></div></main>`;
   }
+} else if (!await publicProfilesAvailable()) {
+  root.innerHTML = '<div class="empty-state"><p class="eyebrow">PRÓXIMO LANZAMIENTO</p><h1>Este perfil todavía no es público.</h1><p>La red de negocios se habilitará automáticamente el 24 de agosto de 2026 a las 2:30 p. m.</p><div class="actions" style="justify-content:center"><a class="button primary" href="registro.html">Registrar negocio</a><a class="button secondary" href="index.html">Volver al inicio</a></div></div>';
 } else 
 if (!supabase) {
   root.innerHTML = '<div class="empty-state">La conexión con Supabase no está disponible.</div>';

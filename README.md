@@ -32,3 +32,9 @@ Demo v0.1 — julio de 2026.
 
 ## Fase actual: pre-registro
 Esta entrega administra únicamente el pre-registro. Aprobar una solicitud no publica negocios, no crea perfiles públicos y no habilita paneles de propietarios.
+
+
+## v1.7 — Modo de lanzamiento automático
+- Antes del 24 de agosto de 2026, 2:30 p. m.: landing pública con contador; directorio y perfiles visibles únicamente para administradores autenticados.
+- Al llegar la fecha: la landing cambia automáticamente a modo producción, habilita Explorar negocios y permite abrir los perfiles publicados.
+- No requiere SQL adicional.
