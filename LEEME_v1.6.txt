@@ -1,0 +1,23 @@
+ALIADOS FANTASMA v1.6 — SPRINT 3.2
+REVISIÓN ADMINISTRATIVA Y PUBLICACIÓN
+
+1. En Supabase abre SQL Editor.
+2. Ejecuta completo el archivo 061_revision_publicacion.sql.
+3. Reemplaza en GitHub todos los archivos por esta versión.
+4. Entra como administrador a solicitudes.html.
+5. Revisa LN Studio, abre la vista previa y elige:
+   - Solicitar cambios
+   - Rechazar
+   - Aprobar y publicar
+
+AL APROBAR:
+- Se crea o actualiza el negocio.
+- Se publican horarios, redes, promociones y galería.
+- El negocio queda activo.
+- Se genera su slug y URL pública.
+- Se muestra un código QR descargable desde el navegador.
+
+El propietario verá en panel.html el estado y los comentarios del administrador.
+
+NOTA:
+El correo automático requiere configurar un proveedor de correo o una Edge Function de Supabase; no se incluyó para no exponer credenciales ni romper la seguridad.
