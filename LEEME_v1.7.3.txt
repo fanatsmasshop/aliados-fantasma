@@ -1,0 +1,17 @@
+ALIADOS FANTASMA v1.7.3 — DASHBOARD, RUTAS Y QR DEL NEGOCIO
+
+CAMBIOS
+- La vista previa del negocio ahora regresa a panel.html.
+- La vista previa administrativa regresa a solicitudes.html.
+- El perfil abierto desde el dashboard conserva una ruta de regreso al dashboard.
+- El dashboard fue redistribuido para mostrar el estado del proceso y el acceso al perfil en una zona principal.
+- Los negocios aprobados o publicados ahora pueden ver su enlace reservado.
+- Los negocios aprobados o publicados ahora pueden ver su código QR.
+- Se agregó botón para copiar el enlace.
+- Antes del lanzamiento, "Ver mi perfil" abre la vista privada del propietario.
+- Después del lanzamiento, abre el perfil público mediante su slug.
+- La privacidad previa al lanzamiento y la cuenta regresiva siguen intactas.
+
+INSTALACIÓN
+Reemplaza los archivos del proyecto con esta versión.
+No requiere ejecutar SQL adicional.

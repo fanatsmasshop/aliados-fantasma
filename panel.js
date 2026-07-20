@@ -8,6 +8,7 @@ let user;
 let pre;
 let draft = { datos:{}, estado:'borrador', porcentaje:0 };
 let dirty = false;
+let publishedBusiness = null;
 
 const form = document.querySelector('#onboarding-form');
 const msg = document.querySelector('#global-message');
@@ -150,6 +151,7 @@ function renderReview(){
   const percentage = calc(data);
   document.querySelector('#review-summary').innerHTML = `<article class="review-card"><span>Perfil completado</span><strong>${percentage}%</strong></article><article class="review-card"><span>Galería</span><strong>${data.galeria.length}/6 fotos</strong></article><article class="review-card"><span>Promociones</span><strong>${data.promociones.length}</strong></article><article class="review-card"><span>Estado</span><strong>${esc(statusLabel(draft.estado))}</strong></article>`;
   updateSubmitState();
+  renderProfileAccess();
 }
 
 function updateProgress(){
@@ -179,6 +181,43 @@ function formatDate(value){
   return new Intl.DateTimeFormat('es-MX',{dateStyle:'medium',timeStyle:'short'}).format(date);
 }
 
+function canonicalProfileUrl(){
+  if(!publishedBusiness?.slug) return '';
+  return new URL(`perfil.html?slug=${encodeURIComponent(publishedBusiness.slug)}`, location.href).href;
+}
+
+function renderProfileAccess(){
+  const card = document.querySelector('#profile-access-card');
+  if(!card) return;
+  const eligible = Boolean(publishedBusiness?.slug && draft.negocio_id && ['aprobado','publicado'].includes(draft.estado));
+  if(!eligible){
+    card.classList.add('hidden');
+    return;
+  }
+  const url = canonicalProfileUrl();
+  const isPublic = draft.estado === 'publicado' && Date.now() >= LAUNCH_AT.getTime();
+  card.classList.remove('hidden');
+  const status = document.querySelector('#profile-access-status');
+  status.textContent = isPublic ? 'Público' : 'En espera';
+  status.className = `workflow-badge ${isPublic ? 'published' : 'approved'}`;
+  document.querySelector('#profile-access-help').textContent = isPublic
+    ? 'Este es el enlace público que puedes compartir con tus clientes.'
+    : 'Tu enlace ya está reservado. El perfil seguirá privado para el público hasta el lanzamiento.';
+  document.querySelector('#owner-profile-link').value = url;
+  document.querySelector('#owner-qr').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(url)}" alt="Código QR de ${esc(draft.datos?.nombre || 'tu negocio')}">`;
+  document.querySelector('#profile-access-note').textContent = isPublic
+    ? 'El QR abre directamente tu perfil público.'
+    : 'Puedes descargar o guardar este QR desde el navegador, pero el enlace mostrará el perfil al público únicamente después del lanzamiento.';
+}
+
+async function loadPublishedBusiness(){
+  publishedBusiness = null;
+  if(!draft.negocio_id) return;
+  const {data,error} = await supabase.from('negocios').select('id,slug,nombre,activo').eq('id',draft.negocio_id).maybeSingle();
+  if(error){ console.error('No fue posible consultar el enlace público:', error); return; }
+  publishedBusiness = data || null;
+}
+
 function renderWorkflow(){
   const meta = statusMeta(draft.estado);
   const badge = document.querySelector('#workflow-badge');
@@ -203,10 +242,11 @@ function renderWorkflow(){
   const actions = [];
   actions.push('<button type="button" class="button secondary small" data-workflow-preview>Ver vista previa</button>');
   if(['cambios_solicitados','rechazado'].includes(draft.estado)) actions.push('<button type="button" class="button primary small" data-workflow-edit>Ir a corregir</button>');
-  if(draft.negocio_id && ['aprobado','publicado'].includes(draft.estado)) actions.push(`<a class="button secondary small" href="perfil.html?business_id=${encodeURIComponent(draft.negocio_id)}" target="_blank" rel="noopener">Ver perfil preparado</a>`);
+  if(draft.negocio_id && ['aprobado','publicado'].includes(draft.estado)) actions.push('<button type="button" class="button secondary small" data-open-owner-profile>Ver perfil preparado</button>');
   document.querySelector('#workflow-actions').innerHTML = actions.join('');
   document.querySelector('[data-workflow-preview]')?.addEventListener('click', previewProfile);
   document.querySelector('[data-workflow-edit]')?.addEventListener('click', () => go(0));
+  document.querySelector('[data-open-owner-profile]')?.addEventListener('click', openOwnerProfile);
 
   const launchWait = document.querySelector('#launch-wait');
   if(draft.estado === 'aprobado' && Date.now() < LAUNCH_AT.getTime()){
@@ -228,6 +268,7 @@ function renderWorkflow(){
   document.querySelector('#account-status').textContent = meta.badge.toUpperCase();
   document.querySelector('#header-help').textContent = draft.estado === 'en_revision' ? 'Tu envío quedó registrado. Aquí aparecerá la respuesta del equipo.' : draft.estado === 'aprobado' ? 'Tu perfil ya fue aprobado y está reservado para el lanzamiento.' : draft.estado === 'publicado' ? 'Administra la información de tu negocio y prepara futuras actualizaciones.' : 'Completa tu información. Puedes guardar y continuar después.';
   updateSubmitState();
+  renderProfileAccess();
 }
 
 function updateSubmitState(){
@@ -302,6 +343,28 @@ async function uploadFile(file,kind){
   return supabase.storage.from('negocios-media').getPublicUrl(path).data.publicUrl;
 }
 
+function openOwnerProfile(){
+  if(draft.estado === 'publicado' && Date.now() >= LAUNCH_AT.getTime() && publishedBusiness?.slug){
+    location.href = `perfil.html?slug=${encodeURIComponent(publishedBusiness.slug)}&from=panel`;
+    return;
+  }
+  location.href = 'perfil.html?preview=1&from=panel';
+}
+
+async function copyOwnerProfileLink(){
+  const url = canonicalProfileUrl();
+  if(!url) return;
+  try{
+    await navigator.clipboard.writeText(url);
+    showMessage('Enlace copiado correctamente.');
+  }catch{
+    const input = document.querySelector('#owner-profile-link');
+    input.focus(); input.select();
+    document.execCommand('copy');
+    showMessage('Enlace copiado correctamente.');
+  }
+}
+
 async function previewProfile(){
   try{
     if(dirty) await save();
@@ -325,6 +388,7 @@ async function init(){
   if(draftData) draft = draftData;
   else draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]};
 
+  await loadPublishedBusiness();
   fill(draft.datos);
   updateProgress();
   renderNav();
@@ -342,6 +406,8 @@ document.querySelector('#save-button').onclick = async () => {
 };
 document.querySelector('#add-promotion').onclick = () => { addPromotion(); markDirty(); };
 document.querySelector('#preview-button').onclick = previewProfile;
+document.querySelector('#copy-profile-link').onclick = copyOwnerProfileLink;
+document.querySelector('#open-owner-profile').onclick = openOwnerProfile;
 document.querySelector('#logout-button').onclick = async () => { await supabase.auth.signOut(); location.replace('login.html'); };
 document.querySelector('#submit-review').onclick = async () => {
   try{

@@ -6,6 +6,26 @@ const slug = params.get('slug');
 const businessId = params.get('business_id');
 const adminPreviewId = params.get('admin_preview');
 const root = document.querySelector('#profile-root');
+const backLink = document.querySelector('#profile-back-link');
+const source = params.get('from');
+const previewMode = params.get('preview') === '1';
+
+function configureBackRoute(){
+  if(!backLink) return;
+  if(adminPreviewId){
+    backLink.href = 'solicitudes.html';
+    backLink.textContent = '← Regresar a solicitudes';
+    return;
+  }
+  if(previewMode || source === 'panel'){
+    backLink.href = 'panel.html';
+    backLink.textContent = '← Regresar a mi dashboard';
+    return;
+  }
+  backLink.href = 'explorar.html';
+  backLink.textContent = '← Explorar negocios';
+}
+configureBackRoute();
 
 function socialUrl(platform,value){
   const user=String(value||'').trim().replace(/^@+/,'');
@@ -15,8 +35,6 @@ function socialUrl(platform,value){
   return {Facebook:`https://facebook.com/${encoded}`,Instagram:`https://instagram.com/${encoded}`,TikTok:`https://tiktok.com/@${encoded}`,YouTube:`https://youtube.com/@${encoded}`,'Sitio web':user}[platform]||user;
 }
 
-
-const previewMode = params.get('preview') === '1';
 const LAUNCH_DATE = new Date('2026-08-24T14:30:00-06:00');
 
 async function publicProfilesAvailable() {
@@ -46,7 +64,7 @@ if (previewMode || adminPreviewId) {
     root.innerHTML = `<section class="profile-hero" style="${b.portada_url ? `background:linear-gradient(rgba(8,10,15,.68),rgba(8,10,15,.9)),url('${esc(b.portada_url)}') center/cover` : ''}">
       <div class="profile-logo">${b.logo_url ? `<img src="${esc(b.logo_url)}" alt="Logo de ${esc(b.nombre||'negocio')}">` : esc((b.nombre||'A').charAt(0))}</div>
       <p class="eyebrow">VISTA PREVIA · ${esc(b.categoria||'NEGOCIO ALIADO')}</p><h1>${esc(b.nombre||'Tu negocio')}</h1><p>${esc(b.descripcion_corta||'Completa una descripción corta desde tu panel.')}</p>
-      <div class="actions">${b.whatsapp?`<a class="button primary" href="https://wa.me/${String(b.whatsapp).replace(/\D/g,'')}" target="_blank">WhatsApp</a>`:''}${b.maps?`<a class="button secondary" href="${esc(b.maps)}" target="_blank">Cómo llegar</a>`:''}${adminPreviewId?'':`<a class="button secondary" href="panel.html">Editar perfil</a>`}</div></section>
+      <div class="actions">${b.whatsapp?`<a class="button primary" href="https://wa.me/${String(b.whatsapp).replace(/\D/g,'')}" target="_blank">WhatsApp</a>`:''}${b.maps?`<a class="button secondary" href="${esc(b.maps)}" target="_blank">Cómo llegar</a>`:''}${adminPreviewId?`<a class="button secondary" href="solicitudes.html">Regresar a revisión</a>`:`<a class="button secondary" href="panel.html">Regresar al dashboard</a>`}</div></section>
       <main class="profile-content"><div class="profile-grid"><article class="panel"><h2>Conoce el negocio</h2><p class="muted">${esc(b.descripcion||b.descripcion_corta||'Sin descripción disponible.')}</p><h3>Galería</h3><div class="gallery-editor">${(b.galeria||[]).map((u,i)=>`<div class="gallery-item"><img src="${esc(u)}" alt="Galería ${i+1}"></div>`).join('')||'<p class="muted">Sin fotografías todavía.</p>'}</div><h3>Promociones</h3>${(b.promociones||[]).map(x=>`<div class="detail-card"><strong>${esc(x.titulo)}</strong><p class="muted">${esc(x.descripcion||'')}</p></div>`).join('')||'<p class="muted">Sin promociones.</p>'}</article><aside class="panel"><h2>Información</h2><div class="detail-card"><small>Dirección</small><strong>${esc([b.direccion,b.colonia,b.municipio].filter(Boolean).join(', ')||'No disponible')}</strong></div><h3>Redes</h3>${social.map(x=>`<a class="detail-card" style="display:block" href="${esc(socialUrl(x[0],x[1]))}" target="_blank" rel="noopener">${esc(x[0])}</a>`).join('')||'<p class="muted">Sin redes registradas.</p>'}<h3>Horarios</h3>${(b.horarios||[]).map(x=>`<div class="detail-card"><small>${esc(x.dia)}</small><strong>${x.cerrado?'Cerrado':`${esc(x.abre)} - ${esc(x.cierra)}`}</strong></div>`).join('')||'<p class="muted">Sin horarios.</p>'}</aside></div></main>`;
   }
 } else if (!await publicProfilesAvailable()) {
