@@ -2,16 +2,57 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080a0f">
+  <meta name="description" content="Descubre negocios locales en Aliados Fantasma.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Aliados Fantasma">
+  <meta property="og:title" content="Perfil | Aliados Fantasma">
+  <meta property="og:description" content="Descubre negocios locales en Aliados Fantasma.">
+  <meta property="og:image" content="aliados-fantasma-logo.png">
+  <meta property="og:url" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="">
   <title>Perfil | Aliados Fantasma</title>
   <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
-  <link rel="stylesheet" href="app.css?v=20260717-4">
-  <link rel="stylesheet" href="logos.css?v=20260717-3">
-<link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head>
-<body class="public-profile">
-  <div class="demo-banner">🚧 PERFIL DE DEMOSTRACIÓN <small>— Información sujeta a cambios.</small></div>
-  <nav class="public-profile-nav"><a id="profile-back-link" class="profile-home" href="index.html#negocios">← Explorar negocios</a><a class="af-profile-nav-brand" href="index.html"><img src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span>Aliados Fantasma</span></a></nav>
-  <div id="profile-root"><div class="empty-state">Cargando perfil…</div></div>
-  <script type="module" src="perfil.js?v=20260720-520"></script>
+  <link rel="preconnect" href="https://api.qrserver.com">
+  <link rel="stylesheet" href="app.css?v=20260721-1">
+  <link rel="stylesheet" href="logos.css?v=20260721-1">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260721-1">
+  <link rel="stylesheet" href="perfil-premium.css?v=20260721-1">
+</head>
+<body class="public-profile premium-profile-page">
+  <a class="skip-link" href="#profile-main">Saltar al contenido</a>
+  <div id="preview-banner" class="demo-banner">🚧 VISTA PREVIA PRIVADA <small>— Solo tú y el equipo administrador pueden verla antes del lanzamiento.</small></div>
+  <nav class="premium-profile-nav" aria-label="Navegación del perfil">
+    <a id="profile-back-link" class="profile-back" href="explorar.html">← Explorar negocios</a>
+    <a class="profile-network-brand" href="index.html" aria-label="Ir al inicio de Aliados Fantasma">
+      <img src="aliados-fantasma-icono.webp" alt="" width="38" height="38">
+      <span><strong>Aliados Fantasma</strong><small>Red de negocios locales</small></span>
+    </a>
+    <button id="nav-share" class="profile-nav-action" type="button" aria-label="Compartir este perfil">Compartir</button>
+  </nav>
+  <div id="profile-root" aria-live="polite">
+    <main class="profile-loading" aria-label="Cargando perfil">
+      <div class="skeleton skeleton-cover"></div>
+      <div class="skeleton-shell">
+        <div class="skeleton skeleton-logo"></div>
+        <div class="skeleton skeleton-line wide"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="lightbox" class="profile-lightbox hidden" role="dialog" aria-modal="true" aria-label="Visor de imágenes">
+    <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Cerrar galería">×</button>
+    <button id="lightbox-prev" class="lightbox-arrow prev" type="button" aria-label="Imagen anterior">‹</button>
+    <figure><img id="lightbox-image" alt=""><figcaption id="lightbox-caption"></figcaption></figure>
+    <button id="lightbox-next" class="lightbox-arrow next" type="button" aria-label="Imagen siguiente">›</button>
+  </div>
+
+  <div id="profile-toast" class="profile-toast hidden" role="status"></div>
+  <script type="module" src="perfil.js?v=20260721-1"></script>
 </body>
 </html>

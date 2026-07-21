@@ -54,3 +54,13 @@ Esta entrega administra únicamente el pre-registro. Aprobar una solicitud no pu
 - Landing, directorio, perfiles y dashboard de negocios consumen una sola fuente de verdad.
 - Caché deshabilitada para HTML, JavaScript y control de lanzamiento.
 - Ejecutar `063_control_global_lanzamiento.sql` antes de publicar esta versión.
+
+## Actualización v1.8.2 — Hardening de preproducción
+
+Ejecutar en orden:
+
+1. `064_hardening_perfiles_borrador.sql`
+2. `065_hardening_preproduccion.sql`
+3. Revisar resultados de `066_verificacion_preproduccion.sql`
+
+Consulta `LEEME_v1.8.2.txt` para las pruebas manuales obligatorias.

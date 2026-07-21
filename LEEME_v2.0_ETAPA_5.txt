@@ -1,0 +1,45 @@
+ALIADOS FANTASMA v2.0 — ETAPA 5: PERFIL PÚBLICO PREMIUM
+========================================================
+
+Esta versión reemplaza los archivos anteriores del proyecto.
+No crea carpetas y conserva Supabase, autenticación, paneles, revisión,
+aprobación, rutas y control de lanzamiento.
+
+ARCHIVOS PRINCIPALES ACTUALIZADOS
+- perfil.html
+- perfil.js
+- perfil-premium.css (nuevo)
+
+FUNCIONES INCLUIDAS
+- Hero premium con portada, logo, categoría, descripción e insignias.
+- Estado abierto/cerrado calculado con los horarios registrados.
+- Acciones de WhatsApp, llamada, ruta, compartir y guardar contacto.
+- Galería responsive con lazy loading, lightbox, teclado y swipe horizontal móvil.
+- Promociones activas con vigencia.
+- Horarios completos y resaltado del día actual.
+- Mapa integrado cuando hay dirección.
+- Redes sociales y datos de contacto.
+- QR descargable en PNG.
+- Tarjeta de contacto VCF.
+- Botón flotante de WhatsApp.
+- Skeleton de carga, estados vacíos y errores.
+- Accesibilidad: skip link, navegación por teclado, ARIA y reducción de movimiento.
+- SEO dinámico: title, description, canonical, Open Graph, Twitter Card y LocalBusiness JSON-LD.
+- Vista previa privada usando el mismo diseño del perfil público.
+
+IMPORTANTE SOBRE SEO SOCIAL
+Los metadatos se actualizan dinámicamente en el navegador. Google suele procesar
+JavaScript, pero WhatsApp/Facebook pueden leer primero el HTML base. Para previews
+sociales 100% personalizados por negocio se necesitará, en una fase futura,
+renderizado en servidor/Cloudflare Worker o páginas HTML generadas por perfil.
+
+NO HAY SQL NUEVO OBLIGATORIO PARA ESTA ETAPA.
+
+PRUEBAS RECOMENDADAS
+1. Abrir una vista previa desde el dashboard.
+2. Revisar portada, logo, horarios, redes, galería y promociones.
+3. Probar WhatsApp, llamada, mapa y compartir.
+4. Abrir y cerrar la galería con mouse, teclado y celular.
+5. Descargar QR y VCF.
+6. Probar un perfil sin imágenes, promociones o dirección.
+7. Verificar en móvil, tableta y escritorio.
