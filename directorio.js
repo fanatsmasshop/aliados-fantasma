@@ -31,18 +31,20 @@ function whatsappUrl(b){const d=digits(b.whatsapp||b.telefono);return d?`https:/
 
 function cardMarkup(b){
   const wa=whatsappUrl(b),cover=coverUrl(b),withCover=Boolean(cover);
+  const logo=logoUrl(b);
   const visual=withCover
-    ? `<div class="business-media"><img class="business-cover-image" src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logoUrl(b))}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="business-brand-row"><img class="business-logo business-logo-primary" src="${esc(logoUrl(b))}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="business-brand-copy"><span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3></div></div>`;
+    ? `<div class="business-media"><img class="business-cover-image" src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    : `<div class="business-media business-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   const heading=withCover?`<span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3>`:'';
   return `<article class="business-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${visual}<div class="business-body"><div class="business-badges business-badges-inline">${badges(b)}</div>${heading}<p class="business-description">${esc(b.descripcion_corta||b.descripcion||'Conoce este negocio local y todo lo que tiene para ofrecer.')}</p><div class="business-meta"><span>📍 ${esc(businessLocation(b))}</span><span>${completeness(b)}% perfil</span></div><div class="business-actions"><a class="view-profile" href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp" data-event="whatsapp">💬</a>`:'<button class="quick-contact" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}</div></div></article>`;
 }
 
 function spotlightMarkup(b){
   const cover=coverUrl(b),withCover=Boolean(cover);
+  const logo=logoUrl(b);
   const media=withCover
-    ? `<div class="spotlight-media"><img src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logoUrl(b))}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="spotlight-logo-stage"><img class="spotlight-logo-only" src="${esc(logoUrl(b))}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
+    ? `<div class="spotlight-media"><img src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    : `<div class="spotlight-media spotlight-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   return `<a class="spotlight-card ${withCover?'has-cover':'no-cover'}" href="${esc(profileUrl(b))}" data-id="${esc(b.id)}" data-event="profile">${media}<div class="spotlight-content"><div class="business-badges">${badges(b)}</div><h3>${esc(b.nombre)}</h3><p>${esc(b.categoria||'Negocio aliado')}</p><span class="spotlight-location">📍 ${esc(businessLocation(b))}</span></div></a>`;
 }
 

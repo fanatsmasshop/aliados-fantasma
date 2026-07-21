@@ -1,0 +1,16 @@
+ALIADOS FANTASMA v2.2.1 — PORTADA GENERADA DESDE EL LOGO
+
+REEMPLAZA EN GITHUB ÚNICAMENTE:
+1. directorio.js
+2. directorio.css
+
+No ejecutes SQL.
+
+COMPORTAMIENTO:
+- Si el negocio sube portada, se usa normalmente.
+- Si no sube portada, se usa el logo duplicado como fondo ampliado y desenfocado.
+- Se aplica una capa oscura y degradados para conservar legibilidad.
+- El logo original aparece nítido al frente.
+- Funciona en tarjetas normales y en “Para descubrir hoy”.
+
+Después del despliegue de Cloudflare, realiza Ctrl + F5.

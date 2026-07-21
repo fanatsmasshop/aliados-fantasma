@@ -100,3 +100,68 @@
   .business-logo-primary{width:66px;height:66px;border-radius:19px}
   .business-body{padding-left:16px;padding-right:16px}
 }
+
+/* v2.2.1 — Portada automática generada desde el logo */
+.business-media-generated,
+.spotlight-media-generated{
+  isolation:isolate;
+  background:#0d0f16;
+}
+
+.generated-cover-bg{
+  position:absolute!important;
+  inset:-22px!important;
+  width:calc(100% + 44px)!important;
+  height:calc(100% + 44px)!important;
+  object-fit:cover!important;
+  filter:blur(22px) saturate(.82) brightness(.62)!important;
+  transform:scale(1.12)!important;
+  opacity:.88;
+  z-index:0;
+}
+
+.generated-cover-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(255,255,255,.10),transparent 42%),
+    linear-gradient(135deg,rgba(168,85,247,.22),rgba(34,211,238,.08)),
+    linear-gradient(to top,rgba(7,8,12,.78),rgba(7,8,12,.18));
+  backdrop-filter:blur(2px);
+}
+
+.business-media-generated .business-logo-overlap,
+.spotlight-media-generated .spotlight-logo-generated{
+  z-index:3!important;
+  object-fit:contain!important;
+  background:rgba(255,255,255,.96)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.14)!important;
+}
+
+.business-card.no-cover .business-body{
+  padding-top:38px;
+}
+
+.spotlight-media-generated .spotlight-logo-generated{
+  left:50%!important;
+  bottom:50%!important;
+  transform:translate(-50%,50%)!important;
+  width:78px!important;
+  height:78px!important;
+  border-radius:22px!important;
+  border:3px solid rgba(255,255,255,.22)!important;
+}
+
+.spotlight-card:hover .spotlight-media-generated .generated-cover-bg{
+  transform:scale(1.18)!important;
+}
+
+.business-card:hover .business-media-generated .generated-cover-bg{
+  transform:scale(1.18)!important;
+}
+
+@media(max-width:600px){
+  .generated-cover-bg{filter:blur(18px) saturate(.8) brightness(.6)!important}
+  .spotlight-media-generated .spotlight-logo-generated{width:72px!important;height:72px!important}
+}
