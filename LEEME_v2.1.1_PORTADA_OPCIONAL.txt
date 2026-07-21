@@ -1,0 +1,17 @@
+ALIADOS FANTASMA v2.1.1 — PORTADA COMPLETAMENTE OPCIONAL
+
+ARCHIVOS A SUBIR A GITHUB (reemplazar los existentes):
+1. directorio.js
+2. directorio.css
+3. perfil.js
+4. perfil-premium.css
+
+No se requiere ejecutar SQL.
+
+CAMBIOS:
+- La portada deja de contar para el porcentaje de perfil completo.
+- Si un negocio no tiene portada, el directorio no muestra imagen rota ni un espacio vacío.
+- La tarjeta se vuelve compacta y utiliza el logo como identidad principal.
+- La sección “Para descubrir hoy” también se adapta sin inventar una portada.
+- El perfil público reduce automáticamente la altura del encabezado cuando no existe portada.
+- Si existe portada, se conserva el diseño premium actual sin cambios.

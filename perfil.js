@@ -113,10 +113,10 @@ function renderProfile(p,{isPreview=false}={}){
   document.documentElement.style.setProperty('--profile-secondary',p.color_secundario||'#22d3ee');
   previewBanner.classList.toggle('hidden',!isPreview);
   navShare.classList.remove('hidden');
-  const address=fullAddress(p);const open=getOpenState(p.horarios);const whatsapp=whatsappUrl(p.whatsapp,p.nombre);const maps=safeUrl(p.enlace_maps);const site=safeUrl(p.sitio_web);const shareUrl=p.slug?new URL(`perfil.html?slug=${encodeURIComponent(p.slug)}`,location.href).href:location.href;
+  const address=fullAddress(p);const open=getOpenState(p.horarios);const whatsapp=whatsappUrl(p.whatsapp,p.nombre);const maps=safeUrl(p.enlace_maps);const site=safeUrl(p.sitio_web);const cover=safeUrl(p.portada_url);const hasCover=Boolean(cover);const shareUrl=p.slug?new URL(`perfil.html?slug=${encodeURIComponent(p.slug)}`,location.href).href:location.href;
   const badges=[p.destacado?'⭐ Destacado':'🤝 Aliado Fantasma',isPreview?'Vista previa privada':'Perfil oficial'];
   root.innerHTML=`
-    <header class="profile-cover reveal" ${p.portada_url?`style="background-image:url('${esc(p.portada_url)}')"`:''}>
+    <header class="profile-cover ${hasCover?'has-cover':'no-cover'} reveal" ${hasCover?`style="background-image:url('${esc(cover)}')"`:''}>
       <div class="profile-cover-inner"><div class="profile-identity">
         <div class="profile-main-logo">${p.logo_url?`<img src="${esc(p.logo_url)}" alt="Logo de ${esc(p.nombre)}" width="160" height="160">`:esc((p.nombre||'A').charAt(0))}</div>
         <div><p class="profile-category">${esc(p.categoria||'Negocio aliado')}</p><h1 class="profile-title">${esc(p.nombre)}</h1><p class="profile-tagline">${esc(p.descripcion_corta||'Conoce este negocio local.')}</p><div class="profile-badges"><span class="open-status ${open.className}">● ${esc(open.label)}</span>${badges.map(x=>`<span class="profile-badge">${esc(x)}</span>`).join('')}</div></div>
