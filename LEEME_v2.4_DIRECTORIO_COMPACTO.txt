@@ -1,0 +1,16 @@
+ALIADOS FANTASMA v2.4 — DIRECTORIO COMPACTO DEFINITIVO
+
+Reemplaza únicamente:
+- directorio.js
+- directorio.css
+
+No requiere SQL.
+Después del despliegue de Cloudflare Pages, realiza Ctrl + F5.
+
+Cambios:
+- Tarjetas superiores compactas y horizontales.
+- Tarjetas del directorio de solo 150 px de alto en escritorio.
+- Logo siempre colocado en el lateral, exista o no portada.
+- La portada se usa únicamente como fondo discreto; cuando no existe se usa el logo.
+- Fallback automático si una portada no carga.
+- Se conservan filtros, algoritmo, métricas, Supabase y bloqueo de lanzamiento.

@@ -34,20 +34,57 @@ function fallbackMediaStyle(logo){
 }
 
 function cardMarkup(b){
-  const wa=whatsappUrl(b),cover=coverUrl(b),withCover=Boolean(cover);
+  const wa=whatsappUrl(b);
   const logo=logoUrl(b);
-  const visual=withCover
-    ? `<div class="business-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="business-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="business-media business-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
-  return `<article class="business-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${visual}<div class="business-body"><div class="business-badges business-badges-inline">${badges(b)}</div><span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3><p class="business-description">${esc(b.descripcion_corta||b.descripcion||'Conoce este negocio local y todo lo que tiene para ofrecer.')}</p><div class="business-meta"><span>📍 ${esc(businessLocation(b))}</span><span>${completeness(b)}% perfil</span></div><div class="business-actions"><a class="view-profile" href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp" data-event="whatsapp">💬</a>`:'<button class="quick-contact" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}</div></div></article>`;
+  const background=coverUrl(b)||logo;
+  return `<article class="business-card compact-card" data-id="${esc(b.id)}">
+    <div class="compact-backdrop" aria-hidden="true">
+      <img src="${esc(background)}" data-fallback="${esc(logo)}" alt="" loading="lazy" decoding="async">
+      <span></span>
+    </div>
+    <div class="compact-card-inner">
+      <img class="compact-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async">
+      <div class="compact-main">
+        <div class="compact-heading">
+          <div class="compact-copy">
+            <h3>${esc(b.nombre)}</h3>
+            <p>${esc(b.descripcion_corta||b.descripcion||b.categoria||'Negocio aliado')}</p>
+          </div>
+          <div class="compact-actions">
+            <a class="compact-profile" href="${esc(profileUrl(b))}" data-event="profile" aria-label="Ver perfil de ${esc(b.nombre)}">◉ <span>Ver perfil</span></a>
+            ${wa?`<a class="compact-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp">⌁</a>`:'<button class="compact-whatsapp" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}
+          </div>
+        </div>
+        <div class="compact-location">📍 ${esc(businessLocation(b))}</div>
+        <div class="business-badges compact-badges">${badges(b)}</div>
+      </div>
+    </div>
+  </article>`;
 }
 
 function spotlightMarkup(b){
-  const cover=coverUrl(b),withCover=Boolean(cover),logo=logoUrl(b),wa=whatsappUrl(b);
-  const media=withCover
-    ? `<div class="spotlight-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="spotlight-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="spotlight-media spotlight-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
-  return `<article class="spotlight-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${media}<div class="spotlight-content"><div class="business-badges">${badges(b)}</div><h3>${esc(b.nombre)}</h3><p>${esc(b.categoria||'Negocio aliado')}</p><span class="spotlight-location">📍 ${esc(businessLocation(b))}</span><div class="spotlight-actions"><a href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="spotlight-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp">WhatsApp</a>`:''}</div></div></article>`;
+  const wa=whatsappUrl(b);
+  const logo=logoUrl(b);
+  const background=coverUrl(b)||logo;
+  return `<article class="spotlight-card compact-spotlight" data-id="${esc(b.id)}">
+    <div class="spotlight-backdrop" aria-hidden="true">
+      <img src="${esc(background)}" data-fallback="${esc(logo)}" alt="" loading="lazy" decoding="async">
+      <span></span>
+    </div>
+    <div class="spotlight-inner">
+      <img class="spotlight-side-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async">
+      <div class="spotlight-main">
+        <div class="business-badges compact-badges">${badges(b)}</div>
+        <h3>${esc(b.nombre)}</h3>
+        <p>${esc(b.categoria||'Negocio aliado')}</p>
+        <div class="spotlight-location">📍 ${esc(businessLocation(b))}</div>
+        <div class="spotlight-actions compact-spotlight-actions">
+          <a href="${esc(profileUrl(b))}" data-event="profile">◉ Ver perfil</a>
+          ${wa?`<a class="spotlight-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp" aria-label="WhatsApp de ${esc(b.nombre)}">⌁</a>`:''}
+        </div>
+      </div>
+    </div>
+  </article>`;
 }
 
 
@@ -64,10 +101,12 @@ function generatedMediaMarkup(media,logo,name){
 
 
 function bindCoverFallbacks(root){
-  root.querySelectorAll('.business-cover-image,.spotlight-cover-image').forEach(img=>{
-    const media=img.closest('.business-media,.spotlight-media');
-    if(!media)return;
-    const fallback=()=>generatedMediaMarkup(media,media.dataset.logo||'aliados-fantasma-icono.webp',media.dataset.name||'Negocio aliado');
+  root.querySelectorAll('.compact-backdrop img,.spotlight-backdrop img').forEach(img=>{
+    const fallback=()=>{
+      const next=img.dataset.fallback;
+      if(next&&img.src!==next){img.src=next;return;}
+      img.style.display='none';
+    };
     img.addEventListener('error',fallback,{once:true});
     if(img.complete&&img.naturalWidth===0)fallback();
   });
@@ -80,7 +119,7 @@ function sortBusinesses(items){return [...items].sort((a,b)=>{if(state.sort==='n
 
 function renderActiveFilters(){const chips=[];if(state.query)chips.push(['query',`Búsqueda: ${state.query}`]);if(state.category)chips.push(['category',state.category]);if(state.municipality)chips.push(['municipality',state.municipality]);if(state.open)chips.push(['open','Abiertos ahora']);if(state.promotion)chips.push(['promotion','Con promoción']);if(state.isNew)chips.push(['isNew','Nuevos']);if(state.featured)chips.push(['featured','Destacados']);el.active.classList.toggle('hidden',!chips.length);el.active.innerHTML=chips.map(([key,label])=>`<span class="filter-chip">${esc(label)} <button type="button" data-remove="${key}" aria-label="Quitar filtro ${esc(label)}">×</button></span>`).join('');el.active.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>removeFilter(btn.dataset.remove)));}
 function removeFilter(key){if(key==='query'){state.query='';el.search.value='';}else if(key==='category'){state.category='';el.category.value='';}else if(key==='municipality'){state.municipality='';el.municipality.value='';}else if(key==='open'){state.open=false;el.open.checked=false;}else if(key==='promotion'){state.promotion=false;el.promotion.checked=false;}else if(key==='isNew'){state.isNew=false;el.newFilter.checked=false;}else if(key==='featured'){state.featured=false;el.featured.checked=false;}state.visible=PAGE_SIZE;applyFilters();}
-function renderFeatured(){if(state.query||state.category||state.municipality||state.open||state.promotion||state.isNew||state.featured){el.featuredSection.classList.add('hidden');return;}const selection=sortBusinesses(state.businesses).slice(0,3);el.featuredSection.classList.toggle('hidden',!selection.length);el.featuredGrid.innerHTML=selection.map(cardMarkup).join('');bindCoverFallbacks(el.featuredGrid);bindTracking(el.featuredGrid);}
+function renderFeatured(){if(state.query||state.category||state.municipality||state.open||state.promotion||state.isNew||state.featured){el.featuredSection.classList.add('hidden');return;}const selection=sortBusinesses(state.businesses).slice(0,3);el.featuredSection.classList.toggle('hidden',!selection.length);el.featuredGrid.innerHTML=selection.map(spotlightMarkup).join('');bindCoverFallbacks(el.featuredGrid);bindTracking(el.featuredGrid);}
 function renderResults(){const shown=state.filtered.slice(0,state.visible);el.grid.innerHTML=shown.map(cardMarkup).join('');el.empty.classList.toggle('hidden',state.filtered.length>0);el.grid.classList.toggle('hidden',state.filtered.length===0);el.loadMore.classList.toggle('hidden',state.visible>=state.filtered.length);el.summary.textContent=`${state.filtered.length} negocio${state.filtered.length===1?'':'s'} encontrado${state.filtered.length===1?'':'s'}`;bindCoverFallbacks(el.grid);bindTracking(el.grid);}
 function applyFilters({trackSearch=false}={}){state.filtered=sortBusinesses(filterBusinesses());renderActiveFilters();renderFeatured();renderResults();el.clear.classList.toggle('hidden',!state.query);el.quick.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category===state.category));if(trackSearch&&state.query)trackEvent('busqueda',null,{query:state.query,resultados:state.filtered.length});}
 function resetAll(){Object.assign(state,{query:'',category:'',municipality:'',open:false,promotion:false,isNew:false,featured:false,sort:'recommended',visible:PAGE_SIZE});el.search.value='';el.category.value='';el.municipality.value='';el.open.checked=false;el.promotion.checked=false;el.newFilter.checked=false;el.featured.checked=false;el.sort.value='recommended';applyFilters();}
