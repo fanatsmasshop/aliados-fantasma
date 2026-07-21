@@ -1,0 +1,10 @@
+ALIADOS FANTASMA v2.4.1 — CORRECCIÓN DEL CARRUSEL SUPERIOR
+
+REEMPLAZAR EN GITHUB:
+- directorio.css
+
+NO reemplazar directorio.js.
+NO ejecutar SQL.
+
+La corrección elimina la colisión con una regla antigua que hacía gigante el logo de las tarjetas de "Para descubrir hoy".
+Después del despliegue de Cloudflare Pages, hacer Ctrl + F5.
