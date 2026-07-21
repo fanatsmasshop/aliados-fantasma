@@ -355,95 +355,173 @@
   .compact-badges .business-badge{font-size:.54rem;padding:3px 6px}
 }
 
-/* v2.4.1 — Corrección definitiva del carrusel superior
-   Evita que la regla heredada .spotlight-card img convierta el logo lateral
-   en una imagen absoluta de tamaño completo. */
-.compact-spotlight .spotlight-side-logo{
+/* v2.4.2 — Ajuste final de proporciones y distribución */
+/* Neutraliza reglas antiguas que afectan cualquier imagen del carrusel. */
+.compact-spotlight img,
+.compact-card img{
+  position:static;
+  inset:auto;
+  max-width:none;
+}
+.compact-spotlight .spotlight-backdrop,
+.compact-card .compact-backdrop{
+  position:absolute;
+  inset:0;
+}
+.compact-spotlight .spotlight-backdrop img,
+.compact-card .compact-backdrop img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Escaparate superior: compacto, pero ocupando correctamente el ancho. */
+.spotlight-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-flow:row;
+  grid-auto-columns:auto;
+  gap:16px;
+  overflow:visible;
+  padding:2px 0 12px;
+}
+.compact-spotlight{
+  width:100%;
+  height:200px!important;
+  min-width:0;
+  border-radius:18px;
+}
+.spotlight-inner{
+  grid-template-columns:78px minmax(0,1fr);
+  gap:15px;
+  padding:17px 18px;
+}
+.spotlight-side-logo{
   position:relative!important;
   inset:auto!important;
-  left:auto!important;
-  right:auto!important;
-  top:auto!important;
-  bottom:auto!important;
   transform:none!important;
-  display:block!important;
-  flex:none!important;
-  width:78px!important;
-  height:78px!important;
-  min-width:78px!important;
-  max-width:78px!important;
-  min-height:78px!important;
-  max-height:78px!important;
-  object-fit:contain!important;
+  width:74px!important;
+  height:74px!important;
   border-radius:18px!important;
-  background:#fff!important;
   padding:5px!important;
-  z-index:4!important;
+}
+.spotlight-main{
+  width:100%;
+  min-width:0;
+}
+.spotlight-main .compact-badges{
+  margin:0 0 7px;
+}
+.spotlight-main h3{
+  margin:0 0 4px;
+  font-size:1.02rem;
+  line-height:1.18;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.spotlight-main p{
+  font-size:.77rem;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+}
+.spotlight-main .spotlight-location{
+  margin-top:8px;
+  font-size:.71rem;
+}
+.compact-spotlight-actions{
+  grid-template-columns:minmax(0,1fr) 74px!important;
+  gap:8px!important;
+  margin-top:11px!important;
+}
+.compact-spotlight-actions a{
+  min-height:36px!important;
+  font-size:.72rem!important;
+  padding:0 10px;
+}
+.compact-spotlight-actions .spotlight-whatsapp{
+  font-size:.69rem!important;
+}
+.compact-spotlight-actions .spotlight-whatsapp:after{
+  content:'WhatsApp';
+  font-size:.69rem;
 }
 
-.compact-spotlight:hover .spotlight-side-logo{
-  transform:none!important;
-}
-
-.compact-spotlight .spotlight-inner{
-  position:relative!important;
-  z-index:3!important;
-  display:grid!important;
-  grid-template-columns:78px minmax(0,1fr)!important;
-  align-items:center!important;
+/* Directorio: tarjetas legibles y alineadas sin volverlas grandes. */
+.directory-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
   gap:14px!important;
-  height:100%!important;
-  padding:16px!important;
 }
-
-.compact-spotlight .spotlight-main{
+.compact-card{
+  height:158px!important;
+  width:100%;
+}
+.compact-card-inner{
+  grid-template-columns:68px minmax(0,1fr);
+  gap:13px;
+  padding:14px 15px;
+}
+.compact-logo{
   position:relative!important;
-  z-index:4!important;
-  min-width:0!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:flex-start!important;
+  inset:auto!important;
+  transform:none!important;
+  width:64px!important;
+  height:64px!important;
+  border-radius:16px!important;
+}
+.compact-heading{
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+}
+.compact-copy h3{
+  font-size:.92rem;
+}
+.compact-copy p{
+  font-size:.7rem;
+}
+.compact-actions a,
+.compact-actions button{
+  min-height:34px;
+}
+.compact-profile{
+  padding:0 9px;
+  font-size:.67rem!important;
+}
+.compact-whatsapp{
+  width:35px;
+}
+.compact-location{
+  margin-top:8px;
+  font-size:.68rem;
+}
+.compact-badges{
+  margin-top:8px;
 }
 
-.compact-spotlight .spotlight-main h3,
-.compact-spotlight .spotlight-main p,
-.compact-spotlight .spotlight-location,
-.compact-spotlight .compact-badges,
-.compact-spotlight .compact-spotlight-actions{
-  position:relative!important;
-  z-index:4!important;
+@media(max-width:1050px){
+  .spotlight-grid{grid-template-columns:1fr}
+  .compact-spotlight{height:190px!important}
 }
-
-.compact-spotlight .spotlight-backdrop img{
-  position:absolute!important;
-  inset:-10px!important;
-  width:calc(100% + 20px)!important;
-  height:calc(100% + 20px)!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:cover!important;
-  filter:blur(9px) brightness(.30) saturate(.9)!important;
-  transform:scale(1.08)!important;
+@media(max-width:850px){
+  .directory-grid{grid-template-columns:1fr!important}
 }
-
-.compact-spotlight{
-  height:220px!important;
-}
-
 @media(max-width:560px){
-  .compact-spotlight{height:205px!important}
-  .compact-spotlight .spotlight-inner{
-    grid-template-columns:62px minmax(0,1fr)!important;
-    gap:11px!important;
-    padding:13px!important;
-  }
-  .compact-spotlight .spotlight-side-logo{
-    width:62px!important;
-    height:62px!important;
-    min-width:62px!important;
-    max-width:62px!important;
-    min-height:62px!important;
-    max-height:62px!important;
-    border-radius:15px!important;
-  }
+  .compact-spotlight{height:auto!important;min-height:190px!important}
+  .spotlight-inner{grid-template-columns:64px minmax(0,1fr);gap:11px;padding:14px}
+  .spotlight-side-logo{width:60px!important;height:60px!important;border-radius:15px!important}
+  .compact-spotlight-actions{grid-template-columns:1fr 42px!important}
+  .compact-spotlight-actions .spotlight-whatsapp{font-size:0!important}
+  .compact-spotlight-actions .spotlight-whatsapp:after{content:'WA';font-size:.65rem}
+  .compact-card{height:146px!important}
+  .compact-card-inner{grid-template-columns:58px minmax(0,1fr);gap:10px;padding:12px}
+  .compact-logo{width:54px!important;height:54px!important;border-radius:14px!important}
+  .compact-copy h3{font-size:.84rem}
+  .compact-profile span{display:none}
+  .compact-profile{width:35px;padding:0}
 }

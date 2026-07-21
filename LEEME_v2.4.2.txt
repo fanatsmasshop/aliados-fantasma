@@ -1,0 +1,14 @@
+ALIADOS FANTASMA v2.4.2 — AJUSTE DE DISTRIBUCIÓN
+
+Reemplaza únicamente directorio.css en GitHub.
+No reemplaces directorio.js.
+No ejecutes SQL.
+Espera el despliegue de Cloudflare Pages y después usa Ctrl + F5.
+
+Correcciones:
+- Tarjetas superiores distribuidas en dos columnas amplias.
+- Logo lateral con tamaño uniforme.
+- Textos sin encimarse.
+- Botones legibles y alineados.
+- Tarjetas inferiores compactas, pero con proporciones utilizables.
+- Responsive para tablet y celular.
