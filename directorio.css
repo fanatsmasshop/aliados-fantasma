@@ -14,3 +14,89 @@
 .spotlight-brand img{position:static;width:110px;height:110px;border-radius:30px;object-fit:contain;background:#fff;padding:7px;box-shadow:0 18px 50px rgba(0,0,0,.3)}
 .spotlight-card.no-cover:hover .spotlight-brand img{transform:translateY(-3px) scale(1.02)}
 @media(max-width:600px){.business-card.no-cover .business-cover{height:104px}.business-card.no-cover .business-logo{width:70px;height:70px}.spotlight-card.no-cover{min-height:230px}}
+/* v2.2 — Directorio compacto con portada opcional real */
+.spotlight-grid{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:minmax(245px,310px);
+  grid-template-columns:none;
+  gap:16px;
+  margin-top:20px;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scroll-snap-type:inline mandatory;
+  padding:2px 2px 14px;
+  scrollbar-width:thin;
+}
+.spotlight-grid::-webkit-scrollbar{height:7px}
+.spotlight-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px}
+.spotlight-card{
+  position:relative;
+  min-height:270px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid var(--directory-border);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(20,22,30,.98),rgba(11,13,19,.98));
+  color:#fff;
+  text-decoration:none;
+  scroll-snap-align:start;
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
+}
+.spotlight-card:hover{transform:translateY(-4px);border-color:rgba(168,85,247,.42);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.spotlight-card:before{display:none}
+.spotlight-media{position:relative;height:132px;overflow:hidden;background:#11131a}
+.spotlight-media>img:first-child{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.spotlight-card:hover .spotlight-media>img:first-child{transform:scale(1.04)}
+.spotlight-media-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,8,12,.72),rgba(7,8,12,.05) 66%)}
+.spotlight-logo{position:absolute!important;left:16px!important;bottom:12px!important;inset:auto!important;width:58px!important;height:58px!important;border-radius:17px!important;object-fit:contain!important;background:#fff!important;padding:4px!important;border:3px solid rgba(8,9,14,.75)!important;box-shadow:0 10px 24px rgba(0,0,0,.32)}
+.spotlight-logo-stage{height:126px;display:grid;place-items:center;background:radial-gradient(circle at 50% 42%,rgba(168,85,247,.25),transparent 46%),linear-gradient(145deg,#161923,#0d0f16)}
+.spotlight-logo-only{position:static!important;width:86px!important;height:86px!important;border-radius:24px!important;object-fit:contain!important;background:#fff!important;padding:6px!important;box-shadow:0 16px 36px rgba(0,0,0,.3);transition:transform .25s ease}
+.spotlight-card:hover .spotlight-logo-only{transform:translateY(-3px) scale(1.02)}
+.spotlight-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;flex:1;padding:16px 17px 18px}
+.spotlight-content h3{margin:10px 0 4px;font-size:1.18rem;line-height:1.2}
+.spotlight-content p{color:#d4d5dc;margin:0;font-size:.84rem}
+.spotlight-location{margin-top:auto;padding-top:14px;color:var(--directory-muted);font-size:.78rem}
+
+.directory-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:22px;align-items:stretch}
+.business-card{display:flex;flex-direction:column;overflow:hidden;min-height:100%;border:1px solid var(--directory-border);border-radius:22px;background:linear-gradient(145deg,rgba(20,22,30,.98),rgba(12,14,20,.98));transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.business-card:hover{transform:translateY(-5px);border-color:rgba(168,85,247,.38);box-shadow:0 22px 55px rgba(0,0,0,.3)}
+.business-media{position:relative;height:138px;overflow:hidden;background:#11131a}
+.business-cover-image{display:block;width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.business-card:hover .business-cover-image{transform:scale(1.035)}
+.business-media-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,11,16,.72),transparent 58%)}
+.business-logo{object-fit:contain;background:#fff}
+.business-logo-overlap{position:absolute;left:16px;bottom:12px;width:58px;height:58px;border-radius:17px;border:3px solid rgba(10,11,16,.8);padding:4px;box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.business-brand-row{display:flex;align-items:center;gap:14px;padding:18px 18px 8px}
+.business-logo-primary{flex:0 0 auto;width:72px;height:72px;border-radius:21px;border:1px solid rgba(255,255,255,.14);padding:5px;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.business-brand-copy{min-width:0}
+.business-brand-copy h3{margin:5px 0 0;font-size:1.22rem;line-height:1.18;overflow-wrap:anywhere}
+.business-body{display:flex;flex-direction:column;flex:1;padding:16px 18px 18px}
+.business-card.has-cover .business-body{padding-top:15px}
+.business-card.no-cover .business-body{padding-top:5px}
+.business-badges-inline{margin-bottom:10px}
+.business-category{color:#c084fc;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.business-body h3{font-size:1.22rem;margin:6px 0 7px}
+.business-description{color:var(--directory-muted);line-height:1.55;font-size:.87rem;margin:0;min-height:43px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.business-meta{display:flex;justify-content:space-between;gap:10px;margin:15px 0;color:#c8cad3;font-size:.78rem}
+.business-meta span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.business-actions{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:auto}
+.business-actions a,.business-actions button{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;text-decoration:none;font:inherit;font-size:.84rem;cursor:pointer}
+.view-profile{background:#fff;color:#0b0c10;font-weight:800;border:0}
+.quick-contact{width:44px;border:1px solid var(--directory-border);background:rgba(255,255,255,.04);color:#fff}
+.directory-skeleton{height:280px}
+
+@media(max-width:1100px){
+  .directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .spotlight-card:last-child{display:flex}
+}
+@media(max-width:600px){
+  .directory-grid{grid-template-columns:1fr}
+  .spotlight-grid{grid-auto-columns:minmax(235px,82vw)}
+  .spotlight-card{min-height:258px}
+  .business-media{height:132px}
+  .business-brand-row{padding:16px 16px 7px}
+  .business-logo-primary{width:66px;height:66px;border-radius:19px}
+  .business-body{padding-left:16px;padding-right:16px}
+}

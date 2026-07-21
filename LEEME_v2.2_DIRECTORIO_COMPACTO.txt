@@ -1,0 +1,23 @@
+ALIADOS FANTASMA v2.2 — DIRECTORIO COMPACTO
+
+ARCHIVOS A REEMPLAZAR EN GITHUB:
+1. directorio.js
+2. directorio.css
+
+NO REQUIERE SQL NUEVO.
+
+CAMBIOS:
+- La portada permanece completamente opcional.
+- Si existe portada, se muestra en una franja compacta con el logo encima.
+- Si no existe portada, no se crea ningún bloque, hueco o placeholder.
+- En negocios sin portada, logo, nombre y categoría aparecen directamente al inicio.
+- “Para descubrir hoy” ahora es un carrusel horizontal compacto.
+- Las tarjetas son más fáciles de escanear y ocupan menos altura.
+- El directorio conserva búsqueda, filtros, algoritmo, promociones y métricas.
+
+ORDEN:
+1. Descomprime este ZIP.
+2. En GitHub reemplaza directorio.js y directorio.css.
+3. Espera el despliegue de Cloudflare Pages.
+4. Haz una recarga forzada con Ctrl + F5.
+5. Prueba un negocio con portada y uno sin portada.
