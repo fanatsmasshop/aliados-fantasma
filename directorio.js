@@ -33,7 +33,7 @@ function cardMarkup(b){
   const wa=whatsappUrl(b),cover=coverUrl(b),withCover=Boolean(cover);
   const logo=logoUrl(b);
   const visual=withCover
-    ? `<div class="business-media"><img class="business-cover-image" src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    ? `<div class="business-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="business-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
     : `<div class="business-media business-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   const heading=withCover?`<span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3>`:'';
   return `<article class="business-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${visual}<div class="business-body"><div class="business-badges business-badges-inline">${badges(b)}</div>${heading}<p class="business-description">${esc(b.descripcion_corta||b.descripcion||'Conoce este negocio local y todo lo que tiene para ofrecer.')}</p><div class="business-meta"><span>📍 ${esc(businessLocation(b))}</span><span>${completeness(b)}% perfil</span></div><div class="business-actions"><a class="view-profile" href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp" data-event="whatsapp">💬</a>`:'<button class="quick-contact" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}</div></div></article>`;
@@ -43,9 +43,30 @@ function spotlightMarkup(b){
   const cover=coverUrl(b),withCover=Boolean(cover);
   const logo=logoUrl(b);
   const media=withCover
-    ? `<div class="spotlight-media"><img src="${esc(cover)}" alt="Portada de ${esc(b.nombre)}" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    ? `<div class="spotlight-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="spotlight-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
     : `<div class="spotlight-media spotlight-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   return `<a class="spotlight-card ${withCover?'has-cover':'no-cover'}" href="${esc(profileUrl(b))}" data-id="${esc(b.id)}" data-event="profile">${media}<div class="spotlight-content"><div class="business-badges">${badges(b)}</div><h3>${esc(b.nombre)}</h3><p>${esc(b.categoria||'Negocio aliado')}</p><span class="spotlight-location">📍 ${esc(businessLocation(b))}</span></div></a>`;
+}
+
+
+function generatedMediaMarkup(media,logo,name){
+  const isSpotlight=media.classList.contains('spotlight-media');
+  media.className=isSpotlight?'spotlight-media spotlight-media-generated':'business-media business-media-generated';
+  media.innerHTML=isSpotlight
+    ? `<img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`
+    : `<img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`;
+  media.closest('.business-card,.spotlight-card')?.classList.remove('has-cover');
+  media.closest('.business-card,.spotlight-card')?.classList.add('no-cover');
+}
+
+function bindCoverFallbacks(root){
+  root.querySelectorAll('.business-cover-image,.spotlight-cover-image').forEach(img=>{
+    const media=img.closest('.business-media,.spotlight-media');
+    if(!media)return;
+    const fallback=()=>generatedMediaMarkup(media,media.dataset.logo||'aliados-fantasma-icono.webp',media.dataset.name||'Negocio aliado');
+    img.addEventListener('error',fallback,{once:true});
+    if(img.complete&&img.naturalWidth===0)fallback();
+  });
 }
 
 function populateFilters(){el.category.innerHTML='<option value="">Todas las categorías</option>'+state.categories.map(c=>`<option value="${esc(c.nombre)}">${esc(c.nombre)}</option>`).join('');const municipalities=[...new Set(state.businesses.map(b=>b.municipio).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));el.municipality.innerHTML='<option value="">Todos los municipios</option>'+municipalities.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');el.quick.innerHTML=state.categories.slice(0,8).map(c=>`<button class="quick-category" type="button" data-category="${esc(c.nombre)}">${esc(c.icono||'')} ${esc(c.nombre)}</button>`).join('');el.quick.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{state.category=state.category===btn.dataset.category?'':btn.dataset.category;el.category.value=state.category;state.visible=PAGE_SIZE;applyFilters();}));}
@@ -55,8 +76,8 @@ function sortBusinesses(items){return [...items].sort((a,b)=>{if(state.sort==='n
 
 function renderActiveFilters(){const chips=[];if(state.query)chips.push(['query',`Búsqueda: ${state.query}`]);if(state.category)chips.push(['category',state.category]);if(state.municipality)chips.push(['municipality',state.municipality]);if(state.open)chips.push(['open','Abiertos ahora']);if(state.promotion)chips.push(['promotion','Con promoción']);if(state.isNew)chips.push(['isNew','Nuevos']);if(state.featured)chips.push(['featured','Destacados']);el.active.classList.toggle('hidden',!chips.length);el.active.innerHTML=chips.map(([key,label])=>`<span class="filter-chip">${esc(label)} <button type="button" data-remove="${key}" aria-label="Quitar filtro ${esc(label)}">×</button></span>`).join('');el.active.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>removeFilter(btn.dataset.remove)));}
 function removeFilter(key){if(key==='query'){state.query='';el.search.value='';}else if(key==='category'){state.category='';el.category.value='';}else if(key==='municipality'){state.municipality='';el.municipality.value='';}else if(key==='open'){state.open=false;el.open.checked=false;}else if(key==='promotion'){state.promotion=false;el.promotion.checked=false;}else if(key==='isNew'){state.isNew=false;el.newFilter.checked=false;}else if(key==='featured'){state.featured=false;el.featured.checked=false;}state.visible=PAGE_SIZE;applyFilters();}
-function renderFeatured(){if(state.query||state.category||state.municipality||state.open||state.promotion||state.isNew||state.featured){el.featuredSection.classList.add('hidden');return;}const selection=sortBusinesses(state.businesses).slice(0,3);el.featuredSection.classList.toggle('hidden',!selection.length);el.featuredGrid.innerHTML=selection.map(spotlightMarkup).join('');bindTracking(el.featuredGrid);}
-function renderResults(){const shown=state.filtered.slice(0,state.visible);el.grid.innerHTML=shown.map(cardMarkup).join('');el.empty.classList.toggle('hidden',state.filtered.length>0);el.grid.classList.toggle('hidden',state.filtered.length===0);el.loadMore.classList.toggle('hidden',state.visible>=state.filtered.length);el.summary.textContent=`${state.filtered.length} negocio${state.filtered.length===1?'':'s'} encontrado${state.filtered.length===1?'':'s'}`;bindTracking(el.grid);}
+function renderFeatured(){if(state.query||state.category||state.municipality||state.open||state.promotion||state.isNew||state.featured){el.featuredSection.classList.add('hidden');return;}const selection=sortBusinesses(state.businesses).slice(0,3);el.featuredSection.classList.toggle('hidden',!selection.length);el.featuredGrid.innerHTML=selection.map(spotlightMarkup).join('');bindCoverFallbacks(el.featuredGrid);bindTracking(el.featuredGrid);}
+function renderResults(){const shown=state.filtered.slice(0,state.visible);el.grid.innerHTML=shown.map(cardMarkup).join('');el.empty.classList.toggle('hidden',state.filtered.length>0);el.grid.classList.toggle('hidden',state.filtered.length===0);el.loadMore.classList.toggle('hidden',state.visible>=state.filtered.length);el.summary.textContent=`${state.filtered.length} negocio${state.filtered.length===1?'':'s'} encontrado${state.filtered.length===1?'':'s'}`;bindCoverFallbacks(el.grid);bindTracking(el.grid);}
 function applyFilters({trackSearch=false}={}){state.filtered=sortBusinesses(filterBusinesses());renderActiveFilters();renderFeatured();renderResults();el.clear.classList.toggle('hidden',!state.query);el.quick.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category===state.category));if(trackSearch&&state.query)trackEvent('busqueda',null,{query:state.query,resultados:state.filtered.length});}
 function resetAll(){Object.assign(state,{query:'',category:'',municipality:'',open:false,promotion:false,isNew:false,featured:false,sort:'recommended',visible:PAGE_SIZE});el.search.value='';el.category.value='';el.municipality.value='';el.open.checked=false;el.promotion.checked=false;el.newFilter.checked=false;el.featured.checked=false;el.sort.value='recommended';applyFilters();}
 

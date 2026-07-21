@@ -1,0 +1,16 @@
+ALIADOS FANTASMA v2.2.2 — FALLBACK REAL DE PORTADA
+
+Sube y reemplaza únicamente:
+- directorio.js
+- directorio.css
+
+Qué corrige:
+- Detecta portadas vacías o con URL inválida.
+- Detecta también imágenes que fallan después de renderizarse.
+- Elimina la imagen rota y su texto alternativo visible.
+- Usa el logo como fondo ampliado, desenfocado y oscurecido.
+- Mantiene el logo nítido al frente.
+- Aplica lo mismo en “Para descubrir hoy” y “Todos los negocios”.
+
+No requiere SQL.
+Después del despliegue usa Ctrl + F5.
