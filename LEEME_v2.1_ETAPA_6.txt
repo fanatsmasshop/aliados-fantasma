@@ -1,0 +1,37 @@
+ALIADOS FANTASMA v2.1 — ETAPA 6: DIRECTORIO PÚBLICO INTELIGENTE
+
+INCLUYE
+- Buscador por nombre, categoría, descripción, colonia, municipio y dirección.
+- Filtros combinables: categoría, municipio, abierto, promociones, nuevos y destacados.
+- Ordenamiento por recomendación, fecha, nombre, apertura y promociones.
+- Algoritmo transparente de puntuación.
+- Rotación diaria moderada para repartir exposición.
+- Sección dinámica “Para descubrir hoy”.
+- Tarjetas premium y responsive.
+- Carga progresiva de 12 negocios.
+- Bloqueo de prelanzamiento y vista administrativa.
+- Estados vacíos, skeletons y errores.
+- Registro de búsquedas, perfiles y clics para preparar estadísticas.
+
+ALGORITMO
+La recomendación considera:
+1. Coincidencia con la búsqueda.
+2. Negocio destacado.
+3. Promoción activa.
+4. Completitud del perfil.
+5. Abierto actualmente.
+6. Perfil verificado.
+7. Negocio nuevo (45 días).
+8. Actividad reciente.
+9. Rotación diaria moderada.
+
+PASOS
+1. Ejecuta 067_directorio_inteligente.sql en Supabase.
+2. Descomprime el ZIP.
+3. Sube todos los archivos descomprimidos a GitHub reemplazando los anteriores.
+4. Espera el despliegue de Cloudflare Pages.
+5. Como administrador, abre explorar.html antes del lanzamiento para probarlo.
+6. Prueba búsquedas, filtros, ver perfil y WhatsApp.
+
+NOTA
+El algoritmo no usa inteligencia artificial ni recopila datos personales. Es un sistema de puntuación claro, determinista y fácil de ajustar.
