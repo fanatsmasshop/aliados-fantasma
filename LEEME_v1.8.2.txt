@@ -1,0 +1,69 @@
+ALIADOS FANTASMA v1.8.2 — HARDENING DE PREPRODUCCIÓN
+=====================================================
+
+ESTA VERSIÓN NO AGREGA MÓDULOS NUEVOS.
+Su objetivo es dejar la base técnica más limpia y segura antes de probar negocios reales.
+
+ORDEN EXACTO EN SUPABASE
+------------------------
+1. Abre SQL Editor.
+2. Ejecuta completo: 064_hardening_perfiles_borrador.sql
+3. Ejecuta completo: 065_hardening_preproduccion.sql
+4. Ejecuta por bloques: 066_verificacion_preproduccion.sql
+5. No ejecutes nuevamente migraciones anteriores que ya estén aplicadas.
+
+QUÉ CORRIGE 064
+---------------
+- Evita que un propietario se autoapruebe o autopublique.
+- Evita que cambie negocio_id, revisiones, comentarios o fechas administrativas.
+
+QUÉ CORRIGE 065
+---------------
+- Retira triggers redundantes de updated_at.
+- Conserva los triggers de alta de auth.users porque cumplen tareas diferentes:
+  uno crea el perfil y otro crea el pre-registro del negocio.
+- Restringe las RPC admin para que anon no pueda ejecutarlas.
+- Refuerza search_path en funciones sensibles.
+- Agrega índices para revisión, perfiles, negocios, miembros y galería.
+
+PRUEBAS MANUALES OBLIGATORIAS
+-----------------------------
+A. USUARIO NUEVO
+- Registrar una cuenta de prueba.
+- Confirmar correo.
+- Verificar que exista exactamente 1 perfil y 1 pre-registro.
+
+B. PROPIETARIO
+- Guardar borrador.
+- Enviar a revisión.
+- Confirmar que no puede poner estado aprobado/publicado desde la API.
+- Confirmar que no ve ni edita datos de otro negocio.
+
+C. ADMINISTRADOR
+- Solicitar cambios.
+- Aprobar.
+- Publicar/actualizar perfil.
+- Dar de baja y reactivar un negocio.
+- Cambiar modo de lanzamiento y regresarlo a automatico.
+
+D. PÚBLICO ANTES DEL LANZAMIENTO
+- Explorar debe permanecer bloqueado.
+- Un perfil público no debe abrirse desde la interfaz.
+- La vista previa privada del propietario y del admin sí debe funcionar.
+
+E. RESPONSIVE
+- Probar a 360 px, 768 px y escritorio.
+- Revisar menú, formularios, tarjetas, modal, QR y botones.
+
+RESULTADO DE LA AUDITORÍA DEL ZIP
+---------------------------------
+- 105 archivos revisados.
+- 0 rutas o recursos locales faltantes.
+- 0 errores de sintaxis JavaScript detectados.
+- La estructura existente se conserva.
+
+IMPORTANTE SOBRE STORAGE
+------------------------
+El bucket negocios-media continúa público porque el frontend usa URLs públicas.
+Eso permite mostrar imágenes sin enlaces firmados. No subas documentos privados,
+identificaciones, comprobantes ni información confidencial a ese bucket.
