@@ -486,114 +486,22 @@ function formatBytes(bytes) {
 
 
 async function loadModerationSummary(){
-  let section=document.querySelector('#moderation-summary-runtime');
-  if(!section){
-    section=document.createElement('section');
-    section.id='moderation-summary-runtime';
-    section.style.cssText='margin:0 0 28px;padding:22px;border:1px solid rgba(255,255,255,.1);border-radius:22px;background:rgba(255,255,255,.03)';
-    document.querySelector('main')?.prepend(section);
-  }
-
-  section.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><p class="eyebrow">MODERACIÓN</p><h2 style="margin:.2rem 0">Reportes y apelaciones</h2><p class="muted" style="margin:0">Revisa cada caso antes de tomar una decisión administrativa.</p></div><button class="button secondary small" id="refresh-moderation-runtime">Actualizar bandeja</button></div><div class="empty-state" style="margin-top:18px">Cargando bandeja…</div>`;
-  section.querySelector('#refresh-moderation-runtime').onclick=loadModerationSummary;
-
   try{
-    const [{data:reports,error:reportsError},{data:appeals,error:appealsError}]=await Promise.all([
-      supabase.from('reportes_negocio').select('id,negocio_id,motivo,descripcion,estado,created_at,negocios(nombre,slug)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(30),
-      supabase.from('apelaciones_suspension').select('id,negocio_id,explicacion,estado,respuesta_admin,created_at,negocios(nombre,slug,motivo_suspension,estado_operativo)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(30)
+    const [{data:reports},{data:appeals}]=await Promise.all([
+      supabase.from('reportes_negocio').select('id,negocio_id,motivo,descripcion,estado,created_at,negocios(nombre)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(20),
+      supabase.from('apelaciones_suspension').select('id,negocio_id,explicacion,estado,created_at,negocios(nombre)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(20)
     ]);
-    if(reportsError) throw reportsError;
-    if(appealsError) throw appealsError;
-
-    section.innerHTML=`
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-        <div><p class="eyebrow">MODERACIÓN</p><h2 style="margin:.2rem 0">Reportes y apelaciones</h2><p class="muted" style="margin:0">Los reportes no generan sanciones automáticas.</p></div>
-        <button class="button secondary small" id="refresh-moderation-runtime">Actualizar bandeja</button>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:20px">
-        <article style="padding:18px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(0,0,0,.16)">
-          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><p class="eyebrow">REPORTES</p><h3 style="margin:.2rem 0">Pendientes</h3></div><span class="badge inactive">${reports?.length||0}</span></div>
-          <p class="muted">Consulta los reportes recibidos y la información enviada por los usuarios.</p>
-          <button class="button secondary" id="view-reports-runtime" type="button">Ver reportes</button>
-        </article>
-        <article style="padding:18px;border:1px solid rgba(188,103,255,.34);border-radius:18px;background:rgba(118,45,174,.09)">
-          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><p class="eyebrow">APELACIONES</p><h3 style="margin:.2rem 0">Requieren decisión</h3></div><span class="badge active">${appeals?.length||0}</span></div>
-          <p class="muted">Revisa la explicación del negocio, acepta o rechaza y registra una respuesta.</p>
-          <button class="button primary" id="view-appeals-runtime" type="button">Abrir apelaciones</button>
-        </article>
-      </div>
-      <div id="appeals-inline-runtime" style="margin-top:20px"></div>`;
-
-    section.querySelector('#refresh-moderation-runtime').onclick=loadModerationSummary;
-    section.querySelector('#view-reports-runtime').onclick=()=>showModerationItems('Reportes pendientes',(reports||[]).map(x=>({title:x.negocios?.nombre||'Negocio',meta:`${x.motivo} · ${x.estado==='en_revision'?'En revisión':'Pendiente'}`,body:x.descripcion,date:x.created_at})));
-    section.querySelector('#view-appeals-runtime').onclick=()=>renderAppealsInbox(appeals||[],true);
-    renderAppealsInbox(appeals||[],false);
-  }catch(error){
-    console.warn('No fue posible cargar moderación',error);
-    section.innerHTML=`<p class="eyebrow">MODERACIÓN</p><h2>No se pudo cargar la bandeja</h2><p class="muted">${esc(error.message||'Error desconocido')}</p><button class="button secondary" id="retry-moderation-runtime">Reintentar</button>`;
-    section.querySelector('#retry-moderation-runtime').onclick=loadModerationSummary;
-  }
+    let section=document.querySelector('#moderation-summary-runtime');
+    if(!section){section=document.createElement('section');section.id='moderation-summary-runtime';section.style.cssText='margin:0 0 22px;padding:20px;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:rgba(255,255,255,.03)';document.querySelector('main')?.prepend(section);}
+    section.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><p class="eyebrow">MODERACIÓN</p><h2 style="margin:.2rem 0">Bandeja de revisión</h2><p class="muted" style="margin:0">Los reportes no suspenden automáticamente a ningún negocio.</p></div><div class="actions"><button class="button secondary" id="view-reports-runtime">Reportes pendientes: ${reports?.length||0}</button><button class="button secondary" id="view-appeals-runtime">Apelaciones: ${appeals?.length||0}</button></div></div>`;
+    section.querySelector('#view-reports-runtime').onclick=()=>showModerationItems('Reportes pendientes',(reports||[]).map(x=>({title:x.negocios?.nombre||'Negocio',meta:x.motivo,body:x.descripcion,date:x.created_at})));
+    section.querySelector('#view-appeals-runtime').onclick=()=>showModerationItems('Apelaciones pendientes',(appeals||[]).map(x=>({title:x.negocios?.nombre||'Negocio',meta:'Apelación de suspensión',body:x.explicacion,date:x.created_at})));
+  }catch(error){console.warn('No fue posible cargar moderación',error);}
 }
-
-function renderAppealsInbox(appeals,scrollIntoView=false){
-  const target=document.querySelector('#appeals-inline-runtime');
-  if(!target)return;
-  target.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:12px"><div><p class="eyebrow">BANDEJA DE APELACIONES</p><h3 style="margin:.2rem 0">Casos pendientes</h3></div><small class="muted">${appeals.length} caso${appeals.length===1?'':'s'}</small></div>${appeals.length?`<div style="display:grid;gap:14px">${appeals.map(appeal=>appealCard(appeal)).join('')}</div>`:'<div class="empty-state">No hay apelaciones pendientes.</div>'}`;
-  if(scrollIntoView)target.scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function appealCard(appeal){
-  const business=appeal.negocios||{};
-  const suspensionReason=business.motivo_suspension||'Sin motivo registrado.';
-  return `<article style="padding:18px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:#10131b">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap">
-      <div><span class="badge ${appeal.estado==='en_revision'?'active':'inactive'}">${appeal.estado==='en_revision'?'En revisión':'Pendiente'}</span><h3 style="margin:.7rem 0 .25rem">${esc(business.nombre||'Negocio')}</h3><small class="muted">Recibida ${fmt(appeal.created_at)}</small></div>
-      ${business.slug?`<a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(business.slug)}" target="_blank" rel="noopener">Ver perfil</a>`:''}
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px">
-      <div style="padding:14px;border-radius:14px;background:rgba(255,76,95,.08);border:1px solid rgba(255,76,95,.18)"><strong>Motivo de suspensión</strong><p class="muted" style="white-space:pre-wrap;margin-bottom:0">${esc(suspensionReason)}</p></div>
-      <div style="padding:14px;border-radius:14px;background:rgba(188,103,255,.08);border:1px solid rgba(188,103,255,.18)"><strong>Explicación del negocio</strong><p style="white-space:pre-wrap;margin-bottom:0">${esc(appeal.explicacion)}</p></div>
-    </div>
-    <div class="actions" style="margin-top:16px;justify-content:flex-end;flex-wrap:wrap">
-      ${appeal.estado==='pendiente'?`<button class="button secondary small" type="button" onclick="markAppealReview('${appeal.id}')">Marcar en revisión</button>`:''}
-      <button class="button danger small" type="button" onclick="resolveAppeal('${appeal.id}','rechazada','${appeal.negocio_id}')">Rechazar</button>
-      <button class="button success small" type="button" onclick="resolveAppeal('${appeal.id}','aceptada','${appeal.negocio_id}')">Aceptar y reactivar</button>
-    </div>
-  </article>`;
-}
-
 function showModerationItems(title,items){
   document.querySelector('#moderation-list-modal')?.remove();const modal=document.createElement('div');modal.id='moderation-list-modal';modal.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px';modal.innerHTML=`<section style="width:min(760px,100%);max-height:86vh;overflow:auto;background:#11141c;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px"><div style="display:flex;justify-content:space-between;gap:16px"><div><p class="eyebrow">ADMINISTRACIÓN</p><h2>${esc(title)}</h2></div><button class="icon-button" data-close>×</button></div><div style="display:grid;gap:12px">${items.length?items.map(x=>`<article style="padding:16px;border:1px solid rgba(255,255,255,.1);border-radius:16px"><strong>${esc(x.title)}</strong><small class="muted" style="display:block;margin:.3rem 0">${esc(x.meta)} · ${fmt(x.date)}</small><p style="white-space:pre-wrap">${esc(x.body)}</p></article>`).join(''):'<p class="muted">No hay elementos pendientes.</p>'}</div></section>`;document.body.appendChild(modal);const close=()=>modal.remove();modal.querySelector('[data-close]').onclick=close;modal.addEventListener('click',e=>{if(e.target===modal)close();});
 }
 
-async function markAppealReview(id){
-  try{
-    const {error}=await supabase.rpc('admin_marcar_apelacion_revision',{p_apelacion_id:id});
-    if(error)throw error;
-    toast('Apelación marcada en revisión');
-    await loadModerationSummary();
-  }catch(error){toast(error.message||'No fue posible actualizar la apelación','error');}
-}
-
-function resolveAppeal(id,decision,businessId){
-  const accepted=decision==='aceptada';
-  adminActionModal({
-    title:accepted?'Aceptar apelación':'Rechazar apelación',
-    description:accepted?'La suspensión será levantada y el negocio volverá a estar activo. La respuesta será visible para el propietario.':'El negocio permanecerá suspendido. Explica claramente por qué la apelación no procede.',
-    confirmText:accepted?'Aceptar y reactivar':'Rechazar apelación',
-    danger:!accepted,
-    textarea:true,
-    minLength:15,
-    placeholder:accepted?'Explica brevemente por qué se acepta la apelación y cualquier condición aplicable…':'Explica los elementos revisados y por qué se mantiene la suspensión…',
-    onConfirm:async response=>{
-      const {error}=await supabase.rpc('admin_resolver_apelacion',{p_apelacion_id:id,p_decision:decision,p_respuesta:response});
-      if(error)throw error;
-      toast(accepted?'Apelación aceptada; negocio reactivado':'Apelación rechazada; negocio notificado');
-      await loadBusinesses();
-    }
-  });
-}
-
 async function suspendBusiness(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:`Suspender ${item?.nombre||'negocio'}`,description:'El perfil desaparecerá del directorio. La suspensión no se aplica automáticamente por recibir reportes: administración debe revisar el caso y registrar un motivo claro.',confirmText:'Suspender negocio',danger:true,textarea:true,minLength:15,placeholder:'Describe la regla incumplida, los hechos revisados y la razón de la medida…',onConfirm:async reason=>{const {error}=await supabase.rpc('admin_suspender_negocio',{p_negocio_id:id,p_motivo:reason,p_hasta:null});if(error)throw error;toast('Negocio suspendido y notificado');await loadBusinesses();}});}
 async function liftSuspension(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:'Levantar suspensión',description:`${esc(item?.nombre||'El negocio')} volverá a estar activo y visible en el directorio.`,confirmText:'Reactivar negocio',onConfirm:async()=>{const {error}=await supabase.rpc('admin_levantar_suspension',{p_negocio_id:id});if(error)throw error;toast('Suspensión levantada');await loadBusinesses();}});}
-window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;window.markAppealReview=markAppealReview;window.resolveAppeal=resolveAppeal;
+window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;
