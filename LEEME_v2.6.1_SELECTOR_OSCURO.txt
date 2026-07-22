@@ -1,0 +1,9 @@
+ALIADOS FANTASMA v2.6.1 — SELECTOR OSCURO
+
+Reemplaza en GitHub:
+1. directorio.css
+2. explorar.html
+
+No reemplaces directorio.js.
+No ejecutes SQL.
+Después del despliegue usa Ctrl + F5.
