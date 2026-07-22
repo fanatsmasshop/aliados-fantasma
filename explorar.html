@@ -11,8 +11,8 @@
   <meta property="og:image" content="aliados-fantasma-logo.png">
   <title>Directorio de negocios | Aliados Fantasma</title>
   <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="sistema-visual.css?v=20260721-700">
-  <link rel="stylesheet" href="directorio.css?v=20260722-901">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260722-2500">
+  <link rel="stylesheet" href="directorio.css?v=20260722-2500">
 </head>
 <body class="directory-page">
   <div id="launch-preview-banner" class="directory-preview-banner hidden" role="status">
@@ -20,7 +20,7 @@
   </div>
 
   <header class="directory-header">
-    <a class="directory-brand" href="index.html" aria-label="Volver a Aliados Fantasma">
+    <a class="directory-brand" href="index.html" aria-label="Volver al inicio de Aliados Fantasma">
       <img src="aliados-fantasma-icono.webp" alt="" width="48" height="48">
       <span><strong>Aliados Fantasma</strong><small>Directorio local</small></span>
     </a>
@@ -31,11 +31,11 @@
   </header>
 
   <main>
-    <section class="directory-hero">
+    <section class="directory-hero" aria-labelledby="directory-title">
       <div class="directory-hero-copy">
         <p class="eyebrow">DESCUBRE LO QUE ESTÁ CERCA</p>
-        <h1>Negocios locales que vale la pena conocer.</h1>
-        <p>Busca por nombre, categoría, colonia o municipio. Encuentra promociones, negocios abiertos y nuevos integrantes de la red.</p>
+        <h1 id="directory-title">Negocios locales que vale la pena conocer.</h1>
+        <p>Busca por nombre, categoría, colonia o municipio. Descubre promociones y nuevos integrantes de la red.</p>
       </div>
       <div class="directory-search-shell" role="search">
         <label class="directory-search">
@@ -48,8 +48,8 @@
       <div id="quick-categories" class="quick-categories" aria-label="Categorías rápidas"></div>
     </section>
 
-    <section id="directory-content" class="directory-content hidden">
-      <aside class="directory-filters" aria-label="Filtros del directorio">
+    <section id="directory-content" class="directory-layout hidden">
+      <aside class="directory-sidebar" aria-label="Filtros del directorio">
         <div class="filter-heading">
           <div><p class="eyebrow">AFINA TU BÚSQUEDA</p><h2>Filtros</h2></div>
           <button id="reset-filters" type="button">Limpiar</button>
@@ -67,10 +67,10 @@
 
         <fieldset class="filter-options">
           <legend>Mostrar</legend>
-          <label><input id="open-filter" type="checkbox"> Abiertos ahora</label>
-          <label><input id="promotion-filter" type="checkbox"> Con promoción activa</label>
-          <label><input id="new-filter" type="checkbox"> Nuevos aliados</label>
-          <label><input id="featured-filter" type="checkbox"> Destacados</label>
+          <label><input id="open-filter" type="checkbox"><span>Abiertos ahora</span></label>
+          <label><input id="promotion-filter" type="checkbox"><span>Con promoción activa</span></label>
+          <label><input id="new-filter" type="checkbox"><span>Nuevos aliados</span></label>
+          <label><input id="featured-filter" type="checkbox"><span>Destacados</span></label>
         </fieldset>
 
         <label class="filter-field">
@@ -83,18 +83,23 @@
             <option value="promotions">Promociones primero</option>
           </select>
         </label>
+
+        <div class="local-support-card">
+          <span aria-hidden="true">✦</span>
+          <div><strong>Apoyemos lo local</strong><p>Cada visita fortalece a los negocios de nuestra comunidad.</p></div>
+        </div>
       </aside>
 
-      <div class="directory-results">
-        <section id="featured-section" class="spotlight-section hidden" aria-labelledby="featured-title">
-          <div class="section-line">
+      <div class="directory-main">
+        <section id="featured-section" class="featured-section hidden" aria-labelledby="featured-title">
+          <div class="section-heading">
             <div><p class="eyebrow">SELECCIÓN DE LA RED</p><h2 id="featured-title">Para descubrir hoy</h2></div>
             <span id="featured-description">Selección dinámica y rotativa</span>
           </div>
-          <div id="featured-grid" class="spotlight-grid"></div>
+          <div id="featured-grid" class="featured-grid"></div>
         </section>
 
-        <section aria-labelledby="results-title">
+        <section class="results-section" aria-labelledby="results-title">
           <div class="results-heading">
             <div><p class="eyebrow">DIRECTORIO</p><h2 id="results-title">Todos los negocios</h2></div>
             <p id="results-summary" aria-live="polite">Cargando negocios…</p>
@@ -127,6 +132,6 @@
   </footer>
 
   <div id="directory-toast" class="directory-toast hidden" role="status"></div>
-  <script type="module" src="directorio.js?v=20260722-900"></script>
+  <script type="module" src="directorio.js?v=20260722-2500"></script>
 </body>
 </html>
