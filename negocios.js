@@ -14,6 +14,14 @@ const selectedMedia = {
 };
 const auth = await requireAdmin();
 
+
+function adminActionModal({title,description='',confirmText='Confirmar',danger=false,textarea=false,minLength=0,placeholder='',onConfirm}){
+  document.querySelector('#admin-action-modal')?.remove();
+  const modal=document.createElement('div');modal.id='admin-action-modal';modal.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px;backdrop-filter:blur(8px)';
+  modal.innerHTML=`<section role="dialog" aria-modal="true" style="width:min(590px,100%);background:#11141c;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:28px;box-shadow:0 30px 100px rgba(0,0,0,.6)"><p class="eyebrow">MODERACIÓN</p><h2>${esc(title)}</h2>${description?`<p class="muted" style="line-height:1.6">${description}</p>`:''}${textarea?`<label class="field"><span>Motivo obligatorio</span><textarea id="admin-action-text" rows="6" minlength="${minLength}" placeholder="${esc(placeholder)}"></textarea><small class="muted">Mínimo ${minLength} caracteres. El negocio podrá ver este motivo.</small></label>`:''}<div class="actions" style="justify-content:flex-end;margin-top:22px"><button type="button" class="button secondary" data-cancel>Cancelar</button><button type="button" class="button ${danger?'danger':'primary'}" data-confirm>${esc(confirmText)}</button></div></section>`;
+  document.body.appendChild(modal);const input=modal.querySelector('#admin-action-text');const confirm=modal.querySelector('[data-confirm]');const sync=()=>{if(input)confirm.disabled=input.value.trim().length<minLength;};input?.addEventListener('input',sync);sync();const close=()=>modal.remove();modal.querySelector('[data-cancel]').onclick=close;modal.addEventListener('click',e=>{if(e.target===modal)close();});confirm.onclick=async()=>{confirm.disabled=true;const old=confirm.textContent;confirm.textContent='Procesando…';try{await onConfirm(input?.value.trim()||'');close();}catch(error){confirm.disabled=false;confirm.textContent=old;toast(error.message||'No fue posible completar la acción.','error');}};setTimeout(()=>input?.focus(),50);
+}
+
 function withTimeout(promise, label, milliseconds = 15000) {
   return Promise.race([
     Promise.resolve(promise),
@@ -93,6 +101,7 @@ async function loadBusinesses() {
     if (error) throw error;
     businesses = data || [];
     render();
+    await loadModerationSummary();
   } catch (error) {
     console.error('Error de negocios:', error);
     toast(`No se cargaron negocios: ${error.message}`, 'error');
@@ -475,6 +484,24 @@ function formatBytes(bytes) {
 }
 
 
-async function suspendBusiness(id){const item=businesses.find(x=>x.id===id);const reason=prompt(`Motivo de suspensión de ${item?.nombre||'este negocio'}:`);if(!reason?.trim())return;const {error}=await supabase.rpc('admin_suspender_negocio',{p_negocio_id:id,p_motivo:reason.trim(),p_hasta:null});if(error)return toast(error.message,'error');toast('Negocio suspendido');await loadBusinesses();}
-async function liftSuspension(id){if(!confirm('¿Levantar la suspensión y volver a publicar el negocio?'))return;const {error}=await supabase.rpc('admin_levantar_suspension',{p_negocio_id:id});if(error)return toast(error.message,'error');toast('Suspensión levantada');await loadBusinesses();}
+
+async function loadModerationSummary(){
+  try{
+    const [{data:reports},{data:appeals}]=await Promise.all([
+      supabase.from('reportes_negocio').select('id,negocio_id,motivo,descripcion,estado,created_at,negocios(nombre)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(20),
+      supabase.from('apelaciones_suspension').select('id,negocio_id,explicacion,estado,created_at,negocios(nombre)').in('estado',['pendiente','en_revision']).order('created_at',{ascending:false}).limit(20)
+    ]);
+    let section=document.querySelector('#moderation-summary-runtime');
+    if(!section){section=document.createElement('section');section.id='moderation-summary-runtime';section.style.cssText='margin:0 0 22px;padding:20px;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:rgba(255,255,255,.03)';document.querySelector('main')?.prepend(section);}
+    section.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><p class="eyebrow">MODERACIÓN</p><h2 style="margin:.2rem 0">Bandeja de revisión</h2><p class="muted" style="margin:0">Los reportes no suspenden automáticamente a ningún negocio.</p></div><div class="actions"><button class="button secondary" id="view-reports-runtime">Reportes pendientes: ${reports?.length||0}</button><button class="button secondary" id="view-appeals-runtime">Apelaciones: ${appeals?.length||0}</button></div></div>`;
+    section.querySelector('#view-reports-runtime').onclick=()=>showModerationItems('Reportes pendientes',(reports||[]).map(x=>({title:x.negocios?.nombre||'Negocio',meta:x.motivo,body:x.descripcion,date:x.created_at})));
+    section.querySelector('#view-appeals-runtime').onclick=()=>showModerationItems('Apelaciones pendientes',(appeals||[]).map(x=>({title:x.negocios?.nombre||'Negocio',meta:'Apelación de suspensión',body:x.explicacion,date:x.created_at})));
+  }catch(error){console.warn('No fue posible cargar moderación',error);}
+}
+function showModerationItems(title,items){
+  document.querySelector('#moderation-list-modal')?.remove();const modal=document.createElement('div');modal.id='moderation-list-modal';modal.style.cssText='position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px';modal.innerHTML=`<section style="width:min(760px,100%);max-height:86vh;overflow:auto;background:#11141c;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:26px"><div style="display:flex;justify-content:space-between;gap:16px"><div><p class="eyebrow">ADMINISTRACIÓN</p><h2>${esc(title)}</h2></div><button class="icon-button" data-close>×</button></div><div style="display:grid;gap:12px">${items.length?items.map(x=>`<article style="padding:16px;border:1px solid rgba(255,255,255,.1);border-radius:16px"><strong>${esc(x.title)}</strong><small class="muted" style="display:block;margin:.3rem 0">${esc(x.meta)} · ${fmt(x.date)}</small><p style="white-space:pre-wrap">${esc(x.body)}</p></article>`).join(''):'<p class="muted">No hay elementos pendientes.</p>'}</div></section>`;document.body.appendChild(modal);const close=()=>modal.remove();modal.querySelector('[data-close]').onclick=close;modal.addEventListener('click',e=>{if(e.target===modal)close();});
+}
+
+async function suspendBusiness(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:`Suspender ${item?.nombre||'negocio'}`,description:'El perfil desaparecerá del directorio. La suspensión no se aplica automáticamente por recibir reportes: administración debe revisar el caso y registrar un motivo claro.',confirmText:'Suspender negocio',danger:true,textarea:true,minLength:15,placeholder:'Describe la regla incumplida, los hechos revisados y la razón de la medida…',onConfirm:async reason=>{const {error}=await supabase.rpc('admin_suspender_negocio',{p_negocio_id:id,p_motivo:reason,p_hasta:null});if(error)throw error;toast('Negocio suspendido y notificado');await loadBusinesses();}});}
+async function liftSuspension(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:'Levantar suspensión',description:`${esc(item?.nombre||'El negocio')} volverá a estar activo y visible en el directorio.`,confirmText:'Reactivar negocio',onConfirm:async()=>{const {error}=await supabase.rpc('admin_levantar_suspension',{p_negocio_id:id});if(error)throw error;toast('Suspensión levantada');await loadBusinesses();}});}
 window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;

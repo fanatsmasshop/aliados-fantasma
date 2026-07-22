@@ -419,7 +419,7 @@ document.querySelector('#submit-review').onclick = async () => {
     if(percentage < 60){ showMessage('Completa al menos 60% del perfil antes de enviarlo.','error'); return; }
     const missing = missingFields(serialize());
     const detail = missing.length ? ` Aún faltan elementos recomendados: ${missing.join(', ')}.` : '';
-    if(!confirm(`¿Enviar esta versión a revisión?${detail}`)) return;
+    let approved=false; await new Promise(resolve=>openActionModal({title:'Enviar perfil a revisión',description:`Esta versión quedará bloqueada mientras administración la revisa.${detail ? `<br><br>${esc(detail)}` : ''}`,confirmText:'Enviar a revisión',onConfirm:async()=>{approved=true;resolve();}})); if(!approved)return;
     await save('en_revision');
     showMessage('Confirmación: recibimos tu perfil y quedó enviado a revisión.', 'ok', 7000);
     go(6);
@@ -452,13 +452,55 @@ async function showRulesIfNeeded(){
   const {data}=await supabase.from('aceptaciones_legales').select('id').eq('usuario_id',user.id).eq('version_terminos',LEGAL_TERMS_VERSION).eq('version_privacidad',LEGAL_PRIVACY_VERSION).maybeSingle();
   if(data) return;
   const modal=document.querySelector('#rules-modal');
-  modal.classList.remove('hidden');
-  document.querySelector('#rules-accept').onchange=e=>document.querySelector('#rules-confirm').disabled=!e.target.checked;
-  document.querySelector('#rules-confirm').onclick=async()=>{
-    const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});
-    if(error){showMessage(error.message,'error');return;}
-    modal.classList.add('hidden');showMessage('Reglas aceptadas. Bienvenido a Aliados Fantasma.');
+  const card=modal.querySelector('.rules-card');
+  const steps=[
+    {eyebrow:'BIENVENIDO',title:'Tu negocio dentro de Aliados Fantasma',body:'Este breve recorrido te mostrará cómo completar tu perfil, publicarlo y administrar su estado sin perder información.'},
+    {eyebrow:'TU PERFIL',title:'Completa la información esencial',body:'Agrega logo, portada, descripción, horarios, ubicación, redes y promociones. Puedes guardar tu progreso y revisar una vista previa antes de enviarlo.'},
+    {eyebrow:'PUBLICACIÓN',title:'Los cambios pasan por revisión',body:'Cuando envíes tu perfil, administración revisará la información. Una vez aprobado y publicado, los clientes podrán encontrarlo en el directorio.'},
+    {eyebrow:'ESTADOS',title:'Administra la disponibilidad',body:'Puedes marcar el negocio como cerrado temporalmente y reabrirlo cuando quieras. También puedes solicitar su eliminación: se ocultará de inmediato y tendrás 30 días para cancelar.'},
+    {eyebrow:'COMUNIDAD SEGURA',title:'Responsabilidades y posibles sanciones',body:'Un negocio puede ser suspendido por información falsa, promociones engañosas, suplantación, contenido ilegal u ofensivo, fraude, manipulación del sistema o incumplimiento reiterado. Un reporte no genera una suspensión automática: administración revisa cada caso y el negocio puede apelar.'}
+  ];
+  let index=0;
+  const render=()=>{
+    const final=index===steps.length-1;const item=steps[index];
+    card.innerHTML=`<div class="tutorial-progress"><span style="width:${((index+1)/steps.length)*100}%"></span></div><p class="eyebrow">${item.eyebrow}</p><h2>${item.title}</h2><p class="tutorial-copy">${item.body}</p>${final?`<div class="notice warning"><strong>Lee antes de continuar.</strong> Las reglas completas se encuentran en los Términos y Condiciones y el tratamiento de datos en la Política de Privacidad.</div><label class="rules-check"><input id="rules-accept" type="checkbox"> He leído y comprendido los <a href="terminos.html" target="_blank">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank">Política de Privacidad</a>.</label>`:''}<div class="tutorial-actions"><button type="button" class="button secondary" id="tutorial-prev" ${index===0?'disabled':''}>Anterior</button><span>${index+1} de ${steps.length}</span>${final?'<button id="rules-confirm" class="button primary" type="button" disabled>Comenzar</button>':'<button type="button" class="button primary" id="tutorial-next">Siguiente</button>'}</div>`;
+    card.querySelector('#tutorial-prev')?.addEventListener('click',()=>{index--;render();});
+    card.querySelector('#tutorial-next')?.addEventListener('click',()=>{index++;render();});
+    if(final){
+      card.querySelector('#rules-accept').onchange=e=>card.querySelector('#rules-confirm').disabled=!e.target.checked;
+      card.querySelector('#rules-confirm').onclick=async()=>{const button=card.querySelector('#rules-confirm');button.disabled=true;button.textContent='Guardando…';const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});if(error){button.disabled=false;button.textContent='Comenzar';showMessage(error.message,'error');return;}modal.classList.add('hidden');showMessage('Tutorial completado. Bienvenido a Aliados Fantasma.');};
+    }
   };
+  modal.classList.remove('hidden');render();
+}
+
+function openActionModal({eyebrow='ALIADOS FANTASMA',title,description='',confirmText='Confirmar',danger=false,textarea=false,minLength=0,placeholder='',onConfirm}){
+  document.querySelector('#af-action-modal')?.remove();
+  const modal=document.createElement('div');
+  modal.id='af-action-modal';
+  modal.className='af-modal';
+  modal.innerHTML=`<section class="af-modal-card" role="dialog" aria-modal="true" aria-labelledby="af-modal-title">
+    <p class="eyebrow">${esc(eyebrow)}</p>
+    <h2 id="af-modal-title">${esc(title)}</h2>
+    ${description?`<p class="af-modal-copy">${description}</p>`:''}
+    ${textarea?`<label class="field"><span>Explicación</span><textarea id="af-modal-text" rows="6" minlength="${minLength}" placeholder="${esc(placeholder)}"></textarea><small class="field-help">Mínimo ${minLength} caracteres.</small></label>`:''}
+    <div class="af-modal-actions"><button type="button" class="button secondary" data-af-cancel>Cancelar</button><button type="button" class="button ${danger?'danger':'primary'}" data-af-confirm>${esc(confirmText)}</button></div>
+  </section>`;
+  document.body.appendChild(modal);
+  const input=modal.querySelector('#af-modal-text');
+  const confirm=modal.querySelector('[data-af-confirm]');
+  const sync=()=>{if(input)confirm.disabled=input.value.trim().length<minLength;};
+  input?.addEventListener('input',sync); sync();
+  const close=()=>modal.remove();
+  modal.querySelector('[data-af-cancel]').onclick=close;
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  document.addEventListener('keydown',function escClose(e){if(e.key==='Escape'&&document.body.contains(modal)){close();document.removeEventListener('keydown',escClose);}});
+  confirm.onclick=async()=>{
+    confirm.disabled=true; const old=confirm.textContent; confirm.textContent='Procesando…';
+    try{await onConfirm(input?.value.trim()||'');close();}
+    catch(error){confirm.disabled=false;confirm.textContent=old;showMessage(error.message||'No fue posible completar la acción.','error');}
+  };
+  setTimeout(()=>input?.focus(),50);
 }
 
 function fmtLong(value){
@@ -509,6 +551,17 @@ async function getOwnerBusinessState(negocioId){
   return Array.isArray(data) ? data[0] : data;
 }
 
+
+async function renderOwnerNotifications(section){
+  let box=section.querySelector('#owner-notifications');
+  if(!box){box=document.createElement('div');box.id='owner-notifications';box.className='owner-notifications';section.appendChild(box);}
+  const {data,error}=await supabase.from('notificaciones_plataforma').select('id,titulo,mensaje,tipo,leida,created_at').eq('usuario_id',user.id).order('created_at',{ascending:false}).limit(5);
+  if(error){box.innerHTML='';return;}
+  if(!data?.length){box.innerHTML='';return;}
+  box.innerHTML=`<div class="owner-notifications-head"><div><p class="eyebrow">AVISOS</p><h3>Notificaciones recientes</h3></div></div><div class="owner-notifications-list">${data.map(n=>`<article class="owner-notification ${n.leida?'':'unread'}"><strong>${esc(n.titulo)}</strong><p>${esc(n.mensaje)}</p><small>${new Intl.DateTimeFormat('es-MX',{dateStyle:'medium',timeStyle:'short'}).format(new Date(n.created_at))}</small></article>`).join('')}</div>`;
+  const unread=data.filter(n=>!n.leida).map(n=>n.id);if(unread.length)await supabase.from('notificaciones_plataforma').update({leida:true}).in('id',unread);
+}
+
 async function renderAccountManagement(){
   const section=document.querySelector('#account-management');
   const negocioId=draft.negocio_id || publishedBusiness?.id;
@@ -532,11 +585,7 @@ async function renderAccountManagement(){
     document.querySelector('#account-actions').innerHTML=actions.join('');
 
     document.querySelector('[data-close-temp]')?.addEventListener('click',async()=>{
-      if(!confirm('Tu perfil seguirá visible con el aviso “Cerrado temporalmente”. ¿Continuar?'))return;
-      const {error}=await supabase.rpc('propietario_cerrar_temporalmente',{p_negocio_id:b.id});
-      if(error)return showMessage(error.message,'error');
-      await renderAccountManagement();
-      showMessage('Tu negocio ahora aparece como cerrado temporalmente.');
+      openActionModal({title:'Cerrar temporalmente',description:'El perfil continuará visible, pero mostrará claramente que el negocio está cerrado temporalmente. Podrás reabrirlo cuando quieras.',confirmText:'Cerrar temporalmente',onConfirm:async()=>{const {error}=await supabase.rpc('propietario_cerrar_temporalmente',{p_negocio_id:b.id});if(error)throw error;await renderAccountManagement();showMessage('Tu negocio ahora aparece como cerrado temporalmente.');}});
     });
     document.querySelector('[data-reopen]')?.addEventListener('click',async()=>{
       const {error}=await supabase.rpc('propietario_reabrir_negocio',{p_negocio_id:b.id});
@@ -551,20 +600,12 @@ async function renderAccountManagement(){
       showMessage(`El negocio quedó oculto. Puedes cancelar la eliminación hasta el ${fmtLong(data)}.`,'warning',9000);
     }));
     document.querySelector('[data-cancel-delete]')?.addEventListener('click',async()=>{
-      if(!confirm('¿Cancelar la eliminación y volver a publicar el negocio?'))return;
-      const {error}=await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});
-      if(error)return showMessage(error.message,'error');
-      await loadPublishedBusiness();
-      await renderAccountManagement();
-      renderProfileAccess();
-      showMessage('La eliminación fue cancelada y el negocio volvió a estar activo.');
+      openActionModal({title:'Cancelar eliminación',description:'El negocio volverá a estar activo y visible. Se cancelará definitivamente la cuenta regresiva de eliminación.',confirmText:'Cancelar eliminación',onConfirm:async()=>{const {error}=await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});if(error)throw error;await loadPublishedBusiness();await renderAccountManagement();renderProfileAccess();showMessage('La eliminación fue cancelada y el negocio volvió a estar activo.');}});
     });
     document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{
-      const text=prompt('Explica por qué solicitas revisar la suspensión:');
-      if(!text||text.trim().length<20)return showMessage('La apelación debe tener al menos 20 caracteres.','error');
-      const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text.trim()});
-      showMessage(error?error.message:'Apelación enviada a administración.',error?'error':'ok');
+      openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
     });
+    await renderOwnerNotifications(section);
   }catch(error){
     console.error('No fue posible cargar el estado del negocio:',error);
     section.classList.remove('hidden');

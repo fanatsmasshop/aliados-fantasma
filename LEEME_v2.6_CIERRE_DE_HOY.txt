@@ -1,0 +1,39 @@
+ALIADOS FANTASMA v2.6 — CIERRE DE LA ACTUALIZACIÓN DE HOY
+
+ESTA ENTREGA NO MODIFICA EL DIRECTORIO v2.5.
+
+ORDEN CORRECTO:
+
+1. SUPABASE
+- Abre SQL Editor.
+- Crea una consulta nueva.
+- Abre 070_notificaciones_moderacion.sql.
+- Copia todo, pégalo y presiona Run.
+- Debe terminar sin errores.
+
+2. GITHUB
+Sube a la raíz y reemplaza estos archivos:
+- panel.js
+- onboarding.css
+- negocios.js
+- perfil.js
+- perfil.html
+- perfil-premium.css
+- terminos.html
+- privacidad.html
+- ayuda.html
+
+3. CLOUDFLARE
+- Espera el despliegue.
+- Abre el sitio y presiona Ctrl + F5.
+
+PRUEBAS:
+A) Cuenta nueva: debe aparecer tutorial de 5 pasos y aceptación final.
+B) Panel: probar cerrar temporalmente, reabrir, programar eliminación y cancelar.
+C) Suspensión: desde administración debe pedir motivo en modal propio.
+D) Apelación: desde el negocio suspendido debe abrir formulario propio.
+E) Reporte: desde perfil público enviar reporte; debe crear aviso para negocio y administración.
+F) Administración: debe aparecer Bandeja de revisión con reportes y apelaciones pendientes.
+G) Revisar terminos.html, privacidad.html y ayuda.html.
+
+No vuelvas a ejecutar 068 ni 069 si ya funcionaron.
