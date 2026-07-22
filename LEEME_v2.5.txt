@@ -1,0 +1,15 @@
+ALIADOS FANTASMA v2.5 — REDISEÑO ESTABLE DEL DIRECTORIO
+
+1. Sube únicamente directorio.css a GitHub y reemplaza el actual.
+2. No reemplaces directorio.js.
+3. No ejecutes SQL.
+4. Espera el despliegue de Cloudflare Pages.
+5. Recarga con Ctrl + F5.
+
+Cambios:
+- Dos tarjetas destacadas amplias y legibles.
+- Tarjetas del directorio compactas, horizontales y equilibradas.
+- Logos laterales uniformes.
+- Botones completos y legibles.
+- Fondo discreto con portada o logo.
+- Responsive para computadora, tableta y celular.

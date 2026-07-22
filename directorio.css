@@ -525,3 +525,347 @@
   .compact-profile span{display:none}
   .compact-profile{width:35px;padding:0}
 }
+
+/* ==========================================================
+   v2.5 — REDISEÑO ESTABLE DEL DIRECTORIO
+   Capa final autoritativa. Neutraliza ajustes experimentales
+   anteriores sin cambiar la lógica de Supabase ni el JS.
+   ========================================================== */
+
+/* Contenedor general */
+.directory-content{
+  grid-template-columns:240px minmax(0,1fr)!important;
+  gap:24px!important;
+  max-width:1440px!important;
+  padding:20px clamp(18px,4vw,64px) 72px!important;
+}
+.directory-results{min-width:0!important}
+.directory-filters{
+  top:88px!important;
+  padding:20px!important;
+  border-radius:18px!important;
+}
+.spotlight-section{
+  padding-bottom:30px!important;
+  margin-bottom:30px!important;
+}
+.section-line h2,.results-heading h2{font-size:1.35rem!important;line-height:1.2!important}
+.section-line>span,.results-heading>p{font-size:.82rem!important}
+
+/* DESTACADOS: dos tarjetas equilibradas y legibles */
+.spotlight-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-auto-flow:row!important;
+  grid-auto-columns:auto!important;
+  gap:14px!important;
+  overflow:visible!important;
+  padding:0!important;
+  margin-top:16px!important;
+}
+.compact-spotlight{
+  position:relative!important;
+  width:100%!important;
+  height:210px!important;
+  min-height:210px!important;
+  overflow:hidden!important;
+  border-radius:18px!important;
+  background:#0c0e14!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+}
+.compact-spotlight:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(168,85,247,.42)!important;
+  box-shadow:0 16px 36px rgba(0,0,0,.28)!important;
+}
+.compact-spotlight .spotlight-backdrop{
+  position:absolute!important;
+  inset:0!important;
+  overflow:hidden!important;
+  z-index:0!important;
+}
+.compact-spotlight .spotlight-backdrop img{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  filter:blur(7px) brightness(.33) saturate(.9)!important;
+  transform:scale(1.08)!important;
+  opacity:.72!important;
+}
+.compact-spotlight .spotlight-backdrop span{
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(90deg,rgba(7,8,12,.97),rgba(7,8,12,.82) 60%,rgba(7,8,12,.62))!important;
+}
+.spotlight-inner{
+  position:relative!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:84px minmax(0,1fr)!important;
+  gap:16px!important;
+  align-items:center!important;
+  height:100%!important;
+  padding:18px!important;
+}
+.spotlight-side-logo{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  width:80px!important;
+  height:80px!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  border-radius:19px!important;
+  background:#fff!important;
+  padding:5px!important;
+  border:1px solid rgba(255,255,255,.25)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.36)!important;
+}
+.spotlight-main{
+  min-width:0!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+}
+.spotlight-main .compact-badges{
+  display:flex!important;
+  gap:5px!important;
+  flex-wrap:wrap!important;
+  margin:0 0 8px!important;
+}
+.spotlight-main h3{
+  margin:0 0 5px!important;
+  font-size:1.04rem!important;
+  line-height:1.2!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+  overflow:hidden!important;
+}
+.spotlight-main p{
+  margin:0!important;
+  color:#d8a5ff!important;
+  font-size:.8rem!important;
+  font-weight:700!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.spotlight-main .spotlight-location{
+  margin:9px 0 0!important;
+  padding:0!important;
+  color:#d0d2da!important;
+  font-size:.73rem!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.compact-spotlight-actions{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 96px!important;
+  gap:8px!important;
+  width:100%!important;
+  margin-top:12px!important;
+}
+.compact-spotlight-actions a{
+  min-height:36px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0 10px!important;
+  border-radius:10px!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  color:#fff!important;
+  background:rgba(8,9,14,.62)!important;
+  text-decoration:none!important;
+  font-size:.73rem!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.compact-spotlight-actions .spotlight-whatsapp{
+  font-size:0!important;
+  color:#25d366!important;
+  border-color:rgba(37,211,102,.34)!important;
+}
+.compact-spotlight-actions .spotlight-whatsapp:after{
+  content:'WhatsApp'!important;
+  font-size:.7rem!important;
+  font-weight:900!important;
+}
+
+/* DIRECTORIO: tarjetas horizontales compactas, pero no diminutas */
+.directory-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;
+  margin-top:16px!important;
+}
+.compact-card{
+  position:relative!important;
+  width:100%!important;
+  height:164px!important;
+  min-height:164px!important;
+  overflow:hidden!important;
+  border-radius:17px!important;
+  background:#0c0e14!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+}
+.compact-card:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(168,85,247,.38)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.25)!important;
+}
+.compact-card .compact-backdrop{
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  overflow:hidden!important;
+}
+.compact-card .compact-backdrop img{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  filter:blur(10px) brightness(.22) saturate(.82)!important;
+  transform:scale(1.08)!important;
+  opacity:.58!important;
+}
+.compact-card .compact-backdrop span{
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(90deg,rgba(7,8,12,.99),rgba(7,8,12,.94) 68%,rgba(7,8,12,.78))!important;
+}
+.compact-card-inner{
+  position:relative!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:70px minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:center!important;
+  height:100%!important;
+  padding:14px 15px!important;
+}
+.compact-logo{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  width:66px!important;
+  height:66px!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  padding:5px!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.32)!important;
+}
+.compact-main{
+  min-width:0!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+.compact-heading{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:10px!important;
+  align-items:start!important;
+}
+.compact-copy{min-width:0!important}
+.compact-copy h3{
+  margin:0 0 4px!important;
+  font-size:.94rem!important;
+  line-height:1.18!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.compact-copy p{
+  margin:0!important;
+  color:#c8cad3!important;
+  font-size:.72rem!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.compact-actions{
+  display:flex!important;
+  gap:6px!important;
+  flex:0 0 auto!important;
+}
+.compact-actions a,.compact-actions button{
+  min-height:34px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:9px!important;
+  text-decoration:none!important;
+  font-size:.68rem!important;
+  font-weight:800!important;
+}
+.compact-profile{
+  min-width:88px!important;
+  padding:0 10px!important;
+  color:#fff!important;
+  background:rgba(8,9,14,.68)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+}
+.compact-whatsapp{
+  width:36px!important;
+  color:#25d366!important;
+  background:rgba(8,9,14,.68)!important;
+  border:1px solid rgba(37,211,102,.30)!important;
+}
+.compact-location{
+  margin-top:9px!important;
+  color:#d0d2da!important;
+  font-size:.7rem!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.compact-badges{
+  display:flex!important;
+  gap:5px!important;
+  flex-wrap:wrap!important;
+  margin-top:9px!important;
+}
+.compact-badges .business-badge{
+  padding:4px 7px!important;
+  font-size:.56rem!important;
+  line-height:1!important;
+}
+
+/* Responsivo */
+@media(max-width:1080px){
+  .directory-content{grid-template-columns:220px minmax(0,1fr)!important;gap:20px!important}
+  .spotlight-grid{grid-template-columns:1fr!important}
+  .compact-spotlight{height:196px!important;min-height:196px!important}
+}
+@media(max-width:860px){
+  .directory-content{display:block!important;padding:18px 16px 60px!important}
+  .directory-filters{position:static!important;margin-bottom:22px!important}
+  .directory-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:600px){
+  .spotlight-inner{grid-template-columns:64px minmax(0,1fr)!important;gap:11px!important;padding:14px!important}
+  .spotlight-side-logo{width:60px!important;height:60px!important;border-radius:15px!important}
+  .compact-spotlight{height:auto!important;min-height:184px!important}
+  .compact-spotlight-actions{grid-template-columns:minmax(0,1fr) 42px!important}
+  .compact-spotlight-actions .spotlight-whatsapp:after{content:'WA'!important;font-size:.65rem!important}
+  .compact-card{height:150px!important;min-height:150px!important}
+  .compact-card-inner{grid-template-columns:58px minmax(0,1fr)!important;gap:10px!important;padding:12px!important}
+  .compact-logo{width:54px!important;height:54px!important;border-radius:14px!important}
+  .compact-profile{min-width:36px!important;width:36px!important;padding:0!important}
+  .compact-profile span{display:none!important}
+  .compact-copy h3{font-size:.86rem!important}
+  .compact-copy p{font-size:.67rem!important}
+}
