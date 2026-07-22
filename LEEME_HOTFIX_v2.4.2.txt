@@ -1,0 +1,14 @@
+ALIADOS FANTASMA — HOTFIX v2.4.2
+
+CORRECCIÓN:
+- Soluciona el error: Cannot access 'LEGAL_TERMS_VERSION' before initialization.
+- El panel ahora inicializa las versiones legales antes de ejecutar init().
+
+PASOS:
+1. Sube panel.js a la raíz del repositorio.
+2. Reemplaza el panel.js existente.
+3. Haz Commit changes.
+4. Espera el despliegue de Cloudflare Pages.
+5. Abre /panel y presiona Ctrl + F5.
+
+NO EJECUTES SQL.

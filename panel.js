@@ -442,11 +442,11 @@ document.querySelector('#gallery-files').onchange = async event => {
 };
 window.addEventListener('beforeunload', event => { if(dirty){ event.preventDefault(); event.returnValue = ''; } });
 
-try{ await init(); }catch(error){ console.error(error); showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0); }
-
-
 const LEGAL_TERMS_VERSION='2026-07-22';
 const LEGAL_PRIVACY_VERSION='2026-07-22';
+
+try{ await init(); }catch(error){ console.error(error); showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0); }
+
 
 async function showRulesIfNeeded(){
   const {data}=await supabase.from('aceptaciones_legales').select('id').eq('usuario_id',user.id).eq('version_terminos',LEGAL_TERMS_VERSION).eq('version_privacidad',LEGAL_PRIVACY_VERSION).maybeSingle();
