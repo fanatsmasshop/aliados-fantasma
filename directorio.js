@@ -34,57 +34,20 @@ function fallbackMediaStyle(logo){
 }
 
 function cardMarkup(b){
-  const wa=whatsappUrl(b);
+  const wa=whatsappUrl(b),cover=coverUrl(b),withCover=Boolean(cover);
   const logo=logoUrl(b);
-  const background=coverUrl(b)||logo;
-  return `<article class="business-card compact-card" data-id="${esc(b.id)}">
-    <div class="compact-backdrop" aria-hidden="true">
-      <img src="${esc(background)}" data-fallback="${esc(logo)}" alt="" loading="lazy" decoding="async">
-      <span></span>
-    </div>
-    <div class="compact-card-inner">
-      <img class="compact-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async">
-      <div class="compact-main">
-        <div class="compact-heading">
-          <div class="compact-copy">
-            <h3>${esc(b.nombre)}</h3>
-            <p>${esc(b.descripcion_corta||b.descripcion||b.categoria||'Negocio aliado')}</p>
-          </div>
-          <div class="compact-actions">
-            <a class="compact-profile" href="${esc(profileUrl(b))}" data-event="profile" aria-label="Ver perfil de ${esc(b.nombre)}"><span>Ver perfil</span></a>
-            ${wa?`<a class="compact-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp">WA</a>`:'<button class="compact-whatsapp" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}
-          </div>
-        </div>
-        <div class="compact-location">📍 ${esc(businessLocation(b))}</div>
-        <div class="business-badges compact-badges">${badges(b)}</div>
-      </div>
-    </div>
-  </article>`;
+  const visual=withCover
+    ? `<div class="business-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="business-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    : `<div class="business-media business-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
+  return `<article class="business-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${visual}<div class="business-body"><div class="business-badges business-badges-inline">${badges(b)}</div><span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3><p class="business-description">${esc(b.descripcion_corta||b.descripcion||'Conoce este negocio local y todo lo que tiene para ofrecer.')}</p><div class="business-meta"><span>📍 ${esc(businessLocation(b))}</span><span>${completeness(b)}% perfil</span></div><div class="business-actions"><a class="view-profile" href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp" data-event="whatsapp">💬</a>`:'<button class="quick-contact" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}</div></div></article>`;
 }
 
 function spotlightMarkup(b){
-  const wa=whatsappUrl(b);
-  const logo=logoUrl(b);
-  const background=coverUrl(b)||logo;
-  return `<article class="spotlight-card compact-spotlight" data-id="${esc(b.id)}">
-    <div class="spotlight-backdrop" aria-hidden="true">
-      <img src="${esc(background)}" data-fallback="${esc(logo)}" alt="" loading="lazy" decoding="async">
-      <span></span>
-    </div>
-    <div class="spotlight-inner">
-      <img class="spotlight-side-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async">
-      <div class="spotlight-main">
-        <div class="business-badges compact-badges">${badges(b)}</div>
-        <h3>${esc(b.nombre)}</h3>
-        <p>${esc(b.categoria||'Negocio aliado')}</p>
-        <div class="spotlight-location">📍 ${esc(businessLocation(b))}</div>
-        <div class="spotlight-actions compact-spotlight-actions">
-          <a href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>
-          ${wa?`<a class="spotlight-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp" aria-label="WhatsApp de ${esc(b.nombre)}">WA</a>`:''}
-        </div>
-      </div>
-    </div>
-  </article>`;
+  const cover=coverUrl(b),withCover=Boolean(cover),logo=logoUrl(b),wa=whatsappUrl(b);
+  const media=withCover
+    ? `<div class="spotlight-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="spotlight-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
+    : `<div class="spotlight-media spotlight-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
+  return `<article class="spotlight-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${media}<div class="spotlight-content"><div class="business-badges">${badges(b)}</div><h3>${esc(b.nombre)}</h3><p>${esc(b.categoria||'Negocio aliado')}</p><span class="spotlight-location">📍 ${esc(businessLocation(b))}</span><div class="spotlight-actions"><a href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="spotlight-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp">WhatsApp</a>`:''}</div></div></article>`;
 }
 
 
@@ -101,12 +64,10 @@ function generatedMediaMarkup(media,logo,name){
 
 
 function bindCoverFallbacks(root){
-  root.querySelectorAll('.compact-backdrop img,.spotlight-backdrop img').forEach(img=>{
-    const fallback=()=>{
-      const next=img.dataset.fallback;
-      if(next&&img.src!==next){img.src=next;return;}
-      img.style.display='none';
-    };
+  root.querySelectorAll('.business-cover-image,.spotlight-cover-image').forEach(img=>{
+    const media=img.closest('.business-media,.spotlight-media');
+    if(!media)return;
+    const fallback=()=>generatedMediaMarkup(media,media.dataset.logo||'aliados-fantasma-icono.webp',media.dataset.name||'Negocio aliado');
     img.addEventListener('error',fallback,{once:true});
     if(img.complete&&img.naturalWidth===0)fallback();
   });
@@ -129,7 +90,7 @@ function bindTracking(root){root.querySelectorAll('[data-event]').forEach(node=>
 
 function wireEvents(){let debounce;el.search.addEventListener('input',()=>{state.query=el.search.value.trim();state.visible=PAGE_SIZE;clearTimeout(debounce);debounce=setTimeout(()=>applyFilters(),180);});el.search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();applyFilters({trackSearch:true});}});el.searchButton.addEventListener('click',()=>{state.query=el.search.value.trim();state.visible=PAGE_SIZE;applyFilters({trackSearch:true});});el.clear.addEventListener('click',()=>removeFilter('query'));el.category.addEventListener('change',()=>{state.category=el.category.value;state.visible=PAGE_SIZE;applyFilters();});el.municipality.addEventListener('change',()=>{state.municipality=el.municipality.value;state.visible=PAGE_SIZE;applyFilters();});[[el.open,'open'],[el.promotion,'promotion'],[el.newFilter,'isNew'],[el.featured,'featured']].forEach(([node,key])=>node.addEventListener('change',()=>{state[key]=node.checked;state.visible=PAGE_SIZE;applyFilters();}));el.sort.addEventListener('change',()=>{state.sort=el.sort.value;applyFilters();});el.reset.addEventListener('click',resetAll);el.emptyReset.addEventListener('click',resetAll);el.loadMore.addEventListener('click',()=>{state.visible+=PAGE_SIZE;renderResults();});}
 
-async function loadDirectory(){el.grid.innerHTML='<div class="directory-skeleton"></div><div class="directory-skeleton"></div><div class="directory-skeleton"></div>';const {data:businesses,error}=await supabase.from('negocios').select('*,categorias(nombre,icono)').eq('activo',true);if(error)throw error;const ids=(businesses||[]).map(b=>b.id);let promotions=[],hours=[];if(ids.length){const [promoResult,hourResult]=await Promise.all([supabase.from('promociones').select('*').in('negocio_id',ids).eq('activa',true),supabase.from('horarios_negocio').select('*').in('negocio_id',ids)]);promotions=promoResult.data||[];hours=hourResult.data||[];}state.businesses=(businesses||[]).map(b=>({...b,categoria:b.categorias?.nombre||'Negocio aliado',categoriaIcono:b.categorias?.icono||'',promociones:promotions.filter(p=>p.negocio_id===b.id),horarios:hours.filter(h=>h.negocio_id===b.id)}));const {data:categories}=await supabase.from('categorias').select('nombre,icono,orden').eq('activa',true).order('orden');state.categories=categories||[];populateFilters();applyFilters();trackEvent('vista_directorio',null,{negocios:state.businesses.length});}
+async function loadDirectory(){el.grid.innerHTML='<div class="directory-skeleton"></div><div class="directory-skeleton"></div><div class="directory-skeleton"></div>';const {data:businesses,error}=await supabase.from('negocios').select('*,categorias(nombre,icono)').eq('activo',true);if(error)throw error;const ids=(businesses||[]).map(b=>b.id);let promotions=[],hours=[];if(ids.length){const [promoResult,hourResult]=await Promise.all([supabase.from('promociones').select('*').in('negocio_id',ids).eq('activa',true),supabase.from('horarios_negocio').select('*').in('negocio_id',ids)]);promotions=promoResult.data||[];hours=hourResult.data||[];}state.businesses=(businesses||[]).map(b=>({...b,categoria:b.categorias?.nombre||'Negocio aliado,categoria',categoriaIcono:b.categorias?.icono||'',promociones:promotions.filter(p=>p.negocio_id===b.id),horarios:hours.filter(h=>h.negocio_id===b.id)}));state.businesses.forEach(b=>{if(b.categoria==='Negocio aliado,categoria')b.categoria='Negocio aliado';});const {data:categories}=await supabase.from('categorias').select('nombre,icono,orden').eq('activa',true).order('orden');state.categories=categories||[];populateFilters();applyFilters();trackEvent('vista_directorio',null,{negocios:state.businesses.length});}
 
 async function init(){wireEvents();const launch=await getLaunchState();const admin=await isAdministrator();if(!launch.open&&!admin){el.gateMessage.textContent=`Se habilitará automáticamente el ${LAUNCH_LABEL}. Mientras tanto, los negocios pueden registrarse y preparar su perfil.`;el.gate.classList.remove('hidden');return;}if(!launch.open&&admin)el.preview.classList.remove('hidden');el.content.classList.remove('hidden');try{await loadDirectory();}catch(error){console.error(error);el.grid.innerHTML='';el.empty.classList.remove('hidden');el.empty.querySelector('h3').textContent='No fue posible cargar el directorio';el.empty.querySelector('p').textContent='Revisa tu conexión e inténtalo nuevamente.';el.summary.textContent='Error de conexión';showToast('No fue posible cargar los negocios');}}
 init();

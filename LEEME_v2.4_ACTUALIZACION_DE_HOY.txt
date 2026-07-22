@@ -1,0 +1,65 @@
+ALIADOS FANTASMA v2.4 — ACTUALIZACIÓN INCREMENTAL
+
+ESTA ENTREGA NO REEMPLAZA TODO EL PROYECTO.
+Solo contiene archivos nuevos o modificados.
+
+ORDEN EXACTO
+
+1. SUPABASE
+- Abre tu proyecto de Supabase.
+- Entra a SQL Editor.
+- Crea una consulta nueva.
+- Abre el archivo 068_ciclo_vida_reportes_onboarding.sql.
+- Copia todo su contenido.
+- Pégalo en SQL Editor.
+- Presiona Run.
+- Debe terminar sin errores.
+
+2. GITHUB
+- Abre el repositorio de Aliados Fantasma.
+- En la raíz del proyecto, sube todos los archivos de este ZIP.
+- Cuando GitHub pregunte, reemplaza los archivos existentes.
+- No crees carpetas nuevas.
+- Confirma el commit.
+
+3. CLOUDFLARE PAGES
+- Espera a que termine el despliegue automático.
+- Abre el sitio.
+- Haz una recarga forzada: Ctrl + F5 en computadora.
+- En celular, cierra la pestaña y vuelve a abrir el sitio.
+
+4. PRUEBAS
+A) Cuenta de negocio
+- Inicia sesión.
+- Debe aparecer la ventana final de reglas.
+- Marca la casilla y confirma.
+- En la parte inferior del panel debe aparecer “Estado de tu negocio”.
+- Prueba cerrar temporalmente y reabrir.
+
+B) Eliminación
+- Pulsa “Eliminar cuenta”.
+- Escribe exactamente ELIMINAR.
+- El negocio debe ocultarse y mostrar la fecha de eliminación a 30 días.
+- Prueba “Cancelar eliminación”.
+
+C) Administración
+- En Negocios, prueba “Suspender”.
+- Escribe un motivo.
+- Verifica que aparezca “Suspendido”.
+- Prueba “Levantar suspensión”.
+
+D) Reportes
+- Abre un perfil público.
+- Pulsa “Reportar”.
+- Completa el formulario.
+- El registro quedará guardado en public.reportes_negocio.
+
+E) Documentos
+- Abre terminos.html.
+- Abre privacidad.html.
+- Abre ayuda.html.
+
+IMPORTANTE
+- La purga definitiva a 30 días ya está preparada mediante la función public.purgar_negocios_eliminados().
+- Para ejecutarla automáticamente se deberá configurar posteriormente una tarea programada en Supabase Cron.
+- Los reportes quedan guardados y visibles mediante las políticas de seguridad; el envío de correos automáticos requerirá una Edge Function o proveedor de correo en una siguiente integración.

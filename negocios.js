@@ -116,9 +116,9 @@ function render() {
       <td><div class="business-cell"><span class="business-logo">${item.logo_url ? `<img src="${esc(item.logo_url)}" alt="">` : esc(item.nombre.charAt(0))}</span><div><strong>${esc(item.nombre)}</strong><small class="muted">/${esc(item.slug)}</small></div></div></td>
       <td>${esc(item.categorias?.nombre || 'Sin categoría')}</td>
       <td>${esc([item.colonia,item.municipio].filter(Boolean).join(', ') || 'Sin ubicación')}</td>
-      <td><span class="badge ${item.baja_at ? 'inactive' : item.activo ? 'active' : 'inactive'}">${item.baja_at ? 'Baja' : item.activo ? 'Activo' : 'Inactivo'}</span>${item.baja_at && item.motivo_baja ? `<small class="muted">${esc(item.motivo_baja)}</small>` : ''}</td>
+      <td><span class="badge ${item.estado_operativo==='activo' ? 'active' : 'inactive'}">${({activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido',eliminacion_programada:'Eliminación programada'})[item.estado_operativo||'activo']}</span>${item.motivo_suspension ? `<small class="muted">${esc(item.motivo_suspension)}</small>` : ''}</td>
       <td>${fmt(item.created_at)}</td>
-      <td><div class="row-actions"><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Perfil privado</a>${item.baja_at ? `<button class="button success small" type="button" onclick="reactivateBusiness('${item.id}')">Reactivar</button>` : `<button class="button danger small" type="button" onclick="deactivateBusiness('${item.id}')">Dar de baja</button>`}</div></td>
+      <td><div class="row-actions"><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Perfil privado</a>${item.estado_operativo==='suspendido' ? `<button class="button success small" type="button" onclick="liftSuspension('${item.id}')">Levantar suspensión</button>` : `<button class="button danger small" type="button" onclick="suspendBusiness('${item.id}')">Suspender</button>`}</div></td>
     </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin resultados</td></tr>';
 }
 
@@ -473,3 +473,8 @@ function formatBytes(bytes) {
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+
+async function suspendBusiness(id){const item=businesses.find(x=>x.id===id);const reason=prompt(`Motivo de suspensión de ${item?.nombre||'este negocio'}:`);if(!reason?.trim())return;const {error}=await supabase.rpc('admin_suspender_negocio',{p_negocio_id:id,p_motivo:reason.trim(),p_hasta:null});if(error)return toast(error.message,'error');toast('Negocio suspendido');await loadBusinesses();}
+async function liftSuspension(id){if(!confirm('¿Levantar la suspensión y volver a publicar el negocio?'))return;const {error}=await supabase.rpc('admin_levantar_suspension',{p_negocio_id:id});if(error)return toast(error.message,'error');toast('Suspensión levantada');await loadBusinesses();}
+window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;

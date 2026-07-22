@@ -395,6 +395,8 @@ async function init(){
   updateProgress();
   renderNav();
   renderWorkflow();
+  await showRulesIfNeeded();
+  await renderAccountManagement();
 }
 
 document.querySelector('#prev-step').onclick = () => go(currentStep - 1);
@@ -441,3 +443,47 @@ document.querySelector('#gallery-files').onchange = async event => {
 window.addEventListener('beforeunload', event => { if(dirty){ event.preventDefault(); event.returnValue = ''; } });
 
 try{ await init(); }catch(error){ console.error(error); showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0); }
+
+
+const LEGAL_TERMS_VERSION='2026-07-22';
+const LEGAL_PRIVACY_VERSION='2026-07-22';
+
+async function showRulesIfNeeded(){
+  const {data}=await supabase.from('aceptaciones_legales').select('id').eq('usuario_id',user.id).eq('version_terminos',LEGAL_TERMS_VERSION).eq('version_privacidad',LEGAL_PRIVACY_VERSION).maybeSingle();
+  if(data) return;
+  const modal=document.querySelector('#rules-modal');
+  modal.classList.remove('hidden');
+  document.querySelector('#rules-accept').onchange=e=>document.querySelector('#rules-confirm').disabled=!e.target.checked;
+  document.querySelector('#rules-confirm').onclick=async()=>{
+    const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});
+    if(error){showMessage(error.message,'error');return;}
+    modal.classList.add('hidden');showMessage('Reglas aceptadas. Bienvenido a Aliados Fantasma.');
+  };
+}
+
+function fmtLong(value){if(!value)return '';return new Intl.DateTimeFormat('es-MX',{dateStyle:'long'}).format(new Date(value));}
+async function renderAccountManagement(){
+  const section=document.querySelector('#account-management');
+  if(!publishedBusiness?.id){section.classList.add('hidden');return;}
+  const {data:b,error}=await supabase.from('negocios').select('id,nombre,estado_operativo,motivo_suspension,suspendido_hasta,eliminacion_programada_at').eq('id',publishedBusiness.id).single();
+  if(error)return;
+  section.classList.remove('hidden');
+  const state=b.estado_operativo||'activo';
+  const labels={activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido por administración',eliminacion_programada:'Eliminación programada'};
+  let detail='Tu negocio está visible y funcionando normalmente.';
+  if(state==='cerrado_temporalmente')detail='El perfil permanece visible, pero muestra que el negocio está cerrado temporalmente.';
+  if(state==='suspendido')detail=`Motivo: ${b.motivo_suspension||'Consulta a administración.'}${b.suspendido_hasta?` · Hasta ${fmtLong(b.suspendido_hasta)}`:''}`;
+  if(state==='eliminacion_programada')detail=`Tu negocio está oculto y se eliminará definitivamente el ${fmtLong(b.eliminacion_programada_at)}.`;
+  document.querySelector('#account-state-card').innerHTML=`<span class="state-dot ${state}"></span><div><strong>${labels[state]||state}</strong><p>${detail}</p></div>`;
+  const actions=[];
+  if(state==='activo')actions.push('<button class="button secondary" data-close-temp>Cerrar temporalmente</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
+  if(state==='cerrado_temporalmente')actions.push('<button class="button primary" data-reopen>Reabrir negocio</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
+  if(state==='eliminacion_programada')actions.push('<button class="button primary" data-cancel-delete>Cancelar eliminación</button>');
+  if(state==='suspendido')actions.push('<button class="button secondary" data-appeal>Presentar apelación</button>');
+  document.querySelector('#account-actions').innerHTML=actions.join('');
+  document.querySelector('[data-close-temp]')?.addEventListener('click',async()=>{if(!confirm('Tu perfil seguirá visible con el aviso “Cerrado temporalmente”. ¿Continuar?'))return;await supabase.rpc('propietario_cerrar_temporalmente',{p_negocio_id:b.id});await renderAccountManagement();});
+  document.querySelector('[data-reopen]')?.addEventListener('click',async()=>{await supabase.rpc('propietario_reabrir_negocio',{p_negocio_id:b.id});await renderAccountManagement();});
+  document.querySelector('[data-delete-account]')?.addEventListener('click',async()=>{const word=prompt('Escribe ELIMINAR para ocultar el negocio e iniciar el plazo de 30 días.');if(word!=='ELIMINAR')return;const {error}=await supabase.rpc('propietario_solicitar_eliminacion',{p_negocio_id:b.id});if(error)return showMessage(error.message,'error');await renderAccountManagement();});
+  document.querySelector('[data-cancel-delete]')?.addEventListener('click',async()=>{await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});await renderAccountManagement();});
+  document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{const text=prompt('Explica por qué solicitas revisar la suspensión:');if(!text||text.trim().length<20)return;const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text.trim()});showMessage(error?error.message:'Apelación enviada a administración.',error?'error':'ok');});
+}

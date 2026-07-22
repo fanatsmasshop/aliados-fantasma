@@ -14,6 +14,8 @@ const previewBanner = document.querySelector('#preview-banner');
 const navShare = document.querySelector('#nav-share');
 const toast = document.querySelector('#profile-toast');
 const lightbox = document.querySelector('#lightbox');
+const reportModal=document.querySelector('#report-modal');
+const reportForm=document.querySelector('#report-form');
 const lightboxImage = document.querySelector('#lightbox-image');
 const lightboxCaption = document.querySelector('#lightbox-caption');
 let galleryItems = [];
@@ -29,6 +31,7 @@ function configureBackRoute(){
   backLink.href='explorar.html';backLink.textContent='← Explorar negocios';
 }
 configureBackRoute();
+const reportButton=document.createElement('button');reportButton.id='nav-report';reportButton.className='profile-nav-action';reportButton.type='button';reportButton.textContent='Reportar';navShare.before(reportButton);
 
 function showToast(message){
   toast.textContent=message;toast.classList.remove('hidden');
@@ -108,15 +111,16 @@ function vcard(p){
 }
 
 function renderProfile(p,{isPreview=false}={}){
+  currentProfile=p;
   currentProfile=p;galleryItems=p.galeria||[];updateSeo(p,isPreview);
   document.documentElement.style.setProperty('--profile-primary',p.color_primario||'#a855f7');
   document.documentElement.style.setProperty('--profile-secondary',p.color_secundario||'#22d3ee');
   previewBanner.classList.toggle('hidden',!isPreview);
   navShare.classList.remove('hidden');
-  const address=fullAddress(p);const open=getOpenState(p.horarios);const whatsapp=whatsappUrl(p.whatsapp,p.nombre);const maps=safeUrl(p.enlace_maps);const site=safeUrl(p.sitio_web);const cover=safeUrl(p.portada_url);const hasCover=Boolean(cover);const shareUrl=p.slug?new URL(`perfil.html?slug=${encodeURIComponent(p.slug)}`,location.href).href:location.href;
+  const address=fullAddress(p);const open=getOpenState(p.horarios);const whatsapp=whatsappUrl(p.whatsapp,p.nombre);const maps=safeUrl(p.enlace_maps);const site=safeUrl(p.sitio_web);const shareUrl=p.slug?new URL(`perfil.html?slug=${encodeURIComponent(p.slug)}`,location.href).href:location.href;
   const badges=[p.destacado?'⭐ Destacado':'🤝 Aliado Fantasma',isPreview?'Vista previa privada':'Perfil oficial'];
   root.innerHTML=`
-    <header class="profile-cover ${hasCover?'has-cover':'no-cover'} reveal" ${hasCover?`style="background-image:url('${esc(cover)}')"`:''}>
+    <header class="profile-cover reveal" ${p.portada_url?`style="background-image:url('${esc(p.portada_url)}')"`:''}>
       <div class="profile-cover-inner"><div class="profile-identity">
         <div class="profile-main-logo">${p.logo_url?`<img src="${esc(p.logo_url)}" alt="Logo de ${esc(p.nombre)}" width="160" height="160">`:esc((p.nombre||'A').charAt(0))}</div>
         <div><p class="profile-category">${esc(p.categoria||'Negocio aliado')}</p><h1 class="profile-title">${esc(p.nombre)}</h1><p class="profile-tagline">${esc(p.descripcion_corta||'Conoce este negocio local.')}</p><div class="profile-badges"><span class="open-status ${open.className}">● ${esc(open.label)}</span>${badges.map(x=>`<span class="profile-badge">${esc(x)}</span>`).join('')}</div></div>
@@ -194,3 +198,8 @@ async function load(){
   }catch(error){console.error(error);errorState('No fue posible cargar el perfil',error.message||'Inténtalo nuevamente más tarde.','<button class="button primary" onclick="location.reload()">Reintentar</button>');}
 }
 load();
+
+
+reportButton.addEventListener('click',()=>{if(!currentProfile?.id)return;reportModal.classList.remove('hidden');});
+document.querySelector('#report-close')?.addEventListener('click',()=>reportModal.classList.add('hidden'));
+reportForm?.addEventListener('submit',async e=>{e.preventDefault();if(!currentProfile?.id)return;const payload={negocio_id:currentProfile.id,motivo:document.querySelector('#report-reason').value,correo_reportante:document.querySelector('#report-email').value.trim(),descripcion:document.querySelector('#report-description').value.trim()};const {error}=await supabase.from('reportes_negocio').insert(payload);if(error){showToast(error.message);return;}reportForm.reset();reportModal.classList.add('hidden');showToast('Reporte enviado. Administración lo revisará.');});

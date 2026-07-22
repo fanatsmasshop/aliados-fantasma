@@ -29,5 +29,18 @@
 <section class="onboarding-step" data-step="4"><div class="step-heading"><span>05</span><div><h2>Galería</h2><p>Sube hasta seis fotografías de productos, instalaciones o trabajos.</p></div></div><input type="file" id="gallery-files" accept="image/png,image/jpeg,image/webp" multiple><div id="gallery-preview" class="gallery-editor"></div></section>
 <section class="onboarding-step" data-step="5"><div class="step-heading"><span>06</span><div><h2>Promociones</h2><p>Agrega ofertas que quieras destacar.</p></div></div><div id="promotions-list"></div><button type="button" id="add-promotion" class="button secondary">+ Agregar promoción</button></section>
 <section class="onboarding-step" data-step="6"><div class="step-heading"><span>07</span><div><h2>Revisión final</h2><p>Comprueba tu avance y envía el perfil al equipo.</p></div></div><div id="review-summary" class="review-grid"></div><div class="submit-card"><h3>¿Todo listo?</h3><p>Después de enviarlo podrás seguir consultando la vista previa, pero los cambios quedarán sujetos a una nueva revisión.</p><button id="submit-review" type="button" class="button primary">Enviar mi perfil a revisión</button><p id="submit-help" class="muted submit-help"></p></div></section>
-<div class="wizard-actions"><button type="button" id="prev-step" class="button secondary">Anterior</button><button type="button" id="save-button" class="button secondary">Guardar progreso</button><button type="button" id="next-step" class="button primary">Siguiente</button></div></form></main></div>
+<div class="wizard-actions"><button type="button" id="prev-step" class="button secondary">Anterior</button><button type="button" id="save-button" class="button secondary">Guardar progreso</button><button type="button" id="next-step" class="button primary">Siguiente</button></div></form>
+<section id="account-management" class="account-management hidden">
+  <div class="step-heading"><span>⚙</span><div><h2>Estado de tu negocio</h2><p>Administra cierres temporales, suspensión y eliminación.</p></div></div>
+  <div id="account-state-card" class="account-state-card"></div>
+  <div id="account-actions" class="account-actions"></div>
+</section>
+</main></div>
+
+<div id="rules-modal" class="rules-modal hidden" role="dialog" aria-modal="true" aria-labelledby="rules-title">
+ <div class="rules-card"><p class="eyebrow">ANTES DE COMENZAR</p><h2 id="rules-title">Responsabilidades y posibles sanciones</h2>
+ <p>Para mantener una red confiable, un negocio puede ser suspendido por información falsa, promociones engañosas, suplantación, contenido ilegal u ofensivo, fraude, manipulación del sistema o incumplimiento reiterado de las reglas.</p>
+ <div class="notice warning"><strong>Un reporte no genera una suspensión automática.</strong> Administración revisa cada caso y el negocio puede conocer el motivo y presentar una apelación.</div>
+ <label class="rules-check"><input id="rules-accept" type="checkbox"> He leído y comprendido los <a href="terminos.html" target="_blank">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank">Política de Privacidad</a>.</label>
+ <div class="actions"><button id="rules-confirm" class="button primary" type="button" disabled>Comenzar a usar Aliados Fantasma</button></div></div></div>
 <script type="module" src="panel.js?v=20260720-520"></script></body></html>
