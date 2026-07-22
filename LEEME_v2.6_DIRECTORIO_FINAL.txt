@@ -1,0 +1,14 @@
+ALIADOS FANTASMA v2.6 — DIRECTORIO FINAL
+
+REEMPLAZA EN GITHUB:
+1. explorar.html
+2. directorio.js
+3. directorio.css
+
+NO EJECUTES SQL.
+
+Esta versión elimina por completo el CSS anterior acumulado y usa una hoja limpia.
+Después del despliegue de Cloudflare:
+- espera a que finalice el deploy;
+- abre /explorar.html;
+- usa Ctrl + F5.
