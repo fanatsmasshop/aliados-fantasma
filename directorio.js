@@ -29,16 +29,12 @@ function logoUrl(b){return safeUrl(b.logo_url)||'aliados-fantasma-icono.webp';}
 function badges(b){const list=[];if(isOpenNow(b))list.push('<span class="business-badge open">● Abierto</span>');if(activePromotions(b).length)list.push('<span class="business-badge promo">🔥 Promoción</span>');if(isNewBusiness(b))list.push('<span class="business-badge new">Nuevo</span>');if(b.destacado)list.push('<span class="business-badge">⭐ Destacado</span>');return list.join('');}
 function whatsappUrl(b){const d=digits(b.whatsapp||b.telefono);return d?`https://wa.me/${d}?text=${encodeURIComponent(`Hola, encontré ${b.nombre} en Aliados Fantasma.`)}`:'';}
 
-function fallbackMediaStyle(logo){
-  return `style="--fallback-image:url('${String(logo).replace(/'/g,"%27")}')"`;
-}
-
 function cardMarkup(b){
   const wa=whatsappUrl(b),cover=coverUrl(b),withCover=Boolean(cover);
   const logo=logoUrl(b);
   const visual=withCover
     ? `<div class="business-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="business-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="business-media-overlay"></div><img class="business-logo business-logo-overlap" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="business-media business-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
+    : `<div class="business-media business-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   return `<article class="business-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${visual}<div class="business-body"><div class="business-badges business-badges-inline">${badges(b)}</div><span class="business-category">${esc(b.categoria||'Negocio aliado')}</span><h3>${esc(b.nombre)}</h3><p class="business-description">${esc(b.descripcion_corta||b.descripcion||'Conoce este negocio local y todo lo que tiene para ofrecer.')}</p><div class="business-meta"><span>📍 ${esc(businessLocation(b))}</span><span>${completeness(b)}% perfil</span></div><div class="business-actions"><a class="view-profile" href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(b.nombre)} por WhatsApp" data-event="whatsapp">💬</a>`:'<button class="quick-contact" type="button" disabled aria-label="WhatsApp no disponible">—</button>'}</div></div></article>`;
 }
 
@@ -46,7 +42,7 @@ function spotlightMarkup(b){
   const cover=coverUrl(b),withCover=Boolean(cover),logo=logoUrl(b),wa=whatsappUrl(b);
   const media=withCover
     ? `<div class="spotlight-media" data-logo="${esc(logo)}" data-name="${esc(b.nombre)}"><img class="spotlight-cover-image" src="${esc(cover)}" alt="" loading="lazy" decoding="async"><div class="spotlight-media-overlay"></div><img class="spotlight-logo" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`
-    : `<div class="spotlight-media spotlight-media-generated" ${fallbackMediaStyle(logo)}><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
+    : `<div class="spotlight-media spotlight-media-generated"><img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(b.nombre)}" loading="lazy" decoding="async"></div>`;
   return `<article class="spotlight-card ${withCover?'has-cover':'no-cover'}" data-id="${esc(b.id)}">${media}<div class="spotlight-content"><div class="business-badges">${badges(b)}</div><h3>${esc(b.nombre)}</h3><p>${esc(b.categoria||'Negocio aliado')}</p><span class="spotlight-location">📍 ${esc(businessLocation(b))}</span><div class="spotlight-actions"><a href="${esc(profileUrl(b))}" data-event="profile">Ver perfil</a>${wa?`<a class="spotlight-whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp">WhatsApp</a>`:''}</div></div></article>`;
 }
 
@@ -54,10 +50,9 @@ function spotlightMarkup(b){
 function generatedMediaMarkup(media,logo,name){
   const isSpotlight=media.classList.contains('spotlight-media');
   media.className=isSpotlight?'spotlight-media spotlight-media-generated':'business-media business-media-generated';
-  media.setAttribute('style',`--fallback-image:url('${String(logo).replace(/'/g,"%27")}')`);
   media.innerHTML=isSpotlight
-    ? `<div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`
-    : `<div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`;
+    ? `<img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="spotlight-logo spotlight-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`
+    : `<img class="generated-cover-bg" src="${esc(logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><div class="generated-cover-overlay"></div><img class="business-logo business-logo-generated" src="${esc(logo)}" alt="Logo de ${esc(name)}" loading="lazy" decoding="async">`;
   media.closest('.business-card,.spotlight-card')?.classList.remove('has-cover');
   media.closest('.business-card,.spotlight-card')?.classList.add('no-cover');
 }

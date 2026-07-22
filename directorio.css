@@ -276,3 +276,72 @@
   .business-media{height:175px}
   .spotlight-logo,.business-logo-generated,.spotlight-logo-generated{width:92px!important;height:92px!important;border-radius:24px!important}
 }
+
+/* v2.4.1 HOTFIX — Portadas automáticas robustas sin variables CSS inline */
+.business-media-generated,
+.spotlight-media-generated{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  background:#11131a!important;
+}
+.business-media-generated::before,
+.business-media-generated::after,
+.spotlight-media-generated::before,
+.spotlight-media-generated::after{
+  content:none!important;
+  display:none!important;
+}
+.generated-cover-bg{
+  display:block!important;
+  position:absolute!important;
+  inset:-10%!important;
+  width:120%!important;
+  height:120%!important;
+  max-width:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  filter:blur(12px) brightness(.62)!important;
+  transform:scale(1.12)!important;
+  opacity:.95!important;
+  z-index:0!important;
+  transition:transform .45s ease!important;
+}
+.generated-cover-overlay{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  background:rgba(0,0,0,.42)!important;
+}
+.business-logo-generated,
+.spotlight-logo-generated{
+  display:block!important;
+  position:absolute!important;
+  z-index:2!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:108px!important;
+  height:108px!important;
+  object-fit:contain!important;
+  border-radius:28px!important;
+  padding:7px!important;
+  background:rgba(255,255,255,.97)!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.42)!important;
+}
+.business-card:hover .generated-cover-bg,
+.spotlight-card:hover .generated-cover-bg{
+  transform:scale(1.18)!important;
+}
+@media(max-width:700px){
+  .business-logo-generated,
+  .spotlight-logo-generated{
+    width:92px!important;
+    height:92px!important;
+    border-radius:24px!important;
+  }
+}
