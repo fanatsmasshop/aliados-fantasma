@@ -461,29 +461,115 @@ async function showRulesIfNeeded(){
   };
 }
 
-function fmtLong(value){if(!value)return '';return new Intl.DateTimeFormat('es-MX',{dateStyle:'long'}).format(new Date(value));}
+function fmtLong(value){
+  if(!value) return '';
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('es-MX',{dateStyle:'long'}).format(date);
+}
+
+function openDeleteModal(onConfirm){
+  document.querySelector('#delete-business-modal-runtime')?.remove();
+  const modal=document.createElement('div');
+  modal.id='delete-business-modal-runtime';
+  modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.78);display:grid;place-items:center;padding:20px;backdrop-filter:blur(8px)';
+  modal.innerHTML=`<section style="width:min(560px,100%);background:#11131a;border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:26px;box-shadow:0 30px 90px rgba(0,0,0,.55)">
+    <span style="display:inline-block;color:#ff7f9f;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem">Acción importante</span>
+    <h2 style="margin:10px 0;color:#fff">Eliminar negocio</h2>
+    <p style="color:#c8cad3;line-height:1.6">Tu negocio se ocultará inmediatamente. Tendrás <strong style="color:#fff">30 días</strong> para cancelar antes de que se elimine definitivamente.</p>
+    <label style="display:block;margin-top:18px;color:#fff;font-weight:700">Escribe <strong>ELIMINAR</strong> para continuar</label>
+    <input id="delete-confirm-word" autocomplete="off" style="width:100%;margin-top:8px;padding:13px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:#090b10;color:#fff;font:inherit;outline:none" />
+    <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;color:#c8cad3;line-height:1.45"><input id="delete-confirm-check" type="checkbox" style="margin-top:3px"> <span>Entiendo que el perfil dejará de ser público desde este momento.</span></label>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px;flex-wrap:wrap">
+      <button type="button" id="delete-cancel-runtime" class="button secondary">Cancelar</button>
+      <button type="button" id="delete-submit-runtime" class="button danger" disabled>Programar eliminación</button>
+    </div>
+  </section>`;
+  document.body.appendChild(modal);
+  const input=modal.querySelector('#delete-confirm-word');
+  const check=modal.querySelector('#delete-confirm-check');
+  const submit=modal.querySelector('#delete-submit-runtime');
+  const sync=()=>{ submit.disabled=!(input.value.trim()==='ELIMINAR' && check.checked); };
+  input.addEventListener('input',sync);
+  check.addEventListener('change',sync);
+  modal.querySelector('#delete-cancel-runtime').onclick=()=>modal.remove();
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  submit.onclick=async()=>{
+    submit.disabled=true;
+    submit.textContent='Procesando…';
+    try{ await onConfirm(); modal.remove(); }
+    catch(error){ submit.disabled=false; submit.textContent='Programar eliminación'; showMessage(error.message||'No se pudo programar la eliminación.','error'); }
+  };
+  setTimeout(()=>input.focus(),50);
+}
+
+async function getOwnerBusinessState(negocioId){
+  const {data,error}=await supabase.rpc('propietario_obtener_estado_negocio',{p_negocio_id:negocioId});
+  if(error) throw error;
+  return Array.isArray(data) ? data[0] : data;
+}
+
 async function renderAccountManagement(){
   const section=document.querySelector('#account-management');
-  if(!publishedBusiness?.id){section.classList.add('hidden');return;}
-  const {data:b,error}=await supabase.from('negocios').select('id,nombre,estado_operativo,motivo_suspension,suspendido_hasta,eliminacion_programada_at').eq('id',publishedBusiness.id).single();
-  if(error)return;
-  section.classList.remove('hidden');
-  const state=b.estado_operativo||'activo';
-  const labels={activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido por administración',eliminacion_programada:'Eliminación programada'};
-  let detail='Tu negocio está visible y funcionando normalmente.';
-  if(state==='cerrado_temporalmente')detail='El perfil permanece visible, pero muestra que el negocio está cerrado temporalmente.';
-  if(state==='suspendido')detail=`Motivo: ${b.motivo_suspension||'Consulta a administración.'}${b.suspendido_hasta?` · Hasta ${fmtLong(b.suspendido_hasta)}`:''}`;
-  if(state==='eliminacion_programada')detail=`Tu negocio está oculto y se eliminará definitivamente el ${fmtLong(b.eliminacion_programada_at)}.`;
-  document.querySelector('#account-state-card').innerHTML=`<span class="state-dot ${state}"></span><div><strong>${labels[state]||state}</strong><p>${detail}</p></div>`;
-  const actions=[];
-  if(state==='activo')actions.push('<button class="button secondary" data-close-temp>Cerrar temporalmente</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
-  if(state==='cerrado_temporalmente')actions.push('<button class="button primary" data-reopen>Reabrir negocio</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
-  if(state==='eliminacion_programada')actions.push('<button class="button primary" data-cancel-delete>Cancelar eliminación</button>');
-  if(state==='suspendido')actions.push('<button class="button secondary" data-appeal>Presentar apelación</button>');
-  document.querySelector('#account-actions').innerHTML=actions.join('');
-  document.querySelector('[data-close-temp]')?.addEventListener('click',async()=>{if(!confirm('Tu perfil seguirá visible con el aviso “Cerrado temporalmente”. ¿Continuar?'))return;await supabase.rpc('propietario_cerrar_temporalmente',{p_negocio_id:b.id});await renderAccountManagement();});
-  document.querySelector('[data-reopen]')?.addEventListener('click',async()=>{await supabase.rpc('propietario_reabrir_negocio',{p_negocio_id:b.id});await renderAccountManagement();});
-  document.querySelector('[data-delete-account]')?.addEventListener('click',async()=>{const word=prompt('Escribe ELIMINAR para ocultar el negocio e iniciar el plazo de 30 días.');if(word!=='ELIMINAR')return;const {error}=await supabase.rpc('propietario_solicitar_eliminacion',{p_negocio_id:b.id});if(error)return showMessage(error.message,'error');await renderAccountManagement();});
-  document.querySelector('[data-cancel-delete]')?.addEventListener('click',async()=>{await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});await renderAccountManagement();});
-  document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{const text=prompt('Explica por qué solicitas revisar la suspensión:');if(!text||text.trim().length<20)return;const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text.trim()});showMessage(error?error.message:'Apelación enviada a administración.',error?'error':'ok');});
+  const negocioId=draft.negocio_id || publishedBusiness?.id;
+  if(!negocioId){section?.classList.add('hidden');return;}
+  try{
+    const b=await getOwnerBusinessState(negocioId);
+    if(!b){section?.classList.add('hidden');return;}
+    section.classList.remove('hidden');
+    const state=b.estado_operativo||'activo';
+    const labels={activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido por administración',eliminacion_programada:'Eliminación programada'};
+    let detail='Tu negocio está visible y funcionando normalmente.';
+    if(state==='cerrado_temporalmente')detail='El perfil permanece visible, pero muestra que el negocio está cerrado temporalmente.';
+    if(state==='suspendido')detail=`Motivo: ${b.motivo_suspension||'Consulta a administración.'}${b.suspendido_hasta?` · Hasta ${fmtLong(b.suspendido_hasta)}`:''}`;
+    if(state==='eliminacion_programada')detail=`Tu negocio ya está oculto. Se eliminará definitivamente el ${fmtLong(b.eliminacion_programada_at)}. Puedes cancelar antes de esa fecha.`;
+    document.querySelector('#account-state-card').innerHTML=`<span class="state-dot ${state}"></span><div><strong>${labels[state]||state}</strong><p>${detail}</p></div>`;
+    const actions=[];
+    if(state==='activo')actions.push('<button class="button secondary" data-close-temp>Cerrar temporalmente</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
+    if(state==='cerrado_temporalmente')actions.push('<button class="button primary" data-reopen>Reabrir negocio</button><button class="button danger" data-delete-account>Eliminar cuenta</button>');
+    if(state==='eliminacion_programada')actions.push('<button class="button primary" data-cancel-delete>Cancelar eliminación</button>');
+    if(state==='suspendido')actions.push('<button class="button secondary" data-appeal>Presentar apelación</button>');
+    document.querySelector('#account-actions').innerHTML=actions.join('');
+
+    document.querySelector('[data-close-temp]')?.addEventListener('click',async()=>{
+      if(!confirm('Tu perfil seguirá visible con el aviso “Cerrado temporalmente”. ¿Continuar?'))return;
+      const {error}=await supabase.rpc('propietario_cerrar_temporalmente',{p_negocio_id:b.id});
+      if(error)return showMessage(error.message,'error');
+      await renderAccountManagement();
+      showMessage('Tu negocio ahora aparece como cerrado temporalmente.');
+    });
+    document.querySelector('[data-reopen]')?.addEventListener('click',async()=>{
+      const {error}=await supabase.rpc('propietario_reabrir_negocio',{p_negocio_id:b.id});
+      if(error)return showMessage(error.message,'error');
+      await renderAccountManagement();
+      showMessage('Tu negocio volvió a estar activo.');
+    });
+    document.querySelector('[data-delete-account]')?.addEventListener('click',()=>openDeleteModal(async()=>{
+      const {data,error}=await supabase.rpc('propietario_solicitar_eliminacion',{p_negocio_id:b.id});
+      if(error)throw error;
+      await renderAccountManagement();
+      showMessage(`El negocio quedó oculto. Puedes cancelar la eliminación hasta el ${fmtLong(data)}.`,'warning',9000);
+    }));
+    document.querySelector('[data-cancel-delete]')?.addEventListener('click',async()=>{
+      if(!confirm('¿Cancelar la eliminación y volver a publicar el negocio?'))return;
+      const {error}=await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});
+      if(error)return showMessage(error.message,'error');
+      await loadPublishedBusiness();
+      await renderAccountManagement();
+      renderProfileAccess();
+      showMessage('La eliminación fue cancelada y el negocio volvió a estar activo.');
+    });
+    document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{
+      const text=prompt('Explica por qué solicitas revisar la suspensión:');
+      if(!text||text.trim().length<20)return showMessage('La apelación debe tener al menos 20 caracteres.','error');
+      const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text.trim()});
+      showMessage(error?error.message:'Apelación enviada a administración.',error?'error':'ok');
+    });
+  }catch(error){
+    console.error('No fue posible cargar el estado del negocio:',error);
+    section.classList.remove('hidden');
+    document.querySelector('#account-state-card').innerHTML='<div><strong>No pudimos consultar el estado</strong><p>Actualiza la página después de instalar el hotfix SQL.</p></div>';
+    document.querySelector('#account-actions').innerHTML='';
+    showMessage(`No se pudo consultar el estado del negocio. ${error.message}`,'error',0);
+  }
 }

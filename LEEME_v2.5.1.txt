@@ -1,0 +1,13 @@
+ALIADOS FANTASMA v2.5.1 — HOTFIX ESTADO Y ELIMINACIÓN
+
+1. En Supabase abre SQL Editor.
+2. Ejecuta completo: 069_hotfix_estado_eliminacion_propietario.sql
+3. En GitHub reemplaza únicamente panel.js.
+4. Espera el despliegue de Cloudflare Pages.
+5. Abre /panel y presiona Ctrl + F5.
+
+Qué corrige:
+- El estado del negocio ya no desaparece cuando entra en eliminación programada.
+- Se muestra la fecha de eliminación definitiva.
+- Aparece el botón Cancelar eliminación.
+- El cuadro nativo fue reemplazado por una confirmación clara que exige escribir ELIMINAR y marcar una casilla.
