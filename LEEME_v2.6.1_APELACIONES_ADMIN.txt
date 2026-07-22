@@ -1,0 +1,21 @@
+ALIADOS FANTASMA v2.6.1 — BANDEJA DE APELACIONES
+
+1. SUPABASE
+- Abre SQL Editor > New query.
+- Copia y ejecuta 071_bandeja_apelaciones_admin.sql.
+- No vuelvas a ejecutar 068, 069 ni 070.
+
+2. GITHUB
+- Sube y reemplaza únicamente negocios.js en la raíz del repositorio.
+- Haz Commit changes.
+
+3. CLOUDFLARE
+- Espera el despliegue.
+- Abre el apartado Negocios del panel administrativo.
+- Presiona Ctrl + F5.
+
+4. PRUEBA
+- En la parte superior aparecerá Reportes y apelaciones.
+- Abre Apelaciones.
+- Puedes marcar un caso en revisión, rechazarlo o aceptarlo y reactivar el negocio.
+- La respuesta administrativa es obligatoria y será notificada al propietario.
