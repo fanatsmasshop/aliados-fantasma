@@ -11,7 +11,12 @@ function showMessage(text,type='success'){
 function slugify(value){return String(value||'recurso').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 function getPromotion(){return (state.data.promociones||[])[0]||{};}
 function normalizePhone(value){return String(value||'').replace(/\D/g,'');}
-function profileLink(){return state.business?.slug?`${location.origin}/perfil.html?slug=${encodeURIComponent(state.business.slug)}`:'';}
+function profileLink(){
+  const slug=state.business?.slug||state.data?.slug||state.draft?.slug||'';
+  if(slug)return `${location.origin}/perfil.html?slug=${encodeURIComponent(slug)}`;
+  if(state.draft?.negocio_id)return `${location.origin}/perfil.html?business_id=${encodeURIComponent(state.draft.negocio_id)}`;
+  return '';
+}
 
 async function loadBusiness(){
   const {data:{user}}=await supabase.auth.getUser();
@@ -21,7 +26,8 @@ async function loadBusiness(){
   if(error) throw error;
   state.draft=draft||{}; state.data=draft?.datos||{};
   if(draft?.negocio_id){
-    const {data:business}=await supabase.from('negocios').select('id,slug,nombre,logo_url,whatsapp,maps_url').eq('id',draft.negocio_id).maybeSingle();
+    const {data:business,error:businessError}=await supabase.from('negocios').select('id,slug,nombre,logo_url,whatsapp,enlace_maps').eq('id',draft.negocio_id).maybeSingle();
+    if(businessError) throw businessError;
     state.business=business||null;
   }
   state.profileUrl=profileLink();
@@ -91,26 +97,35 @@ async function copyField(id){const input=document.getElementById(id);await navig
 
 function setQrType(type){
   const phone=normalizePhone(state.data.whatsapp||state.business?.whatsapp);
-  const urls={profile:state.profileUrl,whatsapp:phone?`https://wa.me/52${phone.replace(/^52/,'')}`:'',maps:state.data.maps||state.business?.maps_url||'',custom:$('#qr-url').value};
+  const urls={profile:state.profileUrl,whatsapp:phone?`https://wa.me/52${phone.replace(/^52/,'')}`:'',maps:state.data.maps||state.data.enlace_maps||state.business?.enlace_maps||'',custom:$('#qr-url').value};
   $('#qr-url').readOnly=type!=='custom';
   $('#qr-url').value=urls[type]||'';
   generateQr();
 }
 async function generateQr(){
   const url=$('#qr-url').value.trim();
+  const preview=$('#marketing-qr');
+  const download=$('#download-qr');
   if(!url){
     state.qrImageUrl='';
-    $('#marketing-qr').removeAttribute('src');
-    $('#qr-destination').textContent='Completa este enlace en tu perfil.';
+    preview.removeAttribute('src');
+    preview.classList.add('hidden');
+    download.removeAttribute('href');
+    download.classList.add('disabled');
+    $('#qr-destination').textContent='No se encontró un enlace disponible. Completa el perfil o selecciona otro destino.';
+    $('#qr-label').textContent=$('#qr-type').selectedOptions[0].textContent;
     await renderPrintableProfile();
     return;
   }
   const qr=`https://api.qrserver.com/v1/create-qr-code/?size=900x900&margin=24&format=png&data=${encodeURIComponent(url)}`;
   state.qrImageUrl=qr;
-  $('#marketing-qr').src=qr;
-  $('#marketing-qr').crossOrigin='anonymous';
+  preview.crossOrigin='anonymous';
+  preview.onload=()=>preview.classList.remove('hidden');
+  preview.onerror=()=>{preview.classList.add('hidden');showMessage('No se pudo cargar la vista previa del QR. Intenta actualizar el cartel.','warning');};
+  preview.src=qr;
   $('#qr-destination').textContent=url;
-  $('#download-qr').href=qr;
+  download.href=qr;
+  download.classList.remove('disabled');
   $('#qr-label').textContent=$('#qr-type').selectedOptions[0].textContent;
   await renderPrintableProfile();
 }
@@ -219,7 +234,7 @@ function renderCalendar(){const name=state.data.nombre||'tu negocio';const promo
   ['Lunes','Historia','Presenta el negocio',`Cuenta qué hace diferente a ${name}.`],['Martes','Publicación','Producto o servicio destacado','Muestra un beneficio concreto y agrega una llamada a WhatsApp.'],['Miércoles','Historia interactiva','Pregunta a tu comunidad','Usa una encuesta o pregunta relacionada con tus productos.'],['Jueves','Promoción',promo.titulo||'Oferta de la semana',promo.descripcion||'Crea una razón clara para comprar o visitar esta semana.'],['Viernes','Reel o video','Detrás de cámaras','Muestra cómo trabajas, preparas o atiendes.'],['Sábado','Historia','Disponibilidad y ubicación','Recuerda horarios, ubicación y formas de contacto.'],['Domingo','Publicación','Comunidad local','Agradece a clientes y recomienda apoyar negocios cercanos.']
   ]; const shift=state.calendarSeed%plans.length;const rotated=[...plans.slice(shift),...plans.slice(0,shift)];$('#marketing-calendar').innerHTML=rotated.map(([day,type,title,desc])=>`<article class="calendar-card"><span>${esc(day)} · ${esc(type)}</span><h3>${esc(title)}</h3><p>${esc(desc)}</p><small>Objetivo: mantener presencia y generar interacción</small></article>`).join('');}
 function resourceCard(icon,title,description,url,label='Abrir recurso'){return `<article class="resource-card"><div class="resource-icon">${icon}</div><h3>${esc(title)}</h3><p>${esc(description)}</p>${url?`<a class="button secondary full" href="${esc(url)}" ${url.startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(label)}</a>`:'<button class="button secondary full" disabled>No disponible</button>'}</article>`;}
-function renderBrandResources(){const logo=state.data.logo_url||state.business?.logo_url;const cover=state.data.portada_url;const wa=normalizePhone(state.data.whatsapp);const resources=[resourceCard('🖼️','Logo del negocio','Archivo principal utilizado en tu perfil y diseños.',logo,'Abrir logo'),resourceCard('🌄','Portada','Imagen panorámica de tu perfil público.',cover,'Abrir portada'),resourceCard('▦','QR del perfil','Código que dirige a clientes a tu perfil digital.',state.profileUrl?`https://api.qrserver.com/v1/create-qr-code/?size=700x700&data=${encodeURIComponent(state.profileUrl)}`:'','Abrir QR'),resourceCard('💬','Enlace de WhatsApp','Acceso directo para recibir mensajes.',wa?`https://wa.me/52${wa.replace(/^52/,'')}`:'','Abrir WhatsApp'),resourceCard('📍','Ubicación','Enlace de Google Maps registrado.',state.data.maps||'','Abrir mapa'),resourceCard('🌐','Perfil público','Consulta cómo ven tu negocio los clientes.',state.profileUrl,'Ver perfil')];$('#brand-resources').innerHTML=resources.join('');}
+function renderBrandResources(){const logo=state.data.logo_url||state.business?.logo_url;const cover=state.data.portada_url;const wa=normalizePhone(state.data.whatsapp);const resources=[resourceCard('🖼️','Logo del negocio','Archivo principal utilizado en tu perfil y diseños.',logo,'Abrir logo'),resourceCard('🌄','Portada','Imagen panorámica de tu perfil público.',cover,'Abrir portada'),resourceCard('▦','QR del perfil','Código que dirige a clientes a tu perfil digital.',state.profileUrl?`https://api.qrserver.com/v1/create-qr-code/?size=700x700&data=${encodeURIComponent(state.profileUrl)}`:'','Abrir QR'),resourceCard('💬','Enlace de WhatsApp','Acceso directo para recibir mensajes.',wa?`https://wa.me/52${wa.replace(/^52/,'')}`:'','Abrir WhatsApp'),resourceCard('📍','Ubicación','Enlace de Google Maps registrado.',state.data.maps||state.data.enlace_maps||state.business?.enlace_maps||'','Abrir mapa'),resourceCard('🌐','Perfil público','Consulta cómo ven tu negocio los clientes.',state.profileUrl,'Ver perfil')];$('#brand-resources').innerHTML=resources.join('');}
 
 function bind(){
   document.querySelectorAll('.marketing-nav button').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.marketing-nav button').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.marketing-section').forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===btn.dataset.section));});

@@ -1,0 +1,17 @@
+ALIADOS FANTASMA v2.8.3 — HOTFIX QR Y PERFIL IMPRIMIBLE
+
+1. No ejecutes SQL.
+2. Sube y reemplaza en la raíz de GitHub:
+   - marketing.html
+   - marketing.css
+   - marketing.js
+3. Haz Commit changes.
+4. Espera Cloudflare Pages.
+5. Abre /marketing y presiona Ctrl + F5.
+
+Correcciones:
+- La consulta ahora usa enlace_maps, que es la columna real.
+- Recupera correctamente slug, WhatsApp y ubicación.
+- Genera automáticamente el QR del perfil.
+- El cartel A4 recibe el QR sin tener que cambiar de opción.
+- No muestra imágenes rotas cuando falta un enlace.
