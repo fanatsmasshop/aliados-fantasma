@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Centro de Marketing | Aliados Fantasma</title>
+  <link rel="icon" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260718-300">
+  <link rel="stylesheet" href="logos.css?v=20260717-3">
+  <link rel="stylesheet" href="marketing.css?v=20260723-800">
+</head>
+<body>
+  <div class="demo-banner">📣 CENTRO DE MARKETING</div>
+  <div class="marketing-shell">
+    <aside class="marketing-sidebar">
+      <a class="sidebar-brand" href="index.html">
+        <img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma">
+        <span><strong>Aliados Fantasma</strong><small>Recursos para tu negocio</small></span>
+      </a>
+      <a class="button secondary full" href="panel.html">← Volver a mi panel</a>
+      <nav class="marketing-nav" aria-label="Secciones del Centro de Marketing">
+        <button class="active" data-section="studio">🎨 Crear diseño</button>
+        <button data-section="copy">✍️ Textos y hashtags</button>
+        <button data-section="qr">▦ Códigos QR</button>
+        <button data-section="calendar">📅 Plan semanal</button>
+        <button data-section="brand">🧰 Kit digital</button>
+      </nav>
+      <div class="marketing-tip"><strong>Consejo</strong><p>Completa tu perfil para que tus recursos salgan mejor personalizados.</p></div>
+    </aside>
+
+    <main class="marketing-main">
+      <header class="marketing-header">
+        <div><p class="eyebrow">RECURSOS PERSONALIZADOS</p><h1 id="marketing-title">Centro de Marketing</h1><p id="marketing-subtitle" class="muted">Cargando información de tu negocio…</p></div>
+        <div class="business-chip"><img id="business-chip-logo" alt=""><span><small>Trabajando para</small><strong id="business-chip-name">Tu negocio</strong></span></div>
+      </header>
+      <div id="marketing-message" class="notice hidden"></div>
+
+      <section class="marketing-section active" data-panel="studio">
+        <div class="section-heading"><div><p class="eyebrow">ESTUDIO RÁPIDO</p><h2>Genera una publicación lista para descargar</h2><p class="muted">Usaremos tu logo, nombre, promoción y datos de contacto.</p></div></div>
+        <div class="studio-layout">
+          <div class="creator-panel">
+            <label class="field"><span>Formato</span><select id="design-format"><option value="square">Publicación 1:1</option><option value="story">Historia 9:16</option><option value="landscape">Banner horizontal</option></select></label>
+            <label class="field"><span>Tipo de recurso</span><select id="design-type"><option value="promotion">Promoción</option><option value="business">Presentación del negocio</option><option value="announcement">Aviso</option><option value="visit">Visítanos</option></select></label>
+            <label class="field"><span>Título principal</span><input id="design-title" maxlength="70" placeholder="Ej. 20% de descuento"></label>
+            <label class="field"><span>Texto secundario</span><textarea id="design-description" rows="3" maxlength="180" placeholder="Describe la oferta o el mensaje"></textarea></label>
+            <label class="field"><span>Texto del botón</span><input id="design-cta" maxlength="28" value="Conoce más"></label>
+            <label class="field"><span>Estilo</span><select id="design-style"><option value="brand">Colores de Aliados</option><option value="dark">Oscuro elegante</option><option value="light">Claro limpio</option></select></label>
+            <div class="creator-actions"><button id="generate-design" class="button primary" type="button">Actualizar diseño</button><button id="download-design" class="button secondary" type="button">Descargar PNG</button></div>
+          </div>
+          <div class="canvas-stage"><canvas id="marketing-canvas" width="1080" height="1080"></canvas><p class="canvas-note">Vista previa. El archivo se descargará en alta resolución.</p></div>
+        </div>
+      </section>
+
+      <section class="marketing-section" data-panel="copy">
+        <div class="section-heading"><div><p class="eyebrow">ASISTENTE DE CONTENIDO</p><h2>Textos listos para publicar</h2><p class="muted">Generación local basada en tu negocio; puedes editar todo antes de copiar.</p></div></div>
+        <div class="copy-grid">
+          <div class="creator-panel">
+            <label class="field"><span>Objetivo</span><select id="copy-goal"><option value="sell">Vender un producto o servicio</option><option value="visit">Atraer visitas</option><option value="announce">Dar un aviso</option><option value="community">Conectar con la comunidad</option></select></label>
+            <label class="field"><span>Tono</span><select id="copy-tone"><option value="friendly">Cercano</option><option value="professional">Profesional</option><option value="energetic">Llamativo</option><option value="premium">Premium</option></select></label>
+            <label class="field"><span>¿Qué quieres comunicar?</span><textarea id="copy-topic" rows="4" placeholder="Ej. Tenemos invitaciones digitales para bodas con confirmación por WhatsApp"></textarea></label>
+            <button id="generate-copy" class="button primary full" type="button">Generar contenido</button>
+          </div>
+          <div class="results-stack">
+            <article class="result-card"><header><h3>Publicación</h3><button class="button secondary small" data-copy-target="generated-post">Copiar</button></header><textarea id="generated-post" rows="9"></textarea></article>
+            <article class="result-card"><header><h3>Historia breve</h3><button class="button secondary small" data-copy-target="generated-story">Copiar</button></header><textarea id="generated-story" rows="5"></textarea></article>
+            <article class="result-card"><header><h3>Hashtags</h3><button class="button secondary small" data-copy-target="generated-hashtags">Copiar</button></header><textarea id="generated-hashtags" rows="4"></textarea></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="marketing-section" data-panel="qr">
+        <div class="section-heading"><div><p class="eyebrow">CÓDIGOS QR</p><h2>Conecta materiales físicos con tus canales</h2><p class="muted">Descarga el QR del perfil, WhatsApp, ubicación o cualquier enlace.</p></div></div>
+        <div class="qr-layout">
+          <div class="creator-panel">
+            <label class="field"><span>Destino</span><select id="qr-type"><option value="profile">Perfil en Aliados Fantasma</option><option value="whatsapp">WhatsApp</option><option value="maps">Ubicación</option><option value="custom">Enlace personalizado</option></select></label>
+            <label class="field"><span>Enlace</span><input id="qr-url" type="url"></label>
+            <button id="generate-qr" class="button primary full" type="button">Generar QR</button>
+          </div>
+          <article class="qr-card"><div class="qr-frame"><img id="marketing-qr" alt="Código QR"></div><h3 id="qr-label">Perfil digital</h3><p id="qr-destination" class="muted"></p><a id="download-qr" class="button secondary" download="codigo-qr.png">Descargar QR</a></article>
+        </div>
+      </section>
+
+      <section class="marketing-section" data-panel="calendar">
+        <div class="section-heading"><div><p class="eyebrow">PLAN DE CONTENIDO</p><h2>Organiza una semana de marketing</h2><p class="muted">Una propuesta práctica basada en el objetivo seleccionado.</p></div><button id="regenerate-calendar" class="button secondary" type="button">Generar otro plan</button></div>
+        <div id="marketing-calendar" class="calendar-grid"></div>
+      </section>
+
+      <section class="marketing-section" data-panel="brand">
+        <div class="section-heading"><div><p class="eyebrow">KIT DIGITAL</p><h2>Todos tus recursos en un solo lugar</h2><p class="muted">Accesos rápidos a los elementos disponibles en tu perfil.</p></div></div>
+        <div id="brand-resources" class="resource-grid"></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="marketing.js?v=20260723-800"></script>
+</body>
+</html>

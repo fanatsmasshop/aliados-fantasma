@@ -1,0 +1,15 @@
+ALIADOS FANTASMA v2.8 - CENTRO DE MARKETING
+
+1. No ejecutes SQL. Esta primera versión funciona con la información que ya existe en el perfil.
+2. Sube a la raíz de GitHub y reemplaza panel.js.
+3. Sube también marketing.html, marketing.css y marketing.js.
+4. Haz Commit changes.
+5. Espera Cloudflare Pages y abre /panel con Ctrl + F5.
+6. En la barra lateral aparecerá “Centro de Marketing”.
+
+PRUEBAS:
+- Abrir Centro de Marketing desde el panel.
+- Cambiar formato y descargar un PNG.
+- Generar textos y copiar.
+- Generar QR del perfil, WhatsApp y Maps.
+- Revisar plan semanal y kit digital.

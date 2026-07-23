@@ -806,3 +806,18 @@ async function initNotificationCenter(){
   try{await fetchNotifications();}
   catch(error){console.error('No fue posible cargar las notificaciones:',error);}
 }
+
+// CENTRO DE MARKETING v2.8
+function ensureMarketingCenterAccess(){
+  const sidebar=document.querySelector('.owner-sidebar');
+  if(!sidebar || document.querySelector('#marketing-center-link')) return;
+  const footer=sidebar.querySelector('.sidebar-footer');
+  const link=document.createElement('a');
+  link.id='marketing-center-link';
+  link.href='marketing.html';
+  link.className='button marketing-center-link full';
+  link.innerHTML='<span aria-hidden="true">📣</span><span>Centro de Marketing</span>';
+  if(footer) sidebar.insertBefore(link,footer); else sidebar.appendChild(link);
+}
+
+document.addEventListener('DOMContentLoaded',ensureMarketingCenterAccess);
