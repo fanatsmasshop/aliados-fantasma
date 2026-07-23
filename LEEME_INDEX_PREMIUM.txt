@@ -1,0 +1,15 @@
+ALIADOS FANTASMA — INDEX PREMIUM CON CUENTA REGRESIVA
+
+1. No ejecutes SQL.
+2. Sube y reemplaza en la raíz de GitHub:
+   - index.html
+   - lanzamiento.css
+   - lanzamiento.js
+   - aliados-fantasma-logo.webp
+   - aliados-fantasma-icono.webp
+3. Haz Commit changes.
+4. Espera el despliegue de Cloudflare Pages.
+5. Abre https://aliados-fantasma.pages.dev/ y presiona Ctrl + F5.
+
+No modifica paneles, directorio, perfiles, autenticación ni Supabase.
+Fecha configurada: 24 de agosto de 2026, 2:30 p. m. (UTC-6).
