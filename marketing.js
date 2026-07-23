@@ -311,21 +311,64 @@ async function renderPrintableProfile(){
     drawText('ESCANEA AQUÍ',w/2,pad+700,w-130,'900 28px Arial',34,1,colors.text);
     drawText('Conoce nuestro perfil, contacto y promociones',w/2,pad+742,w-150,'500 16px Arial',22,2,colors.muted);
   }else if(format==='table'){
-    // Display plegable: mitad superior y mitad inferior simétricas, con línea de doblez.
-    const pad=55,half=(h-pad*2)/2;
-    panel(pad,pad,w-pad*2,h-pad*2,38,'rgba(8,12,21,.93)');
-    ctx.strokeStyle='rgba(255,255,255,.35)';ctx.setLineDash([14,12]);ctx.beginPath();ctx.moveTo(pad,h/2);ctx.lineTo(w-pad,h/2);ctx.stroke();ctx.setLineDash([]);
-    drawText('LÍNEA DE DOBLEZ',w/2,h/2-10,w-160,'700 14px Arial',20,1,'#8f97a6');
-    const renderHalf=(oy)=>{
-      const logoSize=145;logoBox(pad+55,oy+45,logoSize);
-      drawText(name,pad+235,oy+92,w-pad*2-300,'900 45px Arial',52,2,colors.text,'left');
-      drawText(category.toUpperCase(),pad+235,oy+150,w-pad*2-300,'800 21px Arial',27,2,colors.accent,'left');
-      const qrSize=290;qrBox(w-pad-qrSize-55,oy+205,qrSize);
-      drawText(posterTitle,pad+55,oy+270,w-pad*2-qrSize-150,'900 36px Arial',43,3,colors.text,'left');
-      drawText(cta,pad+55,oy+410,w-pad*2-qrSize-150,'400 22px Arial',30,4,colors.muted,'left');
-      footer(pad+55,oy+half-105,w-pad*2-110,18);
+    // Display de mesa tipo caballete.
+    // La cara superior se imprime rotada 180°; al doblar por el centro,
+    // ambas caras quedan derechas y visibles hacia lados opuestos.
+    const outer=55;
+    const foldY=Math.round(h/2);
+    const faceW=w-outer*2;
+    const faceH=foldY-outer-18;
+
+    panel(outer,outer,faceW,h-outer*2,38,'rgba(8,12,21,.93)');
+
+    const renderFace=(x,y,fw,fh)=>{
+      const inset=54;
+      const logoSize=142;
+      const qrSize=286;
+      const top=y+48;
+      const footerH=76;
+
+      logoBox(x+inset,top,logoSize);
+      drawText(name,x+inset+logoSize+38,top+48,fw-(inset*2+logoSize+38),
+        '900 44px Arial',51,2,colors.text,'left');
+      drawText(category.toUpperCase(),x+inset+logoSize+38,top+105,
+        fw-(inset*2+logoSize+38),'800 20px Arial',27,2,colors.accent,'left');
+
+      const contentTop=y+220;
+      qrBox(x+fw-inset-qrSize,contentTop,qrSize);
+      const textW=fw-inset*3-qrSize;
+      let textY=contentTop+44;
+      textY=drawText(posterTitle,x+inset,textY,textW,'900 36px Arial',43,3,colors.text,'left')+22;
+      drawText(cta,x+inset,textY,textW,'400 22px Arial',31,4,colors.muted,'left');
+
+      footer(x+inset,y+fh-footerH-28,fw-inset*2,18);
     };
-    renderHalf(pad);renderHalf(h/2+18);
+
+    // Cara superior: rotada alrededor del centro de su propia mitad.
+    ctx.save();
+    const upperX=outer;
+    const upperY=outer;
+    ctx.translate(upperX+faceW/2,upperY+faceH/2);
+    ctx.rotate(Math.PI);
+    ctx.translate(-(upperX+faceW/2),-(upperY+faceH/2));
+    renderFace(upperX,upperY,faceW,faceH);
+    ctx.restore();
+
+    // Cara inferior: orientación normal.
+    const lowerY=foldY+18;
+    renderFace(outer,lowerY,faceW,h-outer-lowerY,faceH);
+
+    // Guía de plegado central, fuera de las zonas de contenido.
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,.52)';
+    ctx.lineWidth=3;
+    ctx.setLineDash([18,14]);
+    ctx.beginPath();ctx.moveTo(outer+22,foldY);ctx.lineTo(w-outer-22,foldY);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(7,10,16,.88)';
+    roundRect(ctx,w/2-125,foldY-18,250,36,18);ctx.fill();
+    drawText('DOBLAR AQUÍ',w/2,foldY+6,220,'800 15px Arial',20,1,'#d9ddea');
+    ctx.restore();
   }else if(format==='window'){
     const pad=62;panel(pad,pad,w-pad*2,h-pad*2,48,'rgba(8,12,21,.9)');
     if(cover){ctx.save();ctx.globalAlpha=.68;ctx.beginPath();ctx.roundRect(pad,pad,w-pad*2,610,48);ctx.clip();drawImageCover(ctx,cover,pad,pad,w-pad*2,610);ctx.restore();}

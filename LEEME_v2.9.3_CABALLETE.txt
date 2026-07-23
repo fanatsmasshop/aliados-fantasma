@@ -1,0 +1,15 @@
+ALIADOS FANTASMA v2.9.3 — DISPLAY DE MESA TIPO CABALLETE
+
+No ejecutar SQL.
+
+Subir y reemplazar en GitHub:
+- marketing.js
+
+Corrección:
+- La cara superior se imprime rotada 180°.
+- La cara inferior se mantiene normal.
+- Ambas quedan enfrentadas al doblar la hoja por el centro.
+- Se agregó una guía central "DOBLAR AQUÍ".
+- El contenido se centra dentro de cada cara y respeta zonas seguras.
+
+Después del despliegue de Cloudflare, abrir /marketing y presionar Ctrl + F5.
