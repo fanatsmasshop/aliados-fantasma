@@ -206,17 +206,24 @@ async function renderPrintableProfile(){
   const canvas=$('#profile-poster-canvas');
   if(!canvas)return;
   const format=$('#poster-format')?.value||'a4';
+  // Medidas proporcionales a impresión real (aprox. 300 dpi).
   const formats={
-    a4:{w:1240,h:1754,label:'cartel-a4'},
-    a5:{w:874,h:1240,label:'cartel-a5'},
-    table:{w:1100,h:1550,label:'display-mesa'},
-    window:{w:1400,h:2000,label:'escaparate'},
-    card:{w:2200,h:720,label:'tarjeta-doble'},
-    label:{w:800,h:800,label:'etiqueta-qr'}
+    a4:{w:2480,h:3508,label:'cartel-a4',ratio:'210 / 297'},
+    a5:{w:1748,h:2480,label:'cartel-a5',ratio:'148 / 210'},
+    table:{w:1748,h:2480,label:'display-mesa',ratio:'148 / 210'},
+    window:{w:3508,h:4961,label:'escaparate',ratio:'297 / 420'},
+    // Hoja de 195 × 61 mm: dos tarjetas reales de 90 × 51 mm, margen y separación de 5 mm.
+    card:{w:2303,h:720,label:'tarjeta-doble',ratio:'195 / 61'},
+    label:{w:945,h:945,label:'etiqueta-qr',ratio:'1 / 1'}
   };
   const cfg=formats[format];
   const ctx=canvas.getContext('2d');
-  const w=cfg.w,h=cfg.h;canvas.width=w;canvas.height=h;canvas.style.aspectRatio=`${w}/${h}`;
+  const w=cfg.w,h=cfg.h;
+  canvas.width=w;canvas.height=h;
+  canvas.dataset.format=format;
+  canvas.style.aspectRatio=cfg.ratio;
+  canvas.style.width='auto';
+  canvas.style.height='auto';
   const template=$('#poster-style')?.value||'commercial';
   const name=state.data.nombre||state.business?.nombre||'Tu negocio';
   const category=state.data.categoria||state.data.giro||'Negocio local';
@@ -271,8 +278,11 @@ async function renderPrintableProfile(){
 
   if(format==='card'){
     // Dos caras reales: 90 x 51 mm, una junto a la otra para impresión y corte.
-    const gap=70,cardW=(w-gap*3)/2,cardH=h-gap*2;
-    const frontX=gap,backX=gap*2+cardW,y=gap;
+    // 5 mm de margen y separación; cada cara conserva 90 × 51 mm.
+    const mm=Math.min(w/195,h/61);
+    const margin=Math.round(5*mm),gap=Math.round(5*mm);
+    const cardW=Math.round(90*mm),cardH=Math.round(51*mm);
+    const frontX=margin,backX=margin+cardW+gap,y=Math.round((h-cardH)/2);
     panel(frontX,y,cardW,cardH,38,'rgba(8,12,21,.94)');
     panel(backX,y,cardW,cardH,38,'rgba(8,12,21,.94)');
     if(cover){ctx.save();ctx.globalAlpha=.17;ctx.beginPath();ctx.roundRect(frontX,y,cardW,cardH,38);ctx.clip();drawImageCover(ctx,cover,frontX,y,cardW,cardH);ctx.restore();}
@@ -364,7 +374,7 @@ async function downloadPosterPdf(){
     const canvas=$('#profile-poster-canvas');
     const image=canvas.toDataURL('image/jpeg',.96);
     const fmt=$('#poster-format')?.value||'a4';
-    const pdfCfg={a4:{orientation:'portrait',format:'a4',size:[210,297]},a5:{orientation:'portrait',format:'a5',size:[148,210]},table:{orientation:'portrait',format:[148,210],size:[148,210]},window:{orientation:'portrait',format:'a3',size:[297,420]},card:{orientation:'landscape',format:[190,62],size:[190,62]},label:{orientation:'portrait',format:[80,80],size:[80,80]}}[fmt];
+    const pdfCfg={a4:{orientation:'portrait',format:'a4',size:[210,297]},a5:{orientation:'portrait',format:'a5',size:[148,210]},table:{orientation:'portrait',format:[148,210],size:[148,210]},window:{orientation:'portrait',format:'a3',size:[297,420]},card:{orientation:'landscape',format:[195,61],size:[195,61]},label:{orientation:'portrait',format:[80,80],size:[80,80]}}[fmt];
     const pdf=new window.jspdf.jsPDF({orientation:pdfCfg.orientation,unit:'mm',format:pdfCfg.format,compress:true});
     pdf.addImage(image,'JPEG',0,0,pdfCfg.size[0],pdfCfg.size[1],undefined,'FAST');
     pdf.save(`material-${fmt}-${slugify(state.data.nombre||state.business?.nombre)}.pdf`);

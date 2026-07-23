@@ -1,0 +1,14 @@
+ALIADOS FANTASMA v2.9.2 — PROPORCIONES REALES
+
+Reemplazar en GitHub:
+- marketing.js
+- marketing.css
+
+No ejecutar SQL.
+
+Correcciones:
+- A4, A5 y A3 mantienen proporción real.
+- Tarjeta: dos caras de 90 x 51 mm en hoja de 195 x 61 mm.
+- Etiqueta QR cuadrada 80 x 80 mm.
+- Vista previa sin estirar, cortar ni deformar.
+- Ajustes para escritorio, tablet y celular.
