@@ -7,7 +7,7 @@
   <link rel="icon" href="aliados-fantasma-icono.png">
   <link rel="stylesheet" href="app.css?v=20260718-300">
   <link rel="stylesheet" href="logos.css?v=20260717-3">
-  <link rel="stylesheet" href="marketing.css?v=20260723-830">
+  <link rel="stylesheet" href="marketing.css?v=20260723-900">
 </head>
 <body>
   <div class="demo-banner">📣 CENTRO DE MARKETING</div>
@@ -69,28 +69,29 @@
       </section>
 
       <section class="marketing-section" data-panel="qr">
-        <div class="section-heading"><div><p class="eyebrow">PERFIL IMPRIMIBLE</p><h2>Tu negocio en un cartel listo para imprimir</h2><p class="muted">Genera una hoja A4 con la apariencia de tu perfil y un QR grande al centro.</p></div></div>
+        <div class="section-heading"><div><p class="eyebrow">GENERADOR DE MATERIAL POP</p><h2>Tu perfil listo para imprimir en distintos formatos</h2><p class="muted">Crea carteles, displays, tarjetas y etiquetas con tu identidad, datos y código QR.</p></div></div>
         <div class="print-profile-layout">
           <div class="creator-panel print-profile-controls">
             <label class="field"><span>El QR llevará a</span><select id="qr-type"><option value="profile">Perfil en Aliados Fantasma</option><option value="whatsapp">WhatsApp</option><option value="maps">Ubicación</option><option value="custom">Enlace personalizado</option></select></label>
             <label class="field"><span>Enlace</span><input id="qr-url" type="url"></label>
-            <label class="field"><span>Título del cartel</span><input id="poster-title" maxlength="70" value="Conoce nuestro perfil digital"></label>
+            <label class="field"><span>Formato físico</span><select id="poster-format"><option value="a4" selected>Cartel A4</option><option value="a5">Cartel A5</option><option value="counter">Cartel para mostrador</option><option value="table">Display de mesa</option><option value="window">Póster para escaparate</option><option value="card">Tarjeta de presentación</option><option value="label">Etiqueta con QR</option></select></label>
+            <label class="field"><span>Título principal</span><input id="poster-title" maxlength="70" value="Conoce nuestro perfil digital"></label>
             <label class="field"><span>Invitación</span><input id="poster-cta" maxlength="80" value="Escanea el código QR para ver información, promociones y contacto"></label>
-            <label class="field"><span>Plantilla del cartel</span><select id="poster-style"><option value="minimal">Minimalista</option><option value="commercial" selected>Comercial</option><option value="promotion">Promoción</option></select></label>
+            <label class="field"><span>Estilo visual</span><select id="poster-style"><option value="minimal">Minimalista</option><option value="commercial" selected>Comercial</option><option value="promotion">Promoción</option></select></label>
             <div class="poster-options">
               <label><input id="poster-show-phone" type="checkbox" checked> Mostrar WhatsApp</label>
               <label><input id="poster-show-location" type="checkbox" checked> Mostrar ubicación</label>
             </div>
-            <button id="generate-qr" class="button primary full" type="button">Actualizar cartel</button>
+            <button id="generate-qr" class="button primary full" type="button">Actualizar material</button>
             <div class="poster-downloads">
               <button id="download-poster-pdf" class="button primary" type="button">Descargar PDF</button>
               <button id="download-poster-png" class="button secondary" type="button">Descargar PNG</button>
             </div>
-            <p class="print-help">El PDF se genera en tamaño A4 vertical, ideal para imprimir en papel, colocar en mostrador o pegar en otro negocio.</p>
+            <p class="print-help">El PDF se adapta automáticamente al formato seleccionado y mantiene zonas seguras para impresión.</p>
           </div>
           <div class="poster-stage">
             <canvas id="profile-poster-canvas" width="1240" height="1754"></canvas>
-            <p class="canvas-note">Vista previa reducida. El PDF conserva la resolución completa.</p>
+            <p class="canvas-note">Vista previa reducida. El PDF y PNG conservan la resolución completa.</p>
           </div>
         </div>
         <div class="qr-utility">
@@ -111,6 +112,6 @@
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-  <script type="module" src="marketing.js?v=20260723-830"></script>
+  <script type="module" src="marketing.js?v=20260723-900"></script>
 </body>
 </html>

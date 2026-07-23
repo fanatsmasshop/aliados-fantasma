@@ -1,0 +1,21 @@
+ALIADOS FANTASMA v2.9 — GENERADOR DE MATERIAL POP
+
+No requiere SQL.
+
+Sube y reemplaza en la raíz de GitHub:
+- marketing.html
+- marketing.css
+- marketing.js
+
+Después haz Commit changes, espera Cloudflare Pages y presiona Ctrl + F5 en /marketing.
+
+Formatos incluidos:
+- Cartel A4
+- Cartel A5
+- Cartel para mostrador
+- Display de mesa
+- Póster para escaparate
+- Tarjeta de presentación
+- Etiqueta con QR
+
+Todos se descargan en PDF y PNG.

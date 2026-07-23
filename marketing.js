@@ -205,8 +205,19 @@ function drawImageContain(ctx,img,x,y,w,h){
 async function renderPrintableProfile(){
   const canvas=$('#profile-poster-canvas');
   if(!canvas)return;
+  const format=$('#poster-format')?.value||'a4';
+  const formats={
+    a4:{w:1240,h:1754,label:'cartel-a4',pdf:{orientation:'portrait',format:'a4'}},
+    a5:{w:874,h:1240,label:'cartel-a5',pdf:{orientation:'portrait',format:'a5'}},
+    counter:{w:1600,h:1000,label:'mostrador',pdf:{orientation:'landscape',format:'a5'}},
+    table:{w:1000,h:1400,label:'display-mesa',pdf:{orientation:'portrait',format:[148,210]}},
+    window:{w:1400,h:2000,label:'escaparate',pdf:{orientation:'portrait',format:'a3'}},
+    card:{w:1050,h:600,label:'tarjeta',pdf:{orientation:'landscape',format:[90,51]}},
+    label:{w:800,h:800,label:'etiqueta-qr',pdf:{orientation:'portrait',format:[80,80]}}
+  };
+  const cfg=formats[format];
   const ctx=canvas.getContext('2d');
-  const w=1240,h=1754;canvas.width=w;canvas.height=h;
+  const w=cfg.w,h=cfg.h;canvas.width=w;canvas.height=h;canvas.style.aspectRatio=`${w}/${h}`;
   const template=$('#poster-style')?.value||'commercial';
   const name=state.data.nombre||state.business?.nombre||'Tu negocio';
   const category=state.data.categoria||'Negocio local';
@@ -217,82 +228,100 @@ async function renderPrintableProfile(){
   const logoUrl=state.data.logo_url||state.business?.logo_url||'aliados-fantasma-icono.webp';
   const coverUrl=state.data.portada_url||logoUrl;
   const [logo,cover,qr]=await Promise.all([loadImage(logoUrl),loadImage(coverUrl),loadImage(state.qrImageUrl)]);
-
-  const colors={bg:'#070a10',panel:'#10141d',text:'#ffffff',muted:'#c8ccd6',accent:'#c56dff',blue:'#3478ff',pink:'#ff3a9f'};
-  ctx.clearRect(0,0,w,h);ctx.fillStyle=colors.bg;ctx.fillRect(0,0,w,h);ctx.textAlign='center';
-
-  const drawLogo=(x,y,size)=>{
-    ctx.save();ctx.shadowColor='rgba(0,0,0,.32)';ctx.shadowBlur=25;ctx.fillStyle='#fff';roundRect(ctx,x,y,size,size,Math.round(size*.2));ctx.fill();ctx.restore();
-    if(logo)drawImageContain(ctx,logo,x+Math.round(size*.08),y+Math.round(size*.08),size-Math.round(size*.16),size-Math.round(size*.16));
-    else{ctx.fillStyle='#111';ctx.font=`900 ${Math.round(size*.24)}px Arial`;ctx.fillText(name.slice(0,2).toUpperCase(),x+size/2,y+size*.62);}
-  };
-  const drawQr=(x,y,size)=>{
-    ctx.save();ctx.shadowColor='rgba(0,0,0,.28)';ctx.shadowBlur=25;ctx.fillStyle='#fff';roundRect(ctx,x,y,size,size,34);ctx.fill();ctx.restore();
-    if(qr)drawImageContain(ctx,qr,x+28,y+28,size-56,size-56);
-    else{ctx.fillStyle='#111';ctx.font='800 26px Arial';wrapText(ctx,'Genera el QR para completar el cartel',size-80).slice(0,3).forEach((line,i)=>ctx.fillText(line,x+size/2,y+size/2+i*34));}
-  };
-  const drawWrapped=(text,x,y,maxWidth,font,lineHeight,maxLines,color)=>{
-    ctx.font=font;ctx.fillStyle=color;const lines=wrapText(ctx,text,maxWidth).slice(0,maxLines);lines.forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight));return y+lines.length*lineHeight;
-  };
+  const posterTitle=$('#poster-title')?.value||'Conoce nuestro perfil digital';
+  const cta=$('#poster-cta')?.value||'Escanea el código QR para conocer información, promociones y contacto';
   const contact=[];
   if($('#poster-show-phone')?.checked&&phone)contact.push(`WhatsApp: ${phone}`);
   if($('#poster-show-location')?.checked&&municipality)contact.push(municipality);
-  const posterTitle=$('#poster-title')?.value||'Conoce nuestro perfil digital';
-  const cta=$('#poster-cta')?.value||'Escanea el código QR para conocer nuestro perfil';
+  const colors={bg:'#070a10',panel:'#10141d',text:'#ffffff',muted:'#c8ccd6',accent:'#c56dff',blue:'#3478ff',pink:'#ff3a9f'};
+  const scale=Math.min(w/1240,h/1754);
+  const S=n=>Math.max(1,Math.round(n*scale));
+  ctx.clearRect(0,0,w,h);ctx.textAlign='center';ctx.textBaseline='alphabetic';
 
-  if(template==='minimal'){
-    const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,'#07111f');g.addColorStop(.55,'#10121e');g.addColorStop(1,'#1d0b22');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-    ctx.fillStyle='rgba(255,255,255,.035)';roundRect(ctx,74,74,w-148,h-148,44);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.stroke();
-    drawLogo((w-230)/2,145,230);
-    let y=450;y=drawWrapped(name,w/2,y,1000,'900 62px Arial',70,2,colors.text)+8;
-    y=drawWrapped(category.toUpperCase(),w/2,y,950,'800 27px Arial',34,2,colors.accent)+55;
-    drawQr((w-560)/2,y,560);y+=625;
-    ctx.font='900 38px Arial';ctx.fillStyle=colors.text;ctx.fillText('ESCANEA AQUÍ',w/2,y);y+=58;
-    drawWrapped(cta,w/2,y,920,'400 25px Arial',34,3,colors.muted);
-    ctx.strokeStyle='rgba(255,255,255,.1)';ctx.beginPath();ctx.moveTo(150,h-178);ctx.lineTo(w-150,h-178);ctx.stroke();
-    ctx.font='700 22px Arial';ctx.fillStyle='#dde1eb';ctx.fillText(contact.join('   •   ')||'Perfil digital en Aliados Fantasma',w/2,h-125);
-    ctx.font='700 18px Arial';ctx.fillStyle='#949baa';ctx.fillText('ALIADOS FANTASMA',w/2,h-82);
-  }else if(template==='promotion'){
-    if(cover){ctx.save();ctx.globalAlpha=.34;drawImageCover(ctx,cover,0,0,w,h);ctx.restore();}
-    const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(3,7,16,.42)');g.addColorStop(.42,'rgba(7,10,16,.92)');g.addColorStop(1,'#070a10');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-    ctx.fillStyle='rgba(8,12,21,.86)';roundRect(ctx,62,62,w-124,h-124,44);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=2;ctx.stroke();
-    drawLogo(105,105,190);
-    ctx.textAlign='left';ctx.fillStyle=colors.accent;ctx.font='800 26px Arial';ctx.fillText(category.toUpperCase(),335,145);
-    drawWrapped(name,335,205,790,'900 54px Arial',60,2,colors.text);
-    ctx.textAlign='center';
-    const promoTitle=promotion.titulo||posterTitle||'Promoción especial';
-    let y=430;y=drawWrapped(promoTitle,w/2,y,1010,'900 67px Arial',76,3,'#ffffff')+20;
-    const promoDesc=promotion.descripcion||description;
-    y=drawWrapped(promoDesc,w/2,y,970,'400 29px Arial',40,4,colors.muted)+50;
-    drawQr((w-500)/2,y,500);y+=565;
-    ctx.font='900 36px Arial';ctx.fillStyle=colors.text;ctx.fillText('ESCANEA Y CONOCE MÁS',w/2,y);y+=50;
-    drawWrapped(cta,w/2,y,930,'400 24px Arial',33,3,colors.muted);
-    ctx.fillStyle='rgba(255,255,255,.06)';roundRect(ctx,120,h-190,w-240,82,41);ctx.fill();ctx.font='700 22px Arial';ctx.fillStyle='#eef1f7';ctx.fillText(contact.join('   •   ')||'Consulta el perfil digital',w/2,h-139);
-    ctx.font='700 18px Arial';ctx.fillStyle='#a4abb8';ctx.fillText('Perfil creado en Aliados Fantasma',w/2,h-74);
+  const drawWrapped=(text,x,y,maxWidth,font,lineHeight,maxLines,color)=>{
+    ctx.font=font;ctx.fillStyle=color;const lines=wrapText(ctx,text,maxWidth).slice(0,maxLines);
+    lines.forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight));return y+lines.length*lineHeight;
+  };
+  const drawLogo=(x,y,size)=>{
+    ctx.save();ctx.shadowColor='rgba(0,0,0,.3)';ctx.shadowBlur=S(22);ctx.fillStyle='#fff';roundRect(ctx,x,y,size,size,S(30));ctx.fill();ctx.restore();
+    if(logo)drawImageContain(ctx,logo,x+size*.08,y+size*.08,size*.84,size*.84);
+    else{ctx.fillStyle='#111';ctx.font=`900 ${Math.round(size*.24)}px Arial`;ctx.fillText(name.slice(0,2).toUpperCase(),x+size/2,y+size*.62);}
+  };
+  const drawQr=(x,y,size)=>{
+    ctx.save();ctx.shadowColor='rgba(0,0,0,.28)';ctx.shadowBlur=S(22);ctx.fillStyle='#fff';roundRect(ctx,x,y,size,size,S(28));ctx.fill();ctx.restore();
+    if(qr)drawImageContain(ctx,qr,x+size*.07,y+size*.07,size*.86,size*.86);
+    else{ctx.fillStyle='#111';ctx.font=`800 ${S(24)}px Arial`;wrapText(ctx,'Genera el QR para completar el material',size*.75).slice(0,3).forEach((line,i)=>ctx.fillText(line,x+size/2,y+size*.48+i*S(30)));}
+  };
+  const drawFooter=(y,compact=false)=>{
+    const footerH=compact?S(72):S(104);const x=S(70),fw=w-S(140);
+    ctx.fillStyle='rgba(255,255,255,.07)';roundRect(ctx,x,y,fw,footerH,footerH/2);ctx.fill();
+    ctx.fillStyle='#eef1f7';ctx.font=`700 ${compact?S(16):S(21)}px Arial`;
+    const text=contact.join('   •   ')||'Perfil digital en Aliados Fantasma';
+    ctx.fillText(text,w/2,y+footerH*.62);
+  };
+  const drawBrandBackground=()=>{
+    if(cover){ctx.save();ctx.globalAlpha=template==='minimal'?.16:.28;drawImageCover(ctx,cover,0,0,w,h);ctx.restore();}
+    const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,'rgba(3,13,30,.94)');g.addColorStop(.55,'rgba(10,12,23,.94)');g.addColorStop(1,'rgba(35,7,34,.96)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    if(template==='minimal'){ctx.fillStyle='rgba(7,10,16,.72)';ctx.fillRect(0,0,w,h);}
+  };
+  drawBrandBackground();
+
+  if(format==='card'){
+    const pad=S(50),logoSize=S(150),qrSize=S(280);
+    ctx.fillStyle='rgba(10,14,24,.88)';roundRect(ctx,pad,pad,w-pad*2,h-pad*2,S(32));ctx.fill();ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=S(2);ctx.stroke();
+    drawLogo(pad+S(35),pad+S(35),logoSize);
+    ctx.textAlign='left';ctx.fillStyle=colors.accent;ctx.font=`800 ${S(24)}px Arial`;ctx.fillText(category.toUpperCase(),pad+S(220),pad+S(80));
+    let y=pad+S(145);y=drawWrapped(name,pad+S(220),y,w-qrSize-pad*3-S(220),`900 ${S(44)}px Arial`,S(50),2,colors.text)+S(18);
+    drawWrapped(posterTitle,pad+S(220),y,w-qrSize-pad*3-S(220),`600 ${S(24)}px Arial`,S(31),2,colors.muted);
+    ctx.textAlign='center';drawQr(w-pad-qrSize,pad+S(45),qrSize);
+    ctx.font=`900 ${S(22)}px Arial`;ctx.fillStyle=colors.text;ctx.fillText('ESCANEA Y CONOCE MÁS',w-pad-qrSize/2,pad+S(365));
+    ctx.textAlign='left';ctx.font=`700 ${S(18)}px Arial`;ctx.fillStyle='#dfe3ec';ctx.fillText(contact.join('  •  ')||'Aliados Fantasma',pad+S(35),h-pad-S(24));
+  }else if(format==='label'){
+    const pad=S(55),qrSize=S(390);ctx.fillStyle='rgba(10,14,24,.9)';roundRect(ctx,pad,pad,w-pad*2,h-pad*2,S(36));ctx.fill();ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=S(2);ctx.stroke();
+    drawLogo((w-S(130))/2,pad+S(35),S(130));
+    let y=pad+S(205);y=drawWrapped(name,w/2,y,w-S(130),`900 ${S(38)}px Arial`,S(44),2,colors.text)+S(16);
+    drawQr((w-qrSize)/2,y,qrSize);y+=qrSize+S(48);
+    ctx.font=`900 ${S(27)}px Arial`;ctx.fillStyle=colors.text;ctx.fillText('ESCANEA AQUÍ',w/2,y);
+    ctx.font=`600 ${S(17)}px Arial`;ctx.fillStyle=colors.muted;ctx.fillText('Perfil digital en Aliados Fantasma',w/2,h-S(45));
+  }else if(format==='counter'){
+    const pad=S(54),qrSize=S(440),logoSize=S(170);
+    ctx.fillStyle='rgba(9,13,22,.88)';roundRect(ctx,pad,pad,w-pad*2,h-pad*2,S(38));ctx.fill();ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=S(2);ctx.stroke();
+    drawLogo(pad+S(45),pad+S(45),logoSize);
+    ctx.textAlign='left';ctx.fillStyle=colors.accent;ctx.font=`800 ${S(27)}px Arial`;ctx.fillText(category.toUpperCase(),pad+S(250),pad+S(95));
+    let y=pad+S(165);y=drawWrapped(name,pad+S(250),y,w-qrSize-pad*4-S(250),`900 ${S(56)}px Arial`,S(64),2,colors.text)+S(24);
+    y=drawWrapped(posterTitle,pad+S(250),y,w-qrSize-pad*4-S(250),`800 ${S(34)}px Arial`,S(42),2,colors.text)+S(18);
+    drawWrapped(cta,pad+S(250),y,w-qrSize-pad*4-S(250),`400 ${S(24)}px Arial`,S(32),3,colors.muted);
+    ctx.textAlign='center';drawQr(w-pad-qrSize,pad+S(80),qrSize);
+    ctx.font=`900 ${S(28)}px Arial`;ctx.fillStyle=colors.text;ctx.fillText('ESCANEA AQUÍ',w-pad-qrSize/2,pad+qrSize+S(145));
+    drawFooter(h-pad-S(92),true);
   }else{
-    const heroH=510;
-    if(cover){ctx.save();if(!state.data.portada_url){ctx.filter='blur(20px)';ctx.globalAlpha=.9;drawImageCover(ctx,cover,-25,-25,w+50,heroH+50);}else drawImageCover(ctx,cover,0,0,w,heroH);ctx.restore();}
-    else{const g=ctx.createLinearGradient(0,0,w,heroH);g.addColorStop(0,colors.blue);g.addColorStop(1,colors.pink);ctx.fillStyle=g;ctx.fillRect(0,0,w,heroH);}
-    const ov=ctx.createLinearGradient(0,0,0,heroH);ov.addColorStop(0,'rgba(4,8,16,.15)');ov.addColorStop(.55,'rgba(4,8,16,.55)');ov.addColorStop(1,'#070a10');ctx.fillStyle=ov;ctx.fillRect(0,0,w,heroH);
-    drawLogo((w-220)/2,105,220);
-    let y=390;y=drawWrapped(name,w/2,y,1050,'900 57px Arial',64,2,colors.text)+6;
-    drawWrapped(category.toUpperCase(),w/2,y,950,'800 27px Arial',34,2,colors.accent);
-    ctx.fillStyle=colors.panel;roundRect(ctx,72,525,w-144,h-610,42);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.stroke();
-    y=630;y=drawWrapped(posterTitle,w/2,y,980,'900 43px Arial',52,2,colors.text)+14;
-    y=drawWrapped(description,w/2,y,910,'400 25px Arial',34,3,colors.muted)+36;
-    drawQr((w-500)/2,y,500);y+=570;
-    ctx.font='900 35px Arial';ctx.fillStyle=colors.text;ctx.fillText('ESCANEA AQUÍ',w/2,y);y+=49;
-    drawWrapped(cta,w/2,y,900,'400 24px Arial',32,3,colors.muted);
-    const footerY=h-205;
-    ctx.fillStyle='rgba(255,255,255,.06)';roundRect(ctx,125,footerY,w-250,82,41);ctx.fill();ctx.font='700 22px Arial';ctx.fillStyle='#edf0f7';ctx.fillText(contact.join('   •   ')||'Consulta promociones, contacto y ubicación',w/2,footerY+51);
-    ctx.font='700 18px Arial';ctx.fillStyle='#a1a8b5';ctx.fillText('Perfil digital creado en Aliados Fantasma',w/2,h-75);
+    const pad=S(format==='window'?64:74),innerX=pad,innerY=pad,innerW=w-pad*2,innerH=h-pad*2;
+    ctx.fillStyle='rgba(8,12,21,.88)';roundRect(ctx,innerX,innerY,innerW,innerH,S(44));ctx.fill();ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=S(2);ctx.stroke();
+    const heroH=format==='table'?S(350):S(format==='window'?470:420);
+    if(cover){ctx.save();ctx.beginPath();ctx.roundRect(innerX,innerY,innerW,heroH,S(44));ctx.clip();ctx.globalAlpha=.72;drawImageCover(ctx,cover,innerX,innerY,innerW,heroH);ctx.restore();}
+    const ov=ctx.createLinearGradient(0,innerY,0,innerY+heroH);ov.addColorStop(0,'rgba(3,7,15,.2)');ov.addColorStop(1,'rgba(7,10,16,.96)');ctx.fillStyle=ov;ctx.fillRect(innerX,innerY,innerW,heroH);
+    const logoSize=S(format==='window'?210:180);drawLogo((w-logoSize)/2,innerY+S(55),logoSize);
+    let y=innerY+S(format==='window'?330:300);y=drawWrapped(name,w/2,y,innerW-S(100),`900 ${S(format==='window'?60:52)}px Arial`,S(format==='window'?68:60),2,colors.text)+S(8);
+    drawWrapped(category.toUpperCase(),w/2,y,innerW-S(120),`800 ${S(25)}px Arial`,S(31),2,colors.accent);
+    const contentTop=innerY+heroH+S(42);
+    let cy=contentTop;cy=drawWrapped(template==='promotion'?(promotion.titulo||posterTitle):posterTitle,w/2,cy,innerW-S(120),`900 ${S(format==='window'?48:41)}px Arial`,S(format==='window'?57:50),3,colors.text)+S(18);
+    const desc=template==='promotion'?(promotion.descripcion||description):description;
+    cy=drawWrapped(desc,w/2,cy,innerW-S(160),`400 ${S(24)}px Arial`,S(33),3,colors.muted)+S(28);
+    const footerY=innerY+innerH-S(155);
+    const available=Math.max(S(250),footerY-cy-S(145));
+    const qrSize=Math.min(innerW*.46,available,format==='window'?S(560):S(470));
+    drawQr((w-qrSize)/2,cy,qrSize);cy+=qrSize+S(42);
+    ctx.font=`900 ${S(33)}px Arial`;ctx.fillStyle=colors.text;ctx.fillText('ESCANEA Y CONOCE',w/2,cy);cy+=S(46);
+    drawWrapped(cta,w/2,cy,innerW-S(150),`400 ${S(22)}px Arial`,S(29),2,colors.muted);
+    drawFooter(footerY,false);
+    ctx.font=`700 ${S(16)}px Arial`;ctx.fillStyle='#9da5b3';ctx.fillText('Perfil digital creado en Aliados Fantasma',w/2,innerY+innerH-S(34));
   }
   ctx.textAlign='left';
 }
 function downloadPosterPng(){
   const canvas=$('#profile-poster-canvas');
   const link=document.createElement('a');
-  link.download=`perfil-imprimible-${slugify(state.data.nombre||state.business?.nombre)}.png`;
+  const fmt=$('#poster-format')?.value||'a4';link.download=`material-${fmt}-${slugify(state.data.nombre||state.business?.nombre)}.png`;
   link.href=canvas.toDataURL('image/png');link.click();
 }
 async function downloadPosterPdf(){
@@ -301,9 +330,11 @@ async function downloadPosterPdf(){
     if(!window.jspdf?.jsPDF)throw new Error('No se pudo cargar el generador de PDF.');
     const canvas=$('#profile-poster-canvas');
     const image=canvas.toDataURL('image/jpeg',.96);
-    const pdf=new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
-    pdf.addImage(image,'JPEG',0,0,210,297,undefined,'FAST');
-    pdf.save(`perfil-imprimible-${slugify(state.data.nombre||state.business?.nombre)}.pdf`);
+    const fmt=$('#poster-format')?.value||'a4';
+    const pdfCfg={a4:{orientation:'portrait',format:'a4',size:[210,297]},a5:{orientation:'portrait',format:'a5',size:[148,210]},counter:{orientation:'landscape',format:'a5',size:[210,148]},table:{orientation:'portrait',format:[148,210],size:[148,210]},window:{orientation:'portrait',format:'a3',size:[297,420]},card:{orientation:'landscape',format:[90,51],size:[90,51]},label:{orientation:'portrait',format:[80,80],size:[80,80]}}[fmt];
+    const pdf=new window.jspdf.jsPDF({orientation:pdfCfg.orientation,unit:'mm',format:pdfCfg.format,compress:true});
+    pdf.addImage(image,'JPEG',0,0,pdfCfg.size[0],pdfCfg.size[1],undefined,'FAST');
+    pdf.save(`material-${fmt}-${slugify(state.data.nombre||state.business?.nombre)}.pdf`);
     showMessage('PDF generado correctamente.');
   }catch(error){console.error(error);showMessage(`No se pudo generar el PDF: ${error.message}`,'error');}
 }
@@ -322,7 +353,7 @@ function bind(){
   $('#generate-qr').onclick=generateQr;
   $('#qr-url').addEventListener('input',()=>{if($('#qr-type').value==='custom'){clearTimeout(window.__qrTimer);window.__qrTimer=setTimeout(generateQr,250);}});
   ['poster-title','poster-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{clearTimeout(window.__posterTimer);window.__posterTimer=setTimeout(renderPrintableProfile,180);}));
-  ['poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderPrintableProfile));
+  ['poster-format','poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderPrintableProfile));
   $('#download-poster-pdf').onclick=downloadPosterPdf;
   $('#download-poster-png').onclick=async()=>{await renderPrintableProfile();downloadPosterPng();};
   $('#regenerate-calendar').onclick=()=>{state.calendarSeed++;renderCalendar();};
