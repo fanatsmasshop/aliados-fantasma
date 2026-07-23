@@ -52,3 +52,8 @@ html{scroll-padding-top:calc(var(--banner-height,38px) + 18px)}
   .creator-panel,.print-profile-controls{padding:17px}
   .canvas-stage,.poster-stage{padding:10px}
 }
+
+/* v2.8.6 Cartel A4 estable */
+.poster-stage canvas{background:#070a10}
+.print-profile-controls select#poster-style{font-weight:800}
+@media(max-width:700px){.poster-stage canvas{width:100%;max-width:520px}}

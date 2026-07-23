@@ -1,0 +1,12 @@
+ALIADOS FANTASMA v2.8.6 — CARTEL A4 REHECHO
+
+No ejecutar SQL.
+
+Subir y reemplazar en GitHub:
+- marketing.html
+- marketing.js
+- marketing.css
+
+Después hacer Commit changes, esperar Cloudflare Pages y presionar Ctrl + F5 en /marketing.
+
+Plantillas incluidas: Minimalista, Comercial y Promoción.
