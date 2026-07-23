@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260720-600';
+import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
 
 let launchOpen = false;
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];

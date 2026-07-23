@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { getLaunchState, canAccessPublicAreaBeforeLaunch } from './launch-control.js?v=20260720-600';
+import { getLaunchState, canAccessPublicAreaBeforeLaunch } from './launch-control.js?v=20260723-900';
 
 const launchState = await getLaunchState();
 const launched = launchState.open;

@@ -1,7 +1,7 @@
 import { requireAdmin, logout } from './auth.js?v=20260718-120';
 import { supabase } from './supabase-client.js?v=20260718-120';
 import { shell, esc, fmt } from './ui.js?v=20260720-600';
-import { getLaunchState, clearLaunchStateCache, LAUNCH_LABEL } from './launch-control.js?v=20260720-600';
+import { getLaunchState, clearLaunchStateCache, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
 
 const auth = await requireAdmin();
 if (auth) {

@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-310';
 import { esc } from './ui.js?v=20260720-600';
-import { canAccessPublicAreaBeforeLaunch, LAUNCH_LABEL } from './launch-control.js?v=20260720-600';
+import { canAccessPublicAreaBeforeLaunch, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
 
 const params = new URLSearchParams(location.search);
 const slug = params.get('slug');

@@ -1,0 +1,51 @@
+ALIADOS FANTASMA — ESTABILIZACIÓN v4.1
+Fecha: 23 de julio de 2026
+
+CAUSA PRINCIPAL
+La actualización visual reemplazó launch-control.js por un script IIFE de cuenta regresiva. Sin embargo, panel.js, dashboard.js, inicio.js, perfil.js y directorio.js importan funciones nombradas desde launch-control.js:
+- getLaunchState
+- LAUNCH_LABEL
+- clearLaunchStateCache
+- canAccessPublicAreaBeforeLaunch
+- isAdministrator
+
+Al no existir esas exportaciones, el navegador detenía la carga del módulo antes de ejecutar una sola línea. Esto explica el panel inmóvil en “Cargando cuenta / Preparando información”.
+
+OTROS ARCHIVOS REEMPLAZADOS POR DEMOSTRACIONES
+- login.html
+- registro.html
+- terminos.html
+- privacidad.html
+- ayuda.html
+
+CORRECCIONES
+1. Restaurado launch-control.js funcional y compatible con Supabase.
+2. Restaurados login y registro reales conectados a login.js y registro.js.
+3. Restaurados Términos, Privacidad y Ayuda con contenido completo.
+4. Actualizadas versiones de caché en módulos y páginas afectadas.
+5. Conservada la landing v4 y todas las demás funciones existentes.
+6. No se modificó Supabase ni se requiere SQL.
+
+ARCHIVOS INCLUIDOS
+launch-control.js
+panel.js
+panel.html
+dashboard.js
+dashboard.html
+inicio.js
+perfil.js
+perfil.html
+directorio.js
+explorar.html
+directorio.html
+login.html
+registro.html
+terminos.html
+privacidad.html
+ayuda.html
+
+PRUEBAS ESTÁTICAS REALIZADAS
+- Sintaxis JavaScript: correcta.
+- Exportaciones/importaciones del controlador de lanzamiento: compatibles.
+- Referencias locales de archivos: existentes.
+- Eliminación de páginas placeholder: completada.
