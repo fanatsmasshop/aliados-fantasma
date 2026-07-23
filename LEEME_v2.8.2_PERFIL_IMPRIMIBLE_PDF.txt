@@ -1,0 +1,18 @@
+ALIADOS FANTASMA v2.8.2 - PERFIL IMPRIMIBLE EN PDF
+
+1. No ejecutar SQL.
+2. Subir y reemplazar en la raiz de GitHub:
+   - marketing.html
+   - marketing.css
+   - marketing.js
+3. Hacer Commit changes.
+4. Esperar Cloudflare Pages y recargar con Ctrl + F5.
+5. Entrar a Panel > Centro de Marketing > Perfil imprimible.
+
+NUEVO:
+- Cartel A4 parecido al perfil del negocio.
+- Portada, logo, nombre, categoria y descripcion automaticos.
+- QR grande al centro.
+- Opciones de WhatsApp y ubicacion.
+- Descarga en PDF A4 y PNG.
+- Descarga separada del QR.

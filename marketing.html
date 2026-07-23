@@ -7,7 +7,7 @@
   <link rel="icon" href="aliados-fantasma-icono.png">
   <link rel="stylesheet" href="app.css?v=20260718-300">
   <link rel="stylesheet" href="logos.css?v=20260717-3">
-  <link rel="stylesheet" href="marketing.css?v=20260723-800">
+  <link rel="stylesheet" href="marketing.css?v=20260723-820">
 </head>
 <body>
   <div class="demo-banner">📣 CENTRO DE MARKETING</div>
@@ -21,7 +21,7 @@
       <nav class="marketing-nav" aria-label="Secciones del Centro de Marketing">
         <button class="active" data-section="studio">🎨 Crear diseño</button>
         <button data-section="copy">✍️ Textos y hashtags</button>
-        <button data-section="qr">▦ Códigos QR</button>
+        <button data-section="qr">▦ Perfil imprimible</button>
         <button data-section="calendar">📅 Plan semanal</button>
         <button data-section="brand">🧰 Kit digital</button>
       </nav>
@@ -69,14 +69,33 @@
       </section>
 
       <section class="marketing-section" data-panel="qr">
-        <div class="section-heading"><div><p class="eyebrow">CÓDIGOS QR</p><h2>Conecta materiales físicos con tus canales</h2><p class="muted">Descarga el QR del perfil, WhatsApp, ubicación o cualquier enlace.</p></div></div>
-        <div class="qr-layout">
-          <div class="creator-panel">
-            <label class="field"><span>Destino</span><select id="qr-type"><option value="profile">Perfil en Aliados Fantasma</option><option value="whatsapp">WhatsApp</option><option value="maps">Ubicación</option><option value="custom">Enlace personalizado</option></select></label>
+        <div class="section-heading"><div><p class="eyebrow">PERFIL IMPRIMIBLE</p><h2>Tu negocio en un cartel listo para imprimir</h2><p class="muted">Genera una hoja A4 con la apariencia de tu perfil y un QR grande al centro.</p></div></div>
+        <div class="print-profile-layout">
+          <div class="creator-panel print-profile-controls">
+            <label class="field"><span>El QR llevará a</span><select id="qr-type"><option value="profile">Perfil en Aliados Fantasma</option><option value="whatsapp">WhatsApp</option><option value="maps">Ubicación</option><option value="custom">Enlace personalizado</option></select></label>
             <label class="field"><span>Enlace</span><input id="qr-url" type="url"></label>
-            <button id="generate-qr" class="button primary full" type="button">Generar QR</button>
+            <label class="field"><span>Título del cartel</span><input id="poster-title" maxlength="70" value="Conoce nuestro perfil digital"></label>
+            <label class="field"><span>Invitación</span><input id="poster-cta" maxlength="80" value="Escanea el código QR para ver información, promociones y contacto"></label>
+            <label class="field"><span>Estilo del cartel</span><select id="poster-style"><option value="brand">Aliados Fantasma</option><option value="business">Perfil del negocio</option><option value="light">Claro para impresión</option></select></label>
+            <div class="poster-options">
+              <label><input id="poster-show-phone" type="checkbox" checked> Mostrar WhatsApp</label>
+              <label><input id="poster-show-location" type="checkbox" checked> Mostrar ubicación</label>
+            </div>
+            <button id="generate-qr" class="button primary full" type="button">Actualizar cartel</button>
+            <div class="poster-downloads">
+              <button id="download-poster-pdf" class="button primary" type="button">Descargar PDF</button>
+              <button id="download-poster-png" class="button secondary" type="button">Descargar PNG</button>
+            </div>
+            <p class="print-help">El PDF se genera en tamaño A4 vertical, ideal para imprimir en papel, colocar en mostrador o pegar en otro negocio.</p>
           </div>
-          <article class="qr-card"><div class="qr-frame"><img id="marketing-qr" alt="Código QR"></div><h3 id="qr-label">Perfil digital</h3><p id="qr-destination" class="muted"></p><a id="download-qr" class="button secondary" download="codigo-qr.png">Descargar QR</a></article>
+          <div class="poster-stage">
+            <canvas id="profile-poster-canvas" width="1240" height="1754"></canvas>
+            <p class="canvas-note">Vista previa reducida. El PDF conserva la resolución completa.</p>
+          </div>
+        </div>
+        <div class="qr-utility">
+          <div class="qr-mini-preview"><img id="marketing-qr" alt="Código QR"><div><strong id="qr-label">Perfil digital</strong><p id="qr-destination" class="muted"></p></div></div>
+          <a id="download-qr" class="button secondary" download="codigo-qr.png">Descargar solo QR</a>
         </div>
       </section>
 
@@ -91,6 +110,7 @@
       </section>
     </main>
   </div>
-  <script type="module" src="marketing.js?v=20260723-800"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script type="module" src="marketing.js?v=20260723-820"></script>
 </body>
 </html>
