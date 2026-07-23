@@ -10,7 +10,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="launch-locked">
+  <section class="launch-gate" id="launch-gate" aria-labelledby="launch-title">
+    <div class="launch-glow launch-glow-one"></div>
+    <div class="launch-glow launch-glow-two"></div>
+    <div class="launch-shell">
+      <img class="launch-logo" src="logo-aliados.png" alt="Aliados Fantasma">
+      <span class="eyebrow">La red de negocios locales está por despertar</span>
+      <h1 id="launch-title">Ningún negocio local debería crecer solo.</h1>
+      <p>Estamos preparando una comunidad para ayudar a los negocios a verse más profesionales, promocionarse mejor y crecer juntos.</p>
+
+      <div class="launch-date">Lanzamiento oficial · 24 de agosto de 2026 · 2:30 p. m.</div>
+
+      <div class="countdown" aria-label="Cuenta regresiva para el lanzamiento">
+        <article><strong data-countdown="days">00</strong><span>Días</span></article>
+        <article><strong data-countdown="hours">00</strong><span>Horas</span></article>
+        <article><strong data-countdown="minutes">00</strong><span>Minutos</span></article>
+        <article><strong data-countdown="seconds">00</strong><span>Segundos</span></article>
+      </div>
+
+      <div class="launch-actions">
+        <a class="btn btn-primary btn-lg" href="registro.html">Registrar mi negocio</a>
+        <a class="btn btn-ghost btn-lg" href="login.html">Acceso para negocios y administración</a>
+      </div>
+
+      <div class="launch-trust">
+        <span>✓ Gratis por lanzamiento</span>
+        <span>✓ Perfil profesional</span>
+        <span>✓ Código QR propio</span>
+        <span>✓ Comunidad local</span>
+      </div>
+      <small>Impulsado por Fantasmas Biker's Shop · Ecatepec, Estado de México</small>
+    </div>
+  </section>
+
+  <div id="prelaunch-site" hidden>
+  <div class="preview-access-badge" id="preview-access-badge" hidden>Vista anticipada para negocios y administración</div>
   <header class="site-header" id="inicio">
     <div class="container nav-wrap">
       <a class="brand" href="#inicio" aria-label="Aliados Fantasma, inicio">
@@ -199,5 +234,7 @@
     <div class="container footer-bottom"><span>© 2026 Aliados Fantasma</span><span>Versión 3.0 · Fachada pública</span></div>
   </footer>
   <script src="app.js"></script>
+  </div>
+  <script src="launch-control.js"></script>
 </body>
 </html>

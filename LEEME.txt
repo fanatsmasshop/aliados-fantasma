@@ -1,15 +1,32 @@
-ALIADOS FANTASMA 3.0 — NUEVA FACHADA PÚBLICA
+ALIADOS FANTASMA v3.0.1 — FACHADA + CUENTA REGRESIVA
 
-ARCHIVOS
-- index.html: nueva página principal completa.
-- styles.css: identidad visual, responsive y animaciones.
-- app.js: menú, animaciones y tarjetas demo.
-- logo-aliados.png: logo oficial usado en la fachada.
-- directorio.html, registro.html, login.html, perfil-demo.html: páginas puente.
-- terminos.html, privacidad.html, ayuda.html: páginas puente.
+FECHA DE LANZAMIENTO
+24 de agosto de 2026 a las 2:30 p. m. (hora del centro de México).
 
-IMPORTANTE
-Esta entrega moderniza la fachada y la narrativa pública. Las páginas puente indican dónde deben conectarse los módulos reales existentes (Supabase, registro, login, directorio y perfil). Para no romper la plataforma actual, integra index.html, styles.css y app.js sobre una copia del proyecto y conserva tus archivos funcionales actuales cuando tengan lógica real.
+COMPORTAMIENTO
+1. Visitante público antes del lanzamiento:
+   - Solo ve la cuenta regresiva.
+   - Puede entrar a Registro o Iniciar sesión.
+   - No puede abrir el directorio ni el perfil de demostración.
 
-PUBLICACIÓN
-Sube todos los archivos a la raíz del repositorio, sin carpetas, respetando la preferencia actual del proyecto.
+2. Negocio o administrador autenticado:
+   - Puede revisar la fachada completa antes del lanzamiento.
+   - Aparece el distintivo "Vista anticipada para negocios y administración".
+
+3. Después del lanzamiento:
+   - La fachada se abre automáticamente para todo el público.
+
+INTEGRACIÓN CON TU AUTH REAL
+Después de verificar que la sesión pertenece a un administrador o propietario de negocio, ejecutar:
+
+window.AF_PRELAUNCH_ACCESS = true;
+window.dispatchEvent(new Event('af-auth-ready'));
+
+El archivo launch-control.js también reconoce roles comunes almacenados en localStorage o en una sesión de Supabase.
+
+ARCHIVOS NUEVOS O MODIFICADOS
+- index.html
+- styles.css
+- launch-control.js
+- directorio.html
+- perfil-demo.html
