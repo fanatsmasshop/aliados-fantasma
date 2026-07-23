@@ -817,7 +817,17 @@ function ensureMarketingCenterAccess(){
   link.href='marketing.html';
   link.className='button marketing-center-link full';
   link.innerHTML='<span aria-hidden="true">📣</span><span>Centro de Marketing</span>';
+  link.style.cssText='display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 16px 10px;min-height:48px;text-decoration:none;background:linear-gradient(135deg,rgba(91,61,196,.28),rgba(0,149,255,.18));border:1px solid rgba(161,111,255,.45);color:#fff;border-radius:12px;font-weight:800;';
   if(footer) sidebar.insertBefore(link,footer); else sidebar.appendChild(link);
 }
 
-document.addEventListener('DOMContentLoaded',ensureMarketingCenterAccess);
+// El script se carga como módulo al final de panel.html. En ese punto el DOM ya puede
+// estar listo, por lo que no debemos depender únicamente de DOMContentLoaded.
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', ensureMarketingCenterAccess, { once:true });
+}else{
+  ensureMarketingCenterAccess();
+}
+
+// Segundo intento después de que el panel termine de pintar sus componentes dinámicos.
+window.setTimeout(ensureMarketingCenterAccess, 250);

@@ -1,0 +1,8 @@
+ALIADOS FANTASMA v2.8.1 — HOTFIX ACCESO CENTRO DE MARKETING
+
+1. No ejecutes SQL.
+2. Sube panel.js a la raíz del repositorio y reemplaza el actual.
+3. Haz Commit changes.
+4. Espera Cloudflare Pages.
+5. Abre /panel y presiona Ctrl + F5.
+6. Verás el botón 📣 Centro de Marketing encima de Vista previa.
