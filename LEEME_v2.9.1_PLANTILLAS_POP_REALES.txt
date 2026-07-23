@@ -1,0 +1,18 @@
+ALIADOS FANTASMA v2.9.1 — PLANTILLAS POP REALES
+
+No requiere SQL.
+
+Sube y reemplaza en la raíz de GitHub:
+- marketing.html
+- marketing.css
+- marketing.js
+
+Cambios:
+- Tarjeta de presentación con frente y reverso reales.
+- Etiqueta QR compacta y legible.
+- Display de mesa plegable con línea de doblez.
+- Cartel A4 y A5 con composición editorial.
+- Póster de escaparate con jerarquía visual propia.
+- Se eliminó el cartel genérico para mostrador que no aportaba valor.
+
+Después del despliegue de Cloudflare abre /marketing y presiona Ctrl + F5.
