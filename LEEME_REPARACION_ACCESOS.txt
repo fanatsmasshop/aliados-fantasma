@@ -1,0 +1,38 @@
+ALIADOS FANTASMA — REPARACIÓN DE ACCESOS
+
+CAUSA DETECTADA
+La actualización visual sustituyó login.html y registro.html por páginas demostrativas sin formularios. Los archivos funcionales login.js, registro.js, config.js y la conexión de Supabase permanecían correctos.
+
+ARCHIVOS INCLUIDOS
+- login.html
+- registro.html
+- auth-pages.css
+
+PASOS
+1. No ejecutes SQL.
+2. Sube los tres archivos a la raíz de GitHub.
+3. Reemplaza login.html y registro.html.
+4. Agrega auth-pages.css.
+5. Haz Commit changes.
+6. Espera Cloudflare Pages.
+7. Abre /login y /registro y presiona Ctrl + F5.
+
+PRUEBAS
+- Registro por tres pasos.
+- Validación de contraseña y confirmación.
+- Creación de usuario en Supabase.
+- Verificación por correo.
+- Inicio de sesión.
+- Redirección de administrador a dashboard.html.
+- Redirección de negocio a panel.html.
+- Recuperación de contraseña desde recuperar.html.
+
+NO SE MODIFICÓ
+- index.html
+- Supabase
+- paneles
+- directorio
+- perfiles
+- reportes
+- notificaciones
+- Centro de Marketing
