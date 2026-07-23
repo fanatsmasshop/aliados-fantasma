@@ -1,0 +1,24 @@
+ALIADOS FANTASMA v4.3 — SPRINT CRÍTICO
+
+ORDEN DE INSTALACIÓN
+1. Sube todos los archivos de este ZIP a GitHub/Cloudflare Pages, reemplazando los existentes.
+2. En Supabase > SQL Editor abre y ejecuta COMPLETO: 073_sprint_critico_gestion_negocios.sql
+3. Cierra sesión, vuelve a entrar como administrador y abre Negocios.
+
+FUNCIONES INCLUIDAS
+- Modos de gestión: Aliados, compartido y autoadministrado.
+- Porcentaje de perfil en el listado administrativo.
+- Botón Entrar como negocio con barra de aviso y regreso seguro.
+- Invitaciones con enlace de un solo flujo, vencimiento y validación del correo autenticado.
+- Roles: propietario, administrador del negocio y colaborador.
+- Cancelación y consulta de invitaciones.
+- Auditoría de accesos, invitaciones y cambios de gestión.
+- Campos opcionales conservados; el perfil público ya oculta/fallback de imágenes vacías.
+
+IMPORTANTE SOBRE EL CORREO
+Esta versión crea un enlace seguro para compartir por WhatsApp o correo. El envío automático de emails requiere una Supabase Edge Function o un proveedor de correo con secreto de servidor; no se incluyeron claves privadas en el frontend.
+
+PRUEBA RÁPIDA
+- Negocios > Accesos > escribe tu segundo correo > Crear invitación.
+- Copia el enlace, abre incógnito, inicia sesión con ese mismo correo y acepta.
+- Regresa al administrador y pulsa Entrar como negocio.

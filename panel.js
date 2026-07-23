@@ -10,6 +10,9 @@ let pre;
 let draft = { datos:{}, estado:'borrador', porcentaje:0 };
 let dirty = false;
 let publishedBusiness = null;
+let adminMode = false;
+let managedUserId = null;
+let managedBusinessId = null;
 
 const form = document.querySelector('#onboarding-form');
 const msg = document.querySelector('#global-message');
@@ -213,8 +216,8 @@ function renderProfileAccess(){
 
 async function loadPublishedBusiness(){
   publishedBusiness = null;
-  if(!draft.negocio_id) return;
-  const {data,error} = await supabase.from('negocios').select('id,slug,nombre,activo').eq('id',draft.negocio_id).maybeSingle();
+  if(!draft.negocio_id && !managedBusinessId) return;
+  const {data,error} = await supabase.from('negocios').select('id,slug,nombre,activo').eq('id',draft.negocio_id || managedBusinessId).maybeSingle();
   if(error){ console.error('No fue posible consultar el enlace público:', error); return; }
   publishedBusiness = data || null;
 }
@@ -305,12 +308,13 @@ function nextSaveStatus(requestedStatus){
 }
 
 async function save(requestedStatus){
+  if(adminMode && !managedUserId) throw new Error('Este negocio todavía no tiene propietario. Edítalo desde Negocios o crea una invitación antes de usar este panel.');
   const data = serialize();
   const percentage = calc(data);
   const status = nextSaveStatus(requestedStatus);
   document.querySelector('#save-state').textContent = 'Guardando…';
   const payload = {
-    usuario_id:user.id,
+    usuario_id:managedUserId || user.id,
     datos:data,
     estado:status,
     porcentaje:percentage,
@@ -334,7 +338,7 @@ async function uploadFile(file,kind){
   if(!file) return null;
   if(file.size > 10 * 1024 * 1024) throw new Error('La imagen supera 10 MB');
   const ext = (file.name.split('.').pop() || 'webp').toLowerCase();
-  const path = `${user.id}/${kind}-${Date.now()}.${ext}`;
+  const path = `${managedUserId || user.id}/${kind}-${Date.now()}.${ext}`;
   const {error} = await supabase.storage.from('negocios-media').upload(path,file,{upsert:true});
   if(error) throw error;
   return supabase.storage.from('negocios-media').getPublicUrl(path).data.publicUrl;
@@ -374,26 +378,46 @@ async function init(){
   const {data:{user:authenticatedUser}} = await supabase.auth.getUser();
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;
+  managedBusinessId = new URLSearchParams(location.search).get('admin_business');
 
-  const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
-  if(preError) throw preError;
-  pre = Array.isArray(preData) ? preData[0] : preData;
-  if(!pre){ location.replace('estado-cuenta.html'); return; }
+  if(managedBusinessId){
+    const {data:profile,error:profileError}=await supabase.from('perfiles').select('rol,activo').eq('id',authenticatedUser.id).maybeSingle();
+    if(profileError || profile?.rol!=='administrador' || profile?.activo!==true) throw new Error('No tienes permiso para entrar como negocio.');
+    const {data:context,error:contextError}=await supabase.rpc('admin_obtener_contexto_negocio',{p_negocio_id:managedBusinessId});
+    if(contextError) throw contextError;
+    adminMode=true;
+    managedUserId=context?.propietario_id || context?.borrador?.usuario_id || null;
+    const business=context?.negocio || {};
+    pre={nombre_negocio:business.nombre,categoria:'',whatsapp:business.whatsapp,municipio:business.municipio,colonia:business.colonia};
+    if(context?.borrador) draft=context.borrador;
+    else draft={datos:{nombre:business.nombre||'',descripcion_corta:business.descripcion_corta||'',descripcion:business.descripcion||'',logo_url:business.logo_url||'',portada_url:business.portada_url||'',whatsapp:business.whatsapp||'',telefono:business.telefono||'',direccion:business.direccion||'',colonia:business.colonia||'',municipio:business.municipio||'',maps:business.enlace_maps||'',galeria:[],promociones:[]},estado:'borrador',porcentaje:business.porcentaje_perfil||0,negocio_id:business.id};
+    installAdminModeBanner(business.nombre,Boolean(managedUserId));
+  }else{
+    managedUserId=authenticatedUser.id;
+    const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
+    if(preError) throw preError;
+    pre = Array.isArray(preData) ? preData[0] : preData;
+    if(!pre){ location.replace('estado-cuenta.html'); return; }
+    const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
+    if(error) throw error;
+    if(draftData) draft = draftData;
+    else draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]};
+  }
 
-  document.querySelector('#welcome-title').textContent = `Bienvenido, ${pre.nombre_negocio || 'tu negocio'} 👋`;
-  const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
-  if(error) throw error;
-  if(draftData) draft = draftData;
-  else draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]};
+  document.querySelector('#welcome-title').textContent = adminMode ? `Administrando ${pre.nombre_negocio || 'negocio'}` : `Bienvenido, ${pre.nombre_negocio || 'tu negocio'} 👋`;
 
   await loadPublishedBusiness();
   fill(draft.datos);
   updateProgress();
   renderNav();
   renderWorkflow();
-  await showRulesIfNeeded();
-  await renderAccountManagement();
-  await initNotificationCenter();
+  if(!adminMode){
+    await showRulesIfNeeded();
+    await renderAccountManagement();
+    await initNotificationCenter();
+  }else{
+    document.querySelector('#account-management')?.classList.add('hidden');
+  }
 }
 
 document.querySelector('#prev-step').onclick = () => go(currentStep - 1);
@@ -409,7 +433,7 @@ document.querySelector('#add-promotion').onclick = () => { addPromotion(); markD
 document.querySelector('#preview-button').onclick = previewProfile;
 document.querySelector('#copy-profile-link').onclick = copyOwnerProfileLink;
 document.querySelector('#open-owner-profile').onclick = openOwnerProfile;
-document.querySelector('#logout-button').onclick = async () => { await supabase.auth.signOut(); location.replace('login.html'); };
+document.querySelector('#logout-button').onclick = async () => { if(adminMode){location.href='negocios.html';return;} await supabase.auth.signOut(); location.replace('login.html'); };
 document.querySelector('#submit-review').onclick = async () => {
   try{
     const percentage = updateProgress();
@@ -465,7 +489,7 @@ async function showRulesIfNeeded(){
     card.querySelector('#tutorial-next')?.addEventListener('click',()=>{index++;render();});
     if(final){
       card.querySelector('#rules-accept').onchange=e=>card.querySelector('#rules-confirm').disabled=!e.target.checked;
-      card.querySelector('#rules-confirm').onclick=async()=>{const button=card.querySelector('#rules-confirm');button.disabled=true;button.textContent='Guardando…';const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});if(error){button.disabled=false;button.textContent='Comenzar';showMessage(error.message,'error');return;}modal.classList.add('hidden');showMessage('Tutorial completado. Bienvenido a Aliados Fantasma.');};
+      card.querySelector('#rules-confirm').onclick=async()=>{const button=card.querySelector('#rules-confirm');button.disabled=true;button.textContent='Guardando…';const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:managedUserId || user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});if(error){button.disabled=false;button.textContent='Comenzar';showMessage(error.message,'error');return;}modal.classList.add('hidden');showMessage('Tutorial completado. Bienvenido a Aliados Fantasma.');};
     }
   };
   modal.classList.remove('hidden');render();
@@ -600,7 +624,7 @@ async function renderAccountManagement(){
       openActionModal({title:'Cancelar eliminación',description:'El negocio volverá a estar activo y visible. Se cancelará definitivamente la cuenta regresiva de eliminación.',confirmText:'Cancelar eliminación',onConfirm:async()=>{const {error}=await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});if(error)throw error;await loadPublishedBusiness();await renderAccountManagement();renderProfileAccess();showMessage('La eliminación fue cancelada y el negocio volvió a estar activo.');}});
     });
     document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{
-      openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
+      openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:managedUserId || user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
     });
 
   }catch(error){
@@ -831,3 +855,12 @@ if(document.readyState === 'loading'){
 
 // Segundo intento después de que el panel termine de pintar sus componentes dinámicos.
 window.setTimeout(ensureMarketingCenterAccess, 250);
+
+
+function installAdminModeBanner(name,canEdit){
+  const banner=document.createElement('div');
+  banner.className='admin-impersonation-banner';
+  banner.innerHTML=`<div><strong>Modo administrador</strong><span>Estás administrando ${esc(name||'este negocio')} como Administrador.${canEdit?'':' Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.'}</span></div><a class="button secondary small" href="negocios.html">Volver al panel administrativo</a>`;
+  document.body.prepend(banner);
+  if(!canEdit){['#save-button','#submit-review','#logo-file','#portada-file','#gallery-files','#add-promotion'].forEach(selector=>{const el=document.querySelector(selector);if(el)el.disabled=true;});}
+}
