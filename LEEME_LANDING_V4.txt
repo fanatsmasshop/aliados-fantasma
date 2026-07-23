@@ -1,0 +1,18 @@
+ALIADOS FANTASMA — LANDING OFICIAL V4
+
+ARCHIVOS A SUBIR Y REEMPLAZAR EN LA RAÍZ DE GITHUB:
+- index.html
+- lanzamiento.css
+- lanzamiento.js
+- aliados-fantasma-logo.webp
+- aliados-fantasma-icono.webp
+
+NO EJECUTAR SQL.
+
+DESPUÉS:
+1. Commit changes.
+2. Esperar el despliegue de Cloudflare Pages.
+3. Abrir la página principal.
+4. Presionar Ctrl + F5.
+
+La landing conserva el lanzamiento del 24 de agosto de 2026 a las 2:30 p. m. y explica qué es, por qué nació, cómo funciona, beneficios, público objetivo, gratuidad, roadmap y preguntas frecuentes.

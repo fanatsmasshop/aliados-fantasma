@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Aliados Fantasma conecta negocios locales mediante perfiles digitales profesionales. Lanzamiento oficial el 24 de agosto de 2026.">
+  <meta name="description" content="Aliados Fantasma conecta negocios locales con perfiles digitales, promociones, QR y herramientas para crecer. Lanzamiento oficial el 24 de agosto de 2026.">
   <meta name="theme-color" content="#06080d">
-  <title>Aliados Fantasma | Próximamente</title>
+  <meta property="og:title" content="Aliados Fantasma | La red local está por despertar">
+  <meta property="og:description" content="Perfiles digitales, directorio, promociones y recursos para impulsar negocios locales.">
+  <title>Aliados Fantasma | Lanzamiento 2026</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
   <link rel="preload" href="aliados-fantasma-logo.webp" as="image">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260723-premium">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260723-v4">
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -18,9 +20,13 @@
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Aliados Fantasma, inicio">
       <img src="aliados-fantasma-icono.webp" alt="">
-      <span><strong>Aliados Fantasma</strong><small>Directorio local</small></span>
+      <span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos</small></span>
     </a>
-    <nav aria-label="Accesos principales">
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">Menú</button>
+    <nav id="main-nav" aria-label="Navegación principal">
+      <a href="#que-es" class="link">Qué es</a>
+      <a href="#como-funciona" class="link">Cómo funciona</a>
+      <a href="#beneficios" class="link">Beneficios</a>
       <a href="login.html" class="link">Iniciar sesión</a>
       <a href="registro.html" class="button button-small">Registrar negocio</a>
     </nav>
@@ -28,31 +34,27 @@
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-copy">
-        <span class="launch-badge"><i></i> La red local está por despertar</span>
+      <div class="hero-copy reveal">
+        <div class="badge-row">
+          <span class="launch-badge"><i></i> Lanzamiento 2026</span>
+          <span class="launch-badge soft">Registro gratuito por lanzamiento</span>
+        </div>
         <img class="main-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
         <p class="eyebrow">ECATEPEC · ESTADO DE MÉXICO</p>
-        <h1>Conectamos negocios.<br><span>Crecemos juntos.</span></h1>
-        <p class="lead">Una nueva plataforma para descubrir comercios locales, conocer sus promociones, encontrarlos fácilmente y contactarles desde un perfil digital profesional.</p>
-
+        <h1>La red de negocios locales <span>está por despertar.</span></h1>
+        <p class="lead">Una plataforma creada para que los comercios locales tengan presencia digital, sean más fáciles de descubrir y cuenten con herramientas reales para atraer, informar y conectar con nuevos clientes.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a>
-          <a class="button button-secondary" href="login.html">Ya tengo una cuenta</a>
+          <a class="button button-secondary" href="#que-es">Conocer el proyecto</a>
         </div>
-
-        <div class="launch-note">
-          <span>LANZAMIENTO OFICIAL</span>
-          <strong>24 de agosto de 2026 · 2:30 p. m.</strong>
-          <small>Por lanzamiento, el registro será gratuito.</small>
+        <div class="trust-row" aria-label="Características principales">
+          <span>✓ Perfil digital</span><span>✓ Directorio local</span><span>✓ QR personalizado</span><span>✓ Sin costo por lanzamiento</span>
         </div>
       </div>
 
-      <aside class="countdown-card" aria-label="Cuenta regresiva para el lanzamiento">
-        <div class="countdown-top">
-          <span class="live-dot"></span>
-          <small>CUENTA REGRESIVA</small>
-        </div>
-        <h2>Estamos preparando algo grande para los negocios locales.</h2>
+      <aside class="countdown-card reveal" aria-label="Cuenta regresiva para el lanzamiento">
+        <div class="countdown-top"><span class="live-dot"></span><small>LANZAMIENTO OFICIAL</small></div>
+        <h2>24 de agosto de 2026<br><span>2:30 p. m.</span></h2>
         <div class="countdown" id="countdown">
           <div><strong id="days">00</strong><span>Días</span></div>
           <div><strong id="hours">00</strong><span>Horas</span></div>
@@ -60,39 +62,130 @@
           <div><strong id="seconds">00</strong><span>Segundos</span></div>
         </div>
         <div class="progress-shell" aria-hidden="true"><span id="launch-progress"></span></div>
-        <p>Mientras llega el lanzamiento, los negocios aprobados pueden continuar configurando su perfil privado.</p>
+        <p>Los negocios registrados pueden completar su perfil y prepararlo antes de que el directorio se abra al público.</p>
         <a href="login.html" class="panel-link">Entrar al panel privado <span>↗</span></a>
       </aside>
     </section>
 
-    <section class="value-strip" aria-label="Beneficios principales">
-      <article><span>01</span><strong>Perfil digital</strong><p>Información, horarios, redes y contacto en un solo lugar.</p></article>
-      <article><span>02</span><strong>Promociones</strong><p>Ofertas y novedades visibles para nuevos clientes.</p></article>
-      <article><span>03</span><strong>Ubicación y WhatsApp</strong><p>Menos pasos para encontrarte y contactarte.</p></article>
-      <article><span>04</span><strong>Identidad propia</strong><p>Cada negocio conserva su estilo, marca y personalidad.</p></article>
+    <section class="signal-strip" aria-label="Resumen del proyecto">
+      <article><strong>Perfiles profesionales</strong><span>Información clara y actualizada</span></article>
+      <article><strong>Descubrimiento local</strong><span>Negocios reunidos por zona y categoría</span></article>
+      <article><strong>Contacto directo</strong><span>WhatsApp, ubicación y redes en pocos pasos</span></article>
+      <article><strong>Comunidad</strong><span>Una red hecha por y para negocios locales</span></article>
     </section>
 
-    <section class="about">
-      <div>
-        <p class="eyebrow">UNA RED CREADA DESDE LA COMUNIDAD</p>
-        <h2>Más que un directorio: una nueva forma de impulsar lo local.</h2>
+    <section class="section split" id="que-es">
+      <div class="section-heading reveal">
+        <p class="eyebrow">QUÉ ES</p>
+        <h2>Mucho más que una lista de negocios.</h2>
       </div>
-      <p>Aliados Fantasma reúne negocios de la zona en una experiencia clara, moderna y fácil de compartir. Cada perfil es revisado antes de publicarse para mantener información útil y confiable.</p>
+      <div class="body-copy reveal">
+        <p>Aliados Fantasma es una plataforma digital que reúne negocios locales en una sola red. Cada comercio obtiene un perfil propio para mostrar quién es, qué ofrece, dónde se encuentra, cuándo abre y cómo pueden contactarlo.</p>
+        <p>No buscamos sustituir la identidad de cada negocio. La plataforma conserva su nombre, logo, estilo, información y personalidad, mientras le brinda una estructura profesional para presentarse ante nuevos clientes.</p>
+      </div>
     </section>
 
-    <section class="final-card">
+    <section class="problem-section section" id="por-que">
+      <div class="section-heading centered reveal">
+        <p class="eyebrow">POR QUÉ NACIÓ</p>
+        <h2>Porque muchos negocios valiosos siguen siendo difíciles de encontrar.</h2>
+        <p>Aliados Fantasma nace de problemas cotidianos que afectan al comercio local.</p>
+      </div>
+      <div class="problem-grid">
+        <article class="reveal"><span>01</span><h3>Información dispersa</h3><p>Horarios, teléfono, ubicación y promociones suelen estar repartidos entre varias redes.</p></article>
+        <article class="reveal"><span>02</span><h3>Poca visibilidad</h3><p>Muchos comercios dependen únicamente de recomendaciones o publicaciones aisladas.</p></article>
+        <article class="reveal"><span>03</span><h3>Falta de herramientas</h3><p>No todos cuentan con página, código QR o recursos digitales fáciles de compartir.</p></article>
+        <article class="reveal"><span>04</span><h3>Trabajo en solitario</h3><p>Los negocios pueden crecer más cuando forman parte de una comunidad conectada.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="como-funciona">
+      <div class="section-heading centered reveal">
+        <p class="eyebrow">CÓMO FUNCIONA</p>
+        <h2>Del registro a tu perfil público, paso a paso.</h2>
+      </div>
+      <div class="steps">
+        <article class="reveal"><b>1</b><div><h3>Registra tu negocio</h3><p>Crea tu cuenta y proporciona los datos básicos del comercio.</p></div></article>
+        <article class="reveal"><b>2</b><div><h3>Completa tu perfil</h3><p>Agrega logo, descripción, horarios, ubicación, redes, galería y promociones.</p></div></article>
+        <article class="reveal"><b>3</b><div><h3>Revisión administrativa</h3><p>Validamos la información antes de publicarla para mantener perfiles confiables.</p></div></article>
+        <article class="reveal"><b>4</b><div><h3>Publicación</h3><p>Tu negocio aparece en el directorio y recibe un enlace y código QR propios.</p></div></article>
+        <article class="reveal"><b>5</b><div><h3>Actualiza y crece</h3><p>Administra tu información, promociones y recursos desde tu panel privado.</p></div></article>
+      </div>
+    </section>
+
+    <section class="section benefits-section" id="beneficios">
+      <div class="section-heading reveal">
+        <p class="eyebrow">QUÉ RECIBE CADA NEGOCIO</p>
+        <h2>Una presencia digital completa, lista para compartir.</h2>
+      </div>
+      <div class="benefit-grid">
+        <article class="feature feature-large reveal"><span>Perfil público</span><h3>Tu negocio en un solo enlace.</h3><p>Nombre, descripción, categoría, horarios, ubicación, WhatsApp, redes, galería, promociones y más.</p></article>
+        <article class="feature reveal"><span>Directorio</span><h3>Más fácil de descubrir</h3><p>Búsqueda por categoría, municipio y características del negocio.</p></article>
+        <article class="feature reveal"><span>Código QR</span><h3>Conecta lo físico con lo digital</h3><p>Comparte tu perfil desde mostradores, carteles, redes o materiales impresos.</p></article>
+        <article class="feature reveal"><span>Centro de Marketing</span><h3>Recursos para comunicar mejor</h3><p>Herramientas para crear textos, materiales y recursos personalizados.</p></article>
+        <article class="feature reveal"><span>Promociones</span><h3>Destaca tus novedades</h3><p>Publica ofertas, lanzamientos o beneficios para atraer visitas.</p></article>
+        <article class="feature reveal"><span>Panel privado</span><h3>Control desde tu cuenta</h3><p>Edita información, consulta tu estado y administra tu presencia digital.</p></article>
+      </div>
+    </section>
+
+    <section class="section audience-section" id="para-quien">
+      <div class="section-heading centered reveal">
+        <p class="eyebrow">PARA QUIÉN ES</p>
+        <h2>Para negocios locales que quieren ser encontrados y crecer.</h2>
+      </div>
+      <div class="chips reveal" aria-label="Tipos de negocios">
+        <span>Restaurantes</span><span>Cafeterías</span><span>Barberías</span><span>Estéticas</span><span>Boutiques</span><span>Talleres</span><span>Veterinarias</span><span>Papelerías</span><span>Servicios</span><span>Eventos</span><span>Emprendimientos</span><span>Tiendas especializadas</span>
+      </div>
+    </section>
+
+    <section class="section launch-offer">
+      <div class="offer-card reveal">
+        <div><p class="eyebrow">ACCESO DE LANZAMIENTO</p><h2>Registrar tu negocio será completamente gratuito.</h2><p>Durante esta primera etapa podrás crear tu cuenta, preparar tu perfil y formar parte de la red sin costo. Más adelante podrán existir planes o funciones adicionales, pero los detalles se comunicarán con claridad.</p></div>
+        <a class="button button-primary" href="registro.html">Reservar mi lugar <span>→</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="section-heading centered reveal"><p class="eyebrow">LO QUE ESTAMOS CONSTRUYENDO</p><h2>Una plataforma preparada para seguir creciendo.</h2></div>
+      <div class="roadmap">
+        <article class="done reveal"><span>Completado</span><h3>Registro y autenticación</h3></article>
+        <article class="done reveal"><span>Completado</span><h3>Panel de cada negocio</h3></article>
+        <article class="done reveal"><span>Completado</span><h3>Perfiles y directorio</h3></article>
+        <article class="current reveal"><span>En desarrollo</span><h3>Marketing y recursos digitales</h3></article>
+        <article class="future reveal"><span>Próximamente</span><h3>Estadísticas y analítica</h3></article>
+        <article class="future reveal"><span>Próximamente</span><h3>Mapa y nuevas herramientas</h3></article>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="section-heading centered reveal"><p class="eyebrow">PREGUNTAS FRECUENTES</p><h2>Lo esencial antes de registrarte.</h2></div>
+      <div class="faq-list">
+        <details class="reveal"><summary>¿Aliados Fantasma tiene costo?</summary><p>Por lanzamiento, el registro y acceso inicial serán gratuitos. Cualquier cambio futuro se informará previamente.</p></details>
+        <details class="reveal"><summary>¿Quién puede registrar un negocio?</summary><p>Propietarios, responsables o personas autorizadas para administrar la información del comercio.</p></details>
+        <details class="reveal"><summary>¿Mi negocio se publica inmediatamente?</summary><p>No. Primero completas tu perfil y después pasa por una revisión administrativa antes de hacerse público.</p></details>
+        <details class="reveal"><summary>¿Puedo modificar mi información?</summary><p>Sí. Desde tu panel podrás actualizar datos, horarios, imágenes, promociones y medios de contacto.</p></details>
+        <details class="reveal"><summary>¿Puedo cerrar temporalmente o eliminar mi negocio?</summary><p>Sí. Puedes marcarlo como cerrado temporalmente o solicitar su eliminación. La eliminación definitiva cuenta con un periodo de recuperación.</p></details>
+        <details class="reveal"><summary>¿Qué ocurre si un negocio incumple las reglas?</summary><p>Los reportes se revisan antes de tomar medidas. Si corresponde una suspensión, el negocio conoce el motivo y puede presentar una apelación.</p></details>
+      </div>
+    </section>
+
+    <section class="closing-section reveal">
       <img src="aliados-fantasma-icono.webp" alt="">
-      <div><span>¿Tienes un negocio local?</span><h2>Reserva tu lugar antes del lanzamiento.</h2></div>
-      <a href="registro.html" class="button button-primary">Comenzar registro <span>→</span></a>
+      <p class="eyebrow">EL 24 DE AGOSTO COMIENZA UNA NUEVA ETAPA</p>
+      <h2>Tu negocio puede formar parte desde el inicio.</h2>
+      <p>Prepara hoy tu perfil y reserva tu lugar en la red local.</p>
+      <div class="mini-countdown" aria-label="Resumen de cuenta regresiva"><strong><span id="days-bottom">00</span> días</strong><i></i><strong><span id="hours-bottom">00</span> horas</strong></div>
+      <div class="hero-actions"><a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a><a class="button button-secondary" href="login.html">Entrar a mi cuenta</a></div>
     </section>
   </main>
 
   <footer>
-    <span>© 2026 Aliados Fantasma</span>
-    <div><a href="terminos.html">Términos</a><a href="privacidad.html">Privacidad</a><a href="ayuda.html">Ayuda</a></div>
+    <div class="footer-brand"><img src="aliados-fantasma-icono.webp" alt=""><span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos.</small></span></div>
+    <div class="footer-links"><a href="terminos.html">Términos</a><a href="privacidad.html">Privacidad</a><a href="ayuda.html">Ayuda</a><a href="registro.html">Registro</a></div>
+    <span class="copyright">© 2026 Aliados Fantasma</span>
   </footer>
 
   <noscript><div class="noscript">Activa JavaScript para ver la cuenta regresiva.</div></noscript>
-  <script src="lanzamiento.js?v=20260723-premium"></script>
+  <script src="lanzamiento.js?v=20260723-v4"></script>
 </body>
 </html>
