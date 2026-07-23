@@ -32,8 +32,18 @@ async function load() {
 
     const items = (recent || []).slice(0, 8);
     document.querySelector('#requests-list').innerHTML = items.length
-      ? items.map(item => `<a class="detail-card" href="pre-registros.html"><strong>${esc(item.nombre_negocio)}</strong><small class="muted">${esc(item.nombre_responsable)} · ${esc(item.estado)} · ${fmt(item.created_at)}</small></a>`).join('')
-      : '<div class="empty-state">Todavía no hay pre-registros</div>';
+      ? items.map(item => {
+          const business = item.nombre_negocio || 'Negocio sin nombre';
+          const owner = item.nombre_responsable || 'Responsable no indicado';
+          const status = String(item.estado || 'pendiente').toLowerCase();
+          const initial = business.trim().charAt(0).toUpperCase() || 'N';
+          return `<a class="recent-request" href="pre-registros.html">
+            <span class="recent-avatar">${esc(initial)}</span>
+            <span class="recent-info"><strong>${esc(business)}</strong><small>${esc(owner)}</small></span>
+            <span class="recent-meta"><span class="recent-status ${esc(status)}">${esc(status.replaceAll('_', ' '))}</span><span class="recent-date">${fmt(item.created_at)}</span></span>
+          </a>`;
+        }).join('')
+      : '<div class="dashboard-empty"><span>✉</span><h3>Sin pre-registros todavía</h3><p>Las nuevas solicitudes aparecerán aquí.</p></div>';
   } catch (error) {
     console.error(error);
     warning.textContent = `No se pudieron consultar los datos: ${error.message || 'error desconocido'}. Ejecuta 050_pre_registro_oficial.sql.`;

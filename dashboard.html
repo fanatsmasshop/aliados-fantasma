@@ -7,9 +7,11 @@
   <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
   <link rel="stylesheet" href="app.css?v=20260718-120">
   <link rel="stylesheet" href="logos.css?v=20260717-2">
-<link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head>
+<link rel="stylesheet" href="sistema-visual.css?v=20260717-1">
+  <link rel="stylesheet" href="admin-dashboard.css?v=20260723-1000">
+</head>
 <body>
-  <div class="demo-banner">⚡ ALIADOS FANTASMA · PRE-REGISTRO <small>— Centro de revisión administrativa</small></div>
+  <div class="demo-banner">⚡ ALIADOS FANTASMA <small>— Centro de administración y lanzamiento</small></div>
   <div class="app-layout">
     <aside id="sidebar" class="sidebar">
       <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Administración central</small></span></a>
@@ -24,32 +26,84 @@
     </aside>
     <div class="app-main">
       <header class="topbar"><button id="menu-button" class="icon-button menu-button" type="button">☰</button><div><p class="eyebrow">PANEL ADMINISTRATIVO</p><h1>Dashboard</h1></div><div class="user-chip"><span id="user-initial" class="user-avatar">A</span><span><strong id="user-name">Administrador</strong><small id="user-email">Cargando…</small></span></div></header>
-      <main class="content">
-<section class="page-head"><div><p class="eyebrow">FASE DE PRE-REGISTRO</p><h2>Centro de revisión</h2><p class="muted">Seguimiento real de personas y negocios interesados.</p></div><button id="refresh-button" class="button secondary" type="button">Actualizar</button></section>
-<div id="warning" class="notice danger hidden"></div>
-<section class="panel" style="margin-bottom:22px">
-  <div class="page-head" style="margin-bottom:14px"><div><p class="eyebrow">CONTROL DE LANZAMIENTO</p><h2>Disponibilidad pública</h2><p id="launch-control-description" class="muted">Consultando configuración…</p></div><span id="launch-control-badge" class="status-pill pending">Cargando</span></div>
-  <div class="form-grid" style="align-items:end">
-    <label><span>Modo global</span><select id="launch-mode"><option value="automatico">Automático · abrir en la fecha programada</option><option value="cerrado">Mantener cerrado manualmente</option><option value="abierto">Abrir manualmente ahora</option></select></label>
-    <button id="save-launch-mode" class="button primary" type="button">Guardar modo</button>
-  </div>
-  <p class="muted" style="margin-top:12px">Fecha automática: 24 de agosto de 2026, 2:30 p. m., hora de Ciudad de México. El modo cerrado funciona como freno de emergencia; el modo abierto permite una apertura anticipada.</p>
-  <p id="launch-control-message" class="form-message" aria-live="polite"></p>
-</section>
+      <main class="content admin-dashboard-content">
+  <section class="admin-hero">
+    <div>
+      <p class="eyebrow">CENTRO DE CONTROL</p>
+      <h2>Resumen administrativo</h2>
+      <p class="muted">Supervisa el lanzamiento, las solicitudes y la actividad reciente de Aliados Fantasma.</p>
+    </div>
+    <button id="refresh-button" class="button secondary" type="button">↻ Actualizar datos</button>
+  </section>
 
-<section class="stats-grid">
-  <article class="stat-card"><div class="stat-icon">✉</div><div><p>Pendientes</p><strong id="pre-count">—</strong><small><a href="pre-registros.html">Revisar ahora</a></small></div></article>
-  <article class="stat-card"><div class="stat-icon">☎</div><div><p>Contactados</p><strong id="contacted-count">—</strong><small>En seguimiento</small></div></article>
-  <article class="stat-card"><div class="stat-icon">✓</div><div><p>Aprobados</p><strong id="approved-count">—</strong><small>Para la siguiente etapa</small></div></article>
-  <article class="stat-card"><div class="stat-icon">◇</div><div><p>Total</p><strong id="total-count">—</strong><small>Pre-registros recibidos</small></div></article>
-</section>
-<section class="dashboard-grid">
-  <article class="panel" style="grid-column:1/-1"><h2>Pre-registros recientes</h2><div id="requests-list" class="empty-state">Cargando…</div></article>
-</section>
+  <div id="warning" class="notice danger hidden"></div>
+
+  <section class="launch-card">
+    <div class="launch-card__head">
+      <div>
+        <p class="eyebrow">CONTROL DE LANZAMIENTO</p>
+        <h2>Disponibilidad pública</h2>
+        <p id="launch-control-description" class="muted">Consultando configuración…</p>
+      </div>
+      <span id="launch-control-badge" class="status-pill pending">Cargando</span>
+    </div>
+    <div class="launch-card__body">
+      <label class="launch-field">
+        <span>Modo global</span>
+        <select id="launch-mode">
+          <option value="automatico">Automático · abrir en la fecha programada</option>
+          <option value="cerrado">Mantener cerrado manualmente</option>
+          <option value="abierto">Abrir manualmente ahora</option>
+        </select>
+      </label>
+      <button id="save-launch-mode" class="button primary launch-save" type="button">Guardar modo</button>
+    </div>
+    <div class="launch-note">
+      <span>🗓️</span>
+      <p><strong>Fecha automática:</strong> 24 de agosto de 2026, 2:30 p. m., hora de Ciudad de México. El modo cerrado funciona como freno de emergencia y el abierto permite una apertura anticipada.</p>
+    </div>
+    <p id="launch-control-message" class="form-message" aria-live="polite"></p>
+  </section>
+
+  <section class="stats-grid admin-stats">
+    <a class="stat-card admin-stat" href="pre-registros.html?estado=pendiente">
+      <div class="stat-icon">✉</div><div><p>Pendientes</p><strong id="pre-count">—</strong><small>Requieren revisión</small></div>
+    </a>
+    <a class="stat-card admin-stat" href="pre-registros.html?estado=contactado">
+      <div class="stat-icon">☎</div><div><p>Contactados</p><strong id="contacted-count">—</strong><small>En seguimiento</small></div>
+    </a>
+    <a class="stat-card admin-stat" href="pre-registros.html?estado=aprobado">
+      <div class="stat-icon">✓</div><div><p>Aprobados</p><strong id="approved-count">—</strong><small>Listos para avanzar</small></div>
+    </a>
+    <a class="stat-card admin-stat" href="pre-registros.html">
+      <div class="stat-icon">◇</div><div><p>Total</p><strong id="total-count">—</strong><small>Pre-registros recibidos</small></div>
+    </a>
+  </section>
+
+  <section class="admin-dashboard-grid">
+    <article class="panel recent-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">ACTIVIDAD RECIENTE</p><h2>Pre-registros recientes</h2></div>
+        <a class="text-link" href="pre-registros.html">Ver todos →</a>
+      </div>
+      <div id="requests-list" class="recent-list"><div class="dashboard-loading"><span class="spinner"></span><p>Consultando solicitudes…</p></div></div>
+    </article>
+
+    <aside class="quick-panel">
+      <p class="eyebrow">ACCESOS RÁPIDOS</p>
+      <h2>Gestión diaria</h2>
+      <nav class="quick-actions">
+        <a href="pre-registros.html"><span>✉</span><div><strong>Revisar pre-registros</strong><small>Contactar, aprobar o rechazar</small></div><b>→</b></a>
+        <a href="negocios.html"><span>◇</span><div><strong>Administrar negocios</strong><small>Estados, sanciones y apelaciones</small></div><b>→</b></a>
+        <a href="solicitudes.html"><span>✓</span><div><strong>Solicitudes de cambios</strong><small>Comparar y aprobar información</small></div><b>→</b></a>
+        <a href="promociones.html"><span>★</span><div><strong>Revisar promociones</strong><small>Publicaciones pendientes</small></div><b>→</b></a>
+      </nav>
+    </aside>
+  </section>
 </main>
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="dashboard.js?v=20260723-900"></script>
+  <script type="module" src="dashboard.js?v=20260723-1000"></script>
 </body>
 </html>

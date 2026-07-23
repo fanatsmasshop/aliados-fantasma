@@ -1,0 +1,20 @@
+ALIADOS FANTASMA v4.2 — PANEL ADMINISTRATIVO
+
+No ejecutar SQL.
+
+Subir a la raíz de GitHub y reemplazar:
+- dashboard.html
+- dashboard.js
+
+Agregar:
+- admin-dashboard.css
+
+Después hacer Commit changes, esperar Cloudflare y abrir /dashboard con Ctrl + F5.
+
+Cambios:
+- Corrige pre-registros recientes encimados.
+- Añade tarjetas de solicitud en bloque y estados claros.
+- Reorganiza control de lanzamiento.
+- Mejora métricas y accesos rápidos.
+- Responsive en escritorio, tablet y celular.
+- Conserva autenticación, Supabase, RPC y control de lanzamiento.
