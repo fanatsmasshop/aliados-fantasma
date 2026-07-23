@@ -1,0 +1,8 @@
+ALIADOS FANTASMA v2.7.1 — CORRECCIÓN SQL NOTIFICACIONES
+
+1. En Supabase abre SQL Editor > New query.
+2. Abre 072_centro_notificaciones_CORREGIDO.sql.
+3. Copia todo y ejecuta Run.
+4. Debe aparecer Success. No importa que el intento anterior haya fallado: estaba dentro de BEGIN/COMMIT y no se aplicó.
+5. Después sube panel.js y onboarding.css a la raíz de GitHub y reemplaza los existentes.
+6. Haz Commit changes, espera Cloudflare y usa Ctrl + F5 en /panel.

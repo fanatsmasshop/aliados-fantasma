@@ -257,14 +257,10 @@ function renderWorkflow(){
     launchWait.classList.add('hidden');
   }
 
+  // Los mensajes administrativos ahora viven en el Centro de Notificaciones.
+  // Se oculta el bloque fijo para que un aviso ya leído no ocupe permanentemente el inicio.
   const feedback = document.querySelector('#admin-feedback');
-  if(draft.comentario_administrador){
-    feedback.classList.remove('hidden');
-    feedback.className = `notice ${['aprobado','publicado'].includes(draft.estado) ? 'success' : draft.estado === 'en_revision' ? 'warning' : 'danger'}`;
-    feedback.innerHTML = `<strong>Mensaje del equipo de Aliados Fantasma</strong><p>${esc(draft.comentario_administrador)}</p>${draft.revisado_at ? `<small>Actualizado: ${esc(formatDate(draft.revisado_at))}</small>` : ''}`;
-  }else{
-    feedback.classList.add('hidden');
-  }
+  if(feedback) feedback.classList.add('hidden');
 
   document.querySelector('#account-status').textContent = meta.badge.toUpperCase();
   document.querySelector('#header-help').textContent = draft.estado === 'en_revision' ? 'Tu envío quedó registrado. Aquí aparecerá la respuesta del equipo.' : draft.estado === 'aprobado' ? 'Tu perfil ya fue aprobado y está reservado para el lanzamiento.' : draft.estado === 'publicado' ? 'Administra la información de tu negocio y prepara futuras actualizaciones.' : 'Completa tu información. Puedes guardar y continuar después.';
@@ -397,6 +393,7 @@ async function init(){
   renderWorkflow();
   await showRulesIfNeeded();
   await renderAccountManagement();
+  await initNotificationCenter();
 }
 
 document.querySelector('#prev-step').onclick = () => go(currentStep - 1);
@@ -605,7 +602,7 @@ async function renderAccountManagement(){
     document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{
       openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
     });
-    await renderOwnerNotifications(section);
+
   }catch(error){
     console.error('No fue posible cargar el estado del negocio:',error);
     section.classList.remove('hidden');
@@ -613,4 +610,199 @@ async function renderAccountManagement(){
     document.querySelector('#account-actions').innerHTML='';
     showMessage(`No se pudo consultar el estado del negocio. ${error.message}`,'error',0);
   }
+}
+
+
+// ============================================================
+// CENTRO DE NOTIFICACIONES DEL NEGOCIO
+// ============================================================
+let notificationRows = [];
+let notificationFilter = 'all';
+
+function notificationDate(value){
+  const date = new Date(value);
+  if(Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('es-MX',{dateStyle:'medium',timeStyle:'short'}).format(date);
+}
+
+function notificationIcon(type=''){
+  if(type.includes('suspension')) return '🛡️';
+  if(type.includes('apelacion')) return '⚖️';
+  if(type.includes('reporte')) return '🚩';
+  if(type.includes('perfil') || type.includes('aprob')) return '✅';
+  if(type.includes('terminos') || type.includes('legal')) return '📜';
+  return '📢';
+}
+
+function ensureNotificationCenter(){
+  if(document.querySelector('#notification-center-runtime')) return;
+  const root=document.createElement('div');
+  root.id='notification-center-runtime';
+  root.innerHTML=`
+    <button type="button" class="notification-bell" id="notification-bell" aria-label="Abrir notificaciones" aria-expanded="false">
+      <span aria-hidden="true">🔔</span><span class="notification-badge hidden" id="notification-badge">0</span>
+    </button>
+    <div class="notification-backdrop hidden" id="notification-backdrop"></div>
+    <aside class="notification-drawer" id="notification-drawer" aria-hidden="true" aria-label="Centro de notificaciones">
+      <header class="notification-drawer-head">
+        <div><p class="eyebrow">CENTRO DE AVISOS</p><h2>Notificaciones</h2></div>
+        <button type="button" class="notification-close" id="notification-close" aria-label="Cerrar">×</button>
+      </header>
+      <div class="notification-toolbar">
+        <div class="notification-tabs">
+          <button type="button" data-notification-filter="all" class="active">Todas</button>
+          <button type="button" data-notification-filter="unread">Sin leer</button>
+          <button type="button" data-notification-filter="important">Importantes</button>
+        </div>
+        <div class="notification-bulk-actions">
+          <button type="button" id="notifications-read-all">Marcar todas como leídas</button>
+          <button type="button" id="notifications-delete-read">Eliminar leídas</button>
+        </div>
+      </div>
+      <div class="notification-list" id="notification-list"></div>
+    </aside>`;
+  document.body.appendChild(root);
+  const bell=root.querySelector('#notification-bell');
+  const drawer=root.querySelector('#notification-drawer');
+  const backdrop=root.querySelector('#notification-backdrop');
+  const setOpen=open=>{
+    drawer.classList.toggle('open',open);
+    drawer.setAttribute('aria-hidden',String(!open));
+    bell.setAttribute('aria-expanded',String(open));
+    backdrop.classList.toggle('hidden',!open);
+    document.body.classList.toggle('notifications-open',open);
+  };
+  bell.onclick=()=>setOpen(true);
+  root.querySelector('#notification-close').onclick=()=>setOpen(false);
+  backdrop.onclick=()=>setOpen(false);
+  root.querySelectorAll('[data-notification-filter]').forEach(button=>button.onclick=()=>{
+    notificationFilter=button.dataset.notificationFilter;
+    root.querySelectorAll('[data-notification-filter]').forEach(item=>item.classList.toggle('active',item===button));
+    renderNotificationList();
+  });
+  root.querySelector('#notifications-read-all').onclick=markAllNotificationsRead;
+  root.querySelector('#notifications-delete-read').onclick=deleteReadNotifications;
+}
+
+async function fetchNotifications(){
+  const {data,error}=await supabase.from('notificaciones_plataforma')
+    .select('id,titulo,mensaje,tipo,leida,leida_at,importante,obligatoria,created_at')
+    .eq('usuario_id',user.id)
+    .order('created_at',{ascending:false})
+    .limit(100);
+  if(error) throw error;
+  notificationRows=data||[];
+  renderNotificationList();
+  updateNotificationBadge();
+  renderUnreadNotificationSpotlight();
+}
+
+function updateNotificationBadge(){
+  const badge=document.querySelector('#notification-badge');
+  if(!badge) return;
+  const count=notificationRows.filter(item=>!item.leida).length;
+  badge.textContent=count>99?'99+':String(count);
+  badge.classList.toggle('hidden',count===0);
+}
+
+function filteredNotifications(){
+  if(notificationFilter==='unread') return notificationRows.filter(item=>!item.leida);
+  if(notificationFilter==='important') return notificationRows.filter(item=>item.importante || item.obligatoria);
+  return notificationRows;
+}
+
+function renderNotificationList(){
+  const list=document.querySelector('#notification-list');
+  if(!list) return;
+  const rows=filteredNotifications();
+  if(!rows.length){
+    list.innerHTML='<div class="notification-empty"><span>🔔</span><strong>No hay notificaciones aquí</strong><p>Los avisos de tu cuenta aparecerán en esta bandeja.</p></div>';
+    return;
+  }
+  list.innerHTML=rows.map(item=>`<article class="notification-item ${item.leida?'read':'unread'} ${item.importante?'important':''}" data-notification-id="${item.id}">
+    <div class="notification-type-icon">${notificationIcon(item.tipo)}</div>
+    <div class="notification-copy">
+      <div class="notification-title-row"><strong>${esc(item.titulo)}</strong>${item.obligatoria?'<span class="notification-pin">Obligatoria</span>':item.importante?'<span class="notification-pin">Importante</span>':''}</div>
+      <p>${esc(item.mensaje)}</p><small>${notificationDate(item.created_at)}${item.leida_at?` · Leída ${notificationDate(item.leida_at)}`:''}</small>
+      <div class="notification-actions">
+        ${item.leida?'<button type="button" data-mark-unread>Marcar sin leer</button>':'<button type="button" data-mark-read>Marcar como leída</button>'}
+        <button type="button" data-toggle-important>${item.importante?'Quitar importante':'Marcar importante'}</button>
+        <button type="button" data-delete-notification class="danger" ${item.obligatoria&&!item.leida?'disabled title="Primero debes leer este aviso"':''}>Eliminar</button>
+      </div>
+    </div>
+  </article>`).join('');
+  list.querySelectorAll('[data-notification-id]').forEach(card=>{
+    const id=card.dataset.notificationId;
+    card.querySelector('[data-mark-read]')?.addEventListener('click',()=>setNotificationRead(id,true));
+    card.querySelector('[data-mark-unread]')?.addEventListener('click',()=>setNotificationRead(id,false));
+    card.querySelector('[data-toggle-important]')?.addEventListener('click',()=>toggleNotificationImportant(id));
+    card.querySelector('[data-delete-notification]')?.addEventListener('click',()=>deleteNotification(id));
+  });
+}
+
+async function setNotificationRead(id,read=true){
+  const patch={leida:read,leida_at:read?new Date().toISOString():null};
+  const {error}=await supabase.from('notificaciones_plataforma').update(patch).eq('id',id).eq('usuario_id',user.id);
+  if(error) return showMessage(error.message,'error');
+  const row=notificationRows.find(item=>item.id===id);
+  if(row) Object.assign(row,patch);
+  renderNotificationList();updateNotificationBadge();renderUnreadNotificationSpotlight();
+}
+
+async function toggleNotificationImportant(id){
+  const row=notificationRows.find(item=>item.id===id); if(!row)return;
+  const {error}=await supabase.from('notificaciones_plataforma').update({importante:!row.importante}).eq('id',id).eq('usuario_id',user.id);
+  if(error) return showMessage(error.message,'error');
+  row.importante=!row.importante;renderNotificationList();
+}
+
+async function deleteNotification(id){
+  const row=notificationRows.find(item=>item.id===id); if(!row)return;
+  if(row.obligatoria&&!row.leida){showMessage('Primero abre o marca como leído este aviso obligatorio.','warning');return;}
+  openActionModal({title:'Eliminar notificación',description:'Se eliminará de tu bandeja y no podrá recuperarse.',confirmText:'Eliminar',onConfirm:async()=>{
+    const {error}=await supabase.from('notificaciones_plataforma').delete().eq('id',id).eq('usuario_id',user.id);
+    if(error)throw error;
+    notificationRows=notificationRows.filter(item=>item.id!==id);renderNotificationList();updateNotificationBadge();renderUnreadNotificationSpotlight();
+  }});
+}
+
+async function markAllNotificationsRead(){
+  const ids=notificationRows.filter(item=>!item.leida).map(item=>item.id);
+  if(!ids.length)return showMessage('No tienes notificaciones pendientes.');
+  const now=new Date().toISOString();
+  const {error}=await supabase.from('notificaciones_plataforma').update({leida:true,leida_at:now}).in('id',ids).eq('usuario_id',user.id);
+  if(error)return showMessage(error.message,'error');
+  notificationRows.forEach(item=>{if(ids.includes(item.id)){item.leida=true;item.leida_at=now;}});
+  renderNotificationList();updateNotificationBadge();renderUnreadNotificationSpotlight();showMessage('Todas las notificaciones fueron marcadas como leídas.');
+}
+
+async function deleteReadNotifications(){
+  const deletable=notificationRows.filter(item=>item.leida).map(item=>item.id);
+  if(!deletable.length)return showMessage('No hay notificaciones leídas para eliminar.');
+  openActionModal({title:'Eliminar notificaciones leídas',description:`Se eliminarán ${deletable.length} notificaciones de tu bandeja.`,confirmText:'Eliminar leídas',onConfirm:async()=>{
+    const {error}=await supabase.from('notificaciones_plataforma').delete().in('id',deletable).eq('usuario_id',user.id);
+    if(error)throw error;
+    notificationRows=notificationRows.filter(item=>!deletable.includes(item.id));renderNotificationList();updateNotificationBadge();renderUnreadNotificationSpotlight();
+  }});
+}
+
+function renderUnreadNotificationSpotlight(){
+  let spotlight=document.querySelector('#notification-spotlight-runtime');
+  if(!spotlight){
+    spotlight=document.createElement('section');spotlight.id='notification-spotlight-runtime';spotlight.className='notification-spotlight hidden';
+    const target=document.querySelector('#admin-feedback') || document.querySelector('#workflow-card') || document.querySelector('main');
+    target?.parentNode?.insertBefore(spotlight,target);
+  }
+  const item=notificationRows.find(row=>!row.leida);
+  if(!item){spotlight.classList.add('hidden');spotlight.innerHTML='';return;}
+  spotlight.classList.remove('hidden');
+  spotlight.innerHTML=`<div class="notification-spotlight-icon">${notificationIcon(item.tipo)}</div><div><span>Nuevo aviso</span><strong>${esc(item.titulo)}</strong><p>${esc(item.mensaje)}</p></div><div class="notification-spotlight-actions"><button type="button" class="button secondary small" data-open-center>Ver notificaciones</button><button type="button" class="button primary small" data-read-spotlight>Entendido</button></div>`;
+  spotlight.querySelector('[data-open-center]').onclick=()=>document.querySelector('#notification-bell')?.click();
+  spotlight.querySelector('[data-read-spotlight]').onclick=()=>setNotificationRead(item.id,true);
+}
+
+async function initNotificationCenter(){
+  ensureNotificationCenter();
+  try{await fetchNotifications();}
+  catch(error){console.error('No fue posible cargar las notificaciones:',error);}
 }
