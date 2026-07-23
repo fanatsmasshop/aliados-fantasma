@@ -57,32 +57,94 @@ function roundRect(ctx,x,y,w,h,r){const rr=Math.min(r,w/2,h/2);ctx.beginPath();c
 function loadImage(url){return new Promise(resolve=>{if(!url)return resolve(null);const img=new Image();img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=url;});}
 
 async function renderCanvas(){
-  const canvas=$('#marketing-canvas'); const ctx=canvas.getContext('2d'); const format=$('#design-format').value;
-  const dims={square:[1080,1080],story:[1080,1920],landscape:[1600,900]}[format]; canvas.width=dims[0];canvas.height=dims[1];
-  const w=canvas.width,h=canvas.height; const style=$('#design-style').value;
-  const palette=style==='light'?{bg:'#f4f4f8',text:'#11131a,',muted:'#444b5c',card:'rgba(255,255,255,.86)'}:style==='dark'?{bg:'#090b11',text:'#ffffff',muted:'#c6cad5',card:'rgba(13,16,24,.82)'}:{bg:'#070a10',text:'#ffffff',muted:'#d0d5e0',card:'rgba(8,11,18,.75)'};
-  const gradient=ctx.createLinearGradient(0,0,w,h);gradient.addColorStop(0,style==='light'?'#e9e6ff':'#07111f');gradient.addColorStop(.5,style==='light'?'#fff':'#111021');gradient.addColorStop(1,style==='light'?'#f6e9f4':'#200c25');ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
+  const canvas=$('#marketing-canvas');
+  const ctx=canvas.getContext('2d');
+  const format=$('#design-format').value;
+  const dims={square:[1080,1080],story:[1080,1920],landscape:[1600,900]}[format];
+  canvas.width=dims[0];canvas.height=dims[1];
+  const w=canvas.width,h=canvas.height;
+  const style=$('#design-style').value;
+  const isLight=style==='light';
+  const palette=isLight
+    ?{text:'#11131a',muted:'#444b5c',card:'rgba(255,255,255,.9)',accent:'#7026a8'}
+    :{text:'#ffffff',muted:'#d4d7df',card:'rgba(8,11,18,.78)',accent:'#d68cff'};
+
+  const gradient=ctx.createLinearGradient(0,0,w,h);
+  gradient.addColorStop(0,isLight?'#e9e6ff':'#07111f');
+  gradient.addColorStop(.5,isLight?'#fff':'#111021');
+  gradient.addColorStop(1,isLight?'#f6e9f4':'#200c25');
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,w,h);
   if(style==='brand'){
     const glow=ctx.createRadialGradient(w*.12,h*.16,0,w*.12,h*.16,w*.65);glow.addColorStop(0,'rgba(0,71,255,.45)');glow.addColorStop(1,'rgba(0,71,255,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
     const glow2=ctx.createRadialGradient(w*.85,h*.75,0,w*.85,h*.75,w*.65);glow2.addColorStop(0,'rgba(255,45,154,.42)');glow2.addColorStop(1,'rgba(255,45,154,0)');ctx.fillStyle=glow2;ctx.fillRect(0,0,w,h);
   }
-  const logoUrl=state.data.logo_url||state.business?.logo_url; const coverUrl=state.data.portada_url; const [logo,cover]=await Promise.all([loadImage(logoUrl),loadImage(coverUrl)]);
-  if(cover){ctx.save();ctx.globalAlpha=.22;const scale=Math.max(w/cover.width,h/cover.height);ctx.drawImage(cover,(w-cover.width*scale)/2,(h-cover.height*scale)/2,cover.width*scale,cover.height*scale);ctx.restore();}
-  const pad=format==='story'?78:64; const top=format==='story'?120:65;
-  ctx.fillStyle=palette.card;roundRect(ctx,pad,top,w-pad*2,h-top-pad,format==='story'?46:34);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.stroke();
-  const logoSize=format==='story'?230:format==='landscape'?180:200; const logoX=pad+45,logoY=top+45;
-  ctx.fillStyle='#fff';roundRect(ctx,logoX,logoY,logoSize,logoSize,logoSize*.2);ctx.fill();
-  if(logo){const scale=Math.min((logoSize*.82)/logo.width,(logoSize*.82)/logo.height);ctx.drawImage(logo,logoX+(logoSize-logo.width*scale)/2,logoY+(logoSize-logo.height*scale)/2,logo.width*scale,logo.height*scale);}else{ctx.fillStyle='#111';ctx.font=`900 ${logoSize*.22}px Arial`;ctx.textAlign='center';ctx.fillText((state.data.nombre||'AF').slice(0,2).toUpperCase(),logoX+logoSize/2,logoY+logoSize*.6);ctx.textAlign='left';}
-  const textStartY=format==='story'?logoY+logoSize+105:format==='landscape'?top+115:logoY+logoSize+65;
-  const textX=format==='landscape'?logoX+logoSize+65:logoX; const textWidth=format==='landscape'?w-textX-pad-55:w-pad*2-90;
-  ctx.fillStyle=style==='light'?'#7026a8':'#d68cff';ctx.font=`800 ${format==='story'?34:28}px Arial`;ctx.fillText((state.data.categoria||'NEGOCIO LOCAL').toUpperCase(),textX,textStartY);
-  const title=$('#design-title').value||state.data.nombre||'Tu negocio';ctx.fillStyle=style==='light'?'#10131b':'#fff';ctx.font=`900 ${format==='story'?78:format==='landscape'?64:70}px Arial`;let y=textStartY+(format==='story'?105:85);const titleLines=wrapText(ctx,title,textWidth);titleLines.slice(0,3).forEach(line=>{ctx.fillText(line,textX,y);y+=format==='story'?88:76;});
-  ctx.fillStyle=style==='light'?'#3c4352':'#d4d7df';ctx.font=`400 ${format==='story'?37:format==='landscape'?30:32}px Arial`;y+=25;const descLines=wrapText(ctx,$('#design-description').value,textWidth);descLines.slice(0,format==='story'?5:3).forEach(line=>{ctx.fillText(line,textX,y);y+=format==='story'?50:42;});
-  const cta=$('#design-cta').value||'Conoce más';const btnY=h-pad-(format==='story'?185:105);ctx.fillStyle=style==='light'?'#161923':'rgba(0,0,0,.55)';roundRect(ctx,textX,btnY,Math.min(textWidth,format==='story'?600:430),format==='story'?92:72,999);ctx.fill();ctx.strokeStyle='#c45cff';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#fff';ctx.font=`800 ${format==='story'?34:27}px Arial`;ctx.textAlign='center';ctx.fillText(cta,textX+Math.min(textWidth,format==='story'?600:430)/2,btnY+(format==='story'?58:46));ctx.textAlign='left';
-  ctx.fillStyle=style==='light'?'#50576a':'#bfc4d0';ctx.font=`600 ${format==='story'?27:22}px Arial`;const contact=[state.data.municipio,state.data.whatsapp?`WhatsApp: ${state.data.whatsapp}`:''].filter(Boolean).join('  •  ');ctx.fillText(contact,textX,h-pad-28);
-  ctx.fillStyle=style==='light'?'#1c2230':'rgba(255,255,255,.78)';ctx.font=`700 ${format==='story'?25:20}px Arial`;ctx.textAlign='right';ctx.fillText('ALIADOS FANTASMA',w-pad-45,top+68);ctx.textAlign='left';
-}
 
+  const logoUrl=state.data.logo_url||state.business?.logo_url;
+  const coverUrl=state.data.portada_url;
+  const [logo,cover]=await Promise.all([loadImage(logoUrl),loadImage(coverUrl)]);
+  if(cover){ctx.save();ctx.globalAlpha=.2;drawImageCover(ctx,cover,0,0,w,h);ctx.restore();}
+
+  const cfg={
+    square:{pad:64,top:64,logo:190,logoGap:54,titleSize:68,titleLine:76,descSize:31,descLine:42,maxTitle:2,maxDesc:3,buttonH:72,buttonW:430,bottomSafe:155},
+    story:{pad:78,top:120,logo:225,logoGap:92,titleSize:78,titleLine:88,descSize:37,descLine:50,maxTitle:3,maxDesc:5,buttonH:92,buttonW:600,bottomSafe:235},
+    landscape:{pad:52,top:48,logo:150,logoGap:48,titleSize:58,titleLine:64,descSize:27,descLine:37,maxTitle:2,maxDesc:2,buttonH:64,buttonW:390,bottomSafe:118}
+  }[format];
+
+  const cardX=cfg.pad,cardY=cfg.top,cardW=w-cfg.pad*2,cardH=h-cfg.top-cfg.pad;
+  ctx.fillStyle=palette.card;roundRect(ctx,cardX,cardY,cardW,cardH,format==='story'?46:34);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.stroke();
+
+  const logoX=cardX+38,logoY=cardY+38;
+  ctx.fillStyle='#fff';roundRect(ctx,logoX,logoY,cfg.logo,cfg.logo,cfg.logo*.2);ctx.fill();
+  if(logo) drawImageContain(ctx,logo,logoX+16,logoY+16,cfg.logo-32,cfg.logo-32);
+  else{ctx.fillStyle='#111';ctx.font=`900 ${cfg.logo*.22}px Arial`;ctx.textAlign='center';ctx.fillText((state.data.nombre||'AF').slice(0,2).toUpperCase(),logoX+cfg.logo/2,logoY+cfg.logo*.6);}
+
+  let textX,textTop,textWidth;
+  if(format==='landscape'){
+    textX=logoX+cfg.logo+cfg.logoGap;
+    textTop=cardY+70;
+    textWidth=cardX+cardW-textX-44;
+  }else{
+    textX=logoX;
+    textTop=logoY+cfg.logo+cfg.logoGap;
+    textWidth=cardW-76;
+  }
+
+  ctx.textAlign='left';
+  ctx.fillStyle=palette.accent;ctx.font=`800 ${format==='story'?34:26}px Arial`;
+  ctx.fillText((state.data.categoria||'NEGOCIO LOCAL').toUpperCase(),textX,textTop);
+
+  const title=$('#design-title').value||state.data.nombre||'Tu negocio';
+  let y=textTop+(format==='story'?104:format==='landscape'?62:82);
+  ctx.fillStyle=palette.text;ctx.font=`900 ${cfg.titleSize}px Arial`;
+  const titleLines=wrapText(ctx,title,textWidth).slice(0,cfg.maxTitle);
+  titleLines.forEach(line=>{ctx.fillText(line,textX,y);y+=cfg.titleLine;});
+
+  y+=format==='landscape'?10:20;
+  ctx.fillStyle=palette.muted;ctx.font=`400 ${cfg.descSize}px Arial`;
+  const descLines=wrapText(ctx,$('#design-description').value,textWidth).slice(0,cfg.maxDesc);
+  descLines.forEach(line=>{ctx.fillText(line,textX,y);y+=cfg.descLine;});
+
+  const footerY=cardY+cardH-34;
+  const btnY=footerY-cfg.bottomSafe;
+  const btnW=Math.min(textWidth,cfg.buttonW);
+  const btnX=format==='landscape'?textX:cardX+38;
+  ctx.fillStyle=isLight?'#161923':'rgba(0,0,0,.58)';roundRect(ctx,btnX,btnY,btnW,cfg.buttonH,999);ctx.fill();
+  ctx.strokeStyle='#c45cff';ctx.lineWidth=3;ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font=`800 ${format==='story'?34:format==='landscape'?25:27}px Arial`;ctx.textAlign='center';
+  const cta=$('#design-cta').value||'Conoce más';
+  ctx.fillText(cta,btnX+btnW/2,btnY+cfg.buttonH*.64);
+
+  const contact=[state.data.municipio,state.data.whatsapp?`WhatsApp: ${state.data.whatsapp}`:''].filter(Boolean).join('  •  ');
+  ctx.fillStyle=isLight?'#50576a':'#bfc4d0';ctx.font=`600 ${format==='story'?25:format==='landscape'?18:20}px Arial`;ctx.textAlign='left';
+  const contactLines=wrapText(ctx,contact,format==='landscape'?Math.min(620,textWidth):cardW-76).slice(0,2);
+  let contactY=footerY-(contactLines.length-1)*(format==='story'?31:25);
+  contactLines.forEach(line=>{ctx.fillText(line,cardX+38,contactY);contactY+=format==='story'?31:25;});
+
+  ctx.fillStyle=isLight?'#1c2230':'rgba(255,255,255,.78)';ctx.font=`700 ${format==='story'?25:format==='landscape'?17:20}px Arial`;ctx.textAlign='right';
+  ctx.fillText('ALIADOS FANTASMA',cardX+cardW-38,cardY+48);
+  ctx.textAlign='left';
+}
 function downloadCanvas(){const canvas=$('#marketing-canvas');const link=document.createElement('a');link.download=`${slugify(state.data.nombre)}-${$('#design-format').value}.png`;link.href=canvas.toDataURL('image/png');link.click();}
 function generateCopy(){
   const name=state.data.nombre||'nuestro negocio'; const category=state.data.categoria||'negocio local'; const topic=$('#copy-topic').value.trim()||state.data.descripcion_corta||'tenemos algo especial para ti'; const goal=$('#copy-goal').value;const tone=$('#copy-tone').value;

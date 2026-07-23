@@ -1,0 +1,16 @@
+ALIADOS FANTASMA v2.8.5 — CORRECCIÓN DE TEXTOS DEL CENTRO DE MARKETING
+
+1. No ejecutar SQL.
+2. Subir y reemplazar en la raíz de GitHub:
+   - marketing.js
+   - marketing.css
+3. Hacer Commit changes.
+4. Esperar Cloudflare Pages.
+5. Abrir /marketing y presionar Ctrl + F5.
+
+Correcciones:
+- Títulos y descripciones no invaden el botón.
+- El botón y los datos de contacto ya no se enciman.
+- Banner horizontal usa una distribución propia.
+- Publicación 1:1 e historia respetan zonas seguras.
+- Campos de texto y botones ya no se salen del panel.

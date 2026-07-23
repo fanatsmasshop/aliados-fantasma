@@ -36,3 +36,19 @@ html{scroll-padding-top:calc(var(--banner-height,38px) + 18px)}
   .marketing-nav{grid-template-columns:1fr}
   .resource-card p{min-height:0}
 }
+
+/* Hotfix v2.8.5: textos y controles dentro de zona segura */
+.creator-panel input,.creator-panel textarea,.creator-panel select,
+.print-profile-controls input,.print-profile-controls textarea,.print-profile-controls select{
+  width:100%;max-width:100%;min-width:0;box-sizing:border-box;
+}
+.creator-panel textarea,.print-profile-controls textarea{resize:vertical;overflow:auto}
+.creator-panel label,.print-profile-controls label{min-width:0}
+.creator-actions .button,.poster-downloads .button{min-width:0;white-space:normal;text-align:center}
+.canvas-stage{overflow:hidden}
+.canvas-stage canvas{object-fit:contain}
+.print-profile-controls{padding-bottom:12px}
+@media(max-width:700px){
+  .creator-panel,.print-profile-controls{padding:17px}
+  .canvas-stage,.poster-stage{padding:10px}
+}
