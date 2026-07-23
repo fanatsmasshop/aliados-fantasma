@@ -1,0 +1,15 @@
+ALIADOS FANTASMA 3.0 — NUEVA FACHADA PÚBLICA
+
+ARCHIVOS
+- index.html: nueva página principal completa.
+- styles.css: identidad visual, responsive y animaciones.
+- app.js: menú, animaciones y tarjetas demo.
+- logo-aliados.png: logo oficial usado en la fachada.
+- directorio.html, registro.html, login.html, perfil-demo.html: páginas puente.
+- terminos.html, privacidad.html, ayuda.html: páginas puente.
+
+IMPORTANTE
+Esta entrega moderniza la fachada y la narrativa pública. Las páginas puente indican dónde deben conectarse los módulos reales existentes (Supabase, registro, login, directorio y perfil). Para no romper la plataforma actual, integra index.html, styles.css y app.js sobre una copia del proyecto y conserva tus archivos funcionales actuales cuando tengan lógica real.
+
+PUBLICACIÓN
+Sube todos los archivos a la raíz del repositorio, sin carpetas, respetando la preferencia actual del proyecto.
