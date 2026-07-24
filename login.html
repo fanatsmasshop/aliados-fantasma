@@ -7,7 +7,9 @@
   <link rel="icon" type="image/png" href="aliados-fantasma-icono.png">
   <link rel="stylesheet" href="app.css?v=20260718-3">
   <link rel="stylesheet" href="logos.css?v=20260717-2">
-<link rel="stylesheet" href="sistema-visual.css?v=20260717-1"></head>
+<link rel="stylesheet" href="sistema-visual.css?v=20260717-1"><style>
+.context-modal{position:fixed;inset:0;z-index:9999;background:rgba(3,5,10,.82);backdrop-filter:blur(14px);display:grid;place-items:center;padding:20px}.context-modal.hidden{display:none}.context-dialog{width:min(620px,100%);background:linear-gradient(145deg,#121622,#0b0e16);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:30px;box-shadow:0 30px 90px rgba(0,0,0,.55)}.context-dialog h2{margin:8px 0}.context-dialog>p,.context-dialog>small{color:#aeb4c5}.context-lock{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(124,75,255,.13);color:#cbb9ff;font-size:12px;font-weight:800;letter-spacing:.04em}.context-options{display:grid;gap:12px;margin:24px 0}.context-option{width:100%;display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:14px;text-align:left;padding:16px;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#151a28;color:white;cursor:pointer;transition:.18s}.context-option:hover{transform:translateY(-2px);border-color:#8f66ff;background:#1a2030}.context-option strong,.context-option small{display:block}.context-option small{margin-top:4px;color:#9fa7ba}.context-icon{width:46px;height:46px;border-radius:13px;background:#242b3d;display:grid;place-items:center;font-size:21px}.context-arrow{font-size:22px;color:#a98cff}.modal-open{overflow:hidden}
+</style></head>
 <body>
   <div class="demo-banner">🚧 DEMO PÚBLICA v0.1 <small>— Versión en desarrollo de Aliados Fantasma.</small></div>
   <a class="page-back-link" href="index.html">← Volver al sitio</a>
@@ -35,6 +37,16 @@
         <p class="login-help">Al entrar podrás consultar el estado de tu solicitud. Si ya fue aprobada, accederás directamente a tu panel.</p>
       </section>
     </main>
+  </div>
+
+  <div id="context-modal" class="context-modal hidden" role="dialog" aria-modal="true" aria-labelledby="context-title">
+    <div class="context-dialog">
+      <div class="context-lock">🔒 Sesión separada</div>
+      <h2 id="context-title">¿Cómo deseas entrar?</h2>
+      <p>Elige un espacio de trabajo. Para proteger la información, no podrás cambiar directamente entre Administración y un negocio durante esta sesión.</p>
+      <div id="context-options" class="context-options"></div>
+      <small>Para elegir otro espacio tendrás que cerrar sesión e iniciar nuevamente.</small>
+    </div>
   </div>
   <script type="module" src="login.js?v=20260724-OWNER-001"></script>
 </body>

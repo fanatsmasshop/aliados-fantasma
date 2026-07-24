@@ -1,5 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
+import { requireContext, clearActiveContext } from './auth-context.js?v=20260724-CTX-001';
 
 let launchOpen = false;
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -61,9 +62,6 @@ function renderOwnerRoleNavigation(){
   const items = [];
   if(ownerMemberships.length > 1){
     items.push(`<label style="display:grid;gap:6px;font-size:12px;color:#c9cad7"><span>NEGOCIO ACTIVO</span><select id="owner-business-selector" style="width:100%;background:#171a28;color:#fff;border:1px solid #34384f;border-radius:10px;padding:10px">${ownerMemberships.map(item => `<option value="${esc(item.negocio_id)}" ${item.negocio_id === activeOwnerMembership?.negocio_id ? 'selected' : ''}>${esc(item.negocios?.nombre || 'Negocio')}</option>`).join('')}</select></label>`);
-  }
-  if(isGlobalAdmin){
-    items.push('<a href="dashboard.html" class="button secondary full" style="text-decoration:none">🏢 Panel administrativo</a>');
   }
   box.innerHTML = items.join('');
   box.classList.toggle('hidden',!items.length);
@@ -450,6 +448,14 @@ async function init(){
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;
 
+  const activeContext = requireContext(authenticatedUser.id, adminMode ? 'admin' : 'owner');
+  if(!activeContext) return;
+  if(!adminMode && activeContext.businessId){
+    const requested = new URLSearchParams(location.search).get('business');
+    if(requested && requested !== activeContext.businessId){ location.replace(`panel.html?business=${encodeURIComponent(activeContext.businessId)}`); return; }
+    localStorage.setItem('af_owner_business_id', activeContext.businessId);
+  }
+
   if(adminMode){
     const {data:isAdmin,error:adminError} = await supabase.rpc('es_administrador');
     if(adminError || !isAdmin) throw new Error('No tienes permisos para administrar este negocio.');
@@ -593,7 +599,7 @@ document.querySelector('#add-promotion').onclick = () => { addPromotion(); markD
 document.querySelector('#preview-button').onclick = previewProfile;
 document.querySelector('#copy-profile-link').onclick = copyOwnerProfileLink;
 document.querySelector('#open-owner-profile').onclick = openOwnerProfile;
-document.querySelector('#logout-button').onclick = async () => { await supabase.auth.signOut(); location.replace('login.html'); };
+document.querySelector('#logout-button').onclick = async () => { clearActiveContext(user?.id); await supabase.auth.signOut(); location.replace('login.html'); };
 document.querySelector('#submit-review').onclick = async () => {
   try{
     const percentage = updateProgress();

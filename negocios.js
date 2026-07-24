@@ -46,7 +46,6 @@ function bind() {
     if (!document.querySelector('#business-id').value) document.querySelector('#business-slug').value = slugify(event.target.value);
   });
   document.querySelector('#business-form').addEventListener('submit', saveBusiness);
-  document.querySelector('#create-invite')?.addEventListener('click', createInvitation);
   document.querySelector('#search').addEventListener('input', render);
   document.querySelector('#status-filter').addEventListener('change', render);
   document.querySelector('#category-filter').addEventListener('change', render);
@@ -127,11 +126,9 @@ function render() {
       <td>${esc(item.categorias?.nombre || 'Sin categoría')}</td>
       <td>${esc([item.colonia,item.municipio].filter(Boolean).join(', ') || 'Sin ubicación')}</td>
       <td><span class="badge ${item.estado_operativo==='activo' ? 'active' : 'inactive'}">${({activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido',eliminacion_programada:'Eliminación programada'})[item.estado_operativo||'activo']}</span>${item.motivo_suspension ? `<small class="muted">${esc(item.motivo_suspension)}</small>` : ''}</td>
-      <td><span class="badge">${({aliados:'Aliados',compartido:'Compartido',autoadministrado:'Autoadministrado'})[item.modo_gestion||'aliados']}</span></td>
-      <td><strong>${Number(item.porcentaje_perfil||calculateCompletion(item))}%</strong><div class="progress" style="min-width:90px"><i style="width:${Number(item.porcentaje_perfil||calculateCompletion(item))}%"></i></div></td>
       <td>${fmt(item.created_at)}</td>
-      <td><div class="row-actions"><a class="button primary small" href="panel.html?admin_business=${encodeURIComponent(item.id)}">Administrar</a><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><button class="button secondary small" type="button" onclick="manageOwners('${item.id}')">Accesos</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Ver perfil</a>${item.estado_operativo==='suspendido' ? `<button class="button success small" type="button" onclick="liftSuspension('${item.id}')">Levantar suspensión</button>` : `<button class="button secondary small" type="button" onclick="suspendBusiness('${item.id}')">Suspender</button>`}<button class="button danger small" type="button" onclick="deleteBusiness('${item.id}')">Eliminar</button></div></td>
-    </tr>`).join('') : '<tr><td colspan="8" class="empty-state">Sin resultados</td></tr>';
+      <td><div class="row-actions"><button class="button secondary small" type="button" onclick="editBusiness('${item.id}')">Editar</button><a class="button secondary small" href="perfil.html?slug=${encodeURIComponent(item.slug)}" target="_blank" rel="noopener">Perfil privado</a>${item.estado_operativo==='suspendido' ? `<button class="button success small" type="button" onclick="liftSuspension('${item.id}')">Levantar suspensión</button>` : `<button class="button danger small" type="button" onclick="suspendBusiness('${item.id}')">Suspender</button>`}</div></td>
+    </tr>`).join('') : '<tr><td colspan="6" class="empty-state">Sin resultados</td></tr>';
 }
 
 function newBusiness() {
@@ -140,7 +137,6 @@ function newBusiness() {
   document.querySelector('#business-primary').value = '#111111';
   document.querySelector('#business-secondary').value = '#ffffff';
   document.querySelector('#business-modal-title').textContent = 'Nuevo negocio';
-  document.querySelector('#business-management').value = 'aliados';
   resetMediaState();
   openModal('#business-modal');
 }
@@ -152,7 +148,6 @@ window.editBusiness = (id) => {
   Object.entries(mapping).forEach(([key, element]) => document.querySelector(`#${element}`).value = item[key] || '');
   document.querySelector('#business-active').checked = Boolean(item.activo);
   document.querySelector('#business-featured').checked = Boolean(item.destacado);
-  document.querySelector('#business-management').value = item.modo_gestion || 'aliados';
   document.querySelector('#business-modal-title').textContent = 'Editar negocio';
   resetMediaState();
   setExistingPreview('logo', item.logo_url);
@@ -175,9 +170,8 @@ async function saveBusiness(event) {
     enlace_maps:document.querySelector('#business-maps').value.trim() || null, logo_url:document.querySelector('#business-logo').value.trim() || null,
     portada_url:document.querySelector('#business-cover').value.trim() || null, color_primario:document.querySelector('#business-primary').value.trim() || '#111111',
     color_secundario:document.querySelector('#business-secondary').value.trim() || '#ffffff', activo:document.querySelector('#business-active').checked,
-    destacado:document.querySelector('#business-featured').checked, modo_gestion:document.querySelector('#business-management').value
+    destacado:document.querySelector('#business-featured').checked
   };
-  payload.porcentaje_perfil = calculateCompletion(payload);
 
   try {
     let businessId = id;
@@ -235,105 +229,6 @@ window.deactivateBusiness = async (id) => {
   if (error) return toast(`${error.message}. Ejecuta 062_hotfix_redes_espera_y_bajas.sql.`, 'error');
   toast('Negocio dado de baja');
   await loadBusinesses();
-};
-
-window.deleteBusiness = async (id) => {
-  const item = businesses.find(business => business.id === id);
-  if (!item) return;
-
-  document.querySelector('#delete-business-modal')?.remove();
-
-  const modal = document.createElement('div');
-  modal.id = 'delete-business-modal';
-  modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px;backdrop-filter:blur(8px)';
-  modal.innerHTML = `
-    <section role="dialog" aria-modal="true" aria-labelledby="delete-business-title" style="width:min(620px,100%);background:#11141c;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:28px;box-shadow:0 30px 100px rgba(0,0,0,.6)">
-      <p class="eyebrow">ELIMINACIÓN DEFINITIVA</p>
-      <h2 id="delete-business-title">Eliminar ${esc(item.nombre)}</h2>
-      <p class="muted" style="line-height:1.6">Esta acción elimina definitivamente el negocio, sus accesos y su información relacionada. No se puede deshacer.</p>
-
-      <label class="field">
-        <span>Nombre para confirmar</span>
-        <input id="delete-business-confirmation" type="text" autocomplete="off" spellcheck="false" placeholder="${esc(item.nombre)}">
-        <small class="muted">Escribe exactamente: <strong>${esc(item.nombre)}</strong></small>
-      </label>
-
-      <label class="field" style="margin-top:16px">
-        <span>Motivo <small class="muted">(opcional)</small></span>
-        <textarea id="delete-business-reason" rows="4" maxlength="500" placeholder="Ej. Perfil de demostración, registro duplicado o solicitud del propietario."></textarea>
-        <small class="muted">Este dato se usa únicamente para el historial administrativo.</small>
-      </label>
-
-      <p id="delete-business-error" class="muted" role="alert" style="display:none;color:#ff8da1;margin:14px 0 0"></p>
-
-      <div class="actions" style="justify-content:flex-end;margin-top:22px">
-        <button type="button" class="button secondary" data-cancel>Cancelar</button>
-        <button type="button" class="button danger" data-confirm disabled>Eliminar definitivamente</button>
-      </div>
-    </section>`;
-
-  document.body.appendChild(modal);
-
-  const confirmationInput = modal.querySelector('#delete-business-confirmation');
-  const reasonInput = modal.querySelector('#delete-business-reason');
-  const errorBox = modal.querySelector('#delete-business-error');
-  const confirmButton = modal.querySelector('[data-confirm]');
-  const cancelButton = modal.querySelector('[data-cancel]');
-  const expectedName = item.nombre.trim();
-
-  const close = () => modal.remove();
-  const sync = () => {
-    confirmButton.disabled = confirmationInput.value.trim() !== expectedName;
-    errorBox.style.display = 'none';
-  };
-
-  confirmationInput.addEventListener('input', sync);
-  cancelButton.addEventListener('click', close);
-  modal.addEventListener('click', event => {
-    if (event.target === modal && !confirmButton.disabled) return;
-    if (event.target === modal) close();
-  });
-
-  confirmButton.addEventListener('click', async () => {
-    if (confirmationInput.value.trim() !== expectedName) {
-      errorBox.textContent = 'El nombre escrito no coincide exactamente.';
-      errorBox.style.display = 'block';
-      return;
-    }
-
-    const originalText = confirmButton.textContent;
-    confirmButton.disabled = true;
-    cancelButton.disabled = true;
-    confirmButton.textContent = 'Eliminando…';
-    errorBox.style.display = 'none';
-
-    try {
-      const response = await withTimeout(
-        supabase.rpc('admin_eliminar_negocio_definitivo', {
-          p_negocio_id: id,
-          p_nombre_confirmacion: confirmationInput.value.trim(),
-          p_motivo: reasonInput.value.trim() || null
-        }),
-        'la eliminación del negocio',
-        20000
-      );
-
-      if (response.error) throw response.error;
-
-      close();
-      toast('Negocio eliminado definitivamente');
-      await loadBusinesses();
-    } catch (error) {
-      console.error('Error al eliminar negocio:', error);
-      confirmButton.disabled = false;
-      cancelButton.disabled = false;
-      confirmButton.textContent = originalText;
-      errorBox.textContent = error.message || 'No fue posible eliminar el negocio.';
-      errorBox.style.display = 'block';
-    }
-  });
-
-  setTimeout(() => confirmationInput.focus(), 50);
 };
 
 window.reactivateBusiness = async (id) => {
@@ -610,47 +505,3 @@ function showModerationItems(title,items){
 async function suspendBusiness(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:`Suspender ${item?.nombre||'negocio'}`,description:'El perfil desaparecerá del directorio. La suspensión no se aplica automáticamente por recibir reportes: administración debe revisar el caso y registrar un motivo claro.',confirmText:'Suspender negocio',danger:true,textarea:true,minLength:15,placeholder:'Describe la regla incumplida, los hechos revisados y la razón de la medida…',onConfirm:async reason=>{const {error}=await supabase.rpc('admin_suspender_negocio',{p_negocio_id:id,p_motivo:reason,p_hasta:null});if(error)throw error;toast('Negocio suspendido y notificado');await loadBusinesses();}});}
 async function liftSuspension(id){const item=businesses.find(x=>x.id===id);adminActionModal({title:'Levantar suspensión',description:`${esc(item?.nombre||'El negocio')} volverá a estar activo y visible en el directorio.`,confirmText:'Reactivar negocio',onConfirm:async()=>{const {error}=await supabase.rpc('admin_levantar_suspension',{p_negocio_id:id});if(error)throw error;toast('Suspensión levantada');await loadBusinesses();}});}
 window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;
-
-
-function calculateCompletion(item){
-  const checks=[item.nombre,item.categoria_id,item.descripcion_corta,item.whatsapp,item.direccion,item.municipio,item.logo_url,item.portada_url];
-  return Math.round(checks.filter(Boolean).length/checks.length*100);
-}
-
-window.manageOwners=async id=>{
-  const item=businesses.find(x=>x.id===id); if(!item)return;
-  document.querySelector('#owners-business-id').value=id;
-  document.querySelector('#owners-modal-title').textContent=`Accesos de ${item.nombre}`;
-  document.querySelector('#invite-email').value='';
-  document.querySelector('#invite-result').classList.add('hidden');
-  openModal('#owners-modal');
-  await loadInvitations(id);
-};
-
-async function loadInvitations(id){
-  const body=document.querySelector('#owners-body');body.innerHTML='<tr><td colspan="5">Cargando…</td></tr>';
-  const {data,error}=await supabase.rpc('admin_listar_invitaciones_negocio',{p_negocio_id:id});
-  if(error){body.innerHTML=`<tr><td colspan="5">${esc(error.message)}. Ejecuta 073_sprint_critico_gestion_negocios.sql.</td></tr>`;return;}
-  body.innerHTML=(data||[]).length?(data||[]).map(row=>`<tr><td>${esc(row.correo)}</td><td>${esc(row.rol)}</td><td><span class="badge ${row.estado==='aceptada'?'active':'inactive'}">${esc(row.estado)}</span></td><td>${fmt(row.vence_at)}</td><td>${row.estado==='pendiente'?`<button class="button danger small" onclick="cancelInvitation('${row.id}','${id}')">Cancelar</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5">Todavía no hay invitaciones.</td></tr>';
-}
-
-async function createInvitation(){
-  const id=document.querySelector('#owners-business-id').value;
-  const email=document.querySelector('#invite-email').value.trim();
-  const role=document.querySelector('#invite-role').value;
-  if(!email)return toast('Escribe un correo válido','error');
-  const button=document.querySelector('#create-invite');setLoading(button,true);
-  const {data,error}=await supabase.rpc('admin_crear_invitacion_negocio',{p_negocio_id:id,p_correo:email,p_rol:role});
-  setLoading(button,false);
-  if(error)return toast(`${error.message}. Ejecuta 073_sprint_critico_gestion_negocios.sql.`,'error');
-  const link=new URL(`invitacion.html?token=${encodeURIComponent(data.token)}`,location.href).href;
-  const result=document.querySelector('#invite-result');result.classList.remove('hidden');result.className='notice success';
-  result.innerHTML=`<strong>Invitación creada.</strong><p>Comparte este enlace con ${esc(data.correo)}:</p><div class="copy-link-row"><input id="generated-invite-link" value="${esc(link)}" readonly><button class="button secondary small" id="copy-generated-link">Copiar</button></div><small>El enlace vence el ${fmt(data.vence_at)}. Por seguridad, la persona debe iniciar sesión con ese mismo correo.</small>`;
-  document.querySelector('#copy-generated-link').onclick=async()=>{await navigator.clipboard.writeText(link);toast('Enlace copiado');};
-  await loadInvitations(id);
-}
-
-window.cancelInvitation=async(invitationId,businessId)=>{
-  const {error}=await supabase.rpc('admin_cancelar_invitacion_negocio',{p_invitacion_id:invitationId});
-  if(error)return toast(error.message,'error');toast('Invitación cancelada');await loadInvitations(businessId);
-};

@@ -29,7 +29,7 @@
 <section class="page-head"><div><p class="eyebrow">DIRECTORIO</p><h2>Gestión de negocios</h2><p class="muted">Crea, edita, activa y revisa perfiles.</p></div><button id="new-business" class="button primary" type="button">+ Nuevo negocio</button></section>
 <div class="panel">
   <div class="toolbar"><input id="search" class="search" placeholder="Buscar por nombre, municipio o slug"><select id="status-filter"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select><select id="category-filter"><option value="">Todas las categorías</option></select></div>
-  <div class="table-wrap"><table class="data-table"><thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Gestión</th><th>Perfil</th><th>Creación</th><th>Acciones</th></tr></thead><tbody id="business-body"><tr><td colspan="8">Cargando…</td></tr></tbody></table></div>
+  <div class="table-wrap"><table class="data-table"><thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Creación</th><th>Acciones</th></tr></thead><tbody id="business-body"><tr><td colspan="6">Cargando…</td></tr></tbody></table></div>
 </div>
 <div id="business-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">FORMULARIO</p><h2 id="business-modal-title">Nuevo negocio</h2></div><button class="icon-button" data-close="#business-modal" type="button">✕</button></div>
 <form id="business-form" class="form-grid">
@@ -96,21 +96,12 @@
   <label><span>Color principal</span><input id="business-primary" value="#111111"></label>
   <label><span>Color secundario</span><input id="business-secondary" value="#ffffff"></label><label><span><input id="business-active" type="checkbox" style="width:auto"> Perfil activo</span></label>
   <label><span><input id="business-featured" type="checkbox" style="width:auto"> Destacado</span></label>
-  <label><span>Modo de gestión</span><select id="business-management"><option value="aliados">Administrado por Aliados</option><option value="compartido">Compartido</option><option value="autoadministrado">Autoadministrado</option></select></label>
   <div class="wide actions"><button class="button secondary" data-close="#business-modal" type="button">Cancelar</button><button id="save-business" class="button primary" type="submit">Guardar negocio</button></div>
 </form></div></div>
-
-<div id="owners-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">PROPIETARIOS Y ACCESOS</p><h2 id="owners-modal-title">Gestionar accesos</h2></div><button class="icon-button" data-close="#owners-modal" type="button">✕</button></div>
-  <input id="owners-business-id" type="hidden">
-  <div class="form-grid"><label><span>Correo del propietario o colaborador</span><input id="invite-email" type="email" placeholder="persona@correo.com"></label><label><span>Rol</span><select id="invite-role"><option value="propietario">Propietario</option><option value="administrador">Administrador del negocio</option><option value="colaborador">Colaborador</option></select></label></div>
-  <div class="actions"><button id="create-invite" class="button primary" type="button">Crear invitación</button></div>
-  <div id="invite-result" class="notice hidden" style="margin-top:16px"></div>
-  <div class="table-wrap" style="margin-top:18px"><table class="data-table"><thead><tr><th>Correo</th><th>Rol</th><th>Estado</th><th>Vence</th><th></th></tr></thead><tbody id="owners-body"><tr><td colspan="5">Cargando…</td></tr></tbody></table></div>
-</div></div>
 </main>
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="negocios.js?v=20260724-3"></script>
+  <script type="module" src="negocios.js?v=20260717-2"></script>
 </body>
 </html>
