@@ -1,0 +1,21 @@
+CORRECCIÓN ADMINISTRACIÓN DE NEGOCIOS
+
+Se restauró el botón "Accesos" que abre la gestión de:
+- Propietarios
+- Administradores del negocio
+- Colaboradores
+- Invitaciones pendientes, aceptadas o canceladas
+
+También se conserva:
+- Administrar negocio
+- Editar
+- Ver perfil
+- Suspender/reactivar
+- Eliminar definitivamente con nombre exacto y motivo opcional
+
+INSTALACIÓN
+1. Reemplaza negocios.html y negocios.js en GitHub.
+2. Si todavía no lo ejecutaste, corre 075_hotfix_eliminacion_negocios.sql en Supabase.
+3. Espera Cloudflare y recarga con Ctrl + F5.
+
+No vuelvas a ejecutar 073 si ya lo corriste anteriormente.
