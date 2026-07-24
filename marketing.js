@@ -11,6 +11,28 @@ function showMessage(text,type='success'){
 function slugify(value){return String(value||'recurso').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 function getPromotion(){return (state.data.promociones||[])[0]||{};}
 function normalizePhone(value){return String(value||'').replace(/\D/g,'');}
+
+function compactObject(value={}){return Object.fromEntries(Object.entries(value).filter(([,item])=>item!==null&&item!==undefined&&item!==''));}
+function businessToMarketingData(business={},categoryName=''){
+  return compactObject({
+    nombre:business.nombre,categoria:categoryName||business.categoria||'',descripcion_corta:business.descripcion_corta,
+    descripcion:business.descripcion,logo_url:business.logo_url,portada_url:business.portada_url,whatsapp:business.whatsapp,
+    telefono:business.telefono,facebook:business.facebook,instagram:business.instagram,tiktok:business.tiktok,youtube:business.youtube,
+    web:business.sitio_web||business.web,direccion:business.direccion,colonia:business.colonia,municipio:business.municipio,
+    maps:business.enlace_maps||business.maps,enlace_maps:business.enlace_maps,como_llegar:business.como_llegar,
+    horarios:business.horarios,galeria:business.galeria,promociones:business.promociones,slug:business.slug
+  });
+}
+async function loadMembershipBusiness(userId){
+  const {data:membership,error}=await supabase.from('miembros_negocio').select('negocio_id').eq('perfil_id',userId).eq('activo',true).order('updated_at',{ascending:false}).limit(1).maybeSingle();
+  if(error){console.warn('No se pudo consultar la membresía:',error.message);return null;}
+  if(!membership?.negocio_id)return null;
+  const {data:business,error:businessError}=await supabase.from('negocios').select('*').eq('id',membership.negocio_id).maybeSingle();
+  if(businessError){console.warn('No se pudo consultar el negocio:',businessError.message);return null;}
+  let categoryName='';
+  if(business?.categoria_id){const {data:category}=await supabase.from('categorias').select('nombre').eq('id',business.categoria_id).maybeSingle();categoryName=category?.nombre||'';}
+  return business?{...business,__categoryName:categoryName}:null;
+}
 function profileLink(){
   const slug=state.business?.slug||state.data?.slug||state.draft?.slug||'';
   if(slug)return `${location.origin}/perfil.html?slug=${encodeURIComponent(slug)}`;
@@ -24,12 +46,18 @@ async function loadBusiness(){
   state.user=user;
   const {data:draft,error}=await supabase.from('perfiles_borrador').select('*').eq('usuario_id',user.id).maybeSingle();
   if(error) throw error;
-  state.draft=draft||{}; state.data=draft?.datos||{};
-  if(draft?.negocio_id){
-    const {data:business,error:businessError}=await supabase.from('negocios').select('id,slug,nombre,logo_url,whatsapp,enlace_maps').eq('id',draft.negocio_id).maybeSingle();
+  const membershipBusiness=await loadMembershipBusiness(user.id);
+  state.draft=draft||{};
+  state.business=membershipBusiness||null;
+  if(!state.business && draft?.negocio_id){
+    const {data:business,error:businessError}=await supabase.from('negocios').select('*').eq('id',draft.negocio_id).maybeSingle();
     if(businessError) throw businessError;
     state.business=business||null;
   }
+  const businessData=state.business?businessToMarketingData(state.business,state.business.__categoryName):{};
+  state.data={...businessData,...(draft?.datos||{})};
+  state.data.galeria=state.data.galeria||[];
+  state.data.promociones=state.data.promociones||[];
   state.profileUrl=profileLink();
   const name=state.data.nombre||state.business?.nombre||'Tu negocio';
   $('#marketing-title').textContent=`Marketing para ${name}`;
