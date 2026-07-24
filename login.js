@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { isConfigured } from './config.js?v=20260717-2';
-import { getActiveContext, setActiveContext, contextHome } from './auth-context.js?v=20260724-CTX-001';
+import { getActiveContext, setActiveContext, clearActiveContext, contextHome } from './auth-context.js?v=20260724-CTX-LOCK-002';
 
 const form=document.querySelector('#login-form');
 const email=document.querySelector('#email');
@@ -56,6 +56,7 @@ async function resolveAccess(user,forceChoose=false){
     const access=await getAccess(user);
     const saved=getActiveContext(user.id);
     const savedValid=saved && ((saved.type==='admin'&&access.isAdmin)||(saved.type==='owner'&&access.businesses.some(x=>x.negocio_id===saved.businessId)));
+    if(saved && !savedValid) clearActiveContext(user.id);
     if(savedValid&&!forceChoose){location.replace(contextHome(saved));return;}
     const count=(access.isAdmin?1:0)+access.businesses.length;
     if(count===0){location.replace('estado-cuenta.html');return;}

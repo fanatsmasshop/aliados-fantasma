@@ -1,6 +1,7 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
+import { requireContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
 
-const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:''};
+const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:'',adminMode:false,businessId:null};
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
@@ -20,16 +21,51 @@ function profileLink(){
 
 async function loadBusiness(){
   const {data:{user}}=await supabase.auth.getUser();
-  if(!user){location.href='login.html';return;}
+  if(!user){location.replace('login.html');return;}
   state.user=user;
-  const {data:draft,error}=await supabase.from('perfiles_borrador').select('*').eq('usuario_id',user.id).maybeSingle();
-  if(error) throw error;
-  state.draft=draft||{}; state.data=draft?.datos||{};
-  if(draft?.negocio_id){
-    const {data:business,error:businessError}=await supabase.from('negocios').select('id,slug,nombre,logo_url,whatsapp,enlace_maps').eq('id',draft.negocio_id).maybeSingle();
-    if(businessError) throw businessError;
-    state.business=business||null;
+
+  const params=new URLSearchParams(location.search);
+  const adminBusinessId=params.get('admin_business');
+  state.adminMode=Boolean(adminBusinessId);
+  const context=requireContext(user.id,state.adminMode?'admin':'owner');
+  if(!context)return;
+
+  state.businessId=state.adminMode?adminBusinessId:context.businessId;
+  if(!state.businessId)throw new Error('No se encontró el negocio seleccionado.');
+
+  const [{data:business,error:businessError},{data:draft,error:draftError}]=await Promise.all([
+    supabase.from('negocios').select('id,slug,nombre,logo_url,portada_url,whatsapp,telefono,enlace_maps,descripcion_corta,descripcion,direccion,colonia,municipio,activo').eq('id',state.businessId).maybeSingle(),
+    supabase.from('perfiles_borrador').select('*').eq('negocio_id',state.businessId).order('updated_at',{ascending:false}).limit(1).maybeSingle()
+  ]);
+  if(businessError)throw businessError;
+  if(draftError)throw draftError;
+  if(!business)throw new Error('El negocio seleccionado no existe o ya no está disponible.');
+
+  state.business=business;
+  state.draft=draft||{};
+  state.data={
+    nombre:business.nombre||'',
+    descripcion_corta:business.descripcion_corta||'',
+    descripcion:business.descripcion||'',
+    logo_url:business.logo_url||'',
+    portada_url:business.portada_url||'',
+    whatsapp:business.whatsapp||'',
+    telefono:business.telefono||'',
+    direccion:business.direccion||'',
+    colonia:business.colonia||'',
+    municipio:business.municipio||'',
+    maps:business.enlace_maps||'',
+    ...(draft?.datos||{})
+  };
+
+  const back=$('#marketing-back-link');
+  if(back){
+    back.href=state.adminMode
+      ?`panel.html?admin_business=${encodeURIComponent(state.businessId)}`
+      :`panel.html?business=${encodeURIComponent(state.businessId)}`;
+    back.textContent=state.adminMode?'← Volver a administrar negocio':'← Volver a mi negocio';
   }
+
   state.profileUrl=profileLink();
   const name=state.data.nombre||state.business?.nombre||'Tu negocio';
   $('#marketing-title').textContent=`Marketing para ${name}`;
@@ -38,7 +74,7 @@ async function loadBusiness(){
   const logo=state.data.logo_url||state.business?.logo_url||'aliados-fantasma-icono.webp';
   $('#business-chip-logo').src=logo;
   $('#business-chip-logo').onerror=()=>{$('#business-chip-logo').src='aliados-fantasma-icono.webp';};
-  fillDefaults(); renderCanvas(); generateCopy(); setQrType('profile'); renderCalendar(); renderBrandResources();
+  fillDefaults();renderCanvas();generateCopy();setQrType('profile');renderCalendar();renderBrandResources();
 }
 
 function fillDefaults(){
