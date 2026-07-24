@@ -42,3 +42,120 @@
 .notification-list{overflow:auto;padding:14px 18px 30px;display:grid;gap:11px}.notification-item{display:grid;grid-template-columns:42px 1fr;gap:12px;padding:15px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:#141823}.notification-item.unread{border-color:rgba(74,170,255,.42);background:linear-gradient(135deg,rgba(0,71,255,.12),rgba(255,45,154,.06)),#141823}.notification-item.important{box-shadow:inset 3px 0 #b45cff}.notification-type-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#21263a}.notification-copy p{margin:7px 0;color:#c3c7d2;line-height:1.45}.notification-copy small{color:#818899}.notification-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.notification-pin{font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:#ffd76a;border:1px solid rgba(255,215,106,.35);border-radius:999px;padding:3px 7px}.notification-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.notification-actions button.danger{color:#ff8faa}.notification-actions button:disabled{opacity:.38;cursor:not-allowed}.notification-empty{text-align:center;padding:58px 20px;color:#979eae}.notification-empty span{font-size:2rem}.notification-empty strong{display:block;color:#fff;margin:12px 0 5px}
 .notification-spotlight{margin:0 0 16px;padding:17px 18px;border:1px solid rgba(74,170,255,.35);border-radius:17px;background:linear-gradient(135deg,rgba(0,71,255,.13),rgba(255,45,154,.09)),#111620;display:grid;grid-template-columns:46px 1fr auto;gap:14px;align-items:center}.notification-spotlight.hidden{display:none}.notification-spotlight-icon{width:44px;height:44px;border-radius:13px;background:#202941;display:grid;place-items:center;font-size:1.25rem}.notification-spotlight span{font-size:.7rem;letter-spacing:.09em;color:#5dd5ff;text-transform:uppercase;font-weight:800}.notification-spotlight strong{display:block;color:#fff;margin:3px 0}.notification-spotlight p{margin:0;color:#bfc5d2}.notification-spotlight-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:760px){.notification-bell{top:68px;right:13px}.notification-spotlight{grid-template-columns:42px 1fr}.notification-spotlight-actions{grid-column:1/-1;justify-content:stretch}.notification-spotlight-actions .button{flex:1}.notification-drawer{width:100%}}
+
+/* =========================================================
+   SIDEBAR PROFESIONAL Y ESTABLE — 2026-07-24
+   Mantiene siempre visibles las acciones inferiores y evita
+   que el menú completo empuje "Cerrar sesión" fuera de pantalla.
+   ========================================================= */
+.owner-sidebar{
+  overflow:hidden;
+  min-height:0;
+  gap:0;
+}
+.owner-sidebar .sidebar-brand,
+.owner-sidebar .owner-progress{
+  flex:0 0 auto;
+}
+.owner-sidebar .sidebar-brand{
+  margin:0 4px 14px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+}
+.owner-sidebar .sidebar-brand:hover{
+  border-color:rgba(140,92,255,.38);
+  background:rgba(140,92,255,.07);
+}
+.owner-sidebar .owner-progress{
+  margin:0 4px 14px;
+}
+.owner-sidebar .owner-steps{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-content:start;
+  padding:2px 4px 10px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(140,92,255,.55) transparent;
+}
+.owner-sidebar .owner-steps::-webkit-scrollbar{width:6px}
+.owner-sidebar .owner-steps::-webkit-scrollbar-track{background:transparent}
+.owner-sidebar .owner-steps::-webkit-scrollbar-thumb{
+  background:rgba(140,92,255,.48);
+  border-radius:999px;
+}
+.owner-sidebar .owner-step-link{
+  min-height:44px;
+  padding:11px 12px;
+  border:1px solid transparent;
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease;
+}
+.owner-sidebar .owner-step-link:hover{
+  color:var(--text);
+  background:rgba(255,255,255,.045);
+  transform:translateX(2px);
+}
+.owner-sidebar .owner-step-link.active{
+  border-color:rgba(140,92,255,.5);
+  background:linear-gradient(90deg,rgba(140,92,255,.20),rgba(43,168,255,.06));
+  box-shadow:inset 3px 0 0 #8c5cff;
+}
+.owner-sidebar #marketing-center-link{
+  flex:0 0 auto;
+  margin:10px 4px 0 !important;
+  min-height:46px !important;
+  border-radius:13px !important;
+}
+.owner-sidebar #owner-role-navigation{
+  display:none !important;
+}
+.owner-sidebar .sidebar-footer{
+  flex:0 0 auto;
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+  padding:12px 4px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:#0b0e14;
+}
+.owner-sidebar .sidebar-footer .button{
+  min-height:46px;
+  width:100%;
+  justify-content:center;
+  border-radius:13px;
+}
+.owner-sidebar #preview-button{
+  background:rgba(255,255,255,.055);
+}
+.owner-sidebar #logout-button{
+  color:#ffb9c1;
+  border-color:rgba(255,86,105,.30);
+  background:rgba(255,86,105,.075);
+}
+.owner-sidebar #logout-button:hover{
+  color:#fff;
+  border-color:rgba(255,86,105,.58);
+  background:rgba(255,86,105,.16);
+}
+@media(max-width:850px){
+  .owner-sidebar{
+    overflow:visible;
+    height:auto;
+    min-height:auto;
+  }
+  .owner-sidebar .owner-steps{
+    overflow:visible;
+    padding-bottom:4px;
+  }
+  .owner-sidebar #marketing-center-link{
+    margin:10px 0 0 !important;
+  }
+  .owner-sidebar .sidebar-footer{
+    margin-top:10px;
+    padding-left:0;
+    padding-right:0;
+  }
+}

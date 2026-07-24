@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
-import { requireContext, clearActiveContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
+import { requireContext, clearActiveContext } from './auth-context.js?v=20260724-CTX-001';
 
 let launchOpen = false;
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -47,8 +47,10 @@ function chooseOwnerMembership(rows){
 }
 
 function renderOwnerRoleNavigation(){
-  // El negocio se elige al iniciar sesión y permanece bloqueado hasta cerrar sesión.
-  document.querySelector('#owner-role-navigation')?.remove();
+  // El contexto se elige al iniciar sesión y permanece bloqueado.
+  // No se muestran selectores dentro del panel para evitar cambios accidentales.
+  const previous = document.querySelector('#owner-role-navigation');
+  if(previous) previous.remove();
 }
 
 function businessToDraftData(business){
@@ -487,7 +489,7 @@ async function init(){
     const banner=document.createElement('div');
     banner.className='admin-mode-banner';
     banner.style.cssText='position:sticky;top:0;z-index:1000;background:linear-gradient(90deg,#6424c8,#7d2ce0);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:700';
-    banner.innerHTML=`<div><strong>Modo administrador</strong><br><span style="font-weight:500">Estás administrando ${esc(business.nombre)}${adminReadOnly ? '. Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.' : ''}</span></div><a href="dashboard.html" style="background:#22263a;color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none;white-space:nowrap">Volver al panel administrativo</a>`;
+    banner.innerHTML=`<div><strong>Modo administrador</strong><br><span style="font-weight:500">Estás administrando ${esc(business.nombre)}${adminReadOnly ? '. Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.' : ''}</span></div><a href="admin.html" style="background:#22263a;color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none;white-space:nowrap">Volver al panel administrativo</a>`;
     document.body.prepend(banner);
     document.querySelector('#welcome-title').textContent = `Administrando ${business.nombre}`;
     pre = {nombre_negocio:business.nombre};
@@ -500,10 +502,10 @@ async function init(){
     isGlobalAdmin = Boolean(adminFlag);
 
     const memberships = await loadOwnerMemberships(authenticatedUser.id);
-    activeOwnerMembership = memberships.find(item => item.negocio_id === activeContext.businessId) || null;
+    activeOwnerMembership = chooseOwnerMembership(memberships);
 
     if(activeOwnerMembership){
-      rememberBusiness(activeContext.businessId);
+      rememberBusiness(activeOwnerMembership.negocio_id);
       const business = activeOwnerMembership.negocios;
       publishedBusiness = business;
       draftOwnerId = authenticatedUser.id;
@@ -541,9 +543,8 @@ async function init(){
       if(preError) throw preError;
       pre = Array.isArray(preData) ? preData[0] : preData;
       if(!pre){
-        clearActiveContext(authenticatedUser.id);
-        location.replace('login.html?choose=1');
-        return;
+        if(isGlobalAdmin){ location.replace('dashboard.html'); return; }
+        location.replace('estado-cuenta.html'); return;
       }
       document.querySelector('#welcome-title').textContent = `Bienvenido, ${pre.nombre_negocio || 'tu negocio'} 👋`;
       const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
