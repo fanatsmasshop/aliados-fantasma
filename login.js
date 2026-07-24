@@ -23,11 +23,27 @@ document.querySelector('#toggle-password').addEventListener('click', event => {
 });
 
 async function redirectByRole(user) {
-  const { data: profile } = await supabase.from('perfiles').select('rol,activo').eq('id', user.id).maybeSingle();
+  const [{ data: profile }, { data: memberships, error: membershipError }] = await Promise.all([
+    supabase.from('perfiles').select('rol,activo').eq('id', user.id).maybeSingle(),
+    supabase
+      .from('miembros_negocio')
+      .select('negocio_id,rol,activo')
+      .eq('perfil_id', user.id)
+      .eq('activo', true)
+  ]);
+
+  if (membershipError) console.warn('No se pudieron consultar los negocios asignados:', membershipError);
+
+  if ((memberships || []).length > 0) {
+    location.replace('panel.html');
+    return;
+  }
+
   if (profile?.rol === 'administrador' && profile?.activo === true) {
     location.replace('dashboard.html');
     return;
   }
+
   location.replace('panel.html');
 }
 
