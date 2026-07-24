@@ -1,0 +1,45 @@
+ALIADOS FANTASMA — REGISTRO RC1
+Entrega urgente para habilitar el registro de negocios.
+
+ESTA ENTREGA NO ES UN PROYECTO NUEVO.
+Son archivos para sobrescribir en el proyecto oficial existente.
+Todos están en la raíz y la entrega contiene menos de 100 archivos.
+
+ORDEN EXACTO
+1. En Supabase > SQL Editor > New query:
+   abre AF_100_REGISTRO_LANZAMIENTO.sql, pega todo y pulsa Run.
+2. Confirma que el resultado final muestre los conteos sin un error rojo.
+3. En GitHub, sube los otros archivos de esta entrega a la raíz del repositorio.
+4. Cuando GitHub pregunte, reemplaza los archivos existentes con el mismo nombre.
+5. Cloudflare Pages desplegará el commit.
+6. Abre la web en ventana incógnita y prueba con un correo nuevo.
+
+ARCHIVOS WEB QUE SE REEMPLAZAN
+- registro.html
+- registro.js
+- registro-enviado.html
+- registro-enviado.js
+- verificar-correo.html
+- verificar-correo.js
+- estado-cuenta.html
+- estado-cuenta.js
+
+QUÉ CORRIGE
+- Creación automática y reparación del pre-registro.
+- Sincronización de correo confirmado.
+- Soporte para enlaces Auth con code, token_hash y sesión automática.
+- Reenvío de correo de verificación.
+- Recuperación de registros creados cuando el trigger no estaba operativo.
+- Aprobación administrativa que habilita perfil propietario y borrador de onboarding.
+- Validaciones y protección contra doble envío.
+- Caché actualizado para que Cloudflare sirva el JavaScript nuevo.
+
+PRUEBA MÍNIMA
+A. Registrar correo nuevo.
+B. Abrir correo de confirmación.
+C. Llegar a Estado de cuenta.
+D. Ver el registro en Pre-registros del administrador.
+E. Aprobarlo.
+F. Volver a Estado de cuenta y entrar a Configurar mi perfil.
+
+NO EJECUTAR los SQL antiguos después de AF_100, porque podrían volver a definir funciones con versiones anteriores.

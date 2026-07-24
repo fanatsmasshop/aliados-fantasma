@@ -1,1 +1,44 @@
-import { supabase } from './supabase-client.js?v=20260717-2';const loading=document.querySelector('#verify-loading'),success=document.querySelector('#verify-success'),box=document.querySelector('#verify-error'),msg=document.querySelector('#verify-message');const hash=new URLSearchParams(location.hash.slice(1)),query=new URLSearchParams(location.search);async function finish(ok,text=''){loading.classList.add('hidden');if(ok){success.classList.remove('hidden');setTimeout(()=>location.replace('estado-cuenta.html'),1800)}else{msg.textContent=text||'El enlace pudo caducar o ya fue utilizado.';box.classList.remove('hidden')}}try{const err=query.get('error_description')||hash.get('error_description');if(err)throw new Error(decodeURIComponent(err.replace(/\+/g,' ')));const tokenHash=query.get('token_hash'),type=query.get('type');if(tokenHash&&type){const{error}=await supabase.auth.verifyOtp({token_hash:tokenHash,type});if(error)throw error}const{data,error}=await supabase.auth.getSession();if(error)throw error;if(data.session?.user?.email_confirmed_at){await finish(true)}else{let done=false;const{data:listener}=supabase.auth.onAuthStateChange(async(event,session)=>{if(!done&&session?.user?.email_confirmed_at){done=true;listener.subscription.unsubscribe();await finish(true)}});setTimeout(async()=>{if(!done){done=true;listener.subscription.unsubscribe();await finish(false,'No recibimos una sesión válida. Solicita un correo nuevo e inténtalo otra vez.')}},8000)}}catch(e){console.error(e);await finish(false,e.message||'El enlace no es válido o ya expiró.')}
+import { supabase } from './supabase-client.js?v=20260724-RC1';
+
+const loading=document.querySelector('#verify-loading');
+const success=document.querySelector('#verify-success');
+const box=document.querySelector('#verify-error');
+const msg=document.querySelector('#verify-message');
+let finished=false;
+
+async function finish(ok,text=''){
+  if(finished)return;finished=true;
+  loading?.classList.add('hidden');
+  if(ok){
+    success?.classList.remove('hidden');
+    try{await supabase.rpc('usuario_sincronizar_mi_pre_registro');}catch(error){console.warn('La cuenta se sincronizará al entrar:',error);}
+    setTimeout(()=>location.replace('estado-cuenta.html'),1200);
+  }else{
+    if(msg)msg.textContent=text||'El enlace pudo caducar o ya fue utilizado.';
+    box?.classList.remove('hidden');
+  }
+}
+
+try{
+  if(!supabase)throw new Error('El servicio de acceso no está configurado.');
+  const query=new URLSearchParams(location.search);
+  const hash=new URLSearchParams(location.hash.slice(1));
+  const authError=query.get('error_description')||hash.get('error_description');
+  if(authError)throw new Error(decodeURIComponent(authError.replace(/\+/g,' ')));
+
+  const code=query.get('code');
+  const tokenHash=query.get('token_hash');
+  const type=query.get('type');
+  if(code){const {error}=await supabase.auth.exchangeCodeForSession(code);if(error)throw error;}
+  else if(tokenHash&&type){const {error}=await supabase.auth.verifyOtp({token_hash:tokenHash,type});if(error)throw error;}
+
+  const {data,error}=await supabase.auth.getSession();
+  if(error)throw error;
+  if(data.session?.user?.email_confirmed_at){await finish(true);}
+  else{
+    const {data:listener}=supabase.auth.onAuthStateChange(async(_event,session)=>{
+      if(session?.user?.email_confirmed_at){listener.subscription.unsubscribe();await finish(true);}
+    });
+    setTimeout(()=>{listener.subscription.unsubscribe();finish(false,'No recibimos una sesión válida. Abre nuevamente el enlace desde el mismo navegador o inicia sesión con tu correo confirmado.');},10000);
+  }
+}catch(error){console.error(error);await finish(false,error.message||'El enlace no es válido o ya expiró.');}
