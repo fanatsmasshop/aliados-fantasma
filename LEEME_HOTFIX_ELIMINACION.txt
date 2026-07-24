@@ -1,0 +1,11 @@
+HOTFIX ELIMINACIÓN DE NEGOCIOS
+
+1. Reemplaza negocios.js y negocios.html en la raíz del repositorio.
+2. Ejecuta 075_hotfix_eliminacion_negocios.sql completo en Supabase > SQL Editor.
+3. Espera el despliegue de Cloudflare Pages y recarga con Ctrl + F5.
+
+Nuevo flujo:
+- Escribe el nombre exacto del negocio para confirmar.
+- El motivo es opcional.
+- La operación tiene un límite de tiempo y ya no debe quedarse indefinidamente en “Procesando”.
+- Si Supabase devuelve un error, ahora se muestra dentro del cuadro sin cerrarlo.

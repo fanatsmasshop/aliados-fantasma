@@ -236,24 +236,99 @@ window.deleteBusiness = async (id) => {
   const item = businesses.find(business => business.id === id);
   if (!item) return;
 
-  adminActionModal({
-    title: `Eliminar ${item.nombre}`,
-    description: 'Esta acción elimina definitivamente el negocio, sus accesos y su información relacionada. No se puede deshacer. Para confirmar, escribe exactamente el nombre del negocio.',
-    confirmText: 'Eliminar definitivamente',
-    danger: true,
-    textarea: true,
-    minLength: Math.max(1, item.nombre.trim().length),
-    placeholder: item.nombre,
-    onConfirm: async (confirmation) => {
-      if (confirmation.trim() !== item.nombre.trim()) {
-        throw new Error('El nombre escrito no coincide exactamente.');
-      }
-      const { error } = await supabase.rpc('admin_eliminar_negocio_definitivo', { p_negocio_id: id });
-      if (error) throw new Error(`${error.message}. Ejecuta 073_admin_administrar_y_eliminar_negocios.sql en Supabase.`);
+  document.querySelector('#delete-business-modal')?.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'delete-business-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.82);display:grid;place-items:center;padding:20px;backdrop-filter:blur(8px)';
+  modal.innerHTML = `
+    <section role="dialog" aria-modal="true" aria-labelledby="delete-business-title" style="width:min(620px,100%);background:#11141c;border:1px solid rgba(255,255,255,.14);border-radius:24px;padding:28px;box-shadow:0 30px 100px rgba(0,0,0,.6)">
+      <p class="eyebrow">ELIMINACIÓN DEFINITIVA</p>
+      <h2 id="delete-business-title">Eliminar ${esc(item.nombre)}</h2>
+      <p class="muted" style="line-height:1.6">Esta acción elimina definitivamente el negocio, sus accesos y su información relacionada. No se puede deshacer.</p>
+
+      <label class="field">
+        <span>Nombre para confirmar</span>
+        <input id="delete-business-confirmation" type="text" autocomplete="off" spellcheck="false" placeholder="${esc(item.nombre)}">
+        <small class="muted">Escribe exactamente: <strong>${esc(item.nombre)}</strong></small>
+      </label>
+
+      <label class="field" style="margin-top:16px">
+        <span>Motivo <small class="muted">(opcional)</small></span>
+        <textarea id="delete-business-reason" rows="4" maxlength="500" placeholder="Ej. Perfil de demostración, registro duplicado o solicitud del propietario."></textarea>
+        <small class="muted">Este dato se usa únicamente para el historial administrativo.</small>
+      </label>
+
+      <p id="delete-business-error" class="muted" role="alert" style="display:none;color:#ff8da1;margin:14px 0 0"></p>
+
+      <div class="actions" style="justify-content:flex-end;margin-top:22px">
+        <button type="button" class="button secondary" data-cancel>Cancelar</button>
+        <button type="button" class="button danger" data-confirm disabled>Eliminar definitivamente</button>
+      </div>
+    </section>`;
+
+  document.body.appendChild(modal);
+
+  const confirmationInput = modal.querySelector('#delete-business-confirmation');
+  const reasonInput = modal.querySelector('#delete-business-reason');
+  const errorBox = modal.querySelector('#delete-business-error');
+  const confirmButton = modal.querySelector('[data-confirm]');
+  const cancelButton = modal.querySelector('[data-cancel]');
+  const expectedName = item.nombre.trim();
+
+  const close = () => modal.remove();
+  const sync = () => {
+    confirmButton.disabled = confirmationInput.value.trim() !== expectedName;
+    errorBox.style.display = 'none';
+  };
+
+  confirmationInput.addEventListener('input', sync);
+  cancelButton.addEventListener('click', close);
+  modal.addEventListener('click', event => {
+    if (event.target === modal && !confirmButton.disabled) return;
+    if (event.target === modal) close();
+  });
+
+  confirmButton.addEventListener('click', async () => {
+    if (confirmationInput.value.trim() !== expectedName) {
+      errorBox.textContent = 'El nombre escrito no coincide exactamente.';
+      errorBox.style.display = 'block';
+      return;
+    }
+
+    const originalText = confirmButton.textContent;
+    confirmButton.disabled = true;
+    cancelButton.disabled = true;
+    confirmButton.textContent = 'Eliminando…';
+    errorBox.style.display = 'none';
+
+    try {
+      const response = await withTimeout(
+        supabase.rpc('admin_eliminar_negocio_definitivo', {
+          p_negocio_id: id,
+          p_nombre_confirmacion: confirmationInput.value.trim(),
+          p_motivo: reasonInput.value.trim() || null
+        }),
+        'la eliminación del negocio',
+        20000
+      );
+
+      if (response.error) throw response.error;
+
+      close();
       toast('Negocio eliminado definitivamente');
       await loadBusinesses();
+    } catch (error) {
+      console.error('Error al eliminar negocio:', error);
+      confirmButton.disabled = false;
+      cancelButton.disabled = false;
+      confirmButton.textContent = originalText;
+      errorBox.textContent = error.message || 'No fue posible eliminar el negocio.';
+      errorBox.style.display = 'block';
     }
   });
+
+  setTimeout(() => confirmationInput.focus(), 50);
 };
 
 window.reactivateBusiness = async (id) => {
