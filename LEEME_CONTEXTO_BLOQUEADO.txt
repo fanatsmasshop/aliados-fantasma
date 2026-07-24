@@ -1,0 +1,16 @@
+ALIADOS FANTASMA — CONTEXTO BLOQUEADO + LATERALES PROFESIONALES
+
+Reemplaza todos los archivos incluidos en este ZIP.
+No requiere SQL.
+
+Nuevo flujo:
+1. Una cuenta con más de un acceso ve una ventana obligatoria al iniciar sesión.
+2. Elige Administración central o uno de sus negocios.
+3. El contexto queda bloqueado durante la sesión.
+4. Desde un negocio no puede abrir Administración directamente.
+5. Desde Administración no puede entrar como propietario directamente.
+6. Para cambiar de espacio debe cerrar sesión e iniciar nuevamente.
+7. Las rutas están protegidas: escribir la URL manualmente devuelve al contexto correcto.
+
+También se mejoró visualmente el sidebar de Administración y Propietario.
+Después de desplegar: Ctrl+F5, cerrar sesión e iniciar nuevamente.
