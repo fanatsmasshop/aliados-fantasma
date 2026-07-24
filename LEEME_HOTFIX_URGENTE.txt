@@ -1,0 +1,20 @@
+HOTFIX URGENTE — MODO ADMINISTRADOR Y CENTRO DE MARKETING
+
+Reemplaza únicamente estos 4 archivos en la raíz del repositorio:
+- panel.js
+- panel.html
+- marketing.js
+- marketing.html
+
+No ejecutes SQL adicional.
+
+Después espera el despliegue de Cloudflare Pages y recarga con Ctrl + F5.
+
+Correcciones:
+- Evita el error "Cannot read properties of null (reading 'nombre')".
+- Acepta respuestas RPC como objeto o arreglo.
+- Si el RPC no devuelve el negocio, lo consulta directamente por UUID.
+- Carga datos reales del negocio en modo administrador.
+- Conserva el parámetro admin_business al abrir el Centro de Marketing.
+- El Centro de Marketing también carga el negocio administrado.
+- Agrega validaciones para negocio, borrador, galería y promociones nulos.

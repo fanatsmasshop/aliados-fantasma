@@ -10,6 +10,9 @@ let pre;
 let draft = { datos:{}, estado:'borrador', porcentaje:0 };
 let dirty = false;
 let publishedBusiness = null;
+let adminMode = false;
+let managedUserId = null;
+let managedBusinessId = null;
 
 const form = document.querySelector('#onboarding-form');
 const msg = document.querySelector('#global-message');
@@ -17,10 +20,12 @@ const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp
 const field = name => form.elements.namedItem(name);
 
 function compactObject(value={}){
+  if(!value || typeof value !== 'object') return {};
   return Object.fromEntries(Object.entries(value).filter(([,item]) => item !== null && item !== undefined && item !== ''));
 }
 
 function businessToDraftData(business={}, categoryName=''){
+  business = business && typeof business === 'object' ? business : {};
   return compactObject({
     nombre:business.nombre,
     categoria:categoryName || business.categoria || '',
@@ -40,31 +45,37 @@ function businessToDraftData(business={}, categoryName=''){
     municipio:business.municipio,
     maps:business.enlace_maps || business.maps,
     como_llegar:business.como_llegar,
-    horarios:business.horarios,
-    galeria:business.galeria,
-    promociones:business.promociones
+    horarios:Array.isArray(business.horarios) ? business.horarios : undefined,
+    galeria:Array.isArray(business.galeria) ? business.galeria : undefined,
+    promociones:Array.isArray(business.promociones) ? business.promociones : undefined
   });
 }
 
-async function loadMembershipBusiness(userId){
-  const {data:membership,error:membershipError}=await supabase.from('miembros_negocio')
-    .select('negocio_id').eq('perfil_id',userId).eq('activo',true).order('updated_at',{ascending:false}).limit(1).maybeSingle();
-  if(membershipError){
-    console.warn('No se pudo consultar la membresía del negocio:',membershipError.message);
-    return null;
-  }
-  if(!membership?.negocio_id) return null;
-  const {data:business,error:businessError}=await supabase.from('negocios').select('*').eq('id',membership.negocio_id).maybeSingle();
-  if(businessError){
-    console.warn('No se pudo consultar el negocio vinculado:',businessError.message);
-    return null;
-  }
+async function loadBusinessById(businessId){
+  if(!businessId) return null;
+  const {data:business,error}=await supabase.from('negocios').select('*').eq('id',businessId).maybeSingle();
+  if(error) throw error;
+  if(!business) return null;
   let categoryName='';
-  if(business?.categoria_id){
-    const {data:category}=await supabase.from('categorias').select('nombre').eq('id',business.categoria_id).maybeSingle();
+  if(business.categoria_id){
+    const {data:category,error:categoryError}=await supabase.from('categorias').select('nombre').eq('id',business.categoria_id).maybeSingle();
+    if(categoryError) console.warn('No se pudo cargar la categoría:',categoryError.message);
     categoryName=category?.nombre || '';
   }
-  return business ? {...business,__categoryName:categoryName} : null;
+  return {...business,__categoryName:categoryName};
+}
+
+async function loadMembershipBusiness(userId){
+  const {data:membership,error}=await supabase.from('miembros_negocio')
+    .select('negocio_id').eq('perfil_id',userId).eq('activo',true).limit(1).maybeSingle();
+  if(error){ console.warn('No se pudo consultar la membresía:',error.message); return null; }
+  return membership?.negocio_id ? loadBusinessById(membership.negocio_id) : null;
+}
+
+function normalizeAdminContext(raw){
+  const context=Array.isArray(raw) ? raw[0] : raw;
+  if(!context || typeof context !== 'object') return {};
+  return context;
 }
 
 function showMessage(text, type='ok', timeout=5000){
@@ -264,8 +275,8 @@ function renderProfileAccess(){
 
 async function loadPublishedBusiness(){
   publishedBusiness = null;
-  if(!draft.negocio_id) return;
-  const {data,error} = await supabase.from('negocios').select('id,slug,nombre,activo').eq('id',draft.negocio_id).maybeSingle();
+  if(!draft.negocio_id && !managedBusinessId) return;
+  const {data,error} = await supabase.from('negocios').select('id,slug,nombre,activo').eq('id',draft.negocio_id || managedBusinessId).maybeSingle();
   if(error){ console.error('No fue posible consultar el enlace público:', error); return; }
   publishedBusiness = data || null;
 }
@@ -356,12 +367,13 @@ function nextSaveStatus(requestedStatus){
 }
 
 async function save(requestedStatus){
+  if(adminMode && !managedUserId) throw new Error('Este negocio todavía no tiene propietario. Edítalo desde Negocios o crea una invitación antes de usar este panel.');
   const data = serialize();
   const percentage = calc(data);
   const status = nextSaveStatus(requestedStatus);
   document.querySelector('#save-state').textContent = 'Guardando…';
   const payload = {
-    usuario_id:user.id,
+    usuario_id:managedUserId || user.id,
     datos:data,
     estado:status,
     porcentaje:percentage,
@@ -385,7 +397,7 @@ async function uploadFile(file,kind){
   if(!file) return null;
   if(file.size > 10 * 1024 * 1024) throw new Error('La imagen supera 10 MB');
   const ext = (file.name.split('.').pop() || 'webp').toLowerCase();
-  const path = `${user.id}/${kind}-${Date.now()}.${ext}`;
+  const path = `${managedUserId || user.id}/${kind}-${Date.now()}.${ext}`;
   const {error} = await supabase.storage.from('negocios-media').upload(path,file,{upsert:true});
   if(error) throw error;
   return supabase.storage.from('negocios-media').getPublicUrl(path).data.publicUrl;
@@ -425,38 +437,95 @@ async function init(){
   const {data:{user:authenticatedUser}} = await supabase.auth.getUser();
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;
+  managedBusinessId = new URLSearchParams(location.search).get('admin_business');
 
-  const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
-  if(preError) throw preError;
-  pre = Array.isArray(preData) ? preData[0] : preData;
-  if(!pre){ location.replace('estado-cuenta.html'); return; }
+  if(managedBusinessId){
+    const {data:profile,error:profileError}=await supabase.from('perfiles').select('rol,activo').eq('id',authenticatedUser.id).maybeSingle();
+    if(profileError) throw profileError;
+    if(profile?.rol!=='administrador' || profile?.activo!==true) throw new Error('No tienes permiso para entrar como negocio.');
 
-  const membershipBusiness = await loadMembershipBusiness(authenticatedUser.id);
-  const businessFallback = membershipBusiness ? businessToDraftData(membershipBusiness,membershipBusiness.__categoryName) : {};
-  const preFallback = compactObject({nombre:pre.nombre_negocio,categoria:pre.categoria,whatsapp:pre.whatsapp,municipio:pre.municipio,colonia:pre.colonia});
+    const {data:rawContext,error:contextError}=await supabase.rpc('admin_obtener_contexto_negocio',{p_negocio_id:managedBusinessId});
+    if(contextError) throw contextError;
+    const context=normalizeAdminContext(rawContext);
+    const rpcBusiness=context.negocio && typeof context.negocio==='object' ? context.negocio : null;
+    const business=rpcBusiness || await loadBusinessById(managedBusinessId);
+    if(!business) throw new Error('El negocio solicitado no existe o no está disponible.');
 
-  document.querySelector('#welcome-title').textContent = `Bienvenido, ${businessFallback.nombre || pre.nombre_negocio || 'tu negocio'} 👋`;
-  const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
-  if(error) throw error;
-  if(draftData){
-    draft = draftData;
-    draft.datos = {...businessFallback,...preFallback,...(draftData.datos || {})};
-    draft.datos.galeria = draft.datos.galeria || [];
-    draft.datos.promociones = draft.datos.promociones || [];
-    if(!draft.negocio_id && membershipBusiness?.id) draft.negocio_id=membershipBusiness.id;
+    adminMode=true;
+    const contextDraft=context.borrador && typeof context.borrador==='object' ? context.borrador : null;
+    managedUserId=context.propietario_id || contextDraft?.usuario_id || null;
+    const businessFallback=businessToDraftData(business,business.__categoryName || context.categoria_nombre || '');
+    pre={
+      nombre_negocio:businessFallback.nombre || 'Negocio',
+      categoria:businessFallback.categoria || '',
+      whatsapp:businessFallback.whatsapp || '',
+      municipio:businessFallback.municipio || '',
+      colonia:businessFallback.colonia || ''
+    };
+
+    if(contextDraft){
+      draft={...contextDraft};
+      draft.datos={...businessFallback,...(contextDraft.datos || {})};
+    }else{
+      draft={
+        datos:{...businessFallback},
+        estado:'borrador',
+        porcentaje:Number(business.porcentaje_perfil || 0),
+        negocio_id:business.id
+      };
+    }
+    draft.datos=draft.datos || {};
+    draft.datos.galeria=Array.isArray(draft.datos.galeria) ? draft.datos.galeria : [];
+    draft.datos.promociones=Array.isArray(draft.datos.promociones) ? draft.datos.promociones : [];
+    draft.negocio_id=draft.negocio_id || business.id;
+    installAdminModeBanner(pre.nombre_negocio,Boolean(managedUserId));
   }else{
-    draft.datos = {...businessFallback,...preFallback,galeria:businessFallback.galeria || [],promociones:businessFallback.promociones || []};
-    if(membershipBusiness?.id) draft.negocio_id=membershipBusiness.id;
+    managedUserId=authenticatedUser.id;
+    const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
+    if(preError) throw preError;
+    pre = Array.isArray(preData) ? preData[0] : preData;
+
+    const membershipBusiness = await loadMembershipBusiness(authenticatedUser.id);
+    const businessFallback = membershipBusiness ? businessToDraftData(membershipBusiness,membershipBusiness.__categoryName) : {};
+    const preFallback = compactObject({
+      nombre:pre?.nombre_negocio,
+      categoria:pre?.categoria,
+      whatsapp:pre?.whatsapp,
+      municipio:pre?.municipio,
+      colonia:pre?.colonia
+    });
+
+    if(!pre && !membershipBusiness){ location.replace('estado-cuenta.html'); return; }
+    pre=pre || {nombre_negocio:businessFallback.nombre || 'tu negocio'};
+    const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
+    if(error) throw error;
+    if(draftData){
+      draft={...draftData};
+      draft.datos={...businessFallback,...preFallback,...(draftData.datos || {})};
+    }else{
+      draft={datos:{...businessFallback,...preFallback},estado:'borrador',porcentaje:0};
+      if(membershipBusiness?.id) draft.negocio_id=membershipBusiness.id;
+    }
+    draft.datos.galeria=Array.isArray(draft.datos.galeria) ? draft.datos.galeria : [];
+    draft.datos.promociones=Array.isArray(draft.datos.promociones) ? draft.datos.promociones : [];
   }
 
+  document.querySelector('#welcome-title').textContent = adminMode
+    ? `Administrando ${pre?.nombre_negocio || draft.datos?.nombre || 'negocio'}`
+    : `Bienvenido, ${draft.datos?.nombre || pre?.nombre_negocio || 'tu negocio'} 👋`;
+
   await loadPublishedBusiness();
-  fill(draft.datos);
+  fill(draft.datos || {});
   updateProgress();
   renderNav();
   renderWorkflow();
-  await showRulesIfNeeded();
-  await renderAccountManagement();
-  await initNotificationCenter();
+  if(!adminMode){
+    await showRulesIfNeeded();
+    await renderAccountManagement();
+    await initNotificationCenter();
+  }else{
+    document.querySelector('#account-management')?.classList.add('hidden');
+  }
 }
 
 document.querySelector('#prev-step').onclick = () => go(currentStep - 1);
@@ -472,7 +541,7 @@ document.querySelector('#add-promotion').onclick = () => { addPromotion(); markD
 document.querySelector('#preview-button').onclick = previewProfile;
 document.querySelector('#copy-profile-link').onclick = copyOwnerProfileLink;
 document.querySelector('#open-owner-profile').onclick = openOwnerProfile;
-document.querySelector('#logout-button').onclick = async () => { await supabase.auth.signOut(); location.replace('login.html'); };
+document.querySelector('#logout-button').onclick = async () => { if(adminMode){location.href='negocios.html';return;} await supabase.auth.signOut(); location.replace('login.html'); };
 document.querySelector('#submit-review').onclick = async () => {
   try{
     const percentage = updateProgress();
@@ -528,7 +597,7 @@ async function showRulesIfNeeded(){
     card.querySelector('#tutorial-next')?.addEventListener('click',()=>{index++;render();});
     if(final){
       card.querySelector('#rules-accept').onchange=e=>card.querySelector('#rules-confirm').disabled=!e.target.checked;
-      card.querySelector('#rules-confirm').onclick=async()=>{const button=card.querySelector('#rules-confirm');button.disabled=true;button.textContent='Guardando…';const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});if(error){button.disabled=false;button.textContent='Comenzar';showMessage(error.message,'error');return;}modal.classList.add('hidden');showMessage('Tutorial completado. Bienvenido a Aliados Fantasma.');};
+      card.querySelector('#rules-confirm').onclick=async()=>{const button=card.querySelector('#rules-confirm');button.disabled=true;button.textContent='Guardando…';const {error}=await supabase.from('aceptaciones_legales').insert({usuario_id:managedUserId || user.id,version_terminos:LEGAL_TERMS_VERSION,version_privacidad:LEGAL_PRIVACY_VERSION});if(error){button.disabled=false;button.textContent='Comenzar';showMessage(error.message,'error');return;}modal.classList.add('hidden');showMessage('Tutorial completado. Bienvenido a Aliados Fantasma.');};
     }
   };
   modal.classList.remove('hidden');render();
@@ -663,7 +732,7 @@ async function renderAccountManagement(){
       openActionModal({title:'Cancelar eliminación',description:'El negocio volverá a estar activo y visible. Se cancelará definitivamente la cuenta regresiva de eliminación.',confirmText:'Cancelar eliminación',onConfirm:async()=>{const {error}=await supabase.rpc('propietario_cancelar_eliminacion',{p_negocio_id:b.id});if(error)throw error;await loadPublishedBusiness();await renderAccountManagement();renderProfileAccess();showMessage('La eliminación fue cancelada y el negocio volvió a estar activo.');}});
     });
     document.querySelector('[data-appeal]')?.addEventListener('click',async()=>{
-      openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
+      openActionModal({eyebrow:'DERECHO DE REVISIÓN',title:'Presentar apelación',description:'Explica con claridad por qué consideras que la suspensión debe revisarse. La apelación no reactiva automáticamente el perfil.',confirmText:'Enviar apelación',textarea:true,minLength:20,placeholder:'Describe los hechos y cualquier información que administración deba considerar…',onConfirm:async text=>{const {error}=await supabase.from('apelaciones_suspension').insert({negocio_id:b.id,usuario_id:managedUserId || user.id,explicacion:text});if(error)throw error;showMessage('Apelación enviada a administración.');}});
     });
 
   }catch(error){
@@ -877,7 +946,7 @@ function ensureMarketingCenterAccess(){
   const footer=sidebar.querySelector('.sidebar-footer');
   const link=document.createElement('a');
   link.id='marketing-center-link';
-  link.href='marketing.html';
+  link.href=managedBusinessId ? `marketing.html?admin_business=${encodeURIComponent(managedBusinessId)}` : 'marketing.html';
   link.className='button marketing-center-link full';
   link.innerHTML='<span aria-hidden="true">📣</span><span>Centro de Marketing</span>';
   link.style.cssText='display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 16px 10px;min-height:48px;text-decoration:none;background:linear-gradient(135deg,rgba(91,61,196,.28),rgba(0,149,255,.18));border:1px solid rgba(161,111,255,.45);color:#fff;border-radius:12px;font-weight:800;';
@@ -894,3 +963,12 @@ if(document.readyState === 'loading'){
 
 // Segundo intento después de que el panel termine de pintar sus componentes dinámicos.
 window.setTimeout(ensureMarketingCenterAccess, 250);
+
+
+function installAdminModeBanner(name,canEdit){
+  const banner=document.createElement('div');
+  banner.className='admin-impersonation-banner';
+  banner.innerHTML=`<div><strong>Modo administrador</strong><span>Estás administrando ${esc(name||'este negocio')} como Administrador.${canEdit?'':' Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.'}</span></div><a class="button secondary small" href="negocios.html">Volver al panel administrativo</a>`;
+  document.body.prepend(banner);
+  if(!canEdit){['#save-button','#submit-review','#logo-file','#portada-file','#gallery-files','#add-promotion'].forEach(selector=>{const el=document.querySelector(selector);if(el)el.disabled=true;});}
+}

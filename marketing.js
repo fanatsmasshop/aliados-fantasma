@@ -44,20 +44,55 @@ async function loadBusiness(){
   const {data:{user}}=await supabase.auth.getUser();
   if(!user){location.href='login.html';return;}
   state.user=user;
-  const {data:draft,error}=await supabase.from('perfiles_borrador').select('*').eq('usuario_id',user.id).maybeSingle();
-  if(error) throw error;
-  const membershipBusiness=await loadMembershipBusiness(user.id);
-  state.draft=draft||{};
-  state.business=membershipBusiness||null;
-  if(!state.business && draft?.negocio_id){
-    const {data:business,error:businessError}=await supabase.from('negocios').select('*').eq('id',draft.negocio_id).maybeSingle();
-    if(businessError) throw businessError;
-    state.business=business||null;
+  const adminBusinessId=new URLSearchParams(location.search).get('admin_business');
+
+  if(adminBusinessId){
+    const {data:profile,error:profileError}=await supabase.from('perfiles').select('rol,activo').eq('id',user.id).maybeSingle();
+    if(profileError) throw profileError;
+    if(profile?.rol!=='administrador' || profile?.activo!==true) throw new Error('No tienes permiso para administrar este negocio.');
+
+    const {data:rawContext,error:contextError}=await supabase.rpc('admin_obtener_contexto_negocio',{p_negocio_id:adminBusinessId});
+    if(contextError) throw contextError;
+    const context=Array.isArray(rawContext)?(rawContext[0]||{}):(rawContext||{});
+    let business=context.negocio && typeof context.negocio==='object' ? context.negocio : null;
+    if(!business){
+      const {data,error}=await supabase.from('negocios').select('*').eq('id',adminBusinessId).maybeSingle();
+      if(error) throw error;
+      business=data||null;
+    }
+    if(!business) throw new Error('El negocio solicitado no existe o no está disponible.');
+
+    let categoryName='';
+    if(business.categoria_id){
+      const {data:category,error:categoryError}=await supabase.from('categorias').select('nombre').eq('id',business.categoria_id).maybeSingle();
+      if(categoryError) console.warn('No se pudo cargar la categoría:',categoryError.message);
+      categoryName=category?.nombre||'';
+    }
+    const draft=context.borrador && typeof context.borrador==='object' ? context.borrador : null;
+    state.draft=draft||{negocio_id:business.id};
+    state.business={...business,__categoryName:categoryName};
+    const businessData=businessToMarketingData(state.business,categoryName);
+    state.data={...businessData,...(draft?.datos||{})};
+    const back=document.querySelector('.marketing-sidebar a[href="panel.html"]');
+    if(back) back.href=`panel.html?admin_business=${encodeURIComponent(adminBusinessId)}`;
+  }else{
+    const {data:draft,error}=await supabase.from('perfiles_borrador').select('*').eq('usuario_id',user.id).maybeSingle();
+    if(error) throw error;
+    const membershipBusiness=await loadMembershipBusiness(user.id);
+    state.draft=draft||{};
+    state.business=membershipBusiness||null;
+    if(!state.business && draft?.negocio_id){
+      const {data:business,error:businessError}=await supabase.from('negocios').select('*').eq('id',draft.negocio_id).maybeSingle();
+      if(businessError) throw businessError;
+      state.business=business||null;
+    }
+    const businessData=state.business?businessToMarketingData(state.business,state.business.__categoryName):{};
+    state.data={...businessData,...(draft?.datos||{})};
   }
-  const businessData=state.business?businessToMarketingData(state.business,state.business.__categoryName):{};
-  state.data={...businessData,...(draft?.datos||{})};
-  state.data.galeria=state.data.galeria||[];
-  state.data.promociones=state.data.promociones||[];
+
+  state.data=state.data||{};
+  state.data.galeria=Array.isArray(state.data.galeria)?state.data.galeria:[];
+  state.data.promociones=Array.isArray(state.data.promociones)?state.data.promociones:[];
   state.profileUrl=profileLink();
   const name=state.data.nombre||state.business?.nombre||'Tu negocio';
   $('#marketing-title').textContent=`Marketing para ${name}`;
