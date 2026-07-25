@@ -1,0 +1,15 @@
+AF-INDEX-MENU-RC10.3
+
+Corrección puntual del menú móvil del index.
+
+Subir y reemplazar en la raíz de GitHub:
+- index.html
+- lanzamiento.css
+- lanzamiento.js
+
+No ejecutar SQL.
+
+Corrige:
+- el fondo se desenfocaba pero el panel no aparecía;
+- el drawer quedaba debajo del overlay por el contexto de apilamiento del header;
+- mantiene el menú lateral, cierre con X, toque fuera y Escape.

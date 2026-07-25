@@ -109,3 +109,18 @@ footer{padding:30px 0 40px;display:grid;grid-template-columns:1fr auto auto;gap:
   body.menu-open{overflow:hidden}
   body.menu-open .menu-backdrop{opacity:1;visibility:visible;pointer-events:auto}
 }
+
+/* ==========================================================
+   RC10.3 · Corrección de capa del menú móvil
+   El header dejaba al drawer debajo del backdrop porque crea
+   un contexto de apilamiento propio con backdrop-filter.
+   ========================================================== */
+@media(max-width:720px){
+  .site-header{
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+    background:rgba(8,11,18,.97);
+  }
+  .menu-backdrop{z-index:49}
+  .site-header nav{z-index:130}
+}
