@@ -24,6 +24,11 @@ let ownerMemberships = [];
 let activeOwnerMembership = null;
 let isGlobalAdmin = false;
 
+// Estado del centro de notificaciones. Debe inicializarse antes de que init()
+// pueda llamar a initNotificationCenter(), evitando errores de zona temporal.
+let notificationRows = [];
+let notificationFilter = 'all';
+
 function preferredBusinessId(){
   const params = new URLSearchParams(location.search);
   return params.get('business') || localStorage.getItem('af_owner_business_id') || '';
@@ -876,8 +881,6 @@ async function renderAccountManagement(){
 // ============================================================
 // CENTRO DE NOTIFICACIONES DEL NEGOCIO
 // ============================================================
-let notificationRows = [];
-let notificationFilter = 'all';
 
 function notificationDate(value){
   const date = new Date(value);

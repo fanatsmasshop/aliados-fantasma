@@ -1,0 +1,13 @@
+AF-NOTIFICACIONES-RC3.1
+
+Corrección única:
+- Evita el error "Cannot access 'notificationRows' before initialization".
+- No modifica Supabase, SQL, HTML, CSS ni otras funciones.
+
+Instalación:
+1. Sube panel.js a la raíz de GitHub.
+2. Reemplaza el panel.js actual.
+3. Espera el despliegue de Cloudflare.
+4. Abre el sitio con Ctrl + F5 o en una ventana de incógnito.
+
+No ejecutes ningún SQL.
