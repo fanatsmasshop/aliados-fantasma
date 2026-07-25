@@ -1,0 +1,19 @@
+ALIADOS FANTASMA — INDEX PÚBLICO RC10
+
+SUBIR A LA RAÍZ DE GITHUB Y REEMPLAZAR:
+- index.html
+- lanzamiento.css
+- lanzamiento.js
+
+NO ejecutar SQL.
+NO reemplazar logos, iconos ni favicons.
+
+CAMBIOS:
+- Menú móvil ☰ accesible.
+- Navegación pública más clara.
+- Hero simplificado para comerciantes.
+- CTA móvil fijo: iniciar sesión / registrar negocio.
+- Mejor jerarquía y lectura en 320–720 px.
+- Enlaces de Términos, Privacidad y Ayuda regresan al inicio.
+- Caché actualizada a RC10.
+- Logos e identidad visual conservados.

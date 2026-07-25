@@ -10,8 +10,8 @@
   <title>Aliados Fantasma | Lanzamiento 2026</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
   <link rel="preload" href="aliados-fantasma-logo.webp" as="image">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260723-v4">
-  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260725-RC10">
+  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10">
 </head>
 <body>
   <div class="page-noise" aria-hidden="true"></div>
@@ -23,11 +23,14 @@
       <img src="aliados-fantasma-icono.webp" alt="">
       <span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos</small></span>
     </a>
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">Menú</button>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú de navegación">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
     <nav id="main-nav" aria-label="Navegación principal">
       <a href="#que-es" class="link">Qué es</a>
       <a href="#como-funciona" class="link">Cómo funciona</a>
       <a href="#beneficios" class="link">Beneficios</a>
+      <a href="directorio.html" class="link">Directorio</a>
       <a href="login.html" class="link">Iniciar sesión</a>
       <a href="registro.html" class="button button-small">Registrar negocio</a>
     </nav>
@@ -43,13 +46,13 @@
         <img class="main-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
         <p class="eyebrow">ECATEPEC · ESTADO DE MÉXICO</p>
         <h1>La red de negocios locales <span>está por despertar.</span></h1>
-        <p class="lead">Una plataforma creada para que los comercios locales tengan presencia digital, sean más fáciles de descubrir y cuenten con herramientas reales para atraer, informar y conectar con nuevos clientes.</p>
+        <p class="lead">Crea un perfil profesional para tu negocio, reúne tu información en un solo enlace y prepárate para aparecer en el directorio local de Aliados Fantasma.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a>
-          <a class="button button-secondary" href="#que-es">Conocer el proyecto</a>
+          <a class="button button-secondary" href="#como-funciona">Ver cómo funciona</a>
         </div>
         <div class="trust-row" aria-label="Características principales">
-          <span>✓ Perfil digital</span><span>✓ Directorio local</span><span>✓ QR personalizado</span><span>✓ Sin costo por lanzamiento</span>
+          <span>✓ Registro sencillo</span><span>✓ Perfil digital</span><span>✓ Directorio local</span><span>✓ Sin costo por lanzamiento</span>
         </div>
       </div>
 
@@ -63,8 +66,8 @@
           <div><strong id="seconds">00</strong><span>Segundos</span></div>
         </div>
         <div class="progress-shell" aria-hidden="true"><span id="launch-progress"></span></div>
-        <p>Los negocios registrados pueden completar su perfil y prepararlo antes de que el directorio se abra al público.</p>
-        <a href="login.html" class="panel-link">Entrar al panel privado <span>↗</span></a>
+        <p>Regístrate ahora, completa tu información con calma y deja tu perfil preparado para el lanzamiento.</p>
+        <a href="login.html" class="panel-link">Ya tengo cuenta <span>→</span></a>
       </aside>
     </section>
 
@@ -187,6 +190,10 @@
   </footer>
 
   <noscript><div class="noscript">Activa JavaScript para ver la cuenta regresiva.</div></noscript>
-  <script src="lanzamiento.js?v=20260723-v4"></script>
+  <div class="mobile-cta" aria-label="Acciones rápidas">
+    <a href="login.html">Iniciar sesión</a>
+    <a href="registro.html">Registrar negocio</a>
+  </div>
+  <script src="lanzamiento.js?v=20260725-RC10"></script>
 </body>
 </html>
