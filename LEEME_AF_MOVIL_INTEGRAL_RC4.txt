@@ -1,0 +1,42 @@
+ALIADOS FANTASMA — AF-MOVIL-INTEGRAL-RC4
+
+OBJETIVO
+Optimización móvil integral sin rediseñar ni eliminar funciones.
+
+CONTENIDO
+- 30 páginas HTML actualizadas para cargar la capa móvil común.
+- mobile-global.css: adaptación móvil general.
+- panel.js: conserva la corrección de inicialización de notificaciones.
+- login.js y estado-cuenta.js: conserva el flujo aprobado de RC3.
+- onboarding.css: conserva los ajustes previos del onboarding.
+
+INSTALACIÓN
+1. NO ejecutar SQL.
+2. Subir todos los archivos de este paquete a la raíz de GitHub.
+3. Reemplazar los archivos existentes con el mismo nombre.
+4. No crear carpetas.
+5. Esperar el despliegue de Cloudflare.
+6. Abrir en incógnito o usar Ctrl+F5.
+
+CAMBIOS MÓVILES
+- Panel propietario: navegación de pasos horizontal, cabecera compacta y formulario visible sin recorrer una barra lateral enorme.
+- Formularios: una columna, campos con tamaño táctil y fuente de 16 px para evitar zoom automático en iPhone.
+- Horarios, galería, revisión y redes adaptados a pantallas pequeñas.
+- Acciones del onboarding accesibles mediante barra inferior fija.
+- Panel administrativo: menú lateral deslizable, contenido a ancho completo y tablas con desplazamiento controlado.
+- Login, registro, recuperación, verificación y estado de cuenta adaptados a una columna.
+- Directorio, perfiles, landing, marketing, páginas legales y páginas públicas ajustadas.
+- Modales y centro de notificaciones adaptados a la altura real del teléfono.
+- Compatibilidad con áreas seguras de teléfonos con notch.
+
+PRUEBAS RECOMENDADAS
+- Android: 360x800 y 412x915.
+- iPhone: 375x812 y 390x844.
+- Registro, login, estado, onboarding, carga de imágenes, administración, directorio y perfil público.
+
+NO MODIFICA
+- Base de datos.
+- RLS.
+- Funciones SQL.
+- Contenido o identidad visual.
+- Funcionalidades existentes.

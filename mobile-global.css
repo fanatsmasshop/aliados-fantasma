@@ -1,0 +1,143 @@
+/* AF-LANZAMIENTO RC4 — Optimización móvil integral
+   Capa final no destructiva. Se carga después de los estilos existentes. */
+
+:root{--af-touch:44px}
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,video,canvas,svg{max-width:100%;height:auto}
+iframe{max-width:100%}
+button,a,input,select,textarea{touch-action:manipulation}
+button,.button,.btn,.boton,.icon-button,input,select,textarea{font:inherit}
+input,select,textarea{max-width:100%;font-size:16px}
+button,.button,.btn,.boton{min-height:var(--af-touch)}
+[hidden],.hidden{display:none!important}
+.table-wrap,.table-container,.data-table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain}
+table{max-width:100%}
+.modal,.af-modal,[role="dialog"]{overscroll-behavior:contain}
+.modal-card,.af-modal-card{max-height:calc(100dvh - 24px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+@media (max-width:850px){
+  /* App administrativa y paneles */
+  .app-layout{display:block!important;min-height:100dvh}
+  .app-layout>.sidebar,.app-layout .sidebar{position:fixed!important;inset:0 auto 0 0!important;width:min(86vw,320px)!important;height:100dvh!important;z-index:1200!important;transform:translateX(-105%);transition:transform .22s ease;overflow-y:auto;box-shadow:20px 0 60px rgba(0,0,0,.45)}
+  .app-layout>.sidebar.open,.app-layout .sidebar.open,.app-layout.sidebar-open .sidebar,body.sidebar-open .sidebar{transform:translateX(0)}
+  .app-main{width:100%!important;min-width:0!important;margin:0!important;padding:18px 14px 88px!important}
+  .topbar{display:flex!important;align-items:flex-start!important;gap:12px!important;flex-wrap:wrap!important}
+  .topbar>div,.topbar-copy{min-width:0}
+  .topbar h1{font-size:clamp(1.45rem,7vw,2rem)!important;overflow-wrap:anywhere}
+  .menu-button{display:inline-grid!important;place-items:center;min-width:44px;min-height:44px}
+  .stats-grid,.admin-stats,.dashboard-grid,.cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .form-grid,.register-grid{grid-template-columns:1fr!important}
+  .form-grid .wide,.register-grid .wide{grid-column:auto!important}
+  .section-heading,.modal-head{align-items:flex-start!important;gap:12px!important;flex-wrap:wrap!important}
+
+  /* Onboarding: cabecera compacta y contenido visible inmediatamente */
+  .owner-shell{display:block!important;min-height:100dvh!important}
+  .owner-sidebar{position:static!important;width:100%!important;height:auto!important;min-height:0!important;padding:14px!important;border-right:0!important;border-bottom:1px solid var(--line)!important}
+  .owner-sidebar .sidebar-brand{margin-bottom:10px!important;padding:10px 12px!important}
+  .owner-sidebar .af-sidebar-logo{width:44px!important;height:44px!important}
+  .owner-progress{margin:4px 0 10px!important;padding:11px 13px!important}
+  .owner-steps{display:flex!important;gap:8px!important;overflow-x:auto!important;padding:2px 0 8px!important;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .owner-step-link{flex:0 0 auto!important;width:auto!important;min-width:132px!important;padding:10px 12px!important;white-space:nowrap!important;text-align:center!important;scroll-snap-align:start}
+  .owner-sidebar .sidebar-footer{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:6px!important}
+  .owner-sidebar .sidebar-footer .button{margin:0!important}
+  .owner-main{width:100%!important;max-width:none!important;padding:18px 14px 96px!important}
+  .owner-topbar{display:flex!important;gap:12px!important;align-items:flex-start!important;flex-wrap:wrap!important;margin-bottom:16px!important}
+  .owner-topbar h1{font-size:clamp(1.45rem,7vw,2rem)!important}
+  .onboarding-step{padding:18px!important;border-radius:18px!important}
+  .step-heading{gap:12px!important;margin-bottom:18px!important}
+  .step-heading>span{width:40px!important;height:40px!important;flex:0 0 40px!important}
+  .step-heading h2{font-size:1.25rem!important}
+  .form-grid{grid-template-columns:1fr!important;gap:14px!important}
+  .field.wide{grid-column:auto!important}
+  .schedule-row{grid-template-columns:1fr 1fr!important}
+  .gallery-editor{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .review-grid{grid-template-columns:1fr!important}
+  .wizard-actions{position:sticky!important;bottom:0!important;z-index:30!important;margin:18px -14px -18px!important;padding:12px 14px calc(12px + env(safe-area-inset-bottom))!important;background:rgba(10,12,18,.96)!important;backdrop-filter:blur(14px);border-top:1px solid var(--line)!important;display:grid!important;grid-template-columns:1fr 1fr!important}
+  .wizard-actions .button{width:100%!important;margin:0!important}
+
+  /* Autenticación */
+  .login-page{padding:76px 14px 30px!important;min-height:100dvh!important}
+  .login-shell,.register-shell{width:100%!important;max-width:680px!important;grid-template-columns:1fr!important;border-radius:22px!important;overflow:hidden!important}
+  .login-brand,.register-brand{padding:26px 22px!important;min-height:0!important}
+  .login-brand .af-login-logo,.register-brand .af-login-logo{max-height:190px!important;object-fit:contain!important}
+  .login-intro{margin-top:14px!important}
+  .login-card,.register-card{padding:24px 20px!important}
+  .page-back-link{top:14px!important;left:14px!important;z-index:20}
+  .auth-step{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  .form-actions{display:grid!important;grid-template-columns:1fr!important}
+  .form-actions .button{width:100%!important}
+
+  /* Directorio y páginas públicas */
+  .directory-header,.premium-profile-nav,.site-header .container,.encabezado-contenido{padding-left:14px!important;padding-right:14px!important}
+  .directory-hero,.hero{padding-left:14px!important;padding-right:14px!important}
+  .directory-layout{grid-template-columns:1fr!important}
+  .directory-filters{position:static!important;width:100%!important}
+  .business-grid,.directory-grid,.products-grid,.help-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .profile-actions,.hero-actions,.botones{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}
+  .profile-actions>* ,.hero-actions>* ,.botones>*{width:100%!important}
+  .premium-profile-hero,.profile-hero,.portada-contenido{min-width:0!important}
+  .profile-main-grid,.profile-content-grid,.layout{grid-template-columns:1fr!important}
+  .profile-sidebar{position:static!important}
+
+  /* Marketing */
+  .marketing-shell{display:block!important}
+  .marketing-sidebar{position:static!important;width:100%!important;height:auto!important}
+  .marketing-main{width:100%!important;padding:18px 14px 90px!important}
+  .creator-grid,.marketing-grid,.result-grid{grid-template-columns:1fr!important}
+
+  /* Footer / navegación inferior */
+  .menu-inferior{padding-bottom:env(safe-area-inset-bottom)!important}
+}
+
+@media (max-width:560px){
+  body{font-size:15px}
+  h1{font-size:clamp(1.7rem,9vw,2.35rem)}
+  h2{font-size:clamp(1.35rem,7vw,1.8rem)}
+  .button,.btn,.boton{width:100%}
+  .icon-button,.menu-button{width:44px!important;min-width:44px!important}
+  .stats-grid,.admin-stats,.dashboard-grid,.cards-grid,.business-grid,.directory-grid,.products-grid,.help-grid{grid-template-columns:1fr!important}
+  .owner-sidebar{padding:10px!important}
+  .owner-sidebar .sidebar-brand{padding:8px 10px!important}
+  .owner-sidebar .sidebar-brand small{display:none!important}
+  .owner-progress{padding:9px 11px!important}
+  .owner-step-link{min-width:118px!important;font-size:.86rem!important}
+  .owner-sidebar .sidebar-footer{grid-template-columns:1fr!important}
+  .owner-sidebar .sidebar-footer #preview-button{display:none!important}
+  .owner-main{padding:14px 10px 94px!important}
+  .onboarding-step{padding:15px!important;border-radius:16px!important}
+  .step-heading>span{width:36px!important;height:36px!important;flex-basis:36px!important;border-radius:11px!important}
+  .schedule-row{grid-template-columns:1fr!important;gap:9px!important}
+  .schedule-row>*{width:100%!important}
+  .gallery-editor{grid-template-columns:1fr!important}
+  .social-input{display:block!important;overflow:visible!important;border:0!important;background:transparent!important}
+  .social-input>span{display:block!important;border:1px solid var(--line)!important;border-bottom:0!important;border-radius:12px 12px 0 0!important;padding:8px 10px!important}
+  .social-input input{border:1px solid var(--line)!important;border-radius:0 0 12px 12px!important}
+  .wizard-actions{grid-template-columns:1fr!important;margin-left:-10px!important;margin-right:-10px!important}
+  .wizard-actions .secondary{order:2}
+  .login-page{padding-left:10px!important;padding-right:10px!important}
+  .login-brand,.register-brand{padding:20px 16px!important}
+  .login-card,.register-card{padding:22px 16px!important}
+  .summary-row{display:grid!important;grid-template-columns:1fr!important;gap:5px!important}
+  .summary-row strong{text-align:left!important}
+  .profile-actions,.hero-actions,.botones{grid-template-columns:1fr!important}
+  .modal,.af-modal{padding:8px!important;align-items:flex-end!important}
+  .modal-card,.af-modal-card{width:100%!important;max-width:none!important;border-radius:20px 20px 8px 8px!important;padding:18px!important;max-height:92dvh!important}
+  .modal-actions,.af-modal-actions{display:grid!important;grid-template-columns:1fr!important}
+  .notification-bell{right:10px!important;top:64px!important}
+  .notification-drawer{inset:0!important;width:100%!important;max-width:none!important;height:100dvh!important;border-radius:0!important}
+  .data-table{min-width:680px}
+  .legal-card,.help-hero,.help-card,.card{padding:18px!important;border-radius:18px!important}
+  .contenedor,.container,.section{padding-left:12px!important;padding-right:12px!important}
+}
+
+@media (max-width:380px){
+  .owner-step-link{min-width:108px!important;padding:9px!important;font-size:.8rem!important}
+  .owner-topbar .button{width:100%!important}
+  .login-card,.register-card{padding:18px 14px!important}
+}
+
+@media (hover:none) and (pointer:coarse){
+  a,button,.button,.btn,.boton,.nav-link,.owner-step-link{min-height:44px}
+  input[type="checkbox"],input[type="radio"]{min-width:22px;min-height:22px}
+}
