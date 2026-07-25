@@ -1,0 +1,9 @@
+AF-INDEX-PRELOAD-RC10.1
+
+Sube únicamente index.html a la raíz de GitHub y reemplaza el existente.
+No ejecutes SQL.
+
+Corrección:
+- Se retiró el preload innecesario de aliados-fantasma-logo.webp.
+- El logo sigue cargando normalmente cuando corresponde.
+- Desaparece la advertencia de consola sobre recurso precargado no utilizado.
