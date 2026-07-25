@@ -1,0 +1,45 @@
+AF-PAGINAS-INFORMATIVAS-RC9
+
+OBJETIVO
+Mejorar la lectura y navegación de Términos, Privacidad y Ayuda sin modificar Supabase ni la lógica principal de la plataforma.
+
+ARCHIVOS PARA SUBIR A LA RAÍZ DE GITHUB
+- terminos.html
+- privacidad.html
+- ayuda.html
+- info-pages.css
+- return-context.js
+- help-page.js
+- index.html
+- registro.html
+- panel.html
+- panel.js
+- onboarding.css
+
+QUÉ CAMBIA
+- Términos y Privacidad ahora tienen ancho de lectura cómodo, índice, secciones visuales y adaptación móvil.
+- Ayuda incluye buscador, categorías y respuestas desplegables.
+- El botón de regreso detecta el origen permitido:
+  * Inicio -> Volver al inicio
+  * Panel -> Volver al panel
+  * Registro -> Continuar registro
+  * Login -> Volver al acceso
+  * Estado de cuenta -> Volver al estado
+  * Directorio -> Volver al directorio
+- Los enlaces de Inicio, Registro y Panel incluyen el origen de forma explícita.
+- La opción Ayuda del menú del propietario abre el Centro de ayuda y permite volver al panel.
+- Se conserva logo, favicon, colores, tipografías y lógica existente.
+
+INSTALACIÓN
+1. No ejecutar SQL.
+2. Subir todos los archivos a la raíz de GitHub y reemplazar los existentes.
+3. Esperar el despliegue de Cloudflare.
+4. Abrir con Ctrl + F5 o en incógnito.
+
+PRUEBAS
+- Inicio -> Términos -> Volver al inicio.
+- Inicio -> Ayuda -> Volver al inicio.
+- Registro -> Términos -> Continuar registro.
+- Panel -> Ayuda -> Volver al panel.
+- Panel -> Términos/Privacidad -> Volver al panel.
+- Abrir Ayuda y probar búsqueda, categorías y acordeones.
