@@ -8,11 +8,11 @@ const action=document.querySelector('#profile-action');
 function fail(text){loading?.classList.add('hidden');const out=document.querySelector('#state-error-text');if(out)out.textContent=text;errorBox?.classList.remove('hidden');}
 function configureAction(row,draft){
   if(!action)return;
-  const blocked=!row.correo_verificado||row.estado==='rechazado';
+  const blocked=!row.correo_verificado||row.estado!=='aprobado';
   action.classList.toggle('disabled',blocked);
   action.setAttribute('aria-disabled',blocked?'true':'false');
   action.href=blocked?'#':'panel.html';
-  if(blocked){action.onclick=event=>event.preventDefault();action.textContent=!row.correo_verificado?'Verifica tu correo para continuar':'Registro no habilitado';}
+  if(blocked){action.onclick=event=>event.preventDefault();action.textContent=!row.correo_verificado?'Verifica tu correo para continuar':row.estado==='rechazado'?'Registro no habilitado':'Esperando aprobación';}
   else if(!draft){action.textContent=row.estado==='aprobado'?'Completar perfil del negocio':'Preparar mi perfil';}
 }
 function renderPreRegistration(row){
@@ -24,7 +24,7 @@ function renderPreRegistration(row){
   document.querySelector('#state-status').textContent=labels[row.estado]||row.estado||'Pendiente';
   const createdAt=row.created_at?new Date(row.created_at):null;
   document.querySelector('#state-date').textContent=createdAt&&!Number.isNaN(createdAt.getTime())?new Intl.DateTimeFormat('es-MX',{dateStyle:'medium'}).format(createdAt):'Fecha no disponible';
-  const notes={pendiente:'Recibimos tu registro. Puedes preparar tu perfil mientras el equipo revisa la solicitud.',contactado:'El equipo ya comenzó a dar seguimiento. Puedes continuar preparando el perfil digital.',aprobado:'Tu registro fue aprobado. Completa y envía el perfil de tu negocio para revisión.',rechazado:'Tu registro no fue aprobado por ahora. Contacta al equipo para solicitar más información.'};
+  const notes={pendiente:'Recibimos tu registro. El equipo revisará la solicitud antes de habilitar la configuración del perfil.',contactado:'El equipo ya comenzó a dar seguimiento. Cuando tu registro sea aprobado podrás completar el perfil digital.',aprobado:'Tu registro fue aprobado. Completa y envía el perfil de tu negocio para revisión.',rechazado:'Tu registro no fue aprobado por ahora. Contacta al equipo para solicitar más información.'};
   document.querySelector('#state-note').textContent=notes[row.estado]||'Tu solicitud está registrada.';
 }
 function renderProfileState(draft){
@@ -50,8 +50,9 @@ async function loadState(){
     if(!row){fail('No encontramos el registro asociado a esta cuenta. Vuelve a iniciar sesión; si continúa, contacta al equipo de Aliados Fantasma.');return;}
 
     const approved=row.correo_verificado===true&&row.estado==='aprobado';
-    const profileStarted=Boolean(draftData)&&row.correo_verificado===true&&row.estado!=='rechazado';
-    if(approved||profileStarted){
+    // Tener un borrador no equivale a estar aprobado. Evita que usuarios
+    // pendientes salten el proceso de revisión administrativa.
+    if(approved){
       location.replace('panel.html');
       return;
     }

@@ -62,7 +62,9 @@ async function getRegistrationDestination(user){
     const pre=Array.isArray(preData)?preData[0]:preData;
     const approved=pre?.correo_verificado===true&&pre?.estado==='aprobado';
     if(approved) return 'panel.html';
-    if(draftData&&pre?.correo_verificado===true&&pre?.estado!=='rechazado') return 'panel.html';
+    // Un borrador no autoriza el acceso mientras el pre-registro siga pendiente.
+    // Solo administración puede habilitar el onboarding aprobando el pre-registro.
+    if(draftData && approved) return 'panel.html';
   }catch(error){
     console.warn('No se pudo resolver el flujo de registro:',error);
   }

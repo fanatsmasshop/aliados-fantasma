@@ -502,7 +502,7 @@ async function init(){
       const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
       if(preError) throw preError;
       pre = Array.isArray(preData) ? preData[0] : preData;
-      const allowed = pre && pre.correo_verificado === true && ['pendiente','contactado','aprobado'].includes(pre.estado);
+      const allowed = pre && pre.correo_verificado === true && pre.estado === 'aprobado';
       if(!allowed){
         const {data:adminFlag} = await supabase.rpc('es_administrador');
         if(adminFlag){ location.replace('dashboard.html'); return; }
@@ -618,6 +618,11 @@ async function init(){
       pre = Array.isArray(preData) ? preData[0] : preData;
       if(!pre){
         if(isGlobalAdmin){ location.replace('dashboard.html'); return; }
+        location.replace('estado-cuenta.html'); return;
+      }
+      // Defensa adicional: sin membresía, el onboarding solo se habilita cuando
+      // el pre-registro está confirmado y aprobado por administración.
+      if(pre.correo_verificado !== true || pre.estado !== 'aprobado'){
         location.replace('estado-cuenta.html'); return;
       }
       document.querySelector('#welcome-title').textContent = `Bienvenido, ${pre.nombre_negocio || 'tu negocio'} 👋`;

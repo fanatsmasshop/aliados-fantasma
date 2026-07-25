@@ -1,0 +1,33 @@
+ALIADOS FANTASMA — AF-LANZAMIENTO-RC3
+Corrección de flujo y optimización móvil
+
+NO EJECUTAR SQL.
+
+ARCHIVOS A REEMPLAZAR EN LA RAÍZ DE GITHUB:
+1. login.html
+2. login.js
+3. estado-cuenta.html
+4. estado-cuenta.js
+5. panel.html
+6. panel.js
+7. onboarding.css
+
+CORRECCIONES:
+- Un usuario pendiente o contactado ya no puede entrar al onboarding por tener un borrador.
+- Solo un pre-registro con correo confirmado y estado aprobado entra al panel sin membresía.
+- Los usuarios con membresía activa conservan acceso normal a su panel.
+- Estado de cuenta permanece como destino de pendientes, contactados y rechazados.
+- Se agregó una segunda defensa dentro de panel.js para impedir accesos por URL directa.
+- Se actualizaron versiones de caché de los recursos.
+- Onboarding optimizado para celular: navegación horizontal compacta, horarios en una columna,
+  acciones táctiles, timeline compacto, galería y banner administrativo adaptados.
+
+PRUEBA OBLIGATORIA:
+A) Cuenta pendiente -> login -> estado-cuenta.html.
+B) Cuenta aprobada sin membresía -> login -> panel.html.
+C) Cuenta con membresía -> login -> panel correspondiente.
+D) Abrir panel.html directamente con cuenta pendiente -> rebota a estado-cuenta.html.
+E) Probar panel en celular: pasos, horarios, carga de imágenes, guardar, cerrar y reingresar.
+
+SUBIDA:
+Todos los archivos van en la raíz. Esta entrega contiene menos de 100 archivos.
