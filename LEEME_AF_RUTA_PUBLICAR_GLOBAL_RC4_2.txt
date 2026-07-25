@@ -1,0 +1,15 @@
+AF-RUTA-PUBLICAR-GLOBAL-RC4.2
+
+CORRECCIÓN GLOBAL — SIN MODIFICAR PERFILES DE NEGOCIOS
+
+Sube únicamente publicar.html a la raíz de GitHub y reemplaza el existente.
+No ejecutes SQL.
+
+Comportamiento:
+- Visitante sin sesión: /publicar redirige a registro.html.
+- Usuario con sesión: /publicar redirige a panel.html.
+- Si Supabase no responde: muestra botones para registrarse o iniciar sesión.
+- Ya no aparece la pantalla “Módulo en desarrollo / Próximamente”.
+
+Esta corrección cubre cualquier enlace antiguo o futuro que apunte a publicar.html,
+sin editar fantasmas-bikers-shop.html, carnitas-el-compadre.html ni otros perfiles.

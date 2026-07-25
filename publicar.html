@@ -1,3 +1,70 @@
-<!DOCTYPE html>
-<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1.0" name="viewport"/><title>Crear publicación | Aliados Fantasma</title><link href="favicon.png" rel="icon"/><link href="style.css?v=20260717-2" rel="stylesheet"/><link rel="stylesheet" href="sistema-visual.css?v=20260717-1">  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC4">
-</head><body><header class="encabezado"><div class="contenedor encabezado-contenido"><a class="marca" href="index.html"><img alt="Aliados Fantasma" src="isotipo-aliados.webp"/><div><strong>Aliados Fantasma</strong><small>Módulo en desarrollo</small></div></a><a class="encabezado-accion" href="index.html">Inicio</a></div></header><main class="proceso"><div class="contenedor"><section class="proceso-panel"><img src="isotipo-aliados.webp"/><div><span class="etiqueta">Próximamente</span></div><h1>Crear publicación</h1><p>Disponible para propietarios aprobados.</p><div class="botones"><a class="boton boton-principal" href="index.html">Volver al inicio</a><a class="boton boton-secundario" href="https://wa.me/525610329215">Solicitar información</a></div></section></div></main><nav class="menu-inferior"><div class="menu-inferior-contenido"><a class="menu-item" href="index.html"><span>🏠</span><span>Inicio</span></a><a class="menu-item" href="index.html#negocios"><span>🔎</span><span>Explorar</span></a><a class="menu-item" href="index.html#negocios"><span>🏪</span><span>Negocios</span></a><a class="menu-item activo" href="publicar.html"><span>➕</span><span>Publicar</span></a><a class="menu-item" href="login.html"><span>👤</span><span>Cuenta</span></a></div></nav></body></html>
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,follow">
+  <title>Acceso para negocios | Aliados Fantasma</title>
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="app.css?v=20260725-RC4">
+  <link rel="stylesheet" href="mobile-integral.css?v=20260725-RC4">
+  <style>
+    body{min-height:100dvh;display:grid;place-items:center;margin:0;background:#070a10;color:#fff;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .route-card{width:min(92%,440px);padding:32px 24px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:rgba(16,20,29,.94);text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.35)}
+    .route-card img{width:82px;height:82px;object-fit:contain;margin-bottom:18px}
+    .route-card h1{margin:0 0 10px;font-size:clamp(1.45rem,6vw,2rem)}
+    .route-card p{margin:0;color:#b9c2d4;line-height:1.55}
+    .route-spinner{width:38px;height:38px;margin:24px auto 0;border:3px solid rgba(255,255,255,.15);border-top-color:#8b5cf6;border-radius:50%;animation:spin .8s linear infinite}
+    .route-actions{display:none;gap:12px;margin-top:24px;flex-direction:column}
+    .route-actions a{display:block;padding:14px 18px;border-radius:14px;text-decoration:none;font-weight:800;background:#7c3aed;color:#fff}
+    .route-actions a:last-child{background:#1b2230}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <main class="route-card" aria-live="polite">
+    <img src="isotipo-aliados.webp" alt="Aliados Fantasma">
+    <h1 id="route-title">Preparando tu acceso</h1>
+    <p id="route-message">Te enviaremos al lugar correcto según el estado de tu cuenta.</p>
+    <div id="route-spinner" class="route-spinner" aria-label="Cargando"></div>
+    <div id="route-actions" class="route-actions">
+      <a href="registro.html">Registrar mi negocio</a>
+      <a href="login.html">Ya tengo una cuenta</a>
+    </div>
+  </main>
+
+  <script type="module">
+    import { supabase } from './supabase-client.js?v=20260720-600';
+
+    const title = document.querySelector('#route-title');
+    const message = document.querySelector('#route-message');
+    const spinner = document.querySelector('#route-spinner');
+    const actions = document.querySelector('#route-actions');
+
+    const showFallback = () => {
+      title.textContent = 'Únete a Aliados Fantasma';
+      message.textContent = 'Registra tu negocio o inicia sesión para administrar un perfil existente.';
+      spinner.hidden = true;
+      actions.style.display = 'flex';
+    };
+
+    try {
+      if (!supabase) {
+        showFallback();
+      } else {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+
+        if (data.session) {
+          location.replace('panel.html');
+        } else {
+          location.replace('registro.html');
+        }
+      }
+    } catch (error) {
+      console.warn('No se pudo resolver la ruta de publicación:', error);
+      showFallback();
+    }
+  </script>
+</body>
+</html>
