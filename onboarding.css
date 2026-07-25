@@ -242,3 +242,154 @@
   .owner-sidebar.mobile-options-open .sidebar-footer{grid-template-columns:1fr}
   .wizard-actions{grid-template-columns:.9fr 1.3fr;padding-inline:9px}
 }
+
+
+/* =========================================================
+   AF RC5.1 — PANEL MÓVIL DESPEJADO
+   Una sola tarea visible. Menú secundario bajo demanda.
+   ========================================================= */
+@media(max-width:700px){
+  .owner-sidebar{
+    display:grid!important;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:8px;
+    padding:9px 11px!important;
+  }
+  .owner-sidebar .sidebar-brand{
+    grid-column:1;
+    margin:0!important;
+    padding:7px 9px!important;
+    min-width:0;
+  }
+  .owner-sidebar .sidebar-brand small{display:none!important}
+  .owner-sidebar .owner-progress,
+  .owner-sidebar .owner-steps{
+    display:none!important;
+  }
+  .merchant-mobile-actions{
+    display:flex!important;
+    grid-column:2;
+    grid-row:1;
+    justify-content:flex-end;
+    margin:0!important;
+    position:relative;
+  }
+  .mobile-menu-button{
+    width:46px;
+    height:46px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:13px;
+    background:#171b25;
+    color:#fff;
+    font:800 1.5rem/1 system-ui,sans-serif;
+    cursor:pointer;
+  }
+  .mobile-menu-button span{transform:translateY(-1px)}
+  .merchant-mobile-menu{
+    display:none;
+    position:absolute;
+    top:54px;
+    right:0;
+    z-index:850;
+    width:min(280px,calc(100vw - 24px));
+    padding:8px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:15px;
+    background:#11151e;
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+  }
+  .owner-sidebar.mobile-options-open .merchant-mobile-menu{
+    display:grid;
+    gap:7px;
+  }
+  .mobile-menu-item,
+  .owner-sidebar.mobile-options-open #marketing-center-link,
+  .owner-sidebar.mobile-options-open .sidebar-footer .button{
+    min-height:46px!important;
+    width:100%!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+    padding:11px 13px!important;
+    border-radius:11px!important;
+    font-size:.9rem!important;
+  }
+  .owner-sidebar.mobile-options-open #marketing-center-link{
+    display:flex!important;
+    grid-column:1/-1;
+    margin:0!important;
+  }
+  .owner-sidebar.mobile-options-open .sidebar-footer{
+    display:grid!important;
+    grid-column:1/-1;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  /* Inserta las acciones existentes dentro del bloque visual desplegado */
+  .owner-sidebar.mobile-options-open{
+    grid-template-columns:1fr auto;
+  }
+  .owner-sidebar.mobile-options-open #marketing-center-link,
+  .owner-sidebar.mobile-options-open .sidebar-footer{
+    margin-top:8px!important;
+  }
+  .mobile-step-summary{
+    display:grid!important;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:14px;
+    margin:0 0 10px!important;
+    padding:12px 14px!important;
+  }
+  .mobile-step-summary>div:first-child{display:grid;gap:2px}
+  .mobile-step-summary small{font-size:.72rem}
+  .mobile-step-summary strong{font-size:1.05rem}
+  .mobile-progress-compact{
+    width:92px;
+    display:grid;
+    gap:5px;
+    justify-items:end;
+  }
+  .mobile-progress-compact span{font-size:.72rem;font-weight:900;color:#fff}
+  .mobile-progress-compact i{
+    display:block;
+    width:92px;
+    height:6px;
+    border-radius:999px;
+    background:rgba(255,255,255,.1);
+    overflow:hidden;
+  }
+  .mobile-progress-compact b{
+    display:block;
+    height:100%;
+    border-radius:inherit;
+    background:linear-gradient(90deg,#8c5cff,#2ba8ff);
+  }
+  .owner-topbar{display:none!important}
+  .merchant-summary-panel{display:none!important}
+  .merchant-summary-panel.mobile-open{
+    display:grid!important;
+    margin:0 0 12px!important;
+  }
+  .owner-main{padding-top:10px!important}
+  .onboarding-step{margin-top:0!important}
+  .notification-bell{
+    position:absolute!important;
+    top:10px!important;
+    right:68px!important;
+    width:44px!important;
+    height:44px!important;
+    z-index:820!important;
+  }
+}
+@media(max-width:390px){
+  .mobile-progress-compact{width:72px}
+  .mobile-progress-compact i{width:72px}
+  .owner-sidebar .sidebar-brand strong{font-size:.88rem}
+}

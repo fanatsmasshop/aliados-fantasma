@@ -157,7 +157,8 @@ function renderNav(){
 function updateMobileStepSummary(){
   const summary=document.querySelector('#mobile-step-summary');
   if(!summary) return;
-  summary.innerHTML=`<small>Paso ${currentStep + 1} de ${stepNames.length}</small><strong>${esc(stepNames[currentStep])}</strong>`;
+  const percentage = document.querySelector('#progress-label')?.textContent || '0%';
+  summary.innerHTML=`<div><small>Paso ${currentStep + 1} de ${stepNames.length}</small><strong>${esc(stepNames[currentStep])}</strong></div><div class="mobile-progress-compact"><span>${esc(percentage)}</span><i><b style="width:${esc(percentage)}"></b></i></div>`;
 }
 
 function go(index){
@@ -730,7 +731,9 @@ function initMerchantMobileUX(){
   if(optionsButton && sidebar){
     optionsButton.addEventListener('click',()=>{
       const open=sidebar.classList.toggle('mobile-options-open');
-      optionsButton.textContent=open?'Ocultar opciones':'Más opciones';
+      optionsButton.setAttribute('aria-expanded', String(open));
+      optionsButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      optionsButton.querySelector('span').textContent = open ? '×' : '☰';
     });
   }
   updateMobileStepSummary();

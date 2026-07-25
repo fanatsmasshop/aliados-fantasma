@@ -1,0 +1,14 @@
+AF PANEL COMERCIANTES RC5.1
+
+No ejecutar SQL.
+Subir y reemplazar en la raíz de GitHub:
+- panel.html
+- panel.js
+- onboarding.css
+
+Cambios móviles:
+- Menú de tres líneas (☰).
+- Solo marca, campanita, menú, paso actual y formulario.
+- Estado, marketing, vista previa y cerrar sesión quedan ocultos hasta abrir el menú.
+- Se elimina el encabezado repetido y la barra de progreso duplicada.
+- El progreso queda integrado en una tarjeta compacta.
