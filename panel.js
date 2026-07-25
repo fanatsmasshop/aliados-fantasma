@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
-import { requireContext, clearActiveContext } from './auth-context.js?v=20260724-CTX-001';
+import { requireContext, clearActiveContext, getActiveContext, setActiveContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
 
 let launchOpen = false;
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -478,12 +478,37 @@ async function init(){
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;
 
-  const activeContext = requireContext(authenticatedUser.id, adminMode ? 'admin' : 'owner');
-  if(!activeContext) return;
-  if(!adminMode && activeContext.businessId){
-    const requested = new URLSearchParams(location.search).get('business');
-    if(requested && requested !== activeContext.businessId){ location.replace(`panel.html?business=${encodeURIComponent(activeContext.businessId)}`); return; }
-    localStorage.setItem('af_owner_business_id', activeContext.businessId);
+  let activeContext = null;
+  if(adminMode){
+    activeContext = requireContext(authenticatedUser.id, 'admin');
+    if(!activeContext) return;
+  }else{
+    // Durante el onboarding inicial todavía puede no existir un negocio ni una membresía.
+    // En ese caso permitimos entrar con el pre-registro aprobado y su borrador.
+    const initialMemberships = await loadOwnerMemberships(authenticatedUser.id);
+    if(initialMemberships.length){
+      let savedContext = getActiveContext(authenticatedUser.id);
+      const savedValid = savedContext?.type === 'owner' && initialMemberships.some(item => item.negocio_id === savedContext.businessId);
+      if(!savedValid){
+        const selected = chooseOwnerMembership(initialMemberships);
+        setActiveContext(authenticatedUser.id,{type:'owner',businessId:selected.negocio_id,businessName:selected.negocios?.nombre || 'Mi negocio'});
+        savedContext = getActiveContext(authenticatedUser.id);
+      }
+      activeContext = savedContext;
+      const requested = new URLSearchParams(location.search).get('business');
+      if(requested && requested !== activeContext.businessId){ location.replace(`panel.html?business=${encodeURIComponent(activeContext.businessId)}`); return; }
+      localStorage.setItem('af_owner_business_id', activeContext.businessId);
+    }else{
+      const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
+      if(preError) throw preError;
+      pre = Array.isArray(preData) ? preData[0] : preData;
+      const allowed = pre && pre.correo_verificado === true && ['pendiente','contactado','aprobado'].includes(pre.estado);
+      if(!allowed){
+        const {data:adminFlag} = await supabase.rpc('es_administrador');
+        if(adminFlag){ location.replace('dashboard.html'); return; }
+        location.replace('estado-cuenta.html'); return;
+      }
+    }
   }
 
   if(adminMode){

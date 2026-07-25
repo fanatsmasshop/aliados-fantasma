@@ -1,0 +1,14 @@
+AF-ONBOARDING-RC2.1 — CORRECCIÓN DE REBOTE
+
+PROBLEMA CORREGIDO
+RC1 crea el pre-registro aprobado y el perfil borrador antes de que exista un negocio/membresía.
+RC2 exigía una membresía activa al abrir panel.html, por lo que regresaba a estado-cuenta.html.
+
+INSTALACIÓN
+1. No ejecutes SQL.
+2. Sube panel.js a la raíz de GitHub y reemplaza el existente.
+3. Espera el despliegue de Cloudflare.
+4. Abre el sitio en incógnito o usa Ctrl+F5.
+5. En estado de cuenta, pulsa Completar perfil del negocio.
+
+ARCHIVOS: 1 archivo funcional, sin carpetas.
