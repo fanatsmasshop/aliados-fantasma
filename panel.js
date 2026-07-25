@@ -716,32 +716,86 @@ const LEGAL_TERMS_VERSION='2026-07-22';
 const LEGAL_PRIVACY_VERSION='2026-07-22';
 
 
+function openMerchantHelp(){
+  const modal=document.querySelector('#rules-modal');
+  const card=modal?.querySelector('.rules-card');
+  if(!modal || !card) return;
+  card.innerHTML=`
+    <p class="eyebrow">AYUDA RÁPIDA</p>
+    <h2>Completa tu perfil paso a paso</h2>
+    <div class="merchant-help-list">
+      <div><strong>1. Llena un paso</strong><p>Escribe la información que conozcas. Puedes regresar después.</p></div>
+      <div><strong>2. Avanza con “Siguiente”</strong><p>Tu progreso se guarda automáticamente mientras trabajas.</p></div>
+      <div><strong>3. Revisa antes de enviar</strong><p>En el paso 7 podrás comprobar la información y solicitar revisión.</p></div>
+      <div><strong>4. Espera la aprobación</strong><p>Te avisaremos cuando el perfil esté aprobado y publicado.</p></div>
+    </div>
+    <div class="tutorial-actions"><button type="button" class="button primary" id="merchant-help-close">Entendido</button></div>`;
+  modal.classList.remove('hidden');
+  card.querySelector('#merchant-help-close').onclick=()=>modal.classList.add('hidden');
+}
+
 function initMerchantMobileUX(){
-  const sidebar=document.querySelector('.owner-sidebar');
+  const sidebar=document.querySelector('#owner-sidebar');
+  const menu=document.querySelector('#merchant-side-menu');
+  const backdrop=document.querySelector('#merchant-menu-backdrop');
+  const openButton=document.querySelector('#mobile-options-toggle');
+  const closeButton=document.querySelector('#merchant-menu-close');
   const summaryPanel=document.querySelector('.merchant-summary-panel');
-  const summaryButton=document.querySelector('#mobile-summary-toggle');
-  const optionsButton=document.querySelector('#mobile-options-toggle');
-  if(summaryButton && summaryPanel){
-    summaryButton.addEventListener('click',()=>{
-      const open=summaryPanel.classList.toggle('mobile-open');
-      summaryButton.textContent=open?'Ocultar estado':'Ver estado';
-      if(open) summaryPanel.scrollIntoView({behavior:'smooth',block:'start'});
-    });
-  }
-  if(optionsButton && sidebar){
-    optionsButton.addEventListener('click',()=>{
-      const open=sidebar.classList.toggle('mobile-options-open');
-      optionsButton.setAttribute('aria-expanded', String(open));
-      optionsButton.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-      optionsButton.querySelector('span').textContent = open ? '×' : '☰';
-    });
-  }
+
+  const setMenuOpen=(open)=>{
+    if(!sidebar || !menu || !openButton || !backdrop) return;
+    sidebar.classList.toggle('mobile-options-open',open);
+    menu.setAttribute('aria-hidden',String(!open));
+    openButton.setAttribute('aria-expanded',String(open));
+    openButton.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
+    openButton.querySelector('span').textContent=open?'×':'☰';
+    backdrop.hidden=!open;
+    document.body.classList.toggle('merchant-menu-open',open);
+  };
+
+  openButton?.addEventListener('click',()=>setMenuOpen(!sidebar.classList.contains('mobile-options-open')));
+  closeButton?.addEventListener('click',()=>setMenuOpen(false));
+  backdrop?.addEventListener('click',()=>setMenuOpen(false));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape') setMenuOpen(false);});
+
+  document.querySelector('[data-merchant-action="profile"]')?.addEventListener('click',()=>{
+    summaryPanel?.classList.remove('mobile-open');
+    setMenuOpen(false);
+    document.querySelector('#onboarding-form')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  document.querySelector('[data-merchant-action="status"]')?.addEventListener('click',()=>{
+    summaryPanel?.classList.add('mobile-open');
+    setMenuOpen(false);
+    summaryPanel?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  document.querySelector('[data-merchant-action="notifications"]')?.addEventListener('click',()=>{
+    setMenuOpen(false);
+    document.querySelector('#notification-bell')?.click();
+  });
+  document.querySelector('[data-merchant-action="help"]')?.addEventListener('click',()=>{
+    setMenuOpen(false);
+    openMerchantHelp();
+  });
+  document.querySelector('#marketing-center-link')?.addEventListener('click',()=>setMenuOpen(false));
+  document.querySelector('#preview-button')?.addEventListener('click',()=>setMenuOpen(false));
+  document.querySelector('#logout-button')?.addEventListener('click',()=>setMenuOpen(false));
+
   updateMobileStepSummary();
 }
 
-initMerchantMobileUX();
-
-try{ await init(); }catch(error){ console.error(error); showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0); }
+try{
+  await init();
+  initMerchantMobileUX();
+  const menuBusiness=document.querySelector('#merchant-menu-business');
+  if(menuBusiness){
+    const businessName=(document.querySelector('#welcome-title')?.textContent||'Mi perfil')
+      .replace(/^Bienvenido(?:,| a)?\s*/i,'').replace(/👋/g,'').trim();
+    menuBusiness.textContent=businessName||'Mi perfil';
+  }
+}catch(error){
+  console.error(error);
+  showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0);
+}
 
 
 async function showRulesIfNeeded(){

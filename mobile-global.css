@@ -141,3 +141,14 @@ table{max-width:100%}
   a,button,.button,.btn,.boton,.nav-link,.owner-step-link{min-height:44px}
   input[type="checkbox"],input[type="radio"]{min-width:22px;min-height:22px}
 }
+
+/* AF RC7: accesibilidad y densidad visual */
+@media (max-width: 640px){
+  .demo-banner{position:relative!important;top:auto!important;min-height:32px!important;padding:7px 10px!important;font-size:11px!important;line-height:1.2!important}
+  .login-page{padding-top:8px!important}
+  .login-shell,.register-shell{gap:14px!important}
+  .login-brand,.register-brand,.login-card,.register-card{padding:20px!important}
+  .button,.boton,button,input,select,textarea{font-size:16px}
+  .button,.boton,button{min-height:46px}
+  .page-back-link{position:relative!important;top:auto!important;left:auto!important;display:inline-flex!important;margin:10px 12px 0!important}
+}

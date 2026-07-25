@@ -1,12 +1,40 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Configurar mi perfil | Aliados Fantasma</title><link rel="icon" href="aliados-fantasma-icono.png"><link rel="stylesheet" href="app.css?v=20260718-300"><link rel="stylesheet" href="logos.css?v=20260717-3"><link rel="stylesheet" href="onboarding.css?v=20260725-RC5">  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC4">
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Configurar mi perfil | Aliados Fantasma</title><link rel="icon" href="aliados-fantasma-icono.png"><link rel="stylesheet" href="app.css?v=20260725-RC7"><link rel="stylesheet" href="logos.css?v=20260717-3"><link rel="stylesheet" href="onboarding.css?v=20260725-RC6">  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
 </head><body>
-<div class="demo-banner">👻 CENTRO DE CONFIGURACIÓN DEL NEGOCIO</div>
-<div class="owner-shell"><aside class="owner-sidebar"><a class="sidebar-brand" href="index.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp"><span><strong>Aliados Fantasma</strong><small>Mi perfil digital</small></span></a><div class="owner-progress"><div><span>Progreso</span><strong id="progress-label">0%</strong></div><div class="progress"><i id="progress-bar"></i></div></div><div class="merchant-mobile-actions" aria-label="Acciones del panel">
-<button id="mobile-options-toggle" type="button" class="mobile-menu-button" aria-label="Abrir menú" aria-expanded="false"><span aria-hidden="true">☰</span></button>
-<div class="merchant-mobile-menu" id="merchant-mobile-menu">
-<button id="mobile-summary-toggle" type="button" class="mobile-menu-item">Estado de mi perfil</button>
-</div>
-</div><nav id="steps-nav" class="owner-steps"></nav><div class="sidebar-footer"><button id="preview-button" class="button secondary full">Vista previa</button><button id="logout-button" class="button secondary full">Cerrar sesión</button></div></aside>
+<div class="demo-banner">🏪 PANEL DE TU NEGOCIO</div>
+<div class="owner-shell">
+<aside class="owner-sidebar" id="owner-sidebar">
+  <div class="owner-sidebar-head">
+    <a class="sidebar-brand" href="index.html">
+      <img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma">
+      <span><strong>Aliados Fantasma</strong><small>Mi perfil digital</small></span>
+    </a>
+    <button id="mobile-options-toggle" type="button" class="mobile-menu-button" aria-label="Abrir menú" aria-expanded="false" aria-controls="merchant-side-menu"><span aria-hidden="true">☰</span></button>
+  </div>
+
+  <div class="owner-progress">
+    <div><span>Progreso del perfil</span><strong id="progress-label">0%</strong></div>
+    <div class="progress"><i id="progress-bar"></i></div>
+  </div>
+
+  <nav id="steps-nav" class="owner-steps" aria-label="Pasos para completar el perfil"></nav>
+
+  <div class="merchant-menu-backdrop" id="merchant-menu-backdrop" hidden></div>
+  <div class="merchant-side-menu" id="merchant-side-menu" aria-hidden="true">
+    <div class="merchant-side-menu-head">
+      <div><small>MENÚ DEL NEGOCIO</small><strong id="merchant-menu-business">Mi perfil</strong></div>
+      <button id="merchant-menu-close" type="button" aria-label="Cerrar menú">×</button>
+    </div>
+    <nav class="merchant-menu-list" aria-label="Opciones del negocio">
+      <button type="button" class="merchant-menu-item active" data-merchant-action="profile"><span>📝</span><span><strong>Completar perfil</strong><small>Editar información del negocio</small></span></button>
+      <button type="button" class="merchant-menu-item" data-merchant-action="status"><span>✅</span><span><strong>Estado del perfil</strong><small>Revisión, aprobación y publicación</small></span></button>
+      <button type="button" class="merchant-menu-item" id="preview-button"><span>👁️</span><span><strong>Vista previa</strong><small>Ver cómo lo verá el público</small></span></button>
+      <a class="merchant-menu-item" id="marketing-center-link" href="marketing.html"><span>📣</span><span><strong>Centro de Marketing</strong><small>Promociones y herramientas</small></span></a>
+      <button type="button" class="merchant-menu-item" data-merchant-action="notifications"><span>🔔</span><span><strong>Notificaciones</strong><small>Avisos de tu cuenta</small></span></button>
+      <button type="button" class="merchant-menu-item" data-merchant-action="help"><span>❔</span><span><strong>Ayuda</strong><small>Cómo completar y publicar tu perfil</small></span></button>
+    </nav>
+    <button id="logout-button" type="button" class="merchant-menu-logout"><span>↪</span> Cerrar sesión</button>
+  </div>
+</aside>
 <main class="owner-main"><div id="mobile-step-summary" class="mobile-step-summary" aria-live="polite"><small>Paso 1 de 7</small><strong>Identidad</strong></div><header class="owner-topbar"><div><p class="eyebrow" id="account-status">CARGANDO CUENTA</p><h1 id="welcome-title">Bienvenido</h1><p class="muted" id="header-help">Completa tu información. Puedes guardar y continuar después.</p></div><span id="save-state" class="status-pill pending">Sin cambios</span></header><div id="global-message" class="notice hidden"></div><div id="admin-feedback" class="notice hidden"></div>
 <div class="owner-overview-grid merchant-summary-panel">
 <section id="workflow-center" class="workflow-center" aria-live="polite">

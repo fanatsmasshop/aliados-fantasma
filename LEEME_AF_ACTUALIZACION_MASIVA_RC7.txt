@@ -1,0 +1,37 @@
+ALIADOS FANTASMA — ACTUALIZACIÓN MASIVA RC7
+
+OBJETIVO
+Consolidar la versión actual, mejorar UX y consistencia móvil, eliminar referencias rotas y sustituir etiquetas de demostración por indicadores claros de ubicación.
+
+INSTALACIÓN
+1. No ejecutar SQL.
+2. Subir todos los archivos de este paquete a la raíz de GitHub.
+3. Reemplazar los archivos existentes.
+4. Esperar el despliegue de Cloudflare Pages.
+5. Probar en incógnito o con Ctrl + F5.
+
+CAMBIOS PRINCIPALES
+- Las bandas superiores ya no dicen "Demo pública" ni "Versión en desarrollo".
+- Cada banda identifica claramente la sección: Acceso, Registro, Estado, Verificación, Recuperación, Panel o Administración.
+- Se corrigió la referencia rota mobile-integral.css de publicar.html.
+- Se normalizó la carga de app.css y mobile-global.css con versión RC7 para evitar caché antigua.
+- Se mejoró la densidad móvil de pantallas de acceso y formularios.
+- Se conserva el panel lateral y la UX del panel propietario RC6.
+- No se modificó Supabase, RLS, SQL, datos ni perfiles de negocios.
+
+VALIDACIONES AUTOMÁTICAS REALIZADAS
+- 30 HTML revisados.
+- 0 referencias locales rotas.
+- 0 identificadores HTML duplicados detectados.
+- Todos los JavaScript pasan validación de sintaxis con Node.js.
+- No quedan etiquetas "Demo pública" o "Versión en desarrollo" en las pantallas activas revisadas.
+
+PRUEBAS MANUALES PRIORITARIAS
+- Registro nuevo y confirmación de correo.
+- Login pendiente → Estado de solicitud.
+- Login aprobado → Panel.
+- Panel en 320, 375 y 430 px.
+- Menú lateral, campanita y cierre de sesión.
+- Guardado y reanudación del onboarding.
+- Vista previa y perfil público.
+- Administración: pre-registros, solicitudes, negocios y promociones.

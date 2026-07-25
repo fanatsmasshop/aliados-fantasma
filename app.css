@@ -196,3 +196,8 @@ textarea{min-height:105px;resize:vertical}
 .sidebar nav a.active,.owner-steps button.active{background:linear-gradient(90deg,rgba(105,75,255,.2),rgba(105,75,255,.06));border-color:rgba(132,103,255,.28);box-shadow:inset 3px 0 #8b68ff}
 .sidebar-footer{padding-top:16px;border-top:1px solid rgba(255,255,255,.07)}
 .sidebar-footer .button{border-radius:12px;min-height:42px}
+
+/* AF RC7: barras de ubicación, no banners de demostración */
+.demo-banner{min-height:38px;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(90deg,#6f2df5,#159bdd);font-size:.78rem;font-weight:800;letter-spacing:.025em;position:sticky;top:0;z-index:100}
+.demo-banner small{font-weight:600;opacity:.92}
+@media(max-width:640px){.demo-banner{min-height:34px;padding:7px 12px;font-size:.7rem;white-space:normal;text-align:center;line-height:1.25}.page-back-link{top:44px}}

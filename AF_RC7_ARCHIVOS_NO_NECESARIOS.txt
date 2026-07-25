@@ -1,0 +1,18 @@
+REVISIÓN DE ARCHIVOS NO NECESARIOS EN PRODUCCIÓN
+
+SE PUEDEN RETIRAR DEL DESPLIEGUE PÚBLICO (NO AFECTAN LA APLICACIÓN)
+- Todos los archivos LEEME_*.txt
+- HOTFIX_LEEME.txt
+- INFORME_ESTABILIZACION_v4.1.txt
+- PLANTILLAS_CORREO_SUPABASE.txt
+
+IMPORTANTE: pueden conservarse en GitHub como documentación, pero no son necesarios para que Cloudflare ejecute la plataforma.
+
+NO BORRAR TODAVÍA
+- Archivos SQL históricos: no se ejecutan en el navegador, pero documentan la evolución de Supabase. Deben archivarse cuando exista una migración canónica definitiva.
+- index-oficial.html, perfil-demo.html y carnitas-el-compadre.html: parecen contenido heredado o demostrativo, pero pueden seguir enlazados externamente. Confirmar antes de eliminarlos.
+- HTML individuales de negocios reales: no eliminarlos.
+- admin.html, dashboard.html, directorio.html y negocio.html: pueden actuar como rutas de compatibilidad o módulos activos.
+
+CRITERIO
+Esta actualización no elimina archivos automáticamente para evitar romper enlaces antiguos, marcadores, rutas de Cloudflare o referencias compartidas.
