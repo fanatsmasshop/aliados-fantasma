@@ -48,6 +48,14 @@ async function loadState(){
     if(preError)throw preError;if(draftError)throw draftError;
     const row=Array.isArray(preData)?preData[0]:preData;
     if(!row){fail('No encontramos el registro asociado a esta cuenta. Vuelve a iniciar sesión; si continúa, contacta al equipo de Aliados Fantasma.');return;}
+
+    const approved=row.correo_verificado===true&&row.estado==='aprobado';
+    const profileStarted=Boolean(draftData)&&row.correo_verificado===true&&row.estado!=='rechazado';
+    if(approved||profileStarted){
+      location.replace('panel.html');
+      return;
+    }
+
     renderPreRegistration(row);configureAction(row,draftData);renderProfileState(draftData);
   }catch(error){console.error('Error al consultar el estado:',error);fail('No pudimos consultar tu solicitud. Actualiza la página; si continúa, contacta al equipo de Aliados Fantasma.');}
 }

@@ -1,0 +1,26 @@
+AF-FLUJO-APROBADO-RC2.2
+
+OBJETIVO
+Evitar que una cuenta ya aprobada vuelva a la pantalla "Estado de tu solicitud".
+
+ARCHIVOS A SUBIR A LA RAÍZ DE GITHUB
+- login.html
+- login.js
+- estado-cuenta.html
+- estado-cuenta.js
+
+NO EJECUTAR SQL.
+
+CAMBIO DE FLUJO
+- Pendiente/contactado/rechazado: permanece en estado-cuenta.
+- Aprobado: entra directamente a panel.html.
+- Perfil ya iniciado: entra directamente a panel.html.
+- Con membresía activa: conserva el acceso normal al panel del negocio.
+- Administrador: conserva el acceso normal a dashboard.
+
+PRUEBA
+1. Reemplazar los cuatro archivos.
+2. Esperar Cloudflare.
+3. Abrir en incógnito o usar Ctrl+F5.
+4. Iniciar sesión con la cuenta aprobada.
+5. Debe abrir panel.html sin mostrar estado-cuenta.

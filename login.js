@@ -50,6 +50,25 @@ function chooseContext(user,access){
 function escapeHtml(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function activate(user,context){setActiveContext(user.id,context);location.replace(contextHome(context));}
 
+async function getRegistrationDestination(user){
+  try{
+    await supabase.rpc('usuario_sincronizar_mi_pre_registro');
+    const [{data:preData,error:preError},{data:draftData,error:draftError}]=await Promise.all([
+      supabase.rpc('usuario_obtener_mi_pre_registro'),
+      supabase.from('perfiles_borrador').select('estado').eq('usuario_id',user.id).maybeSingle()
+    ]);
+    if(preError) throw preError;
+    if(draftError) throw draftError;
+    const pre=Array.isArray(preData)?preData[0]:preData;
+    const approved=pre?.correo_verificado===true&&pre?.estado==='aprobado';
+    if(approved) return 'panel.html';
+    if(draftData&&pre?.correo_verificado===true&&pre?.estado!=='rechazado') return 'panel.html';
+  }catch(error){
+    console.warn('No se pudo resolver el flujo de registro:',error);
+  }
+  return 'estado-cuenta.html';
+}
+
 async function resolveAccess(user,forceChoose=false){
   if(resolving)return; resolving=true;
   try{
@@ -59,7 +78,7 @@ async function resolveAccess(user,forceChoose=false){
     if(saved && !savedValid) clearActiveContext(user.id);
     if(savedValid&&!forceChoose){location.replace(contextHome(saved));return;}
     const count=(access.isAdmin?1:0)+access.businesses.length;
-    if(count===0){location.replace('estado-cuenta.html');return;}
+    if(count===0){location.replace(await getRegistrationDestination(user));return;}
     if(count===1){
       if(access.isAdmin) activate(user,{type:'admin'});
       else activate(user,{type:'owner',businessId:access.businesses[0].negocio_id,businessName:access.businesses[0].negocios.nombre});
