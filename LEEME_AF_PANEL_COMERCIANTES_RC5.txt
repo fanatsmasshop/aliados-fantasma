@@ -1,0 +1,40 @@
+AF-PANEL-COMERCIANTES-RC5
+
+OBJETIVO
+Simplificar el panel del propietario en celular para comerciantes con poca experiencia tecnológica, sin modificar Supabase, SQL ni la lógica del negocio.
+
+ARCHIVOS A SUBIR A LA RAÍZ DE GITHUB
+- panel.html
+- panel.js
+- onboarding.css
+
+CAMBIOS PRINCIPALES EN CELULAR
+- Encabezado y logo más compactos.
+- Solo se muestra el paso actual, no los siete pasos juntos.
+- Indicador claro: Paso X de 7.
+- Estado y opciones secundarias quedan ocultos en botones simples.
+- Solo quedan visibles Anterior y Siguiente.
+- Guardar progreso se oculta porque el guardado automático sigue funcionando.
+- Botones grandes y fáciles de tocar.
+- Formularios de una sola columna.
+- Horarios, imágenes y promociones más legibles.
+- Botones para seleccionar archivos más claros.
+- Campanita más pequeña y menos invasiva.
+- La lógica, permisos, datos y funciones existentes se conservan.
+
+INSTALACIÓN
+1. No ejecutar SQL.
+2. Subir los tres archivos a la raíz de GitHub.
+3. Reemplazar los existentes.
+4. Esperar el despliegue de Cloudflare.
+5. Probar en incógnito o con Ctrl + F5.
+
+PRUEBA RECOMENDADA
+- Entrar al panel desde un teléfono.
+- Abrir y cerrar “Ver estado”.
+- Abrir y cerrar “Más opciones”.
+- Recorrer los siete pasos.
+- Probar Anterior y Siguiente.
+- Escribir datos y comprobar guardado automático.
+- Subir logo y portada.
+- Abrir la campanita.

@@ -154,12 +154,19 @@ function renderNav(){
   document.querySelectorAll('[data-go]').forEach(button => button.onclick = () => go(+button.dataset.go));
 }
 
+function updateMobileStepSummary(){
+  const summary=document.querySelector('#mobile-step-summary');
+  if(!summary) return;
+  summary.innerHTML=`<small>Paso ${currentStep + 1} de ${stepNames.length}</small><strong>${esc(stepNames[currentStep])}</strong>`;
+}
+
 function go(index){
   currentStep = Math.max(0, Math.min(stepNames.length - 1, index));
   document.querySelectorAll('.onboarding-step').forEach((section,sectionIndex) => section.classList.toggle('active', sectionIndex === currentStep));
   document.querySelector('#prev-step').disabled = currentStep === 0;
   document.querySelector('#next-step').style.display = currentStep === 6 ? 'none' : '';
   renderNav();
+  updateMobileStepSummary();
   if(currentStep === 6) renderReview();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -706,6 +713,30 @@ window.addEventListener('beforeunload', event => { if(dirty){ event.preventDefau
 
 const LEGAL_TERMS_VERSION='2026-07-22';
 const LEGAL_PRIVACY_VERSION='2026-07-22';
+
+
+function initMerchantMobileUX(){
+  const sidebar=document.querySelector('.owner-sidebar');
+  const summaryPanel=document.querySelector('.merchant-summary-panel');
+  const summaryButton=document.querySelector('#mobile-summary-toggle');
+  const optionsButton=document.querySelector('#mobile-options-toggle');
+  if(summaryButton && summaryPanel){
+    summaryButton.addEventListener('click',()=>{
+      const open=summaryPanel.classList.toggle('mobile-open');
+      summaryButton.textContent=open?'Ocultar estado':'Ver estado';
+      if(open) summaryPanel.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  }
+  if(optionsButton && sidebar){
+    optionsButton.addEventListener('click',()=>{
+      const open=sidebar.classList.toggle('mobile-options-open');
+      optionsButton.textContent=open?'Ocultar opciones':'Más opciones';
+    });
+  }
+  updateMobileStepSummary();
+}
+
+initMerchantMobileUX();
 
 try{ await init(); }catch(error){ console.error(error); showMessage(`No se pudo cargar el centro de configuración. ${error.message}`,'error',0); }
 

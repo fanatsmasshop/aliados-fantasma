@@ -188,3 +188,57 @@
   .gallery-item{aspect-ratio:1/1}
   .notification-bell{top:62px;right:10px}
 }
+
+
+/* =========================================================
+   AF RC5 — EXPERIENCIA SIMPLE PARA COMERCIANTES
+   Reduce ruido visual sin alterar la lógica del sistema.
+   ========================================================= */
+.merchant-mobile-actions,.mobile-step-summary{display:none}
+@media(max-width:700px){
+  .demo-banner{font-size:.74rem;padding:9px 44px 9px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .owner-shell{display:block}
+  .owner-sidebar{position:relative!important;padding:10px 12px 12px!important;background:#0b0e14;border-bottom:1px solid var(--line)}
+  .owner-sidebar .sidebar-brand{display:flex;align-items:center;gap:10px;margin:0 0 9px;padding:8px 10px;border-radius:13px}
+  .owner-sidebar .af-sidebar-logo{width:44px!important;height:44px!important;object-fit:contain;margin:0!important}
+  .owner-sidebar .sidebar-brand strong{font-size:.94rem}.owner-sidebar .sidebar-brand small{font-size:.72rem}
+  .owner-sidebar .owner-progress{margin:0 0 9px;padding:10px 12px;border-radius:13px}
+  .owner-sidebar .owner-progress>div:first-child{font-size:.76rem}
+  .merchant-mobile-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+  .merchant-mobile-actions .button{min-height:42px;padding:8px 10px;font-size:.82rem}
+  .owner-sidebar .owner-steps{display:block!important;overflow:visible!important;padding:0!important;margin:0!important}
+  .owner-sidebar .owner-step-link{display:none!important}
+  .owner-sidebar .owner-step-link.active{display:flex!important;align-items:center;justify-content:center;width:100%!important;min-width:0!important;min-height:43px;margin:0;padding:9px 12px!important;font-size:.9rem;text-align:center!important;border:1px solid rgba(140,92,255,.5);background:rgba(140,92,255,.13)}
+  .owner-sidebar #marketing-center-link,.owner-sidebar .sidebar-footer{display:none!important}
+  .owner-sidebar.mobile-options-open #marketing-center-link{display:flex!important;margin:8px 0!important}
+  .owner-sidebar.mobile-options-open .sidebar-footer{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;padding-top:8px}
+  .owner-main{padding:12px 10px 90px!important}
+  .mobile-step-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;margin-bottom:10px;border:1px solid rgba(140,92,255,.3);border-radius:14px;background:linear-gradient(135deg,rgba(140,92,255,.12),rgba(43,168,255,.06))}
+  .mobile-step-summary small{color:var(--muted);font-weight:700}.mobile-step-summary strong{font-size:1rem}
+  .owner-topbar{margin-bottom:10px!important;padding:0 2px}.owner-topbar .eyebrow,.owner-topbar #header-help{display:none}.owner-topbar h1{font-size:1.45rem;margin:0}.owner-topbar #save-state{margin-top:6px;font-size:.7rem}
+  .merchant-summary-panel{display:none!important;margin-bottom:12px}
+  .merchant-summary-panel.mobile-open{display:grid!important}
+  .workflow-center,.profile-access-card{padding:15px!important;border-radius:16px!important}.workflow-head h2,.profile-access-head h2{font-size:1.08rem}.workflow-head p,.profile-access-card p{font-size:.87rem;line-height:1.45}
+  .workflow-timeline{grid-template-columns:1fr!important}.workflow-step{padding:12px!important;min-height:auto!important}
+  .onboarding-step{padding:16px 14px!important;border-radius:18px!important}
+  .step-heading{margin-bottom:16px!important;gap:10px!important}.step-heading>span{width:36px!important;height:36px!important;border-radius:11px!important;font-size:.78rem}.step-heading h2{font-size:1.22rem}.step-heading p{font-size:.86rem;line-height:1.4}
+  .form-grid{grid-template-columns:1fr!important;gap:14px!important}.field.wide{grid-column:auto!important}.field>span{font-size:.88rem;font-weight:800}.field-help{font-size:.76rem;line-height:1.35}
+  input,textarea,select{min-height:48px;font-size:16px!important;border-radius:12px!important}textarea{min-height:110px}
+  input[type=file]{padding:8px!important;min-height:54px;background:rgba(255,255,255,.025)}
+  input[type=file]::file-selector-button{border:0;border-radius:10px;padding:10px 12px;margin-right:9px;background:linear-gradient(135deg,#8c5cff,#5f2eea);color:#fff;font-weight:800;cursor:pointer}
+  .social-input{display:block!important}.social-input>span{display:block;padding:8px 10px 0;font-size:.74rem;color:var(--muted)}
+  .schedule-row{grid-template-columns:1fr 1fr!important;padding:12px!important}.schedule-row>strong{grid-column:1/-1}.schedule-row input[type=time]{width:100%}
+  .gallery-editor{grid-template-columns:repeat(2,1fr)!important;gap:9px!important}.gallery-item{border-radius:13px!important}
+  .promotion-editor{padding:14px!important;border-radius:15px!important}
+  .wizard-actions{position:fixed!important;left:0;right:0;bottom:0;z-index:700;display:grid!important;grid-template-columns:1fr 1.35fr;gap:8px;margin:0!important;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(8,10,16,.97)!important;border-top:1px solid var(--line);box-shadow:0 -12px 32px rgba(0,0,0,.38);backdrop-filter:blur(14px)}
+  .wizard-actions .button{min-height:48px!important;width:100%;font-size:.94rem}
+  #save-button{display:none!important}#prev-step{order:1}#next-step{order:2}
+  .submit-card{padding:15px!important}.submit-card p{font-size:.86rem}.submit-card .button{min-height:50px;width:100%}
+  .account-management{margin-top:14px!important}.account-management .step-heading p{display:none}
+  .notification-bell{top:50px!important;right:8px!important;width:42px!important;height:42px!important}
+}
+@media(max-width:390px){
+  .merchant-mobile-actions{grid-template-columns:1fr}
+  .owner-sidebar.mobile-options-open .sidebar-footer{grid-template-columns:1fr}
+  .wizard-actions{grid-template-columns:.9fr 1.3fr;padding-inline:9px}
+}
