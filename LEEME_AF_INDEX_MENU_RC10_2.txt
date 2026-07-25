@@ -1,0 +1,10 @@
+AF-INDEX-MENU-RC10.2
+
+Sube a la raíz de GitHub y reemplaza:
+- index.html
+- lanzamiento.css
+- lanzamiento.js
+
+No ejecutar SQL.
+
+Cambio: el menú móvil ahora abre como panel lateral deslizable, con botón compacto, fondo oscurecido, X, cierre al tocar fuera y Escape.

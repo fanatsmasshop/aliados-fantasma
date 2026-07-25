@@ -51,30 +51,33 @@
 
   const menuButton = document.querySelector('.menu-button');
   const nav = document.getElementById('main-nav');
+  const drawerClose = document.querySelector('.drawer-close');
+  const menuBackdrop = document.querySelector('.menu-backdrop');
+
+  function openMenu() {
+    if (!nav || !menuButton) return;
+    nav.classList.add('open');
+    document.body.classList.add('menu-open');
+    menuButton.setAttribute('aria-expanded', 'true');
+    menuButton.setAttribute('aria-label', 'Cerrar menú de navegación');
+    window.setTimeout(() => drawerClose?.focus(), 30);
+  }
 
   function closeMenu({ restoreFocus = false } = {}) {
     if (!nav || !menuButton) return;
     nav.classList.remove('open');
+    document.body.classList.remove('menu-open');
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Abrir menú de navegación');
-    if (restoreFocus) menuButton.focus();
+    if (restoreFocus) window.setTimeout(() => menuButton.focus(), 20);
   }
 
   menuButton?.addEventListener('click', () => {
-    if (!nav) return;
-    const willOpen = !nav.classList.contains('open');
-    nav.classList.toggle('open', willOpen);
-    menuButton.setAttribute('aria-expanded', String(willOpen));
-    menuButton.setAttribute('aria-label', willOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+    nav?.classList.contains('open') ? closeMenu({ restoreFocus: true }) : openMenu();
   });
-
+  drawerClose?.addEventListener('click', () => closeMenu({ restoreFocus: true }));
+  menuBackdrop?.addEventListener('click', () => closeMenu({ restoreFocus: true }));
   nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
-
-  document.addEventListener('click', event => {
-    if (!nav?.classList.contains('open')) return;
-    if (nav.contains(event.target) || menuButton?.contains(event.target)) return;
-    closeMenu();
-  });
 
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && nav?.classList.contains('open')) closeMenu({ restoreFocus: true });
