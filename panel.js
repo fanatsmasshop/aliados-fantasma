@@ -15,6 +15,10 @@ let adminBusinessId = new URLSearchParams(location.search).get('admin_business')
 let adminMode = Boolean(adminBusinessId);
 let draftOwnerId = null;
 let adminReadOnly = false;
+let autosaveTimer = null;
+let autosaveRunning = false;
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg','image/png','image/webp']);
 
 let ownerMemberships = [];
 let activeOwnerMembership = null;
@@ -351,8 +355,7 @@ function markDirty(){
 
 function nextSaveStatus(requestedStatus){
   if(requestedStatus === 'en_revision') return 'en_revision';
-  if(dirty && ['en_revision','aprobado','publicado'].includes(draft.estado)) return 'borrador';
-  if(draft.estado === 'rechazado' && dirty) return 'borrador';
+  if(dirty && ['en_revision','cambios_solicitados','aprobado','publicado','rechazado'].includes(draft.estado)) return 'borrador';
   return requestedStatus || draft.estado || 'borrador';
 }
 
@@ -382,6 +385,52 @@ async function save(requestedStatus){
   renderWorkflow();
   if(currentStep === 6) renderReview();
   return row;
+}
+
+function validateImageFile(file){
+  if(!file) throw new Error('Selecciona una imagen.');
+  if(!ALLOWED_IMAGE_TYPES.has(file.type)) throw new Error('Formato no permitido. Usa JPG, PNG o WEBP.');
+  if(file.size > MAX_IMAGE_BYTES) throw new Error('La imagen supera el límite de 8 MB.');
+}
+
+function validateCurrentStep(){
+  const data = serialize();
+  const errors = [];
+  if(currentStep === 0){
+    if(!data.nombre) errors.push('nombre del negocio');
+    if(!data.categoria) errors.push('categoría');
+    if(!data.descripcion_corta) errors.push('descripción corta');
+  }
+  if(currentStep === 1 && !data.whatsapp && !data.telefono) errors.push('WhatsApp o teléfono');
+  if(currentStep === 2){
+    if(!data.direccion) errors.push('dirección');
+    if(!data.municipio) errors.push('municipio');
+  }
+  if(currentStep === 3 && !(data.horarios || []).some(item => !item.cerrado && item.abre && item.cierra)) errors.push('al menos un horario abierto');
+  if(errors.length){
+    showMessage(`Completa: ${errors.join(', ')}.`, 'error', 6500);
+    return false;
+  }
+  return true;
+}
+
+function scheduleAutosave(){
+  if(adminMode || !user || autosaveRunning) return;
+  clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(async () => {
+    if(!dirty || draft.estado === 'en_revision') return;
+    autosaveRunning = true;
+    try{
+      await save();
+      document.querySelector('#save-state').textContent = 'Guardado automático';
+    }catch(error){
+      console.error('Autoguardado:', error);
+      document.querySelector('#save-state').textContent = 'Pendiente de guardar';
+      document.querySelector('#save-state').className = 'status-pill pending';
+    }finally{
+      autosaveRunning = false;
+    }
+  }, 1800);
 }
 
 async function uploadFile(file,kind){
@@ -568,7 +617,7 @@ async function init(){
 }
 
 document.querySelector('#prev-step').onclick = () => go(currentStep - 1);
-document.querySelector('#next-step').onclick = () => go(currentStep + 1);
+document.querySelector('#next-step').onclick = () => { if(validateCurrentStep()) go(currentStep + 1); };
 document.querySelector('#save-button').onclick = async () => {
   try{
     const previous = draft.estado;
@@ -585,7 +634,12 @@ document.querySelector('#submit-review').onclick = async () => {
   try{
     const percentage = updateProgress();
     if(percentage < 60){ showMessage('Completa al menos 60% del perfil antes de enviarlo.','error'); return; }
-    const missing = missingFields(serialize());
+    const currentData = serialize();
+    if(!currentData.nombre || !currentData.categoria || (!currentData.whatsapp && !currentData.telefono) || !currentData.direccion || !currentData.municipio){
+      showMessage('Completa nombre, categoría, un medio de contacto, dirección y municipio antes de enviar.','error',7000);
+      return;
+    }
+    const missing = missingFields(currentData);
     const detail = missing.length ? ` Aún faltan elementos recomendados: ${missing.join(', ')}.` : '';
     let approved=false; await new Promise(resolve=>openActionModal({title:'Enviar perfil a revisión',description:`Esta versión quedará bloqueada mientras administración la revisa.${detail ? `<br><br>${esc(detail)}` : ''}`,confirmText:'Enviar a revisión',onConfirm:async()=>{approved=true;resolve();}})); if(!approved)return;
     await save('en_revision');
@@ -593,13 +647,17 @@ document.querySelector('#submit-review').onclick = async () => {
     go(6);
   }catch(error){ showMessage(error.message,'error'); }
 };
-form.addEventListener('input',markDirty);
+form.addEventListener('input',() => { markDirty(); scheduleAutosave(); });
 ['facebook','instagram','tiktok','youtube'].forEach(name => field(name)?.addEventListener('blur',() => { field(name).value = cleanSocial(field(name).value,name); }));
 document.querySelector('#logo-file').onchange = async event => { try{ field('logo_url').value = await uploadFile(event.target.files[0],'logo'); markDirty(); showMessage('Logo cargado. Guarda los cambios para conservarlo.'); }catch(error){ showMessage(error.message,'error'); } };
 document.querySelector('#portada-file').onchange = async event => { try{ field('portada_url').value = await uploadFile(event.target.files[0],'portada'); markDirty(); showMessage('Portada cargada. Guarda los cambios para conservarla.'); }catch(error){ showMessage(error.message,'error'); } };
 document.querySelector('#gallery-files').onchange = async event => {
   try{
-    for(const file of [...event.target.files].slice(0,6 - (draft.datos.galeria || []).length)){
+    const available = 6 - (draft.datos.galeria || []).length;
+    if(available <= 0) throw new Error('La galería ya tiene el máximo de 6 imágenes.');
+    const selected = [...event.target.files];
+    if(selected.length > available) showMessage(`Solo se agregarán ${available} imagen(es) para respetar el máximo de 6.`, 'warning', 5000);
+    for(const file of selected.slice(0,available)){
       const url = await uploadFile(file,'galeria');
       draft.datos.galeria = [...(draft.datos.galeria || []),url];
     }
@@ -607,6 +665,7 @@ document.querySelector('#gallery-files').onchange = async event => {
     markDirty();
     showMessage('Galería actualizada. Guarda los cambios para conservarla.');
   }catch(error){ showMessage(error.message,'error'); }
+  finally{ event.target.value = ''; }
 };
 window.addEventListener('beforeunload', event => { if(dirty){ event.preventDefault(); event.returnValue = ''; } });
 

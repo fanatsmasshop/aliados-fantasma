@@ -1,0 +1,39 @@
+ALIADOS FANTASMA — AF-ONBOARDING-RC2
+
+OBJETIVO
+Estabiliza el flujo del propietario después de que su registro fue aprobado:
+cuenta -> panel -> completar datos -> guardar -> subir imágenes -> enviar a revisión.
+
+ARCHIVOS: 5, todos en la raíz. No crear carpetas.
+
+ORDEN
+1. En Supabase abre SQL Editor > New query.
+2. Ejecuta completo AF_110_ONBOARDING_LANZAMIENTO.sql.
+3. Debe terminar con: AF-110 ONBOARDING RC2 INSTALADO.
+4. En GitHub, raíz del proyecto, reemplaza:
+   - panel.html
+   - panel.js
+   - onboarding.css
+5. Espera el despliegue de Cloudflare y prueba en ventana incógnita.
+
+PRUEBA OBLIGATORIA
+1. Inicia sesión con el negocio aprobado en RC1.
+2. Completa identidad, contacto, ubicación y al menos un horario.
+3. Sube logo, portada y una foto de galería.
+4. Comprueba que aparezca “Guardado automático”.
+5. Cierra sesión, vuelve a entrar y confirma que los datos siguen ahí.
+6. Llega a Revisión final y pulsa “Enviar mi perfil a revisión”.
+7. Confirma que el estado cambie a “En revisión”.
+8. En administración confirma que el perfil aparece para revisión.
+
+CAMBIOS
+- Corrige las transiciones cuando administración solicita cambios o rechaza.
+- Impide que el propietario modifique campos administrativos.
+- Valida datos esenciales por etapa.
+- Autoguarda después de escribir.
+- Limita imágenes a JPG/PNG/WEBP y 8 MB.
+- Mantiene máximo 6 fotos en galería.
+- Refuerza RLS, Storage e índices sin borrar información.
+
+NO EJECUTAR
+No ejecutes DROP TABLE, DELETE, archivos viejos 060/064 ni otros hotfixes después de AF-110.
