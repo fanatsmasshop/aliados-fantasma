@@ -1,0 +1,15 @@
+AF-PANEL-ESCRITORIO-RC8.1
+
+Subir a la raíz de GitHub y reemplazar:
+- panel.html
+- panel.js
+- onboarding.css
+
+No ejecutar SQL.
+
+Corrección:
+- En computadora el menú deja de ocupar el área principal.
+- Las opciones quedan compactas dentro de la barra lateral izquierda.
+- El formulario permanece visible a la derecha.
+- Cerrar sesión deja de ser una tarjeta gigante.
+- En celular se conserva el menú lateral deslizable.

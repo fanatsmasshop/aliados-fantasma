@@ -505,3 +505,54 @@
   #welcome-title,#account-status,#header-help,#save-state{display:none!important}
   .mobile-step-summary{margin-top:0!important}
 }
+
+/* =========================================================
+   AF RC8.1 — PANEL ESCRITORIO COMPACTO
+   En escritorio, las utilidades viven dentro de la barra lateral.
+   En móvil, el mismo bloque continúa como menú deslizable.
+   ========================================================= */
+@media (min-width:701px){
+  .owner-sidebar{overflow:hidden}
+  .owner-sidebar .owner-steps{min-height:0;overflow-y:auto;padding-right:4px}
+  .merchant-menu-backdrop{display:none!important}
+  .merchant-side-menu{
+    position:static!important;
+    width:auto!important;
+    height:auto!important;
+    max-height:none!important;
+    transform:none!important;
+    margin:12px 0 0!important;
+    padding:12px 0 0!important;
+    border:0!important;
+    border-top:1px solid var(--line)!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    overflow:visible!important;
+    display:grid!important;
+    gap:7px!important;
+  }
+  .merchant-side-menu-head{display:none!important}
+  .merchant-menu-list{display:grid!important;gap:5px!important}
+  .merchant-menu-item{
+    min-height:40px!important;
+    padding:7px 9px!important;
+    grid-template-columns:24px 1fr!important;
+    border-radius:10px!important;
+  }
+  .merchant-menu-item strong{font-size:.8rem!important}
+  .merchant-menu-item small{display:none!important}
+  .merchant-menu-item[data-merchant-action="profile"],
+  .merchant-menu-item[data-merchant-action="notifications"]{display:none!important}
+  .merchant-menu-logout{
+    min-height:40px!important;
+    margin-top:2px!important;
+    border-radius:10px!important;
+    font-size:.8rem!important;
+  }
+}
+@media (max-width:700px){
+  .owner-sidebar{backdrop-filter:none!important}
+  .merchant-side-menu{z-index:1200!important}
+  .merchant-menu-backdrop{z-index:1190!important}
+  .notification-bell{z-index:900!important}
+}
