@@ -1,0 +1,35 @@
+ALIADOS FANTASMA — AF-LAUNCH-STABILIZATION 1.0
+
+OBJETIVO
+Paquete limpio de despliegue para GitHub/Cloudflare Pages.
+Todos los archivos están en la raíz y el paquete contiene menos de 100 archivos.
+No incluye SQL, informes ni instrucciones históricas porque no son necesarios para servir la plataforma.
+
+VALIDACIONES REALIZADAS
+- 30 páginas HTML revisadas en el proyecto maestro.
+- 33 archivos JavaScript validados con node --check: 0 errores de sintaxis.
+- Referencias locales HTML/CSS/JS/imagen: 0 archivos faltantes.
+- IDs HTML duplicados: 0.
+- Se conservaron logos, isotipos, favicons, imágenes de negocios y _headers.
+- Se conservaron dependencias compartidas de autenticación, Supabase, navegación y lanzamiento.
+
+ARCHIVOS EXCLUIDOS DEL DESPLIEGUE
+- index-oficial.html: versión pública antigua con etiquetas de demo; no tiene enlaces internos activos.
+- perfil-demo.html: demostración antigua sin enlaces internos activos.
+- home.js: módulo heredado que ninguna página carga.
+- supabase-config.example.js: ejemplo de configuración; no debe publicarse como recurso de producción.
+- *.sql: historial y migraciones de Supabase; se conservan en el ZIP maestro, pero no son recursos web.
+- LEEME_*.txt, informes y pasos: documentación histórica; se conservan en el ZIP maestro.
+
+IMPORTANTE
+Este paquete NO elimina ni modifica datos de Supabase. Para conservar respaldo técnico, guarda el ZIP maestro completo por separado.
+
+PRUEBA DESPUÉS DE SUBIR
+1. Inicio y menú móvil.
+2. Registro, verificación, login y recuperación.
+3. Estado de cuenta según pendiente/aprobado.
+4. Panel propietario en celular y computadora.
+5. Guardado del onboarding y subida de imágenes.
+6. Panel administrador, solicitudes y negocios.
+7. Directorio y perfil público.
+8. Ayuda, términos y privacidad con regreso al origen.
