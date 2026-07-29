@@ -42,13 +42,13 @@ async function load() {
 
 function updateStats() {
   const count = status => rows.filter(row => row.estado === status).length;
-  document.querySelector('#pending-count').textContent = count('pendiente');
-  document.querySelector('#contacted-count').textContent = count('contactado');
-  document.querySelector('#approved-count').textContent = count('aprobado');
-  document.querySelector('#total-count').textContent = rows.length;
+  document.querySelector('#pending-count').textContent = String(count('pendiente'));
+  document.querySelector('#contacted-count').textContent = String(count('contactado'));
+  document.querySelector('#approved-count').textContent = String(count('aprobado'));
+  document.querySelector('#total-count').textContent = String(rows.length);
   const badge = document.querySelector('#nav-pending');
   const pending = count('pendiente');
-  badge.textContent = pending;
+  badge.textContent = String(pending);
   badge.classList.toggle('hidden', pending === 0);
 }
 

@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { isConfigured } from './config.js?v=20260717-2';
-import { getActiveContext, setActiveContext, clearActiveContext, contextHome } from './auth-context.js?v=20260724-CTX-LOCK-002';
+import { getActiveContext, setActiveContext, clearActiveContext, contextHome } from './auth-context.js?v=20260729-RC14';
 
 const form=document.querySelector('#login-form');
 const email=document.querySelector('#email');
@@ -13,14 +13,20 @@ const options=document.querySelector('#context-options');
 let resolving=false;
 
 function requestedReturn(context){
-  const raw=new URLSearchParams(location.search).get('return');
+  const params=new URLSearchParams(location.search);
+  const raw=params.get('return')||params.get('redirect');
   if(!raw)return '';
   try{
     const url=new URL(raw,location.href);
     if(url.origin!==location.origin)return '';
     const page=url.pathname.split('/').pop()||'';
-    const allowed=new Set(['marketing.html','panel.html','dashboard.html']);
+    const allowed=new Set(['marketing.html','panel.html','dashboard.html','invitacion.html']);
     if(!allowed.has(page))return '';
+    if(page==='invitacion.html'){
+      const token=url.searchParams.get('token')||'';
+      if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(token))return '';
+      return `invitacion.html?token=${encodeURIComponent(token)}`;
+    }
     if(page==='marketing.html'){
       if(context?.type==='admin'&&!url.searchParams.get('admin_business'))return '';
       if(context?.type==='owner'){
@@ -125,6 +131,8 @@ async function resolveAccess(user,forceChoose=false){
     if(saved && !savedValid) clearActiveContext(user.id);
     if(savedValid&&!forceChoose){location.replace(destinationFor(saved));return;}
     const count=(access.isAdmin?1:0)+access.businesses.length;
+    const pendingReturn=requestedReturn(null);
+    if(count===0&&pendingReturn.startsWith('invitacion.html?')){location.replace(pendingReturn);return;}
     if(count===0){location.replace(await getRegistrationDestination(user));return;}
     if(count===1){
       if(access.isAdmin) activate(user,{type:'admin'});

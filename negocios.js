@@ -645,8 +645,17 @@ async function createInvitation(){
   if(error)return toast(`${error.message}. Ejecuta 073_sprint_critico_gestion_negocios.sql.`,'error');
   const link=new URL(`invitacion.html?token=${encodeURIComponent(data.token)}`,location.href).href;
   const result=document.querySelector('#invite-result');result.classList.remove('hidden');result.className='notice success';
-  result.innerHTML=`<strong>Invitación creada.</strong><p>Comparte este enlace con ${esc(data.correo)}:</p><div class="copy-link-row"><input id="generated-invite-link" value="${esc(link)}" readonly><button class="button secondary small" id="copy-generated-link">Copiar</button></div><small>El enlace vence el ${fmt(data.vence_at)}. Por seguridad, la persona debe iniciar sesión con ese mismo correo.</small>`;
-  document.querySelector('#copy-generated-link').onclick=async()=>{await navigator.clipboard.writeText(link);toast('Enlace copiado');};
+  result.innerHTML=`<strong>Invitación creada.</strong><p>Comparte este enlace con ${esc(data.correo)}:</p><div class="copy-link-row"><input id="generated-invite-link" value="${esc(link)}" readonly><button class="button secondary small" id="copy-generated-link" type="button">Copiar</button></div><small>El enlace vence el ${fmt(data.vence_at)}. Por seguridad, la persona debe iniciar sesión con ese mismo correo.</small>`;
+  document.querySelector('#copy-generated-link').onclick=async()=>{
+    try{
+      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(link);
+      else throw new Error('Clipboard no disponible');
+    }catch{
+      const input=document.querySelector('#generated-invite-link');
+      input?.focus();input?.select();document.execCommand('copy');
+    }
+    toast('Enlace copiado');
+  };
   await loadInvitations(id);
 }
 

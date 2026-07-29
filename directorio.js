@@ -230,7 +230,7 @@ function filterBusinesses() {
 function sortBusinesses(items) {
   return [...items].sort((a, b) => {
     if (state.sort === 'name') return a.nombre.localeCompare(b.nombre, 'es');
-    if (state.sort === 'newest') return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    if (state.sort === 'newest') return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
     if (state.sort === 'open') return Number(isOpenNow(b)) - Number(isOpenNow(a)) || recommendationScore(b) - recommendationScore(a);
     if (state.sort === 'promotions') return activePromotions(b).length - activePromotions(a).length || recommendationScore(b) - recommendationScore(a);
     return recommendationScore(b) - recommendationScore(a);

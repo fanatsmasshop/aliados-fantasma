@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { getActiveContext, setActiveContext } from './auth-context.js?v=20260729-MKT-002';
+import { getActiveContext, setActiveContext } from './auth-context.js?v=20260729-RC14';
 
 const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:'',adminMode:false,businessId:null,ready:false,initialized:new Set()};
 const $=selector=>document.querySelector(selector);
@@ -64,8 +64,9 @@ async function resolveOwnerBusiness(userId,requestedBusinessId){
 
 async function loadBusiness(){
   if(!supabase)throw new Error('La conexión con la plataforma no está disponible.');
-  const {data:{user},error:userError}=await supabase.auth.getUser();
-  if(userError)throw userError;
+  const {data:sessionData,error:sessionError}=await supabase.auth.getSession();
+  if(sessionError)throw sessionError;
+  const user=sessionData?.session?.user||null;
   if(!user){
     const returnTo=`marketing.html${location.search||''}`;
     location.replace(`login.html?return=${encodeURIComponent(returnTo)}`);
@@ -152,7 +153,20 @@ function wrapText(ctx,text,maxWidth){
   if(line)lines.push(line); return lines;
 }
 function roundRect(ctx,x,y,w,h,r){const rr=Math.min(r,w/2,h/2);ctx.beginPath();if(typeof ctx.roundRect==='function'){ctx.roundRect(x,y,w,h,rr);return;}ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();}
-function loadImage(url){return new Promise(resolve=>{if(!url)return resolve(null);const img=new Image();img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=url;});}
+function loadImage(url,timeoutMs=10000){
+  return new Promise(resolve=>{
+    if(!url)return resolve(null);
+    const img=new Image();
+    let settled=false;
+    const finish=value=>{if(settled)return;settled=true;clearTimeout(timer);img.onload=null;img.onerror=null;resolve(value);};
+    const timer=setTimeout(()=>finish(null),timeoutMs);
+    img.crossOrigin='anonymous';
+    img.referrerPolicy='no-referrer';
+    img.onload=()=>finish(img);
+    img.onerror=()=>finish(null);
+    img.src=url;
+  });
+}
 
 async function renderCanvas(){
   const canvas=$('#marketing-canvas');
@@ -253,7 +267,19 @@ function generateCopy(){
   $('#generated-story').value=`${goal==='sell'?'🔥':'✨'} ${topic}\n\n${name}\n${wa||'Conoce nuestro perfil en Aliados Fantasma'}`;
   const tags=[name,category,state.data.municipio,'NegocioLocal','AliadosFantasma','CompraLocal'].filter(Boolean).map(v=>`#${String(v).replace(/[^a-zA-Z0-9ÁÉÍÓÚáéíóúÑñ]/g,'')}`);$('#generated-hashtags').value=[...new Set(tags)].join(' ');
 }
-async function copyField(id){const input=document.getElementById(id);if(!input)return;try{if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(input.value);else throw new Error();showMessage('Contenido copiado.');}catch{input.focus();input.select();document.execCommand('copy');showMessage('Contenido copiado.');}}
+async function copyField(id){
+  const input=document.getElementById(id);if(!input)return;
+  try{
+    if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(input.value);
+    else throw new Error('Portapapeles no disponible');
+    showMessage('Contenido copiado.');
+  }catch{
+    input.focus();input.select();
+    const copied=document.execCommand('copy');
+    if(!copied){showMessage('No se pudo copiar automáticamente. Mantén presionado el texto para copiarlo.','warning');return;}
+    showMessage('Contenido copiado.');
+  }
+}
 
 function setQrType(type,renderPoster=true){
   const phone=normalizePhone(state.data.whatsapp||state.business?.whatsapp);
@@ -270,7 +296,7 @@ async function generateQr(){
     state.qrImageUrl='';
     preview.removeAttribute('src');
     preview.classList.add('hidden');
-    download.removeAttribute('href');
+    download.disabled=true;
     download.classList.add('disabled');
     $('#qr-destination').textContent='No se encontró un enlace disponible. Completa el perfil o selecciona otro destino.';
     $('#qr-label').textContent=$('#qr-type').selectedOptions[0].textContent;
@@ -284,10 +310,33 @@ async function generateQr(){
   preview.onerror=()=>{preview.classList.add('hidden');showMessage('No se pudo cargar la vista previa del QR. Intenta actualizar el cartel.','warning');};
   preview.src=qr;
   $('#qr-destination').textContent=url;
-  download.href=qr;
+  download.disabled=false;
   download.classList.remove('disabled');
   $('#qr-label').textContent=$('#qr-type').selectedOptions[0].textContent;
   await renderPrintableProfile();
+}
+
+async function downloadQr(){
+  if(!state.qrImageUrl){showMessage('Primero genera un código QR.','warning');return;}
+  try{
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),10000);
+    const response=await fetch(state.qrImageUrl,{signal:controller.signal,mode:'cors'});
+    clearTimeout(timer);
+    if(!response.ok)throw new Error('No se pudo obtener el archivo del QR.');
+    const blob=await response.blob();
+    const objectUrl=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.download=`qr-${slugify(state.data.nombre||state.business?.nombre||'negocio')}.png`;
+    link.href=objectUrl;document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(objectUrl),1000);
+    showMessage('QR descargado.');
+  }catch(error){
+    console.warn('Descarga directa del QR no disponible:',error);
+    const opened=window.open(state.qrImageUrl,'_blank','noopener,noreferrer');
+    if(opened)showMessage('El QR se abrió en otra pestaña para que puedas guardarlo.','warning');
+    else showMessage('No se pudo descargar el QR. Permite ventanas emergentes e inténtalo nuevamente.','error');
+  }
 }
 
 function drawImageCover(ctx,img,x,y,w,h){
@@ -314,8 +363,13 @@ async function renderPrintableProfile(){
     card:{w:2303,h:720,label:'tarjeta-doble',ratio:'195 / 61'},
     label:{w:945,h:945,label:'etiqueta-qr',ratio:'1 / 1'}
   };
-  const cfg=formats[format];
+  const baseCfg=formats[format]||formats.a4;
+  const isCompactDevice=window.matchMedia?.('(max-width: 760px)').matches||((navigator.deviceMemory||8)<=4);
+  const maxPixels=isCompactDevice?8000000:18000000;
+  const reduction=Math.min(1,Math.sqrt(maxPixels/(baseCfg.w*baseCfg.h)));
+  const cfg={...baseCfg,w:Math.max(1,Math.round(baseCfg.w*reduction)),h:Math.max(1,Math.round(baseCfg.h*reduction))};
   const ctx=canvas.getContext('2d');
+  if(!ctx)throw new Error('Tu navegador no permite generar este material gráfico.');
   const w=cfg.w,h=cfg.h;
   canvas.width=w;canvas.height=h;
   canvas.dataset.format=format;
@@ -454,7 +508,7 @@ async function renderPrintableProfile(){
 
     // Cara inferior: orientación normal.
     const lowerY=foldY+18;
-    renderFace(outer,lowerY,faceW,h-outer-lowerY,faceH);
+    renderFace(outer,lowerY,faceW,h-outer-lowerY);
 
     // Guía de plegado central, fuera de las zonas de contenido.
     ctx.save();
@@ -506,13 +560,20 @@ function downloadPosterPng(){try{const canvas=$('#profile-poster-canvas');const 
 async function ensureJsPdf(){
   if(window.jspdf?.jsPDF)return;
   await new Promise((resolve,reject)=>{
-    const existing=document.querySelector('script[data-jspdf-loader]');
-    if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',()=>reject(new Error('No se pudo cargar el generador de PDF.')),{once:true});return;}
-    const script=document.createElement('script');
-    script.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
-    script.async=true;script.dataset.jspdfLoader='true';
-    script.onload=resolve;script.onerror=()=>reject(new Error('No se pudo cargar el generador de PDF. Revisa tu conexión e inténtalo otra vez.'));
-    document.head.appendChild(script);
+    let settled=false;
+    const finish=(error)=>{if(settled)return;settled=true;clearTimeout(timer);error?reject(error):resolve();};
+    const timer=setTimeout(()=>finish(new Error('El generador de PDF tardó demasiado en responder.')),12000);
+    let script=document.querySelector('script[data-jspdf-loader]');
+    if(script?.dataset.state==='error'){script.remove();script=null;}
+    if(!script){
+      script=document.createElement('script');
+      script.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
+      script.async=true;script.dataset.jspdfLoader='true';script.dataset.state='loading';
+      document.head.appendChild(script);
+    }
+    if(window.jspdf?.jsPDF){finish();return;}
+    script.addEventListener('load',()=>{script.dataset.state='loaded';window.jspdf?.jsPDF?finish():finish(new Error('El generador de PDF no quedó disponible.'));},{once:true});
+    script.addEventListener('error',()=>{script.dataset.state='error';finish(new Error('No se pudo cargar el generador de PDF. Revisa tu conexión e inténtalo otra vez.'));},{once:true});
   });
 }
 
@@ -562,21 +623,25 @@ async function activateSection(section){
   document.querySelector('.marketing-main')?.scrollIntoView({block:'start'});
 }
 
+function runTask(task,errorMessage='No fue posible completar esta acción.'){
+  Promise.resolve().then(task).catch(error=>{console.error(error);showMessage(`${errorMessage}${error?.message?` ${error.message}`:''}`,'error');});
+}
 function bind(){
-  document.querySelectorAll('.marketing-nav button').forEach(btn=>btn.addEventListener('click',()=>activateSection(btn.dataset.section)));
-  ['design-format','design-type','design-style'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderCanvas));
-  ['design-title','design-description','design-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{clearTimeout(window.__designTimer);window.__designTimer=setTimeout(renderCanvas,180);}));
-  $('#generate-design')?.addEventListener('click',renderCanvas);
+  document.querySelectorAll('.marketing-nav button').forEach(btn=>btn.addEventListener('click',()=>runTask(()=>activateSection(btn.dataset.section),'No se pudo abrir esta sección.')));
+  ['design-format','design-type','design-style'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>runTask(renderCanvas,'No se pudo actualizar el diseño.')));
+  ['design-title','design-description','design-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{clearTimeout(window.__designTimer);window.__designTimer=setTimeout(()=>runTask(renderCanvas,'No se pudo actualizar el diseño.'),180);}));
+  $('#generate-design')?.addEventListener('click',()=>runTask(renderCanvas,'No se pudo generar el diseño.'));
   $('#download-design')?.addEventListener('click',downloadCanvas);
   $('#generate-copy')?.addEventListener('click',generateCopy);
-  document.querySelectorAll('[data-copy-target]').forEach(btn=>btn.addEventListener('click',()=>copyField(btn.dataset.copyTarget)));
-  $('#qr-type')?.addEventListener('change',event=>setQrType(event.target.value));
-  $('#generate-qr')?.addEventListener('click',generateQr);
-  $('#qr-url')?.addEventListener('input',()=>{if($('#qr-type').value==='custom'){clearTimeout(window.__qrTimer);window.__qrTimer=setTimeout(generateQr,250);}});
-  ['poster-title','poster-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{if(!state.initialized.has('qr'))return;clearTimeout(window.__posterTimer);window.__posterTimer=setTimeout(renderPrintableProfile,180);}));
-  ['poster-format','poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{if(state.initialized.has('qr'))renderPrintableProfile();}));
-  $('#download-poster-pdf')?.addEventListener('click',downloadPosterPdf);
-  $('#download-poster-png')?.addEventListener('click',async()=>{await renderPrintableProfile();downloadPosterPng();});
+  document.querySelectorAll('[data-copy-target]').forEach(btn=>btn.addEventListener('click',()=>runTask(()=>copyField(btn.dataset.copyTarget),'No se pudo copiar el contenido.')));
+  $('#qr-type')?.addEventListener('change',event=>runTask(()=>setQrType(event.target.value),'No se pudo cambiar el destino del QR.'));
+  $('#generate-qr')?.addEventListener('click',()=>runTask(generateQr,'No se pudo generar el QR.'));
+  $('#download-qr')?.addEventListener('click',()=>runTask(downloadQr,'No se pudo descargar el QR.'));
+  $('#qr-url')?.addEventListener('input',()=>{if($('#qr-type').value==='custom'){clearTimeout(window.__qrTimer);window.__qrTimer=setTimeout(()=>runTask(generateQr,'No se pudo generar el QR.'),250);}});
+  ['poster-title','poster-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{if(!state.initialized.has('qr'))return;clearTimeout(window.__posterTimer);window.__posterTimer=setTimeout(()=>runTask(renderPrintableProfile,'No se pudo actualizar el material.'),180);}));
+  ['poster-format','poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{if(state.initialized.has('qr'))runTask(renderPrintableProfile,'No se pudo actualizar el material.');}));
+  $('#download-poster-pdf')?.addEventListener('click',()=>runTask(downloadPosterPdf,'No se pudo descargar el PDF.'));
+  $('#download-poster-png')?.addEventListener('click',()=>runTask(async()=>{await renderPrintableProfile();downloadPosterPng();},'No se pudo descargar el PNG.'));
   $('#regenerate-calendar')?.addEventListener('click',()=>{state.calendarSeed++;renderCalendar();});
 }
 

@@ -576,7 +576,7 @@ async function init(){
     const banner=document.createElement('div');
     banner.className='admin-mode-banner';
     banner.style.cssText='position:sticky;top:0;z-index:1000;background:linear-gradient(90deg,#6424c8,#7d2ce0);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-weight:700';
-    banner.innerHTML=`<div><strong>Modo administrador</strong><br><span style="font-weight:500">Estás administrando ${esc(business.nombre)}${adminReadOnly ? '. Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.' : ''}</span></div><a href="admin.html" style="background:#22263a;color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none;white-space:nowrap">Volver al panel administrativo</a>`;
+    banner.innerHTML=`<div><strong>Modo administrador</strong><br><span style="font-weight:500">Estás administrando ${esc(business.nombre)}${adminReadOnly ? '. Este negocio todavía no tiene una cuenta propietaria; el panel está en modo consulta.' : ''}</span></div><a href="negocios.html" style="background:#22263a;color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none;white-space:nowrap">Volver a negocios</a>`;
     document.body.prepend(banner);
     document.querySelector('#welcome-title').textContent = `Administrando ${business.nombre}`;
     pre = {nombre_negocio:business.nombre};
