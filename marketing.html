@@ -7,8 +7,8 @@
   <link rel="icon" href="aliados-fantasma-icono.png">
   <link rel="stylesheet" href="app.css?v=20260725-RC7">
   <link rel="stylesheet" href="logos.css?v=20260717-3">
-  <link rel="stylesheet" href="marketing.css?v=20260723-900">
-  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
+  <link rel="stylesheet" href="marketing.css?v=20260729-STAB-12">
+  <link rel="stylesheet" href="mobile-global.css?v=20260729-STAB-12">
 </head>
 <body>
   <div class="demo-banner">📣 CENTRO DE MARKETING</div>
@@ -20,11 +20,11 @@
       </a>
       <a id="marketing-back-link" class="button secondary full" href="panel.html">← Volver al panel</a>
       <nav class="marketing-nav" aria-label="Secciones del Centro de Marketing">
-        <button class="active" data-section="studio">🎨 Crear diseño</button>
-        <button data-section="copy">✍️ Textos y hashtags</button>
-        <button data-section="qr">▦ Perfil imprimible</button>
-        <button data-section="calendar">📅 Plan semanal</button>
-        <button data-section="brand">🧰 Kit digital</button>
+        <button type="button" class="active" data-section="studio">🎨 Crear diseño</button>
+        <button type="button" data-section="copy">✍️ Textos y hashtags</button>
+        <button type="button" data-section="qr">▦ Perfil imprimible</button>
+        <button type="button" data-section="calendar">📅 Plan semanal</button>
+        <button type="button" data-section="brand">🧰 Kit digital</button>
       </nav>
       <div class="marketing-tip"><strong>Consejo</strong><p>Completa tu perfil para que tus recursos salgan mejor personalizados.</p></div>
     </aside>
@@ -34,7 +34,7 @@
         <div><p class="eyebrow">RECURSOS PERSONALIZADOS</p><h1 id="marketing-title">Centro de Marketing</h1><p id="marketing-subtitle" class="muted">Cargando información de tu negocio…</p></div>
         <div class="business-chip"><img id="business-chip-logo" alt=""><span><small>Trabajando para</small><strong id="business-chip-name">Tu negocio</strong></span></div>
       </header>
-      <div id="marketing-message" class="notice hidden"></div>
+      <div id="marketing-message" class="notice hidden" role="status" aria-live="polite"></div>
 
       <section class="marketing-section active" data-panel="studio">
         <div class="section-heading"><div><p class="eyebrow">ESTUDIO RÁPIDO</p><h2>Genera una publicación lista para descargar</h2><p class="muted">Usaremos tu logo, nombre, promoción y datos de contacto.</p></div></div>
@@ -62,9 +62,9 @@
             <button id="generate-copy" class="button primary full" type="button">Generar contenido</button>
           </div>
           <div class="results-stack">
-            <article class="result-card"><header><h3>Publicación</h3><button class="button secondary small" data-copy-target="generated-post">Copiar</button></header><textarea id="generated-post" rows="9"></textarea></article>
-            <article class="result-card"><header><h3>Historia breve</h3><button class="button secondary small" data-copy-target="generated-story">Copiar</button></header><textarea id="generated-story" rows="5"></textarea></article>
-            <article class="result-card"><header><h3>Hashtags</h3><button class="button secondary small" data-copy-target="generated-hashtags">Copiar</button></header><textarea id="generated-hashtags" rows="4"></textarea></article>
+            <article class="result-card"><header><h3>Publicación</h3><button type="button" class="button secondary small" data-copy-target="generated-post">Copiar</button></header><textarea id="generated-post" aria-label="Texto generado para publicación" rows="9"></textarea></article>
+            <article class="result-card"><header><h3>Historia breve</h3><button type="button" class="button secondary small" data-copy-target="generated-story">Copiar</button></header><textarea id="generated-story" aria-label="Texto generado para historia" rows="5"></textarea></article>
+            <article class="result-card"><header><h3>Hashtags</h3><button type="button" class="button secondary small" data-copy-target="generated-hashtags">Copiar</button></header><textarea id="generated-hashtags" aria-label="Hashtags generados" rows="4"></textarea></article>
           </div>
         </div>
       </section>
@@ -112,7 +112,6 @@
       </section>
     </main>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-  <script type="module" src="marketing.js?v=20260724-CONTEXT-LOCK-002"></script>
+  <script type="module" src="marketing.js?v=20260729-STAB-12"></script>
 </body>
 </html>

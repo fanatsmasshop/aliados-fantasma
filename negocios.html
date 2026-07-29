@@ -29,7 +29,7 @@
       <main class="content">
 <section class="page-head"><div><p class="eyebrow">DIRECTORIO</p><h2>Gestión de negocios</h2><p class="muted">Crea, edita, activa y revisa perfiles.</p></div><button id="new-business" class="button primary" type="button">+ Nuevo negocio</button></section>
 <div class="panel">
-  <div class="toolbar"><input id="search" class="search" placeholder="Buscar por nombre, municipio o slug"><select id="status-filter"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select><select id="category-filter"><option value="">Todas las categorías</option></select></div>
+  <div class="toolbar"><input id="search" class="search" placeholder="Buscar por nombre, municipio o slug" aria-label="Buscar negocios"><select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select><select id="category-filter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select></div>
   <div class="table-wrap"><table class="data-table"><thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Gestión</th><th>Perfil</th><th>Creación</th><th>Acciones</th></tr></thead><tbody id="business-body"><tr><td colspan="8">Cargando…</td></tr></tbody></table></div>
 </div>
 <div id="business-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">FORMULARIO</p><h2 id="business-modal-title">Nuevo negocio</h2></div><button class="icon-button" data-close="#business-modal" type="button">✕</button></div>
@@ -57,7 +57,7 @@
       <div class="media-field">
         <span class="media-label">Logo del negocio</span>
         <div id="logo-dropzone" class="upload-zone" tabindex="0" role="button" aria-label="Seleccionar logo">
-          <input id="business-logo-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <input id="business-logo-file" type="file" aria-label="Seleccionar logo del negocio" accept="image/jpeg,image/png,image/webp" hidden>
           <div id="logo-preview" class="media-preview logo-preview">
             <span class="upload-icon">＋</span>
           </div>
@@ -76,7 +76,7 @@
       <div class="media-field">
         <span class="media-label">Portada del perfil</span>
         <div id="cover-dropzone" class="upload-zone cover-zone" tabindex="0" role="button" aria-label="Seleccionar portada">
-          <input id="business-cover-file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <input id="business-cover-file" type="file" aria-label="Seleccionar portada del negocio" accept="image/jpeg,image/png,image/webp" hidden>
           <div id="cover-preview" class="media-preview cover-preview">
             <span class="upload-icon">＋</span>
           </div>

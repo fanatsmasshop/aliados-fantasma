@@ -556,3 +556,6 @@
   .merchant-menu-backdrop{z-index:1190!important}
   .notification-bell{z-index:900!important}
 }
+
+/* AF-LAUNCH-STABILIZATION 1.2 — accesos condicionales */
+.owner-sidebar #marketing-center-link[hidden]{display:none!important}

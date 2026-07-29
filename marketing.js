@@ -1,13 +1,16 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { requireContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
+import { requireContext } from './auth-context.js?v=20260729-MKT-001';
 
-const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:'',adminMode:false,businessId:null};
+const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:'',adminMode:false,businessId:null,ready:false,initialized:new Set()};
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
-function showMessage(text,type='success'){
-  const box=$('#marketing-message'); box.textContent=text; box.className=`notice ${type==='error'?'danger':type==='warning'?'warning':'success'}`;
-  setTimeout(()=>box.classList.add('hidden'),4500);
+function showMessage(text,type='success',timeout=4500){
+  const box=$('#marketing-message');
+  if(!box)return;
+  box.textContent=text;
+  box.className=`notice ${type==='error'?'danger':type==='warning'?'warning':'success'}`;
+  if(timeout)setTimeout(()=>box.classList.add('hidden'),timeout);
 }
 function slugify(value){return String(value||'recurso').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 function getPromotion(){return (state.data.promociones||[])[0]||{};}
@@ -20,26 +23,39 @@ function profileLink(){
 }
 
 async function loadBusiness(){
-  const {data:{user}}=await supabase.auth.getUser();
+  if(!supabase)throw new Error('La conexión con la plataforma no está disponible.');
+  const {data:{user},error:userError}=await supabase.auth.getUser();
+  if(userError)throw userError;
   if(!user){location.replace('login.html');return;}
   state.user=user;
 
   const params=new URLSearchParams(location.search);
   const adminBusinessId=params.get('admin_business');
+  const requestedBusinessId=params.get('business');
   state.adminMode=Boolean(adminBusinessId);
   const context=requireContext(user.id,state.adminMode?'admin':'owner');
   if(!context)return;
 
-  state.businessId=state.adminMode?adminBusinessId:context.businessId;
-  if(!state.businessId)throw new Error('No se encontró el negocio seleccionado.');
+  if(state.adminMode){
+    const {data:isAdmin,error:adminError}=await supabase.rpc('es_administrador');
+    if(adminError||!isAdmin)throw new Error('No tienes permisos para abrir el Centro de Marketing de este negocio.');
+    state.businessId=adminBusinessId;
+  }else{
+    state.businessId=requestedBusinessId||context.businessId;
+    if(requestedBusinessId&&requestedBusinessId!==context.businessId){
+      location.replace(`marketing.html?business=${encodeURIComponent(context.businessId)}`);
+      return;
+    }
+  }
+  if(!state.businessId)throw new Error('Primero debe existir un negocio vinculado a tu cuenta. Completa el perfil y espera la aprobación.');
 
   const [{data:business,error:businessError},{data:draft,error:draftError}]=await Promise.all([
-    supabase.from('negocios').select('id,slug,nombre,logo_url,portada_url,whatsapp,telefono,enlace_maps,descripcion_corta,descripcion,direccion,colonia,municipio,activo').eq('id',state.businessId).maybeSingle(),
+    supabase.from('negocios').select('id,slug,nombre,logo_url,portada_url,whatsapp,telefono,enlace_maps,descripcion_corta,descripcion,direccion,colonia,municipio,activo,estado').eq('id',state.businessId).maybeSingle(),
     supabase.from('perfiles_borrador').select('*').eq('negocio_id',state.businessId).order('updated_at',{ascending:false}).limit(1).maybeSingle()
   ]);
   if(businessError)throw businessError;
   if(draftError)throw draftError;
-  if(!business)throw new Error('El negocio seleccionado no existe o ya no está disponible.');
+  if(!business)throw new Error('El negocio seleccionado no existe, fue eliminado o todavía no está disponible.');
 
   state.business=business;
   state.draft=draft||{};
@@ -74,9 +90,16 @@ async function loadBusiness(){
   const logo=state.data.logo_url||state.business?.logo_url||'aliados-fantasma-icono.webp';
   $('#business-chip-logo').src=logo;
   $('#business-chip-logo').onerror=()=>{$('#business-chip-logo').src='aliados-fantasma-icono.webp';};
-  fillDefaults();renderCanvas();generateCopy();setQrType('profile');renderCalendar();renderBrandResources();
-}
 
+  fillDefaults();
+  generateCopy();
+  renderCalendar();
+  renderBrandResources();
+  setQrType('profile',false);
+  state.ready=true;
+  document.body.classList.add('marketing-ready');
+  await activateSection('studio');
+}
 function fillDefaults(){
   const promo=getPromotion();
   $('#design-title').value=promo.titulo||state.data.descripcion_corta||`Conoce ${state.data.nombre||'nuestro negocio'}`;
@@ -89,7 +112,7 @@ function wrapText(ctx,text,maxWidth){
   for(const word of words){const test=line?`${line} ${word}`:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}
   if(line)lines.push(line); return lines;
 }
-function roundRect(ctx,x,y,w,h,r){const rr=Math.min(r,w/2,h/2);ctx.beginPath();ctx.roundRect(x,y,w,h,rr);}
+function roundRect(ctx,x,y,w,h,r){const rr=Math.min(r,w/2,h/2);ctx.beginPath();if(typeof ctx.roundRect==='function'){ctx.roundRect(x,y,w,h,rr);return;}ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();}
 function loadImage(url){return new Promise(resolve=>{if(!url)return resolve(null);const img=new Image();img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src=url;});}
 
 async function renderCanvas(){
@@ -181,7 +204,7 @@ async function renderCanvas(){
   ctx.fillText('ALIADOS FANTASMA',cardX+cardW-38,cardY+48);
   ctx.textAlign='left';
 }
-function downloadCanvas(){const canvas=$('#marketing-canvas');const link=document.createElement('a');link.download=`${slugify(state.data.nombre)}-${$('#design-format').value}.png`;link.href=canvas.toDataURL('image/png');link.click();}
+function downloadCanvas(){try{const canvas=$('#marketing-canvas');const link=document.createElement('a');link.download=`${slugify(state.data.nombre)}-${$('#design-format').value}.png`;link.href=canvas.toDataURL('image/png');link.click();showMessage('Diseño descargado.');}catch(error){console.error(error);showMessage('No se pudo descargar el diseño. Actualiza la vista previa e inténtalo otra vez.','error');}}
 function generateCopy(){
   const name=state.data.nombre||'nuestro negocio'; const category=state.data.categoria||'negocio local'; const topic=$('#copy-topic').value.trim()||state.data.descripcion_corta||'tenemos algo especial para ti'; const goal=$('#copy-goal').value;const tone=$('#copy-tone').value;
   const openings={friendly:`✨ ¡Hola! En ${name} queremos compartirte algo especial.`,professional:`En ${name}, nos enfocamos en ofrecerte una experiencia de calidad.`,energetic:`🔥 ¡Atención! ${name} tiene algo que no te puedes perder.`,premium:`Descubre una experiencia creada con detalle en ${name}.`};
@@ -191,14 +214,14 @@ function generateCopy(){
   $('#generated-story').value=`${goal==='sell'?'🔥':'✨'} ${topic}\n\n${name}\n${wa||'Conoce nuestro perfil en Aliados Fantasma'}`;
   const tags=[name,category,state.data.municipio,'NegocioLocal','AliadosFantasma','CompraLocal'].filter(Boolean).map(v=>`#${String(v).replace(/[^a-zA-Z0-9ÁÉÍÓÚáéíóúÑñ]/g,'')}`);$('#generated-hashtags').value=[...new Set(tags)].join(' ');
 }
-async function copyField(id){const input=document.getElementById(id);await navigator.clipboard.writeText(input.value);showMessage('Contenido copiado.');}
+async function copyField(id){const input=document.getElementById(id);if(!input)return;try{if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(input.value);else throw new Error();showMessage('Contenido copiado.');}catch{input.focus();input.select();document.execCommand('copy');showMessage('Contenido copiado.');}}
 
-function setQrType(type){
+function setQrType(type,renderPoster=true){
   const phone=normalizePhone(state.data.whatsapp||state.business?.whatsapp);
   const urls={profile:state.profileUrl,whatsapp:phone?`https://wa.me/52${phone.replace(/^52/,'')}`:'',maps:state.data.maps||state.data.enlace_maps||state.business?.enlace_maps||'',custom:$('#qr-url').value};
   $('#qr-url').readOnly=type!=='custom';
   $('#qr-url').value=urls[type]||'';
-  generateQr();
+  if(renderPoster)generateQr();
 }
 async function generateQr(){
   const url=$('#qr-url').value.trim();
@@ -440,14 +463,23 @@ async function renderPrintableProfile(){
   }
   ctx.textAlign='left';
 }
-function downloadPosterPng(){
-  const canvas=$('#profile-poster-canvas');
-  const link=document.createElement('a');
-  const fmt=$('#poster-format')?.value||'a4';link.download=`material-${fmt}-${slugify(state.data.nombre||state.business?.nombre)}.png`;
-  link.href=canvas.toDataURL('image/png');link.click();
+function downloadPosterPng(){try{const canvas=$('#profile-poster-canvas');const link=document.createElement('a');const fmt=$('#poster-format')?.value||'a4';link.download=`material-${fmt}-${slugify(state.data.nombre||state.business?.nombre)}.png`;link.href=canvas.toDataURL('image/png');link.click();showMessage('PNG descargado.');}catch(error){console.error(error);showMessage('No se pudo descargar el PNG. Actualiza el material e inténtalo otra vez.','error');}}
+async function ensureJsPdf(){
+  if(window.jspdf?.jsPDF)return;
+  await new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-jspdf-loader]');
+    if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',()=>reject(new Error('No se pudo cargar el generador de PDF.')),{once:true});return;}
+    const script=document.createElement('script');
+    script.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js';
+    script.async=true;script.dataset.jspdfLoader='true';
+    script.onload=resolve;script.onerror=()=>reject(new Error('No se pudo cargar el generador de PDF. Revisa tu conexión e inténtalo otra vez.'));
+    document.head.appendChild(script);
+  });
 }
+
 async function downloadPosterPdf(){
   try{
+    await ensureJsPdf();
     await renderPrintableProfile();
     if(!window.jspdf?.jsPDF)throw new Error('No se pudo cargar el generador de PDF.');
     const canvas=$('#profile-poster-canvas');
@@ -464,21 +496,49 @@ async function downloadPosterPdf(){
 function renderCalendar(){const name=state.data.nombre||'tu negocio';const promo=getPromotion();const plans=[
   ['Lunes','Historia','Presenta el negocio',`Cuenta qué hace diferente a ${name}.`],['Martes','Publicación','Producto o servicio destacado','Muestra un beneficio concreto y agrega una llamada a WhatsApp.'],['Miércoles','Historia interactiva','Pregunta a tu comunidad','Usa una encuesta o pregunta relacionada con tus productos.'],['Jueves','Promoción',promo.titulo||'Oferta de la semana',promo.descripcion||'Crea una razón clara para comprar o visitar esta semana.'],['Viernes','Reel o video','Detrás de cámaras','Muestra cómo trabajas, preparas o atiendes.'],['Sábado','Historia','Disponibilidad y ubicación','Recuerda horarios, ubicación y formas de contacto.'],['Domingo','Publicación','Comunidad local','Agradece a clientes y recomienda apoyar negocios cercanos.']
   ]; const shift=state.calendarSeed%plans.length;const rotated=[...plans.slice(shift),...plans.slice(0,shift)];$('#marketing-calendar').innerHTML=rotated.map(([day,type,title,desc])=>`<article class="calendar-card"><span>${esc(day)} · ${esc(type)}</span><h3>${esc(title)}</h3><p>${esc(desc)}</p><small>Objetivo: mantener presencia y generar interacción</small></article>`).join('');}
-function resourceCard(icon,title,description,url,label='Abrir recurso'){return `<article class="resource-card"><div class="resource-icon">${icon}</div><h3>${esc(title)}</h3><p>${esc(description)}</p>${url?`<a class="button secondary full" href="${esc(url)}" ${url.startsWith('http')?'target="_blank" rel="noopener"':''}>${esc(label)}</a>`:'<button class="button secondary full" disabled>No disponible</button>'}</article>`;}
+function safeResourceUrl(value){
+  const text=String(value||'').trim();
+  if(!text)return '';
+  try{
+    const url=new URL(text,location.origin);
+    if(!['http:','https:'].includes(url.protocol))return '';
+    return url.href;
+  }catch{return '';}
+}
+function resourceCard(icon,title,description,url,label='Abrir recurso'){
+  const safe=safeResourceUrl(url);
+  return `<article class="resource-card"><div class="resource-icon">${icon}</div><h3>${esc(title)}</h3><p>${esc(description)}</p>${safe?`<a class="button secondary full" href="${esc(safe)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`:'<button class="button secondary full" type="button" disabled>No disponible</button>'}</article>`;
+}
 function renderBrandResources(){const logo=state.data.logo_url||state.business?.logo_url;const cover=state.data.portada_url;const wa=normalizePhone(state.data.whatsapp);const resources=[resourceCard('🖼️','Logo del negocio','Archivo principal utilizado en tu perfil y diseños.',logo,'Abrir logo'),resourceCard('🌄','Portada','Imagen panorámica de tu perfil público.',cover,'Abrir portada'),resourceCard('▦','QR del perfil','Código que dirige a clientes a tu perfil digital.',state.profileUrl?`https://api.qrserver.com/v1/create-qr-code/?size=700x700&data=${encodeURIComponent(state.profileUrl)}`:'','Abrir QR'),resourceCard('💬','Enlace de WhatsApp','Acceso directo para recibir mensajes.',wa?`https://wa.me/52${wa.replace(/^52/,'')}`:'','Abrir WhatsApp'),resourceCard('📍','Ubicación','Enlace de Google Maps registrado.',state.data.maps||state.data.enlace_maps||state.business?.enlace_maps||'','Abrir mapa'),resourceCard('🌐','Perfil público','Consulta cómo ven tu negocio los clientes.',state.profileUrl,'Ver perfil')];$('#brand-resources').innerHTML=resources.join('');}
 
-function bind(){
-  document.querySelectorAll('.marketing-nav button').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.marketing-nav button').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.marketing-section').forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===btn.dataset.section));});
-  ['design-format','design-type','design-style'].forEach(id=>document.getElementById(id).addEventListener('change',renderCanvas));['design-title','design-description','design-cta'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{clearTimeout(window.__designTimer);window.__designTimer=setTimeout(renderCanvas,180);}));
-  $('#generate-design').onclick=renderCanvas;$('#download-design').onclick=downloadCanvas;$('#generate-copy').onclick=generateCopy;document.querySelectorAll('[data-copy-target]').forEach(btn=>btn.onclick=()=>copyField(btn.dataset.copyTarget));
-  $('#qr-type').onchange=e=>setQrType(e.target.value);
-  $('#generate-qr').onclick=generateQr;
-  $('#qr-url').addEventListener('input',()=>{if($('#qr-type').value==='custom'){clearTimeout(window.__qrTimer);window.__qrTimer=setTimeout(generateQr,250);}});
-  ['poster-title','poster-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{clearTimeout(window.__posterTimer);window.__posterTimer=setTimeout(renderPrintableProfile,180);}));
-  ['poster-format','poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderPrintableProfile));
-  $('#download-poster-pdf').onclick=downloadPosterPdf;
-  $('#download-poster-png').onclick=async()=>{await renderPrintableProfile();downloadPosterPng();};
-  $('#regenerate-calendar').onclick=()=>{state.calendarSeed++;renderCalendar();};
+async function activateSection(section){
+  document.querySelectorAll('.marketing-nav button').forEach(button=>button.classList.toggle('active',button.dataset.section===section));
+  document.querySelectorAll('.marketing-section').forEach(panel=>panel.classList.toggle('active',panel.dataset.panel===section));
+  if(!state.ready)return;
+  if(section==='studio'&&!state.initialized.has('studio')){state.initialized.add('studio');await renderCanvas();}
+  if(section==='qr'&&!state.initialized.has('qr')){state.initialized.add('qr');await generateQr();}
+  if(section==='copy'&&!state.initialized.has('copy')){state.initialized.add('copy');generateCopy();}
+  if(section==='calendar'&&!state.initialized.has('calendar')){state.initialized.add('calendar');renderCalendar();}
+  if(section==='brand'&&!state.initialized.has('brand')){state.initialized.add('brand');renderBrandResources();}
+  document.querySelector('.marketing-main')?.scrollIntoView({block:'start'});
 }
 
-bind();loadBusiness().catch(error=>{console.error(error);showMessage(`No fue posible cargar el Centro de Marketing: ${error.message}`,'error');});
+function bind(){
+  document.querySelectorAll('.marketing-nav button').forEach(btn=>btn.addEventListener('click',()=>activateSection(btn.dataset.section)));
+  ['design-format','design-type','design-style'].forEach(id=>document.getElementById(id)?.addEventListener('change',renderCanvas));
+  ['design-title','design-description','design-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{clearTimeout(window.__designTimer);window.__designTimer=setTimeout(renderCanvas,180);}));
+  $('#generate-design')?.addEventListener('click',renderCanvas);
+  $('#download-design')?.addEventListener('click',downloadCanvas);
+  $('#generate-copy')?.addEventListener('click',generateCopy);
+  document.querySelectorAll('[data-copy-target]').forEach(btn=>btn.addEventListener('click',()=>copyField(btn.dataset.copyTarget)));
+  $('#qr-type')?.addEventListener('change',event=>setQrType(event.target.value));
+  $('#generate-qr')?.addEventListener('click',generateQr);
+  $('#qr-url')?.addEventListener('input',()=>{if($('#qr-type').value==='custom'){clearTimeout(window.__qrTimer);window.__qrTimer=setTimeout(generateQr,250);}});
+  ['poster-title','poster-cta'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{if(!state.initialized.has('qr'))return;clearTimeout(window.__posterTimer);window.__posterTimer=setTimeout(renderPrintableProfile,180);}));
+  ['poster-format','poster-style','poster-show-phone','poster-show-location'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>{if(state.initialized.has('qr'))renderPrintableProfile();}));
+  $('#download-poster-pdf')?.addEventListener('click',downloadPosterPdf);
+  $('#download-poster-png')?.addEventListener('click',async()=>{await renderPrintableProfile();downloadPosterPng();});
+  $('#regenerate-calendar')?.addEventListener('click',()=>{state.calendarSeed++;renderCalendar();});
+}
+
+bind();loadBusiness().catch(error=>{console.error(error);document.body.classList.add('marketing-load-error');showMessage(`No fue posible cargar el Centro de Marketing: ${error.message}`,'error',0);const subtitle=$('#marketing-subtitle');if(subtitle)subtitle.textContent='Regresa al panel y vuelve a intentarlo. Si el problema continúa, verifica que el negocio esté aprobado y vinculado a tu cuenta.';});

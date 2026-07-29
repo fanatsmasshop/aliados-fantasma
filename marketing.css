@@ -122,3 +122,59 @@ html{scroll-padding-top:calc(var(--banner-height,38px) + 18px)}
   #profile-poster-canvas[data-format="card"]{width:100% !important}
   #profile-poster-canvas[data-format="label"]{width:min(100%,420px) !important}
 }
+
+/* AF-LAUNCH-STABILIZATION 1.2 — Centro de Marketing estable */
+body:not(.marketing-ready):not(.marketing-load-error) .marketing-nav button{
+  opacity:.55;
+  pointer-events:none;
+}
+.marketing-load-error .marketing-nav button{
+  opacity:.45;
+  pointer-events:none;
+}
+.marketing-nav button,.creator-actions .button,.poster-downloads .button{
+  min-height:44px;
+}
+#marketing-message:not(.hidden){
+  margin-bottom:18px;
+}
+@media(max-width:980px){
+  .marketing-sidebar{
+    position:sticky;
+    top:var(--banner-height,38px);
+    z-index:30;
+    height:auto;
+    padding:12px 14px;
+    gap:10px;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    box-shadow:0 12px 30px rgba(0,0,0,.24);
+  }
+  .marketing-sidebar .sidebar-brand{display:none}
+  .marketing-sidebar #marketing-back-link{margin:0}
+  .marketing-nav{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    overscroll-behavior-inline:contain;
+    scrollbar-width:thin;
+    padding-bottom:2px;
+  }
+  .marketing-nav button{
+    flex:0 0 auto;
+    white-space:nowrap;
+    padding:10px 13px;
+  }
+  .marketing-main{padding-top:22px}
+}
+@media(max-width:700px){
+  .marketing-header h1{font-size:clamp(1.55rem,8vw,2.15rem)}
+  .business-chip{width:100%;min-width:0}
+  .business-chip span{min-width:0}
+  .business-chip strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .creator-panel,.result-card,.qr-card{border-radius:17px;padding:16px}
+  .canvas-stage,.poster-stage{border-radius:17px}
+  .section-heading h2{font-size:1.35rem}
+  .qr-mini-preview{min-width:0}
+  .qr-mini-preview p{max-width:100%;font-size:.72rem}
+}

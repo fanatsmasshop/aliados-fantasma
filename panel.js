@@ -652,6 +652,7 @@ async function init(){
   updateProgress();
   renderNav();
   renderWorkflow();
+  configureMarketingCenterAccess();
   if(!adminMode){
     await showRulesIfNeeded();
     await renderAccountManagement();
@@ -868,7 +869,7 @@ async function showRulesIfNeeded(){
   let index=0;
   const render=()=>{
     const final=index===steps.length-1;const item=steps[index];
-    card.innerHTML=`<div class="tutorial-progress"><span style="width:${((index+1)/steps.length)*100}%"></span></div><p class="eyebrow">${item.eyebrow}</p><h2>${item.title}</h2><p class="tutorial-copy">${item.body}</p>${final?`<div class="notice warning"><strong>Lee antes de continuar.</strong> Las reglas completas se encuentran en los Términos y Condiciones y el tratamiento de datos en la Política de Privacidad.</div><label class="rules-check"><input id="rules-accept" type="checkbox"> He leído y comprendido los <a href="terminos.html" target="_blank">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank">Política de Privacidad</a>.</label>`:''}<div class="tutorial-actions"><button type="button" class="button secondary" id="tutorial-prev" ${index===0?'disabled':''}>Anterior</button><span>${index+1} de ${steps.length}</span>${final?'<button id="rules-confirm" class="button primary" type="button" disabled>Comenzar</button>':'<button type="button" class="button primary" id="tutorial-next">Siguiente</button>'}</div>`;
+    card.innerHTML=`<div class="tutorial-progress"><span style="width:${((index+1)/steps.length)*100}%"></span></div><p class="eyebrow">${item.eyebrow}</p><h2>${item.title}</h2><p class="tutorial-copy">${item.body}</p>${final?`<div class="notice warning"><strong>Lee antes de continuar.</strong> Las reglas completas se encuentran en los Términos y Condiciones y el tratamiento de datos en la Política de Privacidad.</div><label class="rules-check"><input id="rules-accept" type="checkbox"> He leído y comprendido los <a href="terminos.html?from=panel" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a> y la <a href="privacidad.html?from=panel" target="_blank" rel="noopener noreferrer">Política de Privacidad</a>.</label>`:''}<div class="tutorial-actions"><button type="button" class="button secondary" id="tutorial-prev" ${index===0?'disabled':''}>Anterior</button><span>${index+1} de ${steps.length}</span>${final?'<button id="rules-confirm" class="button primary" type="button" disabled>Comenzar</button>':'<button type="button" class="button primary" id="tutorial-next">Siguiente</button>'}</div>`;
     card.querySelector('#tutorial-prev')?.addEventListener('click',()=>{index--;render();});
     card.querySelector('#tutorial-next')?.addEventListener('click',()=>{index++;render();});
     if(final){
@@ -1230,27 +1231,23 @@ async function initNotificationCenter(){
   catch(error){console.error('No fue posible cargar las notificaciones:',error);}
 }
 
-// CENTRO DE MARKETING v2.8
-function ensureMarketingCenterAccess(){
-  const sidebar=document.querySelector('.owner-sidebar');
-  if(!sidebar || document.querySelector('#marketing-center-link')) return;
-  const footer=sidebar.querySelector('.sidebar-footer');
-  const link=document.createElement('a');
-  link.id='marketing-center-link';
-  link.href=adminMode ? `marketing.html?admin_business=${encodeURIComponent(adminBusinessId)}` : 'marketing.html';
-  link.className='button marketing-center-link full';
-  link.innerHTML='<span aria-hidden="true">📣</span><span>Centro de Marketing</span>';
-  link.style.cssText='display:flex;align-items:center;justify-content:center;gap:10px;margin:14px 16px 10px;min-height:48px;text-decoration:none;background:linear-gradient(135deg,rgba(91,61,196,.28),rgba(0,149,255,.18));border:1px solid rgba(161,111,255,.45);color:#fff;border-radius:12px;font-weight:800;';
-  if(footer) sidebar.insertBefore(link,footer); else sidebar.appendChild(link);
+// CENTRO DE MARKETING — acceso seguro
+function configureMarketingCenterAccess(){
+  const link=document.querySelector('#marketing-center-link');
+  if(!link)return;
+  const businessId=adminMode
+    ?adminBusinessId
+    :(activeOwnerMembership?.negocio_id||draft?.negocio_id||publishedBusiness?.id||'');
+  if(!businessId){
+    link.hidden=true;
+    link.removeAttribute('href');
+    link.setAttribute('aria-disabled','true');
+    return;
+  }
+  link.hidden=false;
+  link.removeAttribute('aria-disabled');
+  link.href=adminMode
+    ?`marketing.html?admin_business=${encodeURIComponent(businessId)}`
+    :`marketing.html?business=${encodeURIComponent(businessId)}`;
 }
 
-// El script se carga como módulo al final de panel.html. En ese punto el DOM ya puede
-// estar listo, por lo que no debemos depender únicamente de DOMContentLoaded.
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', ensureMarketingCenterAccess, { once:true });
-}else{
-  ensureMarketingCenterAccess();
-}
-
-// Segundo intento después de que el panel termine de pintar sus componentes dinámicos.
-window.setTimeout(ensureMarketingCenterAccess, 250);
