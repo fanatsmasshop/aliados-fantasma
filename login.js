@@ -12,6 +12,30 @@ const modal=document.querySelector('#context-modal');
 const options=document.querySelector('#context-options');
 let resolving=false;
 
+function requestedReturn(context){
+  const raw=new URLSearchParams(location.search).get('return');
+  if(!raw)return '';
+  try{
+    const url=new URL(raw,location.href);
+    if(url.origin!==location.origin)return '';
+    const page=url.pathname.split('/').pop()||'';
+    const allowed=new Set(['marketing.html','panel.html','dashboard.html']);
+    if(!allowed.has(page))return '';
+    if(page==='marketing.html'){
+      if(context?.type==='admin'&&!url.searchParams.get('admin_business'))return '';
+      if(context?.type==='owner'){
+        const requested=url.searchParams.get('business');
+        if(requested&&requested!==context.businessId)return '';
+        url.searchParams.set('business',context.businessId);
+        url.searchParams.delete('admin_business');
+      }
+    }
+    if(page==='dashboard.html'&&context?.type!=='admin')return '';
+    return `${page}${url.search}`;
+  }catch{return '';}
+}
+function destinationFor(context){return requestedReturn(context)||contextHome(context);}
+
 if(!isConfigured||!supabase){warning.classList.remove('hidden');button.disabled=true;}
 else{
   const {data}=await supabase.auth.getSession();
@@ -24,12 +48,33 @@ document.querySelector('#toggle-password').addEventListener('click',event=>{
 });
 
 async function getAccess(user){
-  const [{data:profile},{data:memberships,error}]=await Promise.all([
+  const [{data:profile},{data:memberships,error},{data:draft,error:draftError}]=await Promise.all([
     supabase.from('perfiles').select('rol,activo,nombre').eq('id',user.id).maybeSingle(),
-    supabase.from('miembros_negocio').select('negocio_id,rol,activo,negocios(id,nombre,slug,activo)').eq('perfil_id',user.id).eq('activo',true)
+    supabase.from('miembros_negocio').select('negocio_id,rol,activo,negocios(id,nombre,slug,activo)').eq('perfil_id',user.id).eq('activo',true),
+    supabase.from('perfiles_borrador').select('negocio_id,datos').eq('usuario_id',user.id).maybeSingle()
   ]);
-  if(error) console.warn(error);
-  const businesses=(memberships||[]).filter(x=>x.negocios&&x.negocios.activo!==false);
+  if(error)console.warn(error);
+  if(draftError)console.warn(draftError);
+  const businesses=(memberships||[]).filter(x=>x.negocios);
+
+  // Recupera perfiles publicados antes de que se creara su membresía.
+  if(!businesses.length&&draft?.negocio_id){
+    const {data:business,error:businessError}=await supabase
+      .from('negocios')
+      .select('id,nombre,slug,activo')
+      .eq('id',draft.negocio_id)
+      .maybeSingle();
+    if(businessError)console.warn(businessError);
+    if(business){
+      businesses.push({
+        negocio_id:business.id,
+        rol:'propietario',
+        activo:true,
+        negocios:business,
+        recuperado_desde_borrador:true
+      });
+    }
+  }
   return {isAdmin:profile?.rol==='administrador'&&profile?.activo===true,businesses};
 }
 
@@ -48,7 +93,7 @@ function chooseContext(user,access){
   });
 }
 function escapeHtml(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function activate(user,context){setActiveContext(user.id,context);location.replace(contextHome(context));}
+function activate(user,context){setActiveContext(user.id,context);location.replace(destinationFor(context));}
 
 async function getRegistrationDestination(user){
   try{
@@ -78,7 +123,7 @@ async function resolveAccess(user,forceChoose=false){
     const saved=getActiveContext(user.id);
     const savedValid=saved && ((saved.type==='admin'&&access.isAdmin)||(saved.type==='owner'&&access.businesses.some(x=>x.negocio_id===saved.businessId)));
     if(saved && !savedValid) clearActiveContext(user.id);
-    if(savedValid&&!forceChoose){location.replace(contextHome(saved));return;}
+    if(savedValid&&!forceChoose){location.replace(destinationFor(saved));return;}
     const count=(access.isAdmin?1:0)+access.businesses.length;
     if(count===0){location.replace(await getRegistrationDestination(user));return;}
     if(count===1){

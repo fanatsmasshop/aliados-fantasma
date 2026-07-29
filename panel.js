@@ -644,6 +644,14 @@ async function init(){
       if(draftData){ draft = draftData; draftOwnerId = authenticatedUser.id; }
       else { draftOwnerId = authenticatedUser.id; draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]}; }
       await loadPublishedBusiness();
+      if(draft.negocio_id){
+        setActiveContext(authenticatedUser.id,{
+          type:'owner',
+          businessId:draft.negocio_id,
+          businessName:publishedBusiness?.nombre||draft.datos?.nombre||pre.nombre_negocio||'Mi negocio'
+        });
+        rememberBusiness(draft.negocio_id);
+      }
       renderOwnerRoleNavigation();
     }
   }

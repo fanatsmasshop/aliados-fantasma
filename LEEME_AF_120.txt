@@ -1,0 +1,8 @@
+ALIADOS FANTASMA — AF-120
+
+1. Ejecuta AF_120_VINCULAR_PROPIETARIOS_MARKETING.sql en Supabase.
+2. Sube marketing.js, marketing.html, panel.js, panel.html, login.js y login.html a la raíz de GitHub.
+3. Espera Cloudflare y abre con Ctrl+F5 o en incógnito.
+4. Prueba Panel -> Centro de Marketing.
+
+La corrección repara datos existentes, publicaciones futuras y el frontend para evitar ciclos de redirección.

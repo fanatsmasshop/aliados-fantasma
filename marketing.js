@@ -1,5 +1,5 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { requireContext } from './auth-context.js?v=20260729-MKT-001';
+import { getActiveContext, setActiveContext } from './auth-context.js?v=20260729-MKT-002';
 
 const state={user:null,draft:null,business:null,data:{},profileUrl:'',calendarSeed:0,qrImageUrl:'',adminMode:false,businessId:null,ready:false,initialized:new Set()};
 const $=selector=>document.querySelector(selector);
@@ -22,32 +22,71 @@ function profileLink(){
   return '';
 }
 
+async function resolveOwnerBusiness(userId,requestedBusinessId){
+  const saved=getActiveContext(userId);
+  const {data:memberships,error:membershipError}=await supabase
+    .from('miembros_negocio')
+    .select('negocio_id,rol,activo,negocios(id,nombre,slug,activo)')
+    .eq('perfil_id',userId)
+    .eq('activo',true);
+  if(membershipError)console.warn('No se pudieron consultar las membresías:',membershipError);
+
+  const rows=(memberships||[]).filter(item=>item.negocios);
+  let selected=null;
+  if(requestedBusinessId)selected=rows.find(item=>item.negocio_id===requestedBusinessId)||null;
+  if(!selected&&saved?.type==='owner')selected=rows.find(item=>item.negocio_id===saved.businessId)||null;
+  if(!selected&&!requestedBusinessId)selected=rows[0]||null;
+
+  if(selected){
+    setActiveContext(userId,{type:'owner',businessId:selected.negocio_id,businessName:selected.negocios?.nombre||'Mi negocio'});
+    return selected.negocio_id;
+  }
+
+  // Compatibilidad con perfiles ya publicados antes de que se creara su
+  // membresía. RLS solo permite leer el borrador perteneciente al usuario.
+  const {data:draft,error:draftError}=await supabase
+    .from('perfiles_borrador')
+    .select('usuario_id,negocio_id,estado,datos')
+    .eq('usuario_id',userId)
+    .maybeSingle();
+  if(draftError)throw draftError;
+  if(draft?.negocio_id){
+    if(requestedBusinessId&&requestedBusinessId!==draft.negocio_id){
+      throw new Error('No tienes acceso al negocio solicitado.');
+    }
+    const businessName=draft.datos?.nombre||'Mi negocio';
+    setActiveContext(userId,{type:'owner',businessId:draft.negocio_id,businessName});
+    return draft.negocio_id;
+  }
+
+  throw new Error('Primero debe existir un negocio vinculado a tu cuenta. Completa el perfil y espera la publicación.');
+}
+
 async function loadBusiness(){
   if(!supabase)throw new Error('La conexión con la plataforma no está disponible.');
   const {data:{user},error:userError}=await supabase.auth.getUser();
   if(userError)throw userError;
-  if(!user){location.replace('login.html');return;}
+  if(!user){
+    const returnTo=`marketing.html${location.search||''}`;
+    location.replace(`login.html?return=${encodeURIComponent(returnTo)}`);
+    return;
+  }
   state.user=user;
 
   const params=new URLSearchParams(location.search);
   const adminBusinessId=params.get('admin_business');
   const requestedBusinessId=params.get('business');
   state.adminMode=Boolean(adminBusinessId);
-  const context=requireContext(user.id,state.adminMode?'admin':'owner');
-  if(!context)return;
 
   if(state.adminMode){
     const {data:isAdmin,error:adminError}=await supabase.rpc('es_administrador');
     if(adminError||!isAdmin)throw new Error('No tienes permisos para abrir el Centro de Marketing de este negocio.');
+    setActiveContext(user.id,{type:'admin'});
     state.businessId=adminBusinessId;
   }else{
-    state.businessId=requestedBusinessId||context.businessId;
-    if(requestedBusinessId&&requestedBusinessId!==context.businessId){
-      location.replace(`marketing.html?business=${encodeURIComponent(context.businessId)}`);
-      return;
-    }
+    state.businessId=await resolveOwnerBusiness(user.id,requestedBusinessId);
   }
-  if(!state.businessId)throw new Error('Primero debe existir un negocio vinculado a tu cuenta. Completa el perfil y espera la aprobación.');
+  if(!state.businessId)throw new Error('Primero debe existir un negocio vinculado a tu cuenta. Completa el perfil y espera la publicación.');
 
   const [{data:business,error:businessError},{data:draft,error:draftError}]=await Promise.all([
     supabase.from('negocios').select('id,slug,nombre,logo_url,portada_url,whatsapp,telefono,enlace_maps,descripcion_corta,descripcion,direccion,colonia,municipio,activo,estado').eq('id',state.businessId).maybeSingle(),
