@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Activa tu acceso | Aliados Fantasma</title>
+</head>
+<body style="margin:0;padding:0;background:#070a13;color:#fff;font-family:Arial,Helvetica,sans-serif">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#070a13;width:100%">
+<tr><td align="center" style="padding:28px 14px">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:580px;background:#101522;border:1px solid #27304a;border-radius:20px;overflow:hidden">
+<tr><td align="center" style="padding:11px 20px;background:#6138e8;color:#fff;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase">Acceso a un negocio</td></tr>
+<tr><td align="center" style="padding:34px 28px 16px">
+<img src="https://aliados-fantasma.pages.dev/aliados-fantasma-logo.png" width="170" alt="Aliados Fantasma" style="display:block;width:170px;max-width:70%;height:auto;border:0;margin:0 auto 24px">
+<p style="margin:0 0 10px;color:#3ee6ff;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase">Tu espacio está listo</p>
+<h1 style="margin:0 0 14px;color:#fff;font-size:28px;line-height:35px;font-weight:800">Activa tu acceso</h1>
+<p style="margin:0;color:#b9c2d8;font-size:16px;line-height:25px">Te invitaron a administrar <strong style="color:#fff">{{ .Data.negocio_nombre }}</strong> dentro de Aliados Fantasma.</p>
+</td></tr>
+<tr><td style="padding:12px 28px 0">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0b101b;border:1px solid #252d42;border-radius:12px;width:100%">
+<tr><td style="padding:14px 16px"><p style="margin:0 0 4px;color:#8290ad;font-size:12px">Correo invitado</p><p style="margin:0 0 10px;color:#fff;font-size:14px;font-weight:700;word-break:break-word">{{ .Email }}</p><p style="margin:0;color:#8290ad;font-size:12px">Rol asignado</p><p style="margin:4px 0 0;color:#fff;font-size:14px;font-weight:700;text-transform:capitalize">{{ .Data.rol }}</p></td></tr>
+</table>
+</td></tr>
+<tr><td align="center" style="padding:28px">
+<a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#7847f5;color:#fff;text-decoration:none;font-size:16px;font-weight:800;padding:16px 30px;border-radius:12px;border:1px solid #9b73ff">Activar mi acceso</a>
+<p style="margin:18px 0 0;color:#8895af;font-size:13px;line-height:20px">El enlace es personal. Después podrás crear tu contraseña y aceptar el acceso al negocio.</p>
+</td></tr>
+<tr><td style="padding:0 28px 28px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#151a2a;border:1px solid #2c3550;border-radius:15px;width:100%"><tr><td style="padding:21px"><p style="margin:0 0 14px;color:#fff;font-size:15px;font-weight:800">Con este acceso podrás</p><p style="margin:0 0 9px;color:#bec7da;font-size:14px">✓ Editar la información del negocio</p><p style="margin:0 0 9px;color:#bec7da;font-size:14px">✓ Administrar imágenes, horarios y promociones</p><p style="margin:0;color:#bec7da;font-size:14px">✓ Utilizar las herramientas disponibles para tu rol</p></td></tr></table></td></tr>
+<tr><td style="padding:0 28px 30px"><p style="margin:0 0 8px;color:#9aa6bd;font-size:12px">Si el botón no funciona, copia este enlace:</p><p style="margin:0;color:#58c8ff;font-size:11px;line-height:18px;word-break:break-all">{{ .ConfirmationURL }}</p></td></tr>
+<tr><td style="padding:22px 28px;background:#0a0e18;border-top:1px solid #252d42"><p style="margin:0 0 8px;color:#fff;font-size:13px;font-weight:700;text-align:center">¿No reconoces esta invitación?</p><p style="margin:0;color:#7f8ba3;font-size:12px;line-height:19px;text-align:center">Ignora este mensaje. No se otorgará acceso mientras no aceptes la invitación.</p></td></tr>
+<tr><td align="center" style="padding:24px 28px 30px"><p style="margin:0 0 7px;color:#fff;font-size:14px;font-weight:800">Aliados Fantasma</p><p style="margin:0;color:#66718a;font-size:11px;line-height:17px">Ecatepec · Estado de México<br>Impulsado por Fantasmas Biker's Shop</p></td></tr>
+</table>
+<p style="margin:18px 0 0;color:#657088;font-size:11px;text-align:center">© 2026 Aliados Fantasma. Mensaje automático.</p>
+</td></tr></table>
+</body>
+</html>

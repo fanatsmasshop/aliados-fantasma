@@ -1,0 +1,46 @@
+ALIADOS FANTASMA — INVITACIONES POR CORREO 1.0
+
+1) GITHUB / CLOUDFLARE
+Reemplaza en la raíz:
+- negocios.html
+- negocios.js
+- invitacion.html
+- invitacion.js
+
+2) SUPABASE EDGE FUNCTION
+Supabase > Edge Functions > Deploy a new function > Via Editor.
+Nombre exacto: enviar-invitacion-negocio
+Reemplaza el código del editor con el contenido de:
+- enviar-invitacion-negocio.index.ts
+Deja activada la verificación JWT y despliega.
+No pegues ninguna clave secreta en el frontend. Las variables SUPABASE_URL,
+SUPABASE_ANON_KEY y SUPABASE_SERVICE_ROLE_KEY existen automáticamente en la función alojada.
+
+3) URL PERMITIDA
+Authentication > URL Configuration > Redirect URLs.
+Agrega:
+https://aliados-fantasma.pages.dev/invitacion.html**
+
+4) CORREO INVITE USER
+Authentication > Emails > Invite user.
+Asunto:
+Activa tu acceso a {{ .Data.negocio_nombre }} | Aliados Fantasma
+
+Cuerpo:
+Pega todo PLANTILLA_INVITE_USER.html.
+
+5) CUENTAS YA EXISTENTES
+Si el correo ya pertenece a una cuenta, Supabase no puede volver a enviar Invite user.
+La función enviará automáticamente un Magic Link al mismo destino. Conviene personalizar
+también la plantilla Magic link or OTP después, aunque la plantilla predeterminada funciona.
+
+6) PRUEBA
+- Administración > Negocios > Accesos.
+- Escribe un correo nuevo.
+- Selecciona rol.
+- Pulsa Enviar invitación.
+- Debe mostrar Invitación enviada y un enlace de respaldo.
+- Abre el correo, pulsa Activar mi acceso, crea contraseña y acepta.
+- Debe abrir panel.html con acceso al negocio.
+
+No requiere ejecutar SQL: usa las tablas y RPC existentes de 073_sprint_critico_gestion_negocios.sql.

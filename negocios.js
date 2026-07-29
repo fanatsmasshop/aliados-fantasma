@@ -636,16 +636,35 @@ async function loadInvitations(id){
 
 async function createInvitation(){
   const id=document.querySelector('#owners-business-id').value;
-  const email=document.querySelector('#invite-email').value.trim();
+  const email=document.querySelector('#invite-email').value.trim().toLowerCase();
   const role=document.querySelector('#invite-role').value;
-  if(!email)return toast('Escribe un correo válido','error');
-  const button=document.querySelector('#create-invite');setLoading(button,true);
-  const {data,error}=await supabase.rpc('admin_crear_invitacion_negocio',{p_negocio_id:id,p_correo:email,p_rol:role});
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return toast('Escribe un correo válido','error');
+  if(!id) return toast('No se encontró el negocio','error');
+
+  const button=document.querySelector('#create-invite');
+  setLoading(button,true);
+  const {data,error}=await supabase.functions.invoke('enviar-invitacion-negocio',{
+    body:{negocio_id:id,correo:email,rol:role}
+  });
   setLoading(button,false);
-  if(error)return toast(`${error.message}. Ejecuta 073_sprint_critico_gestion_negocios.sql.`,'error');
-  const link=new URL(`invitacion.html?token=${encodeURIComponent(data.token)}`,location.href).href;
-  const result=document.querySelector('#invite-result');result.classList.remove('hidden');result.className='notice success';
-  result.innerHTML=`<strong>Invitación creada.</strong><p>Comparte este enlace con ${esc(data.correo)}:</p><div class="copy-link-row"><input id="generated-invite-link" value="${esc(link)}" readonly><button class="button secondary small" id="copy-generated-link" type="button">Copiar</button></div><small>El enlace vence el ${fmt(data.vence_at)}. Por seguridad, la persona debe iniciar sesión con ese mismo correo.</small>`;
+
+  if(error){
+    console.error('Error al enviar invitación',error);
+    return toast(error.message || 'No fue posible enviar la invitación','error');
+  }
+  if(!data?.ok){
+    return toast(data?.message || 'No fue posible crear la invitación','error');
+  }
+
+  const link=data.link;
+  const result=document.querySelector('#invite-result');
+  result.classList.remove('hidden');
+  result.className=data.email_sent?'notice success':'notice warning';
+  const deliveryText=data.email_sent
+    ? `<strong>Invitación enviada.</strong><p>Enviamos el acceso a ${esc(data.correo)}.</p>`
+    : `<strong>Invitación creada, pero el correo no pudo enviarse.</strong><p>Comparte el enlace con ${esc(data.correo)}.</p>`;
+  result.innerHTML=`${deliveryText}<div class="copy-link-row"><input id="generated-invite-link" value="${esc(link)}" readonly><button class="button secondary small" id="copy-generated-link" type="button">Copiar enlace</button></div><small>El acceso interno vence el ${fmt(data.vence_at)}. El correo de acceso de Supabase puede vencer antes, así que conserva este enlace como respaldo.</small>`;
+
   document.querySelector('#copy-generated-link').onclick=async()=>{
     try{
       if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(link);
@@ -656,6 +675,7 @@ async function createInvitation(){
     }
     toast('Enlace copiado');
   };
+  document.querySelector('#invite-email').value='';
   await loadInvitations(id);
 }
 
