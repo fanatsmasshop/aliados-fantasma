@@ -741,9 +741,45 @@ function initMerchantMobileUX(){
   const openButton=document.querySelector('#mobile-options-toggle');
   const closeButton=document.querySelector('#merchant-menu-close');
   const summaryPanel=document.querySelector('.merchant-summary-panel');
+  const mobileMode=window.matchMedia('(max-width:700px)');
+
+  if(!sidebar || !menu || !openButton || !backdrop) return;
+
+  const resetButton=()=>{
+    openButton.setAttribute('aria-expanded','false');
+    openButton.setAttribute('aria-label','Abrir menú');
+    const icon=openButton.querySelector('span');
+    if(icon) icon.textContent='☰';
+  };
+
+  const closeVisualState=()=>{
+    menu.classList.remove('open');
+    sidebar.classList.remove('mobile-options-open');
+    document.body.classList.remove('merchant-menu-open');
+    backdrop.hidden=true;
+    resetButton();
+  };
+
+  const syncMenuMode=()=>{
+    closeVisualState();
+    if(mobileMode.matches){
+      menu.setAttribute('inert','');
+      menu.setAttribute('aria-hidden','true');
+    }else{
+      // En escritorio el menú es una parte visible y operable de la barra lateral.
+      // Nunca debe quedar inert ni oculto para tecnologías de asistencia.
+      menu.removeAttribute('inert');
+      menu.setAttribute('aria-hidden','false');
+    }
+  };
 
   const setMenuOpen=(open)=>{
-    if(!sidebar || !menu || !openButton || !backdrop) return;
+    // En escritorio los botones viven permanentemente en la barra lateral.
+    // Cerrar una acción no debe desactivarlos con inert.
+    if(!mobileMode.matches){
+      syncMenuMode();
+      return;
+    }
 
     if(open){
       menu.removeAttribute('inert');
@@ -754,29 +790,24 @@ function initMerchantMobileUX(){
       document.body.classList.add('merchant-menu-open');
       openButton.setAttribute('aria-expanded','true');
       openButton.setAttribute('aria-label','Cerrar menú');
-      openButton.querySelector('span').textContent='×';
+      const icon=openButton.querySelector('span');
+      if(icon) icon.textContent='×';
       requestAnimationFrame(()=>closeButton?.focus());
       return;
     }
 
     if(menu.contains(document.activeElement)) openButton.focus();
-    menu.classList.remove('open');
-    sidebar.classList.remove('mobile-options-open');
-    document.body.classList.remove('merchant-menu-open');
-    backdrop.hidden=true;
-    openButton.setAttribute('aria-expanded','false');
-    openButton.setAttribute('aria-label','Abrir menú');
-    openButton.querySelector('span').textContent='☰';
+    closeVisualState();
     menu.setAttribute('inert','');
     menu.setAttribute('aria-hidden','true');
   };
 
-  menu?.setAttribute('inert','');
-
-  openButton?.addEventListener('click',()=>setMenuOpen(!sidebar.classList.contains('mobile-options-open')));
+  openButton.addEventListener('click',()=>setMenuOpen(!menu.classList.contains('open')));
   closeButton?.addEventListener('click',()=>setMenuOpen(false));
-  backdrop?.addEventListener('click',()=>setMenuOpen(false));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape') setMenuOpen(false);});
+  backdrop.addEventListener('click',()=>setMenuOpen(false));
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && mobileMode.matches && menu.classList.contains('open')) setMenuOpen(false);
+  });
 
   document.querySelector('[data-merchant-action="profile"]')?.addEventListener('click',()=>{
     summaryPanel?.classList.remove('mobile-open');
@@ -800,12 +831,16 @@ function initMerchantMobileUX(){
   document.querySelector('#preview-button')?.addEventListener('click',()=>setMenuOpen(false));
   document.querySelector('#logout-button')?.addEventListener('click',()=>setMenuOpen(false));
 
+  if(typeof mobileMode.addEventListener==='function') mobileMode.addEventListener('change',syncMenuMode);
+  else mobileMode.addListener(syncMenuMode);
+  syncMenuMode();
   updateMobileStepSummary();
 }
 
+initMerchantMobileUX();
+
 try{
   await init();
-  initMerchantMobileUX();
   const menuBusiness=document.querySelector('#merchant-menu-business');
   if(menuBusiness){
     const businessName=(document.querySelector('#welcome-title')?.textContent||'Mi perfil')
@@ -1036,16 +1071,33 @@ function ensureNotificationCenter(){
   const bell=root.querySelector('#notification-bell');
   const drawer=root.querySelector('#notification-drawer');
   const backdrop=root.querySelector('#notification-backdrop');
+  const notificationClose=root.querySelector('#notification-close');
   const setOpen=open=>{
-    drawer.classList.toggle('open',open);
-    drawer.setAttribute('aria-hidden',String(!open));
-    bell.setAttribute('aria-expanded',String(open));
-    backdrop.classList.toggle('hidden',!open);
-    document.body.classList.toggle('notifications-open',open);
+    if(open){
+      drawer.removeAttribute('inert');
+      drawer.setAttribute('aria-hidden','false');
+      drawer.classList.add('open');
+      bell.setAttribute('aria-expanded','true');
+      backdrop.classList.remove('hidden');
+      document.body.classList.add('notifications-open');
+      requestAnimationFrame(()=>notificationClose?.focus());
+      return;
+    }
+    if(drawer.contains(document.activeElement)) bell.focus();
+    drawer.classList.remove('open');
+    bell.setAttribute('aria-expanded','false');
+    backdrop.classList.add('hidden');
+    document.body.classList.remove('notifications-open');
+    drawer.setAttribute('inert','');
+    drawer.setAttribute('aria-hidden','true');
   };
+  drawer.setAttribute('inert','');
   bell.onclick=()=>setOpen(true);
-  root.querySelector('#notification-close').onclick=()=>setOpen(false);
+  notificationClose.onclick=()=>setOpen(false);
   backdrop.onclick=()=>setOpen(false);
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && drawer.classList.contains('open')) setOpen(false);
+  });
   root.querySelectorAll('[data-notification-filter]').forEach(button=>button.onclick=()=>{
     notificationFilter=button.dataset.notificationFilter;
     root.querySelectorAll('[data-notification-filter]').forEach(item=>item.classList.toggle('active',item===button));
