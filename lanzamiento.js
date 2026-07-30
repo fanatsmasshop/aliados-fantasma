@@ -9,7 +9,7 @@ import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
-const OPEN_TRANSITION_MS = 1450;
+const OPEN_TRANSITION_MS = 1100;
 
 let launchState = null;
 let launchRefreshInProgress = false;

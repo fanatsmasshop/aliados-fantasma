@@ -1,28 +1,18 @@
-AF REVELACIÓN CINEMATOGRÁFICA — HOTFIX 2.3
+AF-REVELACION-CINEMATOGRAFICA-HOTFIX-2.4
 
-MEJORA
-- Todas las frases dinámicas ahora usan la misma transición cinematográfica:
-  salida hacia arriba + desenfoque + entrada desde abajo + enfoque.
-- Se aplica a:
-  * historia narrativa;
-  * estados de conexión;
-  * Descubre / Conecta / Crece / Juntos.
-- El 3, 2, 1 conserva su golpe visual propio porque funciona como clímax.
-- No cambia la duración total: evento 28 s y versión breve 8 s.
+Corrige la pantalla morada con punto blanco que aparecía justo antes del directorio.
 
-INSTALACIÓN
-Reemplaza en la raíz de GitHub:
+Cambios:
+- Se elimina el efecto de portal blanco.
+- La escena final se desvanece y las cortinas revelan directamente el directorio que ya está cargado detrás.
+- La transición final se reduce a 1.1 segundos.
+- No requiere SQL ni cambios en Supabase.
+
+Reemplazar en GitHub:
 - index.html
 - lanzamiento.css
 - lanzamiento.js
 
-No requiere SQL ni cambios en Supabase.
-
-PRUEBAS
-Evento:
-https://aliados-fantasma.pages.dev/?reveal=event&preview=1
-
-Breve:
-https://aliados-fantasma.pages.dev/?reveal=short&preview=1
-
-Después del despliegue usa Ctrl + F5 o incógnito.
+Pruebas:
+/?reveal=event&preview=1
+/?reveal=short&preview=1
