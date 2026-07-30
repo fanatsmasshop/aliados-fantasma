@@ -1,16 +1,33 @@
-AF-INICIO-ACTIVO-PRO-1.0
+ALIADOS FANTASMA — REVELACIÓN DE LANZAMIENTO 1.0
 
-INSTALACIÓN
-1. Sube los cinco archivos de esta carpeta a la raíz de GitHub.
-2. Reemplaza index.html, lanzamiento.js y lanzamiento.css.
-3. Agrega home-live.js.
-4. Espera el despliegue de Cloudflare Pages.
-5. Para probar sin esperar la fecha, configura el modo de lanzamiento como "abierto" desde el dashboard administrativo.
+ARCHIVOS A SUBIR A LA RAÍZ DE GITHUB
+- index.html
+- lanzamiento.js
+- lanzamiento.css
+- home-live.js
 
-COMPORTAMIENTO
-- Antes del lanzamiento: conserva la landing y la cuenta regresiva.
-- Al abrirse la red o llegar la cuenta a cero: la portada cambia automáticamente al inicio público profesional.
-- Muestra banners automáticos de negocios, categorías, recomendados, promociones activas y todos los negocios.
-- La fecha anterior del 24 de agosto ya no aparece en el cierre de la landing.
+Reemplaza los archivos existentes. No requiere SQL ni cambios en Supabase.
 
-NO REQUIERE SQL NUEVO.
+CÓMO FUNCIONA
+1. La cuenta regresiva llega a 00:00:00:00.
+2. La portada consulta el estado de lanzamiento.
+3. Si el modo automático abre la red, aparece una presentación de aproximadamente 5 segundos.
+4. Mientras la presentación se reproduce, el directorio real se carga detrás.
+5. Las cortinas se abren y revelan directamente el inicio activo con banners, categorías y negocios.
+
+PRUEBA INMEDIATA
+1. En el panel administrativo deja el modo global en ABIERTO.
+2. Espera a que Cloudflare termine el despliegue.
+3. Abre en incógnito:
+   https://aliados-fantasma.pages.dev/?reveal=1
+
+También funciona con:
+   https://aliados-fantasma.pages.dev/?presentacion=1
+
+La animación puede omitirse con el botón “Omitir presentación” o la tecla Esc.
+El parámetro de prueba NO abre la plataforma si el modo global sigue cerrado.
+
+COMPORTAMIENTO REAL
+- Al llegar a cero en modo AUTOMÁTICO, la animación se ejecuta sin parámetros.
+- Si el administrador cambia de cerrado a abierto mientras un visitante mantiene la portada abierta, se ejecutará cuando la página detecte el cambio.
+- Si la red ya estaba abierta al cargar la página normalmente, entra directamente al directorio sin obligar a repetir cinco segundos cada vez.

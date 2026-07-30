@@ -2,7 +2,14 @@ import { getLaunchState, clearLaunchStateCache, formatLaunchDate } from './launc
 import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-LIVE1';
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
+const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
+const REVEAL_PREPARE_MS = 3900;
+const REVEAL_OPEN_MS = 1150;
+
 let launchState = null;
+let launchRefreshInProgress = false;
+let revealInProgress = false;
+let lastZeroRefreshAt = 0;
 
 function setCountdownValues(values) {
   Object.entries(values).forEach(([id, value]) => {
@@ -15,7 +22,119 @@ function setCountdownValues(values) {
   if (bottomHours) bottomHours.textContent = values.hours;
 }
 
-function renderLaunchIdentity(state) {
+function revealWasForced() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('reveal') === '1' || params.get('presentacion') === '1';
+}
+
+function createRevealBusinessPreview() {
+  const container = document.getElementById('launch-reveal-businesses');
+  const message = document.getElementById('launch-reveal-message');
+  if (!container) return;
+
+  const cards = [...document.querySelectorAll('#live-featured-grid .live-business-card')].slice(0, 4);
+  const totalText = document.getElementById('live-business-count')?.textContent?.trim();
+  const total = Number.parseInt(totalText || '0', 10);
+
+  container.replaceChildren();
+  cards.forEach(card => {
+    const image = card.querySelector('.live-card-logo');
+    const heading = card.querySelector('h3');
+    if (!image || !heading) return;
+
+    const item = document.createElement('span');
+    item.className = 'launch-reveal__business';
+
+    const clone = document.createElement('img');
+    clone.src = image.currentSrc || image.src;
+    clone.alt = '';
+
+    const name = document.createElement('small');
+    name.textContent = heading.textContent?.trim() || 'Negocio aliado';
+
+    item.append(clone, name);
+    container.append(item);
+  });
+
+  if (message && Number.isFinite(total) && total > 0) {
+    message.textContent = `${total} negocio${total === 1 ? '' : 's'} ya ${total === 1 ? 'está listo' : 'están listos'} para ser descubierto${total === 1 ? '' : 's'}.`;
+  }
+}
+
+async function runLaunchReveal() {
+  if (revealInProgress) return;
+
+  const overlay = document.getElementById('launch-reveal');
+  const skipButton = document.getElementById('launch-reveal-skip');
+  if (!overlay) {
+    document.body.classList.add('launch-reveal-complete');
+    await activateLiveHome();
+    return;
+  }
+
+  revealInProgress = true;
+  let skipped = false;
+  let skipResolve;
+  const skipPromise = new Promise(resolve => { skipResolve = resolve; });
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const requestSkip = () => {
+    if (skipped) return;
+    skipped = true;
+    skipResolve();
+  };
+  const onKeydown = event => {
+    if (event.key === 'Escape') requestSkip();
+  };
+
+  skipButton?.addEventListener('click', requestSkip, { once: true });
+  document.addEventListener('keydown', onKeydown);
+
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  document.body.classList.remove('launch-reveal-complete');
+  document.body.classList.add('launch-reveal-active', 'live-preparing');
+  overlay.hidden = false;
+  overlay.setAttribute('aria-hidden', 'false');
+  overlay.classList.remove('is-opening', 'is-complete');
+
+  // Fuerza un frame inicial para que las animaciones siempre arranquen desde cero.
+  void overlay.offsetWidth;
+  overlay.classList.add('is-running');
+
+  const liveHomePromise = activateLiveHome();
+  liveHomePromise.then(createRevealBusinessPreview).catch(() => {});
+
+  if (reducedMotion) {
+    await Promise.race([liveHomePromise, skipPromise]);
+  } else {
+    await Promise.race([
+      Promise.allSettled([liveHomePromise, wait(REVEAL_PREPARE_MS)]),
+      skipPromise
+    ]);
+    // Si se omitió, de todos modos espera a que el directorio quede preparado.
+    if (skipped) await liveHomePromise;
+  }
+
+  createRevealBusinessPreview();
+  overlay.classList.add('is-opening');
+  document.body.classList.add('live-reveal-opening');
+
+  await wait(reducedMotion || skipped ? 180 : REVEAL_OPEN_MS);
+
+  overlay.classList.add('is-complete');
+  document.body.classList.remove('launch-reveal-active', 'live-preparing', 'live-reveal-opening');
+  document.body.classList.add('launch-reveal-complete');
+
+  await wait(reducedMotion || skipped ? 20 : 180);
+  overlay.hidden = true;
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.classList.remove('is-running', 'is-opening', 'is-complete');
+
+  document.removeEventListener('keydown', onKeydown);
+  revealInProgress = false;
+}
+
+async function renderLaunchIdentity(state, { reveal = false } = {}) {
   const card = document.querySelector('.countdown-card');
   const badge = document.getElementById('launch-badge-primary');
   const status = document.getElementById('launch-status-label');
@@ -36,11 +155,18 @@ function renderLaunchIdentity(state) {
     if (meta) meta.content = 'Descubre negocios locales, promociones y perfiles verificados dentro de Aliados Fantasma.';
     if (ogTitle) ogTitle.content = 'Aliados Fantasma | Descubre negocios locales';
     document.title = 'Aliados Fantasma | Negocios locales';
-    activateLiveHome();
+
+    if (reveal) {
+      await runLaunchReveal();
+    } else {
+      document.body.classList.add('launch-reveal-complete');
+      await activateLiveHome();
+    }
     return;
   }
 
   deactivateLiveHome();
+  document.body.classList.remove('launch-reveal-active', 'live-preparing', 'live-reveal-opening', 'launch-reveal-complete');
   document.title = 'Aliados Fantasma | Próximo lanzamiento';
   if (ogTitle) ogTitle.content = 'Aliados Fantasma | La red local está por despertar';
 
@@ -98,17 +224,32 @@ function updateCountdown() {
   const elapsed = Math.max(0, Math.min(total, now - windowStart));
   if (progress) progress.style.width = `${(elapsed / total) * 100}%`;
 
-  if (remaining === 0) refreshLaunchState();
+  if (remaining === 0 && Date.now() - lastZeroRefreshAt > 10000) {
+    lastZeroRefreshAt = Date.now();
+    refreshLaunchState();
+  }
 }
 
-async function refreshLaunchState() {
+async function refreshLaunchState({ initial = false } = {}) {
+  if (launchRefreshInProgress) return;
+  launchRefreshInProgress = true;
+
   try {
+    const previousState = launchState;
     clearLaunchStateCache();
-    launchState = await getLaunchState({ refresh: true });
-    renderLaunchIdentity(launchState);
+    const nextState = await getLaunchState({ refresh: true });
+    const transitionedToOpen = Boolean(previousState && !previousState.open && nextState.open);
+    const forcedPresentation = initial && revealWasForced() && nextState.open;
+
+    launchState = nextState;
+    await renderLaunchIdentity(nextState, {
+      reveal: transitionedToOpen || forcedPresentation
+    });
     updateCountdown();
   } catch (error) {
     console.error('No fue posible actualizar la fecha de lanzamiento.', error);
+  } finally {
+    launchRefreshInProgress = false;
   }
 }
 
@@ -165,6 +306,6 @@ window.addEventListener('resize', () => {
   if (window.innerWidth > 720) closeMenu();
 });
 
-await refreshLaunchState();
+await refreshLaunchState({ initial: true });
 window.setInterval(updateCountdown, 1000);
 window.setInterval(refreshLaunchState, 60000);

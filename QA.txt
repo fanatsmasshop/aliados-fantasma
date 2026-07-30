@@ -1,12 +1,11 @@
-AF-INICIO-ACTIVO-PRO-1.0 — VALIDACIÓN
+QA — AF REVELACIÓN DE LANZAMIENTO 1.0
 
-- JavaScript: sintaxis correcta en todos los archivos del proyecto.
-- index.html: sin IDs duplicados.
-- Referencias locales: completas.
-- Inicio previo al lanzamiento: conservado.
-- Inicio activo: oculto hasta que getLaunchState().open sea verdadero.
-- Cambio automático al llegar a cero: conectado a refreshLaunchState().
-- Slider: automático, controles, indicadores, pausa y gesto horizontal.
-- Datos: negocios activos desde Supabase, categorías, promociones y filtros.
-- Diseño: escritorio, tablet y móvil.
-- SQL adicional: no requerido.
+[OK] lanzamiento.js pasa node --check.
+[OK] home-live.js pasa node --check.
+[OK] index.html no contiene IDs duplicados.
+[OK] La presentación tiene botón de omisión y soporte para tecla Escape.
+[OK] Respeta prefers-reduced-motion.
+[OK] El directorio se carga detrás de la presentación antes de abrir las cortinas.
+[OK] Si Supabase tarda, la presentación espera a que el directorio termine de preparar su estado.
+[OK] La consulta al llegar a cero está limitada para evitar peticiones cada segundo si el modo sigue cerrado.
+[OK] No requiere SQL, secretos ni cambios en RLS.
