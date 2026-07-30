@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Aliados Fantasma conecta negocios locales con perfiles digitales, promociones, QR y herramientas para crecer. Lanzamiento oficial el 24 de agosto de 2026.">
+  <meta name="description" content="Aliados Fantasma conecta negocios locales con perfiles digitales, promociones, QR y herramientas para crecer. Próximo lanzamiento con fecha por confirmar.">
   <meta name="theme-color" content="#06080d">
   <meta property="og:title" content="Aliados Fantasma | La red local está por despertar">
   <meta property="og:description" content="Perfiles digitales, directorio, promociones y recursos para impulsar negocios locales.">
-  <title>Aliados Fantasma | Lanzamiento 2026</title>
+  <title>Aliados Fantasma | Próximo lanzamiento</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260725-RC10.3">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260730-DATE1">
   <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10.3">
 </head>
 <body>
@@ -44,7 +44,7 @@
     <section class="hero" id="inicio">
       <div class="hero-copy reveal">
         <div class="badge-row">
-          <span class="launch-badge"><i></i> Lanzamiento 2026</span>
+          <span id="launch-badge-primary" class="launch-badge"><i></i> Próximo lanzamiento</span>
           <span class="launch-badge soft">Registro gratuito por lanzamiento</span>
         </div>
         <img class="main-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
@@ -61,8 +61,8 @@
       </div>
 
       <aside class="countdown-card reveal" aria-label="Cuenta regresiva para el lanzamiento">
-        <div class="countdown-top"><span class="live-dot"></span><small>LANZAMIENTO OFICIAL</small></div>
-        <h2>24 de agosto de 2026<br><span>2:30 p. m.</span></h2>
+        <div class="countdown-top"><span class="live-dot"></span><small id="launch-status-label">FECHA POR CONFIRMAR</small></div>
+        <h2 id="launch-date-heading"><span>Próximamente</span></h2>
         <div class="countdown" id="countdown">
           <div><strong id="days">00</strong><span>Días</span></div>
           <div><strong id="hours">00</strong><span>Horas</span></div>
@@ -70,7 +70,7 @@
           <div><strong id="seconds">00</strong><span>Segundos</span></div>
         </div>
         <div class="progress-shell" aria-hidden="true"><span id="launch-progress"></span></div>
-        <p>Regístrate ahora, completa tu información con calma y deja tu perfil preparado para el lanzamiento.</p>
+        <p id="launch-card-message">Regístrate ahora, completa tu información y deja tu perfil preparado mientras confirmamos la fecha oficial.</p>
         <a href="login.html" class="panel-link">Ya tengo cuenta <span>→</span></a>
       </aside>
     </section>
@@ -198,6 +198,6 @@
     <a href="login.html">Iniciar sesión</a>
     <a href="registro.html">Registrar negocio</a>
   </div>
-  <script src="lanzamiento.js?v=20260725-RC10.3"></script>
+  <script type="module" src="lanzamiento.js?v=20260730-DATE1"></script>
 </body>
 </html>

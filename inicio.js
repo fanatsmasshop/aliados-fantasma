@@ -1,12 +1,12 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { getLaunchState, canAccessPublicAreaBeforeLaunch } from './launch-control.js?v=20260723-900';
+import { getLaunchState, canAccessPublicAreaBeforeLaunch } from './launch-control.js?v=20260730-DATE1';
 
 const launchState = await getLaunchState();
 const launched = launchState.open;
 if (!await canAccessPublicAreaBeforeLaunch()) location.replace('index.html');
 
 const strip = document.querySelector('.demo-strip');
-if (strip) strip.textContent = launched ? '🌐 ALIADOS FANTASMA EN LÍNEA · Explora la red local de negocios.' : '🔐 VISTA PREVIA ADMINISTRATIVA · El público verá esta sección al finalizar la cuenta regresiva.';
+if (strip) strip.textContent = launched ? '🌐 ALIADOS FANTASMA EN LÍNEA · Explora la red local de negocios.' : launchState.hasDate ? `🔐 VISTA PREVIA ADMINISTRATIVA · Apertura programada para ${launchState.launchLabel}.` : '🔐 VISTA PREVIA ADMINISTRATIVA · La fecha pública todavía está por confirmar.';
 
 const grid = document.querySelector('#business-grid');
 const total = document.querySelector('#business-total');

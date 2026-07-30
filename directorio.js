@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260721-700';
 import { esc } from './ui.js?v=20260721-700';
-import { getLaunchState, isAdministrator, LAUNCH_LABEL } from './launch-control.js?v=20260721-700';
+import { getLaunchState, isAdministrator } from './launch-control.js?v=20260730-DATE1';
 
 const PAGE_SIZE = 12;
 const DEFAULT_LOGO = 'aliados-fantasma-icono.webp';
@@ -366,7 +366,9 @@ async function init() {
   const launch = await getLaunchState();
   const admin = await isAdministrator();
   if (!launch.open && !admin) {
-    el.gateMessage.textContent = `Se habilitará automáticamente el ${LAUNCH_LABEL}. Mientras tanto, los negocios pueden registrarse y preparar su perfil.`;
+    el.gateMessage.textContent = launch.hasDate
+      ? `Se habilitará automáticamente el ${launch.launchLabel}. Mientras tanto, los negocios pueden registrarse y preparar su perfil.`
+      : 'La fecha oficial todavía está por confirmar. Los negocios pueden registrarse y preparar su perfil desde ahora.';
     el.gate.classList.remove('hidden');
     return;
   }

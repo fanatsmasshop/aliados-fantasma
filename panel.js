@@ -1,8 +1,9 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
-import { getLaunchState, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
+import { getLaunchState } from './launch-control.js?v=20260730-DATE1';
 import { requireContext, clearActiveContext, getActiveContext, setActiveContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
 
 let launchOpen = false;
+let launchState = { open:false, hasDate:false, launchLabel:'Fecha por confirmar' };
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 const stepNames = ['Identidad','Contacto','Ubicación','Horarios','Galería','Promociones','Revisión'];
 let currentStep = 0;
@@ -321,7 +322,9 @@ function renderWorkflow(){
   const launchWait = document.querySelector('#launch-wait');
   if(draft.estado === 'aprobado' && !launchOpen){
     launchWait.classList.remove('hidden');
-    document.querySelector('#launch-wait-text').textContent = `Aunque ya está listo, seguirá oculto al público hasta el ${LAUNCH_LABEL} Solo tú y los administradores pueden revisarlo antes de esa fecha.`;
+    document.querySelector('#launch-wait-text').textContent = launchState.hasDate
+      ? `Aunque ya está listo, seguirá oculto al público hasta ${launchState.launchLabel}. Solo tú y los administradores pueden revisarlo antes de esa fecha.`
+      : 'Aunque ya está listo, seguirá oculto al público mientras confirmamos la fecha oficial. Solo tú y los administradores pueden revisarlo por ahora.';
   }else{
     launchWait.classList.add('hidden');
   }
@@ -486,7 +489,8 @@ async function previewProfile(){
 }
 
 async function init(){
-  launchOpen = (await getLaunchState()).open;
+  launchState = await getLaunchState();
+  launchOpen = launchState.open;
   const {data:{user:authenticatedUser}} = await supabase.auth.getUser();
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;

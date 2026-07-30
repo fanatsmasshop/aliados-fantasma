@@ -23,3 +23,13 @@
 @media(max-width:1120px){.admin-dashboard-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.admin-hero,.launch-card__head{align-items:stretch;flex-direction:column}.admin-hero .button{width:100%}.launch-card__body{grid-template-columns:1fr}.launch-save{width:100%}.quick-actions{grid-template-columns:1fr}.recent-request{grid-template-columns:44px minmax(0,1fr)}.recent-meta{grid-column:2;justify-items:start;grid-auto-flow:column;justify-content:start;align-items:center}.section-heading{align-items:flex-start;flex-direction:column}.admin-dashboard-content{padding-top:18px}}
 @media(max-width:480px){.launch-card,.quick-panel,.recent-panel{padding:17px}.recent-date{display:none}.admin-stat{padding:16px}.admin-stat strong{font-size:1.65rem}}
+
+/* AF Fecha dinámica 1.0 */
+.launch-settings-grid{grid-template-columns:minmax(220px,.75fr) minmax(260px,1fr);align-items:end}
+.launch-field input[type="datetime-local"]{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#0b0f17;color:var(--text);font:inherit;color-scheme:dark}
+.launch-field small{display:block;margin-top:7px;color:var(--muted);font-size:.75rem;line-height:1.4}
+.launch-pending-toggle{display:flex;align-items:flex-start;gap:11px;min-height:50px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025);cursor:pointer}
+.launch-pending-toggle input{width:19px;height:19px;margin:2px 0 0;accent-color:#8b5cf6}
+.launch-pending-toggle span{display:grid;gap:3px}.launch-pending-toggle strong{font-size:.9rem}.launch-pending-toggle small{color:var(--muted);font-size:.75rem;line-height:1.35}
+.launch-field input:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:860px){.launch-settings-grid{grid-template-columns:1fr}.launch-pending-toggle,.launch-save{width:100%}}

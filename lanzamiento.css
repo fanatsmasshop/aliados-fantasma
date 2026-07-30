@@ -124,3 +124,9 @@ footer{padding:30px 0 40px;display:grid;grid-template-columns:1fr auto auto;gap:
   .menu-backdrop{z-index:49}
   .site-header nav{z-index:130}
 }
+
+/* AF Fecha dinámica 1.0 */
+.countdown-card.date-pending .countdown{opacity:.42}
+.countdown-card.date-pending .progress-shell{opacity:.4}
+.countdown-card.date-pending h2 span{font-size:clamp(1.75rem,4vw,2.6rem)}
+.countdown-card.launched .live-dot{background:var(--green)}

@@ -1,0 +1,27 @@
+ALIADOS FANTASMA — FECHA DE LANZAMIENTO DINÁMICA 1.0
+
+ORDEN OBLIGATORIO
+
+1. En Supabase abre SQL Editor.
+2. Ejecuta el archivo separado AF_130_FECHA_LANZAMIENTO_DINAMICA.sql.
+3. En GitHub reemplaza los archivos incluidos en este ZIP.
+4. Espera el despliegue exitoso de Cloudflare Pages.
+5. Entra como administrador a dashboard.html.
+6. En “Control de lanzamiento” podrás:
+   - marcar “Fecha aún por confirmar”;
+   - seleccionar fecha y hora;
+   - mantener el sitio cerrado;
+   - programar la apertura automática;
+   - abrir el sitio manualmente.
+
+ESTADO INICIAL DESPUÉS DEL SQL
+- Fecha: por confirmar.
+- Modo: cerrado.
+- El público no verá la fecha cancelada.
+- La portada mostrará “Próximamente”.
+
+IMPORTANTE
+- No subas el archivo SQL a GitHub.
+- La fecha y hora del panel se interpretan como hora de Ciudad de México.
+- El modo automático exige una fecha.
+- Los cambios se reflejan en portada, cuenta regresiva, directorio, perfiles y panel de negocios.

@@ -1,6 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260720-310';
 import { esc } from './ui.js?v=20260720-600';
-import { canAccessPublicAreaBeforeLaunch, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
+import { canAccessPublicAreaBeforeLaunch, getLaunchState } from './launch-control.js?v=20260730-DATE1';
 
 const params = new URLSearchParams(location.search);
 const slug = params.get('slug');
@@ -183,7 +183,7 @@ async function load(){
       renderProfile(normalizeDraft(draft),{isPreview:true});return;
     }
     previewBanner.classList.add('hidden');
-    if(!await canAccessPublicAreaBeforeLaunch()){errorState('Este perfil todavía no es público',`La red se habilitará automáticamente el ${LAUNCH_LABEL}.`,'<a class="button primary" href="registro.html">Registrar negocio</a><a class="button secondary" href="index.html">Volver al inicio</a>');return;}
+    if(!await canAccessPublicAreaBeforeLaunch()){const launch=await getLaunchState();const message=launch.hasDate?`La red se habilitará automáticamente el ${launch.launchLabel}.`:'La fecha oficial de lanzamiento todavía está por confirmar. Puedes registrar tu negocio y preparar su perfil desde ahora.';errorState('Este perfil todavía no es público',message,'<a class="button primary" href="registro.html">Registrar negocio</a><a class="button secondary" href="index.html">Volver al inicio</a>');return;}
     if(!supabase){errorState('Conexión no disponible','No fue posible conectar con la plataforma.');return;}
     if(!slug&&!businessId){errorState('Perfil no indicado','Selecciona un negocio desde el directorio.','<a class="button primary" href="explorar.html">Explorar negocios</a>');return;}
     let q=supabase.from('negocios').select('*,categorias(nombre)').eq('activo',true);q=businessId?q.eq('id',businessId):q.eq('slug',slug);const {data:b,error}=await q.maybeSingle();

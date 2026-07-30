@@ -1,14 +1,20 @@
 import { requireAdmin, logout } from './auth.js?v=20260718-120';
 import { supabase } from './supabase-client.js?v=20260718-120';
 import { shell, esc, fmt } from './ui.js?v=20260720-600';
-import { getLaunchState, clearLaunchStateCache, LAUNCH_LABEL } from './launch-control.js?v=20260723-900';
+import {
+  getLaunchState,
+  clearLaunchStateCache,
+  toMexicoCityInputValue,
+  mexicoCityInputToIso
+} from './launch-control.js?v=20260730-DATE1';
 
 const auth = await requireAdmin();
 if (auth) {
   shell(auth.profile, auth.user);
   document.querySelector('#logout-button').addEventListener('click', logout);
   document.querySelector('#refresh-button').addEventListener('click', load);
-  document.querySelector('#save-launch-mode').addEventListener('click', saveLaunchMode);
+  document.querySelector('#save-launch-settings').addEventListener('click', saveLaunchSettings);
+  document.querySelector('#launch-date-pending').addEventListener('change', syncLaunchDateField);
   await Promise.all([load(), loadLaunchControl()]);
 }
 
@@ -54,49 +60,115 @@ async function load() {
 }
 
 
+function syncLaunchDateField() {
+  const pending = document.querySelector('#launch-date-pending').checked;
+  const input = document.querySelector('#launch-at');
+  input.disabled = pending;
+  input.required = !pending;
+}
+
 async function loadLaunchControl() {
   const badge = document.querySelector('#launch-control-badge');
   const description = document.querySelector('#launch-control-description');
+  const dateLabel = document.querySelector('#launch-current-date');
+
   try {
     clearLaunchStateCache();
     const state = await getLaunchState({ refresh: true });
     document.querySelector('#launch-mode').value = state.mode;
-    badge.textContent = state.open ? 'Público abierto' : 'Público en espera';
+    document.querySelector('#launch-at').value = toMexicoCityInputValue(state.launchAtIso);
+    document.querySelector('#launch-date-pending').checked = !state.hasDate;
+    syncLaunchDateField();
+
+    badge.textContent = state.open ? 'Público abierto' : state.hasDate ? 'Público programado' : 'Fecha pendiente';
     badge.className = `status-pill ${state.open ? 'ok' : 'pending'}`;
-    const modeText = state.mode === 'automatico' ? `Automático: se abrirá el ${LAUNCH_LABEL}.` : state.mode === 'cerrado' ? 'Cierre manual activo: la fecha no abrirá el sitio hasta cambiar el modo.' : 'Apertura manual activa: el directorio y los perfiles públicos están disponibles.';
-    description.textContent = modeText;
+    dateLabel.textContent = state.hasDate ? state.launchLabel : 'Fecha por confirmar';
+
+    if (state.mode === 'automatico') {
+      description.textContent = state.hasDate
+        ? `Apertura automática programada para ${state.launchLabel}.`
+        : 'El modo automático necesita una fecha. Mientras no se establezca, el acceso público permanecerá cerrado.';
+    } else if (state.mode === 'cerrado') {
+      description.textContent = state.hasDate
+        ? `Cierre manual activo. La fecha guardada es ${state.launchLabel}, pero el sitio no abrirá hasta cambiar el modo.`
+        : 'Cierre manual activo y fecha todavía por confirmar.';
+    } else {
+      description.textContent = state.hasDate
+        ? `Apertura manual activa. La fecha informativa guardada es ${state.launchLabel}.`
+        : 'Apertura manual activa sin una fecha oficial anunciada.';
+    }
   } catch (error) {
     console.error(error);
     badge.textContent = 'Sin configuración';
     badge.className = 'status-pill pending';
-    description.textContent = 'Ejecuta 063_control_global_lanzamiento.sql para activar el control global.';
+    description.textContent = 'Ejecuta AF_130_FECHA_LANZAMIENTO_DINAMICA.sql para activar el control editable.';
+    dateLabel.textContent = 'No disponible';
   }
 }
 
-async function saveLaunchMode() {
-  const button = document.querySelector('#save-launch-mode');
+async function saveLaunchSettings() {
+  const button = document.querySelector('#save-launch-settings');
   const message = document.querySelector('#launch-control-message');
   const mode = document.querySelector('#launch-mode').value;
+  const pending = document.querySelector('#launch-date-pending').checked;
+  const localValue = document.querySelector('#launch-at').value;
+
+  if (!pending && !localValue) {
+    message.style.color = 'var(--danger)';
+    message.textContent = 'Selecciona la fecha y hora o marca “Fecha aún por confirmar”.';
+    return;
+  }
+
+  if (pending && mode === 'automatico') {
+    message.style.color = 'var(--danger)';
+    message.textContent = 'El modo automático requiere una fecha. Selecciona “Mantener cerrado manualmente” mientras se confirma.';
+    return;
+  }
+
+  const launchAtIso = pending ? null : mexicoCityInputToIso(localValue);
+  if (!pending && !launchAtIso) {
+    message.style.color = 'var(--danger)';
+    message.textContent = 'La fecha seleccionada no es válida.';
+    return;
+  }
+
+  const readableDate = pending
+    ? 'la fecha como pendiente'
+    : `la fecha ${new Intl.DateTimeFormat('es-MX', { dateStyle: 'long', timeStyle: 'short', timeZone: 'America/Mexico_City' }).format(new Date(launchAtIso))}`;
+
   const warning = mode === 'abierto'
-    ? 'Esto habilitará inmediatamente el directorio y los perfiles públicos. ¿Continuar?'
+    ? `Esto habilitará inmediatamente el directorio y los perfiles públicos y guardará ${readableDate}. ¿Continuar?`
     : mode === 'cerrado'
-      ? 'Esto mantendrá cerrado el acceso público incluso después de la fecha programada. ¿Continuar?'
-      : 'El sitio volverá al modo automático según la fecha programada. ¿Continuar?';
+      ? `Esto mantendrá cerrado el acceso público y guardará ${readableDate}. ¿Continuar?`
+      : `El sitio se abrirá automáticamente en ${readableDate}. ¿Continuar?`;
+
   if (!confirm(warning)) return;
+
   button.disabled = true;
-  message.textContent = 'Guardando…';
+  message.style.color = 'var(--muted)';
+  message.textContent = 'Guardando configuración…';
+
   try {
-    const { error } = await supabase.rpc('admin_actualizar_modo_lanzamiento', { p_modo: mode });
+    const { error } = await supabase.rpc('admin_actualizar_configuracion_lanzamiento', {
+      p_modo: mode,
+      p_lanzamiento_at: launchAtIso
+    });
     if (error) throw error;
+
     clearLaunchStateCache();
     message.style.color = 'var(--success)';
-    message.textContent = 'Modo de lanzamiento actualizado correctamente.';
+    message.textContent = pending
+      ? 'Fecha retirada correctamente. Toda la plataforma mostrará “Fecha por confirmar”.'
+      : 'Fecha y modo de lanzamiento actualizados en toda la plataforma.';
     await loadLaunchControl();
   } catch (error) {
     console.error(error);
     message.style.color = 'var(--danger)';
-    message.textContent = error.message || 'No fue posible actualizar el modo.';
+    message.textContent = error.message?.includes('admin_actualizar_configuracion_lanzamiento')
+      ? 'Primero ejecuta AF_130_FECHA_LANZAMIENTO_DINAMICA.sql en Supabase.'
+      : error.message || 'No fue posible actualizar la configuración.';
   } finally {
     button.disabled = false;
   }
 }
+
