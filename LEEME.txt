@@ -1,18 +1,15 @@
-AF-REVELACION-CINEMATOGRAFICA-HOTFIX-2.4
+PAQUETE LIGERO — ACTUALIZACIÓN MASIVA DE ESTILO
 
-Corrige la pantalla morada con punto blanco que aparecía justo antes del directorio.
+Contiene únicamente:
+- todas las páginas HTML activas y auxiliares del sitio
+- af-pro-unified.css
 
-Cambios:
-- Se elimina el efecto de portal blanco.
-- La escena final se desvanece y las cortinas revelan directamente el directorio que ya está cargado detrás.
-- La transición final se reduce a 1.1 segundos.
-- No requiere SQL ni cambios en Supabase.
+Total aproximado: 34 archivos, por debajo del límite de 100.
 
-Reemplazar en GitHub:
-- index.html
-- lanzamiento.css
-- lanzamiento.js
+Cómo subir:
+1. Descomprime el ZIP.
+2. Sube todos los archivos a la raíz del repositorio.
+3. Reemplaza los HTML existentes.
+4. Agrega af-pro-unified.css.
 
-Pruebas:
-/?reveal=event&preview=1
-/?reveal=short&preview=1
+No incluye imágenes, JavaScript, SQL, documentación histórica ni carpetas.
