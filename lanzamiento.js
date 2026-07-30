@@ -163,35 +163,77 @@ function startRevealProgress(duration) {
   };
 }
 
+const REVEAL_COPY_OUT_MS = 280;
+const REVEAL_COPY_IN_MS = 520;
+
+async function transitionRevealCopy(element, nextText, pause) {
+  if (!element) return true;
+
+  element.classList.add('launch-dynamic-copy');
+  const normalizedNext = String(nextText ?? '');
+  if ((element.textContent || '').trim() === normalizedNext.trim()) return true;
+
+  const cleanup = () => {
+    element.classList.remove('is-copy-leaving', 'is-copy-entering');
+  };
+
+  cleanup();
+  element.classList.add('is-copy-leaving');
+  if (!await pause(REVEAL_COPY_OUT_MS)) {
+    cleanup();
+    return false;
+  }
+
+  element.textContent = normalizedNext;
+  element.classList.remove('is-copy-leaving');
+  void element.offsetWidth;
+  element.classList.add('is-copy-entering');
+
+  const completed = await pause(REVEAL_COPY_IN_MS);
+  cleanup();
+  return completed;
+}
+
 async function runEventTimeline(overlay, pause) {
   setRevealScene(overlay, 'intro');
   if (!await pause(3000)) return;
 
   setRevealScene(overlay, 'story');
   const story = document.getElementById('launch-story-line');
-  if (story) story.textContent = 'Cada negocio tiene una historia.';
+  if (story) {
+    story.textContent = 'Cada negocio tiene una historia.';
+    story.classList.add('launch-dynamic-copy');
+  }
   if (!await pause(2500)) return;
-  if (story) story.textContent = 'Pero muchas historias aún esperan ser descubiertas.';
-  if (!await pause(2500)) return;
+  if (!await transitionRevealCopy(story, 'Pero muchas historias aún esperan ser descubiertas.', pause)) return;
+  if (!await pause(1700)) return;
 
+  const status = document.getElementById('launch-connection-status');
+  if (status) {
+    status.textContent = 'Conectando negocios…';
+    status.classList.add('launch-dynamic-copy');
+  }
   setRevealScene(overlay, 'connection');
   createRevealBusinessPreview();
-  const status = document.getElementById('launch-connection-status');
-  if (status) status.textContent = 'Conectando negocios…';
   if (!await pause(2000)) return;
-  if (status) status.textContent = 'Activando perfiles…';
-  if (!await pause(2000)) return;
-  if (status) status.textContent = 'Construyendo comunidad…';
-  if (!await pause(2000)) return;
+  if (!await transitionRevealCopy(status, 'Activando perfiles…', pause)) return;
+  if (!await pause(1200)) return;
+  if (!await transitionRevealCopy(status, 'Construyendo comunidad…', pause)) return;
+  if (!await pause(1200)) return;
 
   setRevealScene(overlay, 'identity');
   if (!await pause(5000)) return;
 
-  setRevealScene(overlay, 'promise');
   const word = document.getElementById('launch-promise-word');
-  for (const value of ['Descubre.', 'Conecta.', 'Crece.', 'Juntos.']) {
-    if (word) word.textContent = value;
-    if (!await pause(1000)) return;
+  if (word) {
+    word.textContent = 'Descubre.';
+    word.classList.add('launch-dynamic-copy');
+  }
+  setRevealScene(overlay, 'promise');
+  if (!await pause(1000)) return;
+  for (const value of ['Conecta.', 'Crece.', 'Juntos.']) {
+    if (!await transitionRevealCopy(word, value, pause)) return;
+    if (!await pause(200)) return;
   }
 
   setRevealScene(overlay, 'count');
@@ -210,9 +252,12 @@ async function runShortTimeline(overlay, pause) {
   setRevealScene(overlay, 'identity');
   if (!await pause(2200)) return;
 
-  setRevealScene(overlay, 'connection');
   const status = document.getElementById('launch-connection-status');
-  if (status) status.textContent = 'Abriendo la red…';
+  if (status) {
+    status.textContent = 'Abriendo la red…';
+    status.classList.add('launch-dynamic-copy');
+  }
+  setRevealScene(overlay, 'connection');
   createRevealBusinessPreview();
   if (!await pause(2500)) return;
 

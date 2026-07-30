@@ -1,20 +1,28 @@
-AF-REVELACIÓN-CINEMATOGRÁFICA HOTFIX 2.2
+AF REVELACIÓN CINEMATOGRÁFICA — HOTFIX 2.3
 
-CAMBIOS
-- Se eliminó la línea luminosa vertical del centro.
-- Se ocultó por completo la barra inferior de progreso.
-- Se ocultó el contador de tiempo de la presentación.
-- Se mantiene el botón “Omitir presentación”.
-- No se modificaron la duración, las escenas ni la lógica del lanzamiento.
+MEJORA
+- Todas las frases dinámicas ahora usan la misma transición cinematográfica:
+  salida hacia arriba + desenfoque + entrada desde abajo + enfoque.
+- Se aplica a:
+  * historia narrativa;
+  * estados de conexión;
+  * Descubre / Conecta / Crece / Juntos.
+- El 3, 2, 1 conserva su golpe visual propio porque funciona como clímax.
+- No cambia la duración total: evento 28 s y versión breve 8 s.
 
-ARCHIVOS A REEMPLAZAR EN GITHUB
+INSTALACIÓN
+Reemplaza en la raíz de GitHub:
 - index.html
 - lanzamiento.css
+- lanzamiento.js
 
-NO REQUIERE SQL NI CAMBIOS EN SUPABASE.
+No requiere SQL ni cambios en Supabase.
 
 PRUEBAS
-Evento: https://aliados-fantasma.pages.dev/?reveal=event&preview=1
-Breve: https://aliados-fantasma.pages.dev/?reveal=short&preview=1
+Evento:
+https://aliados-fantasma.pages.dev/?reveal=event&preview=1
 
-Después del despliegue usa Ctrl+F5 o una ventana de incógnito.
+Breve:
+https://aliados-fantasma.pages.dev/?reveal=short&preview=1
+
+Después del despliegue usa Ctrl + F5 o incógnito.
