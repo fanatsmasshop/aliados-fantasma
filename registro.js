@@ -1,5 +1,6 @@
 import { supabase } from './supabase-client.js?v=20260724-RC1';
 import { isConfigured } from './config.js?v=20260717-2';
+import { isStrongPassword, passwordStrength, PASSWORD_HELP } from './auth-validation.js?v=20260730-F1FIX';
 
 const form=document.querySelector('#register-form');
 const button=document.querySelector('#register-button');
@@ -22,14 +23,13 @@ function setError(id,text=''){const out=document.querySelector(`[data-error-for=
 function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
 function digits(v){return String(v).replace(/\D/g,'');}
 function validPhone(v){return digits(v).length===10||digits(v).length===12&&digits(v).startsWith('52');}
-function scorePassword(v){let s=0;if(v.length>=8)s++;if(/[A-ZÁÉÍÓÚÑ]/.test(v))s++;if(/[a-záéíóúñ]/.test(v))s++;if(/\d/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;return s;}
-function updateStrength(){const s=scorePassword(password.value);const fill=document.querySelector('#password-meter-fill');const label=document.querySelector('#password-strength');if(fill)fill.style.width=`${s*20}%`;const labels=['Muy débil','Débil','Aceptable','Buena','Fuerte','Muy fuerte'];if(label){label.textContent=password.value?labels[s]:'Usa 8 caracteres, una mayúscula y un número.';label.style.color=s>=4?'var(--success)':s>=3?'#ffd36b':'var(--danger)';}}
+function updateStrength(){const strength=passwordStrength(password?.value||'');const fill=document.querySelector('#password-meter-fill');const label=document.querySelector('#password-strength');if(fill)fill.style.width=`${strength.score*20}%`;if(label){label.textContent=strength.label;label.style.color=strength.valid?'var(--success)':strength.score>=3?'#ffd36b':'var(--danger)';}}
 password?.addEventListener('input',updateStrength);
 
 document.querySelector('#toggle-password')?.addEventListener('click',event=>{const show=password.type==='password';password.type=confirm.type=show?'text':'password';event.currentTarget.textContent=show?'Ocultar':'Ver';});
 
 function validateStep(n){let ok=true;const req=(id,msg)=>{setError(id,'');if(!val(id)){setError(id,msg);ok=false;}};
-  if(n===1){req('responsable','Escribe tu nombre.');req('email','Escribe tu correo.');if(val('email')&&!validEmail(val('email'))){setError('email','Escribe un correo válido.');ok=false;}setError('password','');if(scorePassword(password.value)<3){setError('password','Usa al menos 8 caracteres, una mayúscula y un número.');ok=false;}setError('password-confirm','');if(password.value!==confirm.value){setError('password-confirm','Las contraseñas no coinciden.');ok=false;}}
+  if(n===1){req('responsable','Escribe tu nombre.');req('email','Escribe tu correo.');if(val('email')&&!validEmail(val('email'))){setError('email','Escribe un correo válido.');ok=false;}setError('password','');if(!isStrongPassword(password.value)){setError('password',PASSWORD_HELP);ok=false;}setError('password-confirm','');if(password.value!==confirm.value){setError('password-confirm','Las contraseñas no coinciden.');ok=false;}}
   if(n===2){['negocio','categoria','municipio','colonia'].forEach(id=>req(id,'Este campo es obligatorio.'));req('whatsapp','Escribe tu WhatsApp.');if(val('whatsapp')&&!validPhone(val('whatsapp'))){setError('whatsapp','Escribe un número mexicano de 10 dígitos.');ok=false;}}
   if(n===3){setError('terms','');if(!el('terms')?.checked){setError('terms','Debes aceptar los términos y el aviso de privacidad.');ok=false;}}
   return ok;

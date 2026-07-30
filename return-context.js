@@ -5,7 +5,7 @@ const ROUTES = {
   login: { href: 'login.html', label: 'Volver al acceso' },
   estado: { href: 'estado-cuenta.html', label: 'Volver al estado' },
   ayuda: { href: 'ayuda.html', label: 'Volver a ayuda' },
-  directorio: { href: 'directorio.html', label: 'Volver al directorio' }
+  directorio: { href: 'explorar.html', label: 'Volver al directorio' }
 };
 
 function normalizeSource(value = '') {
@@ -16,7 +16,7 @@ function normalizeSource(value = '') {
   if (source.includes('panel')) return 'panel';
   if (source.includes('login')) return 'login';
   if (source.includes('ayuda')) return 'ayuda';
-  if (source.includes('directorio')) return 'directorio';
+  if (source.includes('directorio') || source.includes('explorar')) return 'directorio';
   if (source.includes('index') || source === '/' || source === '') return 'index';
   return '';
 }

@@ -3,15 +3,23 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   X-Frame-Options: SAMEORIGIN
+  Strict-Transport-Security: max-age=31536000
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://cshjnpjqvflwmtypuyvc.supabase.co wss://cshjnpjqvflwmtypuyvc.supabase.co https://api.qrserver.com; upgrade-insecure-requests
 
 /*.html
   Cache-Control: no-cache, no-store, must-revalidate
 
 /*.js
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: public, max-age=86400, must-revalidate
 
 /*.css
-  Cache-Control: no-cache, no-store, must-revalidate
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
 
 /dashboard
   Cache-Control: no-cache, no-store, must-revalidate
@@ -30,3 +38,14 @@
 
 /launch-control.js
   Cache-Control: no-cache, no-store, must-revalidate
+
+/config.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/supabase/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/docs/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

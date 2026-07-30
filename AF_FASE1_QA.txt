@@ -1,0 +1,28 @@
+ALIADOS FANTASMA — QA FASE 1
+Versión: AF-F1-FIX-1.0
+Fecha: 30-07-2026
+
+VALIDACIONES SUPERADAS
+- 32 archivos JavaScript: sintaxis válida con Node.js.
+- Referencias locales HTML/CSS: sin archivos faltantes.
+- IDs HTML: sin duplicados.
+- Directorio ficticio eliminado del flujo público.
+- index.html enlaza explorar.html.
+- directorio.html redirige al directorio real.
+- Configuración duplicada supabase-config.js eliminada.
+- Regla de contraseña compartida en registro, invitación y recuperación.
+- Edge Function presente en estructura Supabase CLI.
+- 27 SQL históricos aislados fuera de migrations.
+- Migración canónica: 29 tablas, 8 enums, 50 funciones, 67 políticas y 24 triggers de aplicación/auth.
+- No se encontraron valores de service_role ni secretos SMTP dentro del paquete.
+
+PRUEBAS QUE SIGUEN SIENDO MANUALES EN PRODUCCIÓN
+- Registro y confirmación de correo.
+- Recuperación de contraseña.
+- Invitación a cuenta nueva y existente.
+- Aceptación de invitación y membresía.
+- RLS entre negocios.
+- Publicación, suspensión y eliminación.
+- Carga real de imágenes.
+
+La actualización móvil integral no forma parte de esta versión.

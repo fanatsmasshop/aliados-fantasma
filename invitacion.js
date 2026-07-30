@@ -1,4 +1,5 @@
 import { supabase } from './supabase-client.js?v=20260717-2';
+import { isStrongPassword, PASSWORD_HELP } from './auth-validation.js?v=20260730-F1FIX';
 
 const title=document.querySelector('#invite-title');
 const message=document.querySelector('#invite-message');
@@ -35,7 +36,7 @@ function renderAcceptance(user){
   const needsPassword=authType==='invite';
   actions.innerHTML=`
     ${needsPassword?`<div style="width:100%;display:grid;gap:12px;text-align:left">
-      <label><span>Crea una contraseña</span><input id="invite-password" type="password" minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres"></label>
+      <label><span>Crea una contraseña</span><input id="invite-password" type="password" minlength="8" autocomplete="new-password" placeholder="8 caracteres, mayúscula y número"></label>
       <label><span>Confirma la contraseña</span><input id="invite-password-confirm" type="password" minlength="8" autocomplete="new-password" placeholder="Repite la contraseña"></label>
     </div>`:''}
     <button id="accept-invite" class="button primary" type="button">${needsPassword?'Crear contraseña y aceptar':'Aceptar invitación'}</button>
@@ -49,7 +50,7 @@ function renderAcceptance(user){
       if(needsPassword){
         const password=document.querySelector('#invite-password').value;
         const confirm=document.querySelector('#invite-password-confirm').value;
-        if(password.length<8) throw new Error('La contraseña debe tener al menos 8 caracteres.');
+        if(!isStrongPassword(password)) throw new Error(PASSWORD_HELP);
         if(password!==confirm) throw new Error('Las contraseñas no coinciden.');
         const {error:passwordError}=await supabase.auth.updateUser({password});
         if(passwordError) throw passwordError;
