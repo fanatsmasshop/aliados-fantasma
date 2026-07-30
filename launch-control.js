@@ -118,11 +118,15 @@ export async function getLaunchState({ refresh = false } = {}) {
   // Si Supabase no responde, el estado seguro es cerrado y sin fecha.
   let mode = 'cerrado';
   let configuredAt = null;
+  let presentationMode = 'breve';
+  let presentationFrequency = 'una_vez';
+  let presentationTarget = 'inicio';
+  let presentationVersion = 1;
 
   try {
     const { data, error } = await supabase
       .from('configuracion_sistema')
-      .select('modo_lanzamiento,lanzamiento_at,actualizado_at')
+      .select('*')
       .eq('id', 1)
       .maybeSingle();
 
@@ -130,6 +134,18 @@ export async function getLaunchState({ refresh = false } = {}) {
     if (data) {
       mode = data.modo_lanzamiento || mode;
       configuredAt = data.lanzamiento_at || null;
+      presentationMode = ['evento', 'breve', 'ninguna'].includes(data.presentacion_modo)
+        ? data.presentacion_modo
+        : presentationMode;
+      presentationFrequency = ['solo_lanzamiento', 'una_vez', 'cada_entrada'].includes(data.presentacion_frecuencia)
+        ? data.presentacion_frecuencia
+        : presentationFrequency;
+      presentationTarget = ['inicio', 'directorio'].includes(data.presentacion_destino)
+        ? data.presentacion_destino
+        : presentationTarget;
+      presentationVersion = Number.isInteger(data.presentacion_version) && data.presentacion_version > 0
+        ? data.presentacion_version
+        : presentationVersion;
     }
   } catch (error) {
     console.warn('No fue posible consultar la configuración de lanzamiento. Se mantendrá cerrado por seguridad.', error);
@@ -155,7 +171,11 @@ export async function getLaunchState({ refresh = false } = {}) {
     launchAtMs: hasDate ? launchAtMs : null,
     launchAtIso,
     launchLabel: hasDate ? formatLaunchDate(launchAtIso) : 'Fecha por confirmar',
-    clockOffsetMs
+    clockOffsetMs,
+    presentationMode,
+    presentationFrequency,
+    presentationTarget,
+    presentationVersion
   };
 
   return cachedState;

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="app.css?v=20260725-RC7">
   <link rel="stylesheet" href="logos.css?v=20260717-2">
 <link rel="stylesheet" href="sistema-visual.css?v=20260717-1">
-  <link rel="stylesheet" href="admin-dashboard.css?v=20260730-DATE1">
+  <link rel="stylesheet" href="admin-dashboard.css?v=20260730-CINEMA2">
   <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
 </head>
 <body>
@@ -78,6 +78,62 @@
     <p id="launch-control-message" class="form-message" aria-live="polite"></p>
   </section>
 
+  <section class="launch-card presentation-card">
+    <div class="launch-card__head">
+      <div>
+        <p class="eyebrow">PRESENTACIÓN DE LANZAMIENTO</p>
+        <h2>Revelación pública</h2>
+        <p id="presentation-control-description" class="muted">Consultando configuración…</p>
+      </div>
+      <span id="presentation-control-badge" class="status-pill pending">Cargando</span>
+    </div>
+
+    <div class="presentation-settings-grid">
+      <label class="launch-field">
+        <span>Tipo de presentación</span>
+        <select id="presentation-mode">
+          <option value="evento">Evento cinematográfico · 28 segundos</option>
+          <option value="breve">Presentación breve · 8 segundos</option>
+          <option value="ninguna">Sin presentación · acceso directo</option>
+        </select>
+      </label>
+
+      <label class="launch-field">
+        <span>Cuándo mostrarla</span>
+        <select id="presentation-frequency">
+          <option value="solo_lanzamiento">Solo al abrirse en la fecha oficial</option>
+          <option value="una_vez">Una vez por visitante</option>
+          <option value="cada_entrada">En cada entrada</option>
+        </select>
+      </label>
+
+      <label class="launch-field">
+        <span>Acción al terminar</span>
+        <select id="presentation-target">
+          <option value="inicio">Revelar el inicio con banners y negocios</option>
+          <option value="directorio">Abrir el directorio completo</option>
+        </select>
+      </label>
+
+      <label class="launch-pending-toggle presentation-reset-toggle">
+        <input id="presentation-reset" type="checkbox">
+        <span><strong>Reiniciar para visitantes</strong><small>Hace que quienes ya la vieron puedan verla nuevamente una vez.</small></span>
+      </label>
+    </div>
+
+    <div class="presentation-actions">
+      <button id="save-presentation-settings" class="button primary" type="button">Guardar presentación</button>
+      <a class="button secondary" href="index.html?reveal=event&amp;preview=1" target="_blank" rel="noopener">▶ Probar evento 28 s</a>
+      <a class="button secondary" href="index.html?reveal=short&amp;preview=1" target="_blank" rel="noopener">▶ Probar breve 8 s</a>
+    </div>
+
+    <div class="launch-note">
+      <span>🎬</span>
+      <p><strong>Uso recomendado:</strong> durante la transmisión selecciona “Evento cinematográfico” y “Solo al abrirse”. Después del evento cambia a “Presentación breve” y “Una vez por visitante”.</p>
+    </div>
+    <p id="presentation-control-message" class="form-message" aria-live="polite"></p>
+  </section>
+
   <section class="stats-grid admin-stats">
     <a class="stat-card admin-stat" href="pre-registros.html?estado=pendiente">
       <div class="stat-icon">✉</div><div><p>Pendientes</p><strong id="pre-count">—</strong><small>Requieren revisión</small></div>
@@ -117,6 +173,6 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="dashboard.js?v=20260730-DATE1"></script>
+  <script type="module" src="dashboard.js?v=20260730-CINEMA2"></script>
 </body>
 </html>

@@ -1,14 +1,20 @@
-import { getLaunchState, clearLaunchStateCache, formatLaunchDate } from './launch-control.js?v=20260730-DATE1';
+import {
+  getLaunchState,
+  clearLaunchStateCache,
+  formatLaunchDate,
+  isAdministrator
+} from './launch-control.js?v=20260730-CINEMA2';
 import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-LIVE1';
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
-const REVEAL_PREPARE_MS = 3900;
-const REVEAL_OPEN_MS = 1150;
+const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
+const OPEN_TRANSITION_MS = 1450;
 
 let launchState = null;
 let launchRefreshInProgress = false;
 let revealInProgress = false;
+let forcedPresentationConsumed = false;
 let lastZeroRefreshAt = 0;
 
 function setCountdownValues(values) {
@@ -22,9 +28,55 @@ function setCountdownValues(values) {
   if (bottomHours) bottomHours.textContent = values.hours;
 }
 
-function revealWasForced() {
+function getRevealRequest() {
   const params = new URLSearchParams(window.location.search);
-  return params.get('reveal') === '1' || params.get('presentacion') === '1';
+  const requested = String(params.get('reveal') || params.get('presentacion') || '').toLowerCase();
+  const mode = requested === 'event' || requested === 'evento' || requested === '1'
+    ? 'evento'
+    : requested === 'short' || requested === 'breve'
+      ? 'breve'
+      : null;
+  return {
+    mode,
+    preview: params.get('preview') === '1' || params.get('admin_preview') === '1'
+  };
+}
+
+function getRevealStorageKey(state) {
+  const version = Number(state.presentationVersion || 1);
+  return `af-launch-presentation:${version}:${state.presentationMode || 'breve'}`;
+}
+
+function wasRevealSeen(state) {
+  try {
+    return window.localStorage.getItem(getRevealStorageKey(state)) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function markRevealSeen(state) {
+  try {
+    window.localStorage.setItem(getRevealStorageKey(state), '1');
+  } catch {
+    // El modo privado puede impedir localStorage. La presentación seguirá funcionando.
+  }
+}
+
+function shouldRunConfiguredReveal(state, { initial, transitionedToOpen }) {
+  if (!state.open || state.presentationMode === 'ninguna') return null;
+
+  if (state.presentationFrequency === 'solo_lanzamiento') {
+    return transitionedToOpen ? state.presentationMode : null;
+  }
+
+  if (state.presentationFrequency === 'cada_entrada') {
+    return initial || transitionedToOpen ? state.presentationMode : null;
+  }
+
+  return (initial || transitionedToOpen) && !wasRevealSeen(state)
+    ? state.presentationMode
+    : null;
 }
 
 function createRevealBusinessPreview() {
@@ -57,11 +109,119 @@ function createRevealBusinessPreview() {
   });
 
   if (message && Number.isFinite(total) && total > 0) {
-    message.textContent = `${total} negocio${total === 1 ? '' : 's'} ya ${total === 1 ? 'está listo' : 'están listos'} para ser descubierto${total === 1 ? '' : 's'}.`;
+    message.textContent = `${total} negocio${total === 1 ? '' : 's'} ya ${total === 1 ? 'forma' : 'forman'} parte de la red.`;
   }
 }
 
-async function runLaunchReveal() {
+function setRevealScene(overlay, sceneName) {
+  overlay.querySelectorAll('.launch-scene').forEach(scene => {
+    const active = scene.dataset.scene === sceneName;
+    if (!active && scene.classList.contains('is-active')) scene.classList.add('is-leaving');
+    scene.classList.toggle('is-active', active);
+    if (active) scene.classList.remove('is-leaving');
+  });
+
+  [...overlay.classList]
+    .filter(name => name.startsWith('scene-'))
+    .forEach(name => overlay.classList.remove(name));
+  overlay.classList.add(`scene-${sceneName}`);
+}
+
+function pulseCount(scene, value) {
+  const count = document.getElementById('launch-final-count');
+  if (count) count.textContent = value;
+  scene?.classList.remove('count-pulse');
+  void scene?.offsetWidth;
+  scene?.classList.add('count-pulse');
+}
+
+function startRevealProgress(duration) {
+  const bar = document.getElementById('launch-reveal-progress-bar');
+  const timeLabel = document.getElementById('launch-reveal-time');
+  const startedAt = performance.now();
+
+  const update = () => {
+    const elapsed = performance.now() - startedAt;
+    const progress = Math.min(1, elapsed / duration);
+    if (bar) bar.style.transform = `scaleX(${progress})`;
+    if (timeLabel) {
+      const remaining = Math.max(0, Math.ceil((duration - elapsed) / 1000));
+      timeLabel.textContent = `00:${String(remaining).padStart(2, '0')}`;
+    }
+    return progress;
+  };
+
+  update();
+  const timer = window.setInterval(() => {
+    if (update() >= 1) window.clearInterval(timer);
+  }, 100);
+
+  return () => {
+    window.clearInterval(timer);
+    if (bar) bar.style.transform = 'scaleX(1)';
+    if (timeLabel) timeLabel.textContent = '00:00';
+  };
+}
+
+async function runEventTimeline(overlay, pause) {
+  setRevealScene(overlay, 'intro');
+  if (!await pause(3000)) return;
+
+  setRevealScene(overlay, 'story');
+  const story = document.getElementById('launch-story-line');
+  if (story) story.textContent = 'Cada negocio tiene una historia.';
+  if (!await pause(2500)) return;
+  if (story) story.textContent = 'Pero muchas historias aún esperan ser descubiertas.';
+  if (!await pause(2500)) return;
+
+  setRevealScene(overlay, 'connection');
+  createRevealBusinessPreview();
+  const status = document.getElementById('launch-connection-status');
+  if (status) status.textContent = 'Conectando negocios…';
+  if (!await pause(2000)) return;
+  if (status) status.textContent = 'Activando perfiles…';
+  if (!await pause(2000)) return;
+  if (status) status.textContent = 'Construyendo comunidad…';
+  if (!await pause(2000)) return;
+
+  setRevealScene(overlay, 'identity');
+  if (!await pause(5000)) return;
+
+  setRevealScene(overlay, 'promise');
+  const word = document.getElementById('launch-promise-word');
+  for (const value of ['Descubre.', 'Conecta.', 'Crece.', 'Juntos.']) {
+    if (word) word.textContent = value;
+    if (!await pause(1000)) return;
+  }
+
+  setRevealScene(overlay, 'count');
+  const countScene = overlay.querySelector('[data-scene="count"]');
+  for (const value of ['3', '2', '1']) {
+    pulseCount(countScene, value);
+    if (!await pause(1000)) return;
+  }
+
+  setRevealScene(overlay, 'final');
+  createRevealBusinessPreview();
+  await pause(2000);
+}
+
+async function runShortTimeline(overlay, pause) {
+  setRevealScene(overlay, 'identity');
+  if (!await pause(2200)) return;
+
+  setRevealScene(overlay, 'connection');
+  const status = document.getElementById('launch-connection-status');
+  if (status) status.textContent = 'Abriendo la red…';
+  createRevealBusinessPreview();
+  if (!await pause(2500)) return;
+
+  setRevealScene(overlay, 'final');
+  createRevealBusinessPreview();
+  await pause(3300);
+}
+
+async function runLaunchReveal(mode, state) {
   if (revealInProgress) return;
 
   const overlay = document.getElementById('launch-reveal');
@@ -77,11 +237,18 @@ async function runLaunchReveal() {
   let skipResolve;
   const skipPromise = new Promise(resolve => { skipResolve = resolve; });
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const duration = reducedMotion ? 1800 : PRESENTATION_DURATION[mode] || PRESENTATION_DURATION.breve;
+  const modeLabel = document.getElementById('launch-reveal-mode-label');
+  if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'EVENTO CINEMATOGRÁFICO' : 'PRESENTACIÓN BREVE';
 
   const requestSkip = () => {
     if (skipped) return;
     skipped = true;
     skipResolve();
+  };
+  const pause = async milliseconds => {
+    await Promise.race([wait(milliseconds), skipPromise]);
+    return !skipped;
   };
   const onKeydown = event => {
     if (event.key === 'Escape') requestSkip();
@@ -95,46 +262,55 @@ async function runLaunchReveal() {
   document.body.classList.add('launch-reveal-active', 'live-preparing');
   overlay.hidden = false;
   overlay.setAttribute('aria-hidden', 'false');
-  overlay.classList.remove('is-opening', 'is-complete');
-
-  // Fuerza un frame inicial para que las animaciones siempre arranquen desde cero.
+  overlay.className = `launch-reveal mode-${mode === 'evento' ? 'event' : 'short'}`;
   void overlay.offsetWidth;
   overlay.classList.add('is-running');
 
+  const finishProgress = startRevealProgress(duration);
   const liveHomePromise = activateLiveHome();
   liveHomePromise.then(createRevealBusinessPreview).catch(() => {});
 
-  if (reducedMotion) {
-    await Promise.race([liveHomePromise, skipPromise]);
-  } else {
-    await Promise.race([
-      Promise.allSettled([liveHomePromise, wait(REVEAL_PREPARE_MS)]),
-      skipPromise
-    ]);
-    // Si se omitió, de todos modos espera a que el directorio quede preparado.
-    if (skipped) await liveHomePromise;
+  window.setTimeout(() => overlay.classList.add('can-skip'), reducedMotion ? 0 : mode === 'evento' ? 2600 : 1000);
+
+  try {
+    if (reducedMotion) {
+      setRevealScene(overlay, 'final');
+      await Promise.allSettled([liveHomePromise, wait(duration)]);
+    } else if (mode === 'evento') {
+      await runEventTimeline(overlay, pause);
+    } else {
+      await runShortTimeline(overlay, pause);
+    }
+
+    await liveHomePromise;
+    createRevealBusinessPreview();
+    setRevealScene(overlay, 'final');
+    finishProgress();
+
+    overlay.classList.add('is-opening');
+    document.body.classList.add('live-reveal-opening');
+    await wait(reducedMotion || skipped ? 220 : OPEN_TRANSITION_MS);
+
+    overlay.classList.add('is-complete');
+    document.body.classList.remove('launch-reveal-active', 'live-preparing', 'live-reveal-opening');
+    document.body.classList.add('launch-reveal-complete');
+
+    markRevealSeen(state);
+    await wait(reducedMotion || skipped ? 20 : 180);
+    overlay.hidden = true;
+    overlay.setAttribute('aria-hidden', 'true');
+
+    if (state.presentationTarget === 'directorio') {
+      window.location.assign('explorar.html?from=lanzamiento');
+    }
+  } finally {
+    finishProgress();
+    document.removeEventListener('keydown', onKeydown);
+    revealInProgress = false;
   }
-
-  createRevealBusinessPreview();
-  overlay.classList.add('is-opening');
-  document.body.classList.add('live-reveal-opening');
-
-  await wait(reducedMotion || skipped ? 180 : REVEAL_OPEN_MS);
-
-  overlay.classList.add('is-complete');
-  document.body.classList.remove('launch-reveal-active', 'live-preparing', 'live-reveal-opening');
-  document.body.classList.add('launch-reveal-complete');
-
-  await wait(reducedMotion || skipped ? 20 : 180);
-  overlay.hidden = true;
-  overlay.setAttribute('aria-hidden', 'true');
-  overlay.classList.remove('is-running', 'is-opening', 'is-complete');
-
-  document.removeEventListener('keydown', onKeydown);
-  revealInProgress = false;
 }
 
-async function renderLaunchIdentity(state, { reveal = false } = {}) {
+async function renderLaunchIdentity(state, { revealMode = null } = {}) {
   const card = document.querySelector('.countdown-card');
   const badge = document.getElementById('launch-badge-primary');
   const status = document.getElementById('launch-status-label');
@@ -156,8 +332,8 @@ async function renderLaunchIdentity(state, { reveal = false } = {}) {
     if (ogTitle) ogTitle.content = 'Aliados Fantasma | Descubre negocios locales';
     document.title = 'Aliados Fantasma | Negocios locales';
 
-    if (reveal) {
-      await runLaunchReveal();
+    if (revealMode) {
+      await runLaunchReveal(revealMode, state);
     } else {
       document.body.classList.add('launch-reveal-complete');
       await activateLiveHome();
@@ -210,15 +386,13 @@ function updateCountdown() {
   const now = Date.now() + (launchState.clockOffsetMs || 0);
   const remaining = Math.max(0, launchState.launchAtMs - now);
   const seconds = Math.floor(remaining / 1000);
-  const values = {
+  setCountdownValues({
     days: pad(Math.floor(seconds / 86400)),
     hours: pad(Math.floor((seconds % 86400) / 3600)),
     minutes: pad(Math.floor((seconds % 3600) / 60)),
     seconds: pad(seconds % 60)
-  };
-  setCountdownValues(values);
+  });
 
-  // La barra representa los últimos 30 días previos al lanzamiento.
   const windowStart = launchState.launchAtMs - (30 * 86400 * 1000);
   const total = launchState.launchAtMs - windowStart;
   const elapsed = Math.max(0, Math.min(total, now - windowStart));
@@ -239,12 +413,27 @@ async function refreshLaunchState({ initial = false } = {}) {
     clearLaunchStateCache();
     const nextState = await getLaunchState({ refresh: true });
     const transitionedToOpen = Boolean(previousState && !previousState.open && nextState.open);
-    const forcedPresentation = initial && revealWasForced() && nextState.open;
+    const request = getRevealRequest();
+
+    let stateForRender = nextState;
+    let revealMode = null;
+
+    if (initial && request.mode && !forcedPresentationConsumed) {
+      forcedPresentationConsumed = true;
+      if (nextState.open) {
+        revealMode = request.mode;
+      } else if (request.preview && await isAdministrator()) {
+        stateForRender = { ...nextState, open: true, presentationTarget: 'inicio' };
+        revealMode = request.mode;
+      }
+    }
+
+    if (!revealMode) {
+      revealMode = shouldRunConfiguredReveal(nextState, { initial, transitionedToOpen });
+    }
 
     launchState = nextState;
-    await renderLaunchIdentity(nextState, {
-      reveal: transitionedToOpen || forcedPresentation
-    });
+    await renderLaunchIdentity(stateForRender, { revealMode });
     updateCountdown();
   } catch (error) {
     console.error('No fue posible actualizar la fecha de lanzamiento.', error);

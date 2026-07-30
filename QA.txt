@@ -1,11 +1,23 @@
-QA — AF REVELACIÓN DE LANZAMIENTO 1.0
+AF REVELACIÓN CINEMATOGRÁFICA 2.0 — VALIDACIÓN
 
 [OK] lanzamiento.js pasa node --check.
+[OK] launch-control.js pasa node --check.
+[OK] dashboard.js pasa node --check.
 [OK] home-live.js pasa node --check.
-[OK] index.html no contiene IDs duplicados.
-[OK] La presentación tiene botón de omisión y soporte para tecla Escape.
-[OK] Respeta prefers-reduced-motion.
-[OK] El directorio se carga detrás de la presentación antes de abrir las cortinas.
-[OK] Si Supabase tarda, la presentación espera a que el directorio termine de preparar su estado.
-[OK] La consulta al llegar a cero está limitada para evitar peticiones cada segundo si el modo sigue cerrado.
-[OK] No requiere SQL, secretos ni cambios en RLS.
+[OK] index.html no tiene IDs duplicados.
+[OK] dashboard.html no tiene IDs duplicados.
+[OK] Duración narrativa del modo evento: 28,000 ms.
+[OK] Duración narrativa del modo breve: 8,000 ms.
+[OK] La presentación precarga el inicio activo y los negocios reales.
+[OK] Existe vista previa administrativa sin modificar el estado público.
+[OK] Existe almacenamiento local para “una vez por visitante”.
+[OK] El administrador puede reiniciar la presentación aumentando su versión.
+[OK] El modo “solo lanzamiento” se ejecuta al cambiar de cerrado a abierto.
+[OK] Accesibilidad: botón omitir, tecla Escape y reducción de movimiento.
+
+PRUEBAS REALES PENDIENTES DESPUÉS DEL DESPLIEGUE
+- Ejecutar AF_131 en el Supabase real.
+- Guardar las tres configuraciones desde dashboard.html.
+- Probar en Android/iPhone y computadora.
+- Confirmar que los logos de negocios aparezcan durante la escena de conexión.
+- Confirmar apertura automática al llegar la fecha real.

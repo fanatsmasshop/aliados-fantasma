@@ -6,7 +6,7 @@ import {
   clearLaunchStateCache,
   toMexicoCityInputValue,
   mexicoCityInputToIso
-} from './launch-control.js?v=20260730-DATE1';
+} from './launch-control.js?v=20260730-CINEMA2';
 
 const auth = await requireAdmin();
 if (auth) {
@@ -15,7 +15,8 @@ if (auth) {
   document.querySelector('#refresh-button').addEventListener('click', load);
   document.querySelector('#save-launch-settings').addEventListener('click', saveLaunchSettings);
   document.querySelector('#launch-date-pending').addEventListener('change', syncLaunchDateField);
-  await Promise.all([load(), loadLaunchControl()]);
+  document.querySelector('#save-presentation-settings').addEventListener('click', savePresentationSettings);
+  await Promise.all([load(), loadLaunchControl(), loadPresentationControl()]);
 }
 
 async function load() {
@@ -172,3 +173,88 @@ async function saveLaunchSettings() {
   }
 }
 
+
+
+function presentationModeLabel(mode) {
+  if (mode === 'evento') return 'Evento cinematográfico · 28 segundos';
+  if (mode === 'ninguna') return 'Sin presentación';
+  return 'Presentación breve · 8 segundos';
+}
+
+function presentationFrequencyLabel(frequency) {
+  if (frequency === 'solo_lanzamiento') return 'solo al abrirse oficialmente';
+  if (frequency === 'cada_entrada') return 'en cada entrada';
+  return 'una vez por visitante';
+}
+
+async function loadPresentationControl() {
+  const badge = document.querySelector('#presentation-control-badge');
+  const description = document.querySelector('#presentation-control-description');
+
+  try {
+    clearLaunchStateCache();
+    const state = await getLaunchState({ refresh: true });
+    document.querySelector('#presentation-mode').value = state.presentationMode;
+    document.querySelector('#presentation-frequency').value = state.presentationFrequency;
+    document.querySelector('#presentation-target').value = state.presentationTarget;
+    document.querySelector('#presentation-reset').checked = false;
+
+    badge.textContent = state.presentationMode === 'evento'
+      ? 'Evento 28 s'
+      : state.presentationMode === 'breve'
+        ? 'Breve 8 s'
+        : 'Desactivada';
+    badge.className = `status-pill ${state.presentationMode === 'ninguna' ? 'pending' : 'ok'}`;
+
+    description.textContent = `${presentationModeLabel(state.presentationMode)}, ${presentationFrequencyLabel(state.presentationFrequency)}. Al terminar ${state.presentationTarget === 'directorio' ? 'abrirá el directorio completo' : 'revelará el inicio con banners y negocios'}.`;
+  } catch (error) {
+    console.error(error);
+    badge.textContent = 'Sin configuración';
+    badge.className = 'status-pill pending';
+    description.textContent = 'Ejecuta AF_131_PRESENTACION_LANZAMIENTO.sql para activar este control.';
+  }
+}
+
+async function savePresentationSettings() {
+  const button = document.querySelector('#save-presentation-settings');
+  const message = document.querySelector('#presentation-control-message');
+  const mode = document.querySelector('#presentation-mode').value;
+  const frequency = document.querySelector('#presentation-frequency').value;
+  const target = document.querySelector('#presentation-target').value;
+  const reset = document.querySelector('#presentation-reset').checked;
+
+  const warning = mode === 'evento' && frequency === 'cada_entrada'
+    ? 'La presentación cinematográfica dura 28 segundos y se mostrará en cada visita. Esto puede ser pesado después del evento. ¿Guardar de todos modos?'
+    : `Se configurará “${presentationModeLabel(mode)}” ${presentationFrequencyLabel(frequency)}. ¿Continuar?`;
+
+  if (!confirm(warning)) return;
+
+  button.disabled = true;
+  message.style.color = 'var(--muted)';
+  message.textContent = 'Guardando presentación…';
+
+  try {
+    const { error } = await supabase.rpc('admin_actualizar_presentacion_lanzamiento', {
+      p_modo: mode,
+      p_frecuencia: frequency,
+      p_destino: target,
+      p_reiniciar: reset
+    });
+    if (error) throw error;
+
+    clearLaunchStateCache();
+    message.style.color = 'var(--success)';
+    message.textContent = reset
+      ? 'Presentación guardada y reiniciada para los visitantes.'
+      : 'Presentación de lanzamiento actualizada correctamente.';
+    await loadPresentationControl();
+  } catch (error) {
+    console.error(error);
+    message.style.color = 'var(--danger)';
+    message.textContent = error.message?.includes('admin_actualizar_presentacion_lanzamiento')
+      ? 'Primero ejecuta AF_131_PRESENTACION_LANZAMIENTO.sql en Supabase.'
+      : error.message || 'No fue posible actualizar la presentación.';
+  } finally {
+    button.disabled = false;
+  }
+}

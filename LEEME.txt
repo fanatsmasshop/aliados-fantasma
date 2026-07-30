@@ -1,33 +1,50 @@
-ALIADOS FANTASMA — REVELACIÓN DE LANZAMIENTO 1.0
+ALIADOS FANTASMA — REVELACIÓN CINEMATOGRÁFICA 2.0
 
-ARCHIVOS A SUBIR A LA RAÍZ DE GITHUB
-- index.html
-- lanzamiento.js
-- lanzamiento.css
-- home-live.js
+QUÉ INCLUYE
+- Evento cinematográfico de 28 segundos.
+- Presentación breve de 8 segundos.
+- Opción sin presentación.
+- Control desde el Dashboard administrativo.
+- Frecuencia: solo al lanzamiento, una vez por visitante o cada entrada.
+- Destino final: inicio activo o directorio completo.
+- Botones de prueba sin abrir públicamente el proyecto.
+- Precarga de banners y negocios mientras ocurre la presentación.
 
-Reemplaza los archivos existentes. No requiere SQL ni cambios en Supabase.
+INSTALACIÓN
+1. Supabase > SQL Editor: ejecuta AF_131_PRESENTACION_LANZAMIENTO.sql una sola vez.
+2. En GitHub reemplaza estos archivos:
+   index.html
+   lanzamiento.js
+   lanzamiento.css
+   home-live.js
+   launch-control.js
+   dashboard.html
+   dashboard.js
+   admin-dashboard.css
+3. Espera el despliegue exitoso de Cloudflare Pages.
+4. Entra a dashboard.html y configura “Presentación de lanzamiento”.
 
-CÓMO FUNCIONA
-1. La cuenta regresiva llega a 00:00:00:00.
-2. La portada consulta el estado de lanzamiento.
-3. Si el modo automático abre la red, aparece una presentación de aproximadamente 5 segundos.
-4. Mientras la presentación se reproduce, el directorio real se carga detrás.
-5. Las cortinas se abren y revelan directamente el inicio activo con banners, categorías y negocios.
+PRUEBAS
+- Evento de 28 segundos:
+  https://aliados-fantasma.pages.dev/?reveal=event&preview=1
+- Presentación breve de 8 segundos:
+  https://aliados-fantasma.pages.dev/?reveal=short&preview=1
 
-PRUEBA INMEDIATA
-1. En el panel administrativo deja el modo global en ABIERTO.
-2. Espera a que Cloudflare termine el despliegue.
-3. Abre en incógnito:
-   https://aliados-fantasma.pages.dev/?reveal=1
+El parámetro preview=1 solo permite la vista previa si existe una sesión administrativa.
+Si el sitio ya está abierto, basta con ?reveal=event o ?reveal=short.
 
-También funciona con:
-   https://aliados-fantasma.pages.dev/?presentacion=1
+CONFIGURACIÓN PARA EL EVENTO
+- Tipo: Evento cinematográfico · 28 segundos
+- Cuándo: Solo al abrirse en la fecha oficial
+- Acción final: Revelar el inicio con banners y negocios
 
-La animación puede omitirse con el botón “Omitir presentación” o la tecla Esc.
-El parámetro de prueba NO abre la plataforma si el modo global sigue cerrado.
+CONFIGURACIÓN DESPUÉS DEL EVENTO
+- Tipo: Presentación breve · 8 segundos
+- Cuándo: Una vez por visitante
+- Acción final: Revelar el inicio con banners y negocios
+- Marca “Reiniciar para visitantes” al cambiar del modo evento al breve.
 
-COMPORTAMIENTO REAL
-- Al llegar a cero en modo AUTOMÁTICO, la animación se ejecuta sin parámetros.
-- Si el administrador cambia de cerrado a abierto mientras un visitante mantiene la portada abierta, se ejecutará cuando la página detecte el cambio.
-- Si la red ya estaba abierta al cargar la página normalmente, entra directamente al directorio sin obligar a repetir cinco segundos cada vez.
+NOTAS
+- No subas el archivo SQL a GitHub.
+- La presentación no reproduce audio automáticamente. Para YouTube, sincroniza música desde OBS.
+- La tecla Esc y el botón “Omitir presentación” terminan la secuencia.
