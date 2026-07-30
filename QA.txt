@@ -1,0 +1,12 @@
+AF-INICIO-ACTIVO-PRO-1.0 — VALIDACIÓN
+
+- JavaScript: sintaxis correcta en todos los archivos del proyecto.
+- index.html: sin IDs duplicados.
+- Referencias locales: completas.
+- Inicio previo al lanzamiento: conservado.
+- Inicio activo: oculto hasta que getLaunchState().open sea verdadero.
+- Cambio automático al llegar a cero: conectado a refreshLaunchState().
+- Slider: automático, controles, indicadores, pausa y gesto horizontal.
+- Datos: negocios activos desde Supabase, categorías, promociones y filtros.
+- Diseño: escritorio, tablet y móvil.
+- SQL adicional: no requerido.

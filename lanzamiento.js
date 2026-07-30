@@ -1,4 +1,5 @@
 import { getLaunchState, clearLaunchStateCache, formatLaunchDate } from './launch-control.js?v=20260730-DATE1';
+import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-LIVE1';
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 let launchState = null;
@@ -21,6 +22,8 @@ function renderLaunchIdentity(state) {
   const heading = document.getElementById('launch-date-heading');
   const message = document.getElementById('launch-card-message');
   const meta = document.querySelector('meta[name="description"]');
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const closingEyebrow = document.getElementById('closing-eyebrow');
 
   card?.classList.toggle('date-pending', !state.hasDate && !state.open);
   card?.classList.toggle('launched', state.open);
@@ -30,9 +33,16 @@ function renderLaunchIdentity(state) {
     if (status) status.textContent = 'ALIADOS FANTASMA EN LÍNEA';
     if (heading) heading.innerHTML = '<span>La red ya está activa</span>';
     if (message) message.textContent = 'Explora negocios locales, descubre promociones y conecta directamente con cada comercio.';
-    if (meta) meta.content = 'Aliados Fantasma conecta negocios locales mediante perfiles digitales, promociones, QR y un directorio público.';
+    if (meta) meta.content = 'Descubre negocios locales, promociones y perfiles verificados dentro de Aliados Fantasma.';
+    if (ogTitle) ogTitle.content = 'Aliados Fantasma | Descubre negocios locales';
+    document.title = 'Aliados Fantasma | Negocios locales';
+    activateLiveHome();
     return;
   }
+
+  deactivateLiveHome();
+  document.title = 'Aliados Fantasma | Próximo lanzamiento';
+  if (ogTitle) ogTitle.content = 'Aliados Fantasma | La red local está por despertar';
 
   if (!state.hasDate) {
     if (badge) badge.innerHTML = '<i></i> Próximo lanzamiento';
@@ -40,6 +50,7 @@ function renderLaunchIdentity(state) {
     if (heading) heading.innerHTML = '<span>Próximamente</span>';
     if (message) message.textContent = 'Regístrate ahora, completa tu información y deja tu perfil preparado mientras confirmamos la fecha oficial.';
     if (meta) meta.content = 'Aliados Fantasma conecta negocios locales con perfiles digitales, promociones, QR y herramientas para crecer. Próximo lanzamiento con fecha por confirmar.';
+    if (closingEyebrow) closingEyebrow.textContent = 'PRÓXIMAMENTE COMIENZA UNA NUEVA ETAPA';
     return;
   }
 
@@ -55,6 +66,7 @@ function renderLaunchIdentity(state) {
   if (heading) heading.innerHTML = `${dateOnly}<br><span>${timeOnly}</span>`;
   if (message) message.textContent = 'Regístrate ahora, completa tu información con calma y deja tu perfil preparado para el lanzamiento.';
   if (meta) meta.content = `Aliados Fantasma conecta negocios locales con perfiles digitales, promociones y QR. Lanzamiento programado para ${state.launchLabel}.`;
+  if (closingEyebrow) closingEyebrow.textContent = `EL ${dateOnly.toUpperCase()} COMIENZA UNA NUEVA ETAPA`;
 }
 
 function updateCountdown() {
