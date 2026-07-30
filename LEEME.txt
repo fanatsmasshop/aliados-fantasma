@@ -1,18 +1,26 @@
-AF-REVELACION-CINEMATOGRAFICA-HOTFIX-2.4
+FBS — PANTALLA DE LANZAMIENTO PROFESIONAL 1.0
 
-Corrige la pantalla morada con punto blanco que aparecía justo antes del directorio.
+INSTALACIÓN
+1. Reemplaza únicamente el index.html actual de Fantasmas Biker's Shop por el index.html incluido.
+2. Conserva la carpeta assets actual. La nueva página utiliza:
+   - assets/logo.png
+   - assets/storefront.png
+   - assets/team.png
+   - assets/team-names.png
+   - assets/contact.vcf
+3. No requiere SQL ni cambios en Supabase.
 
-Cambios:
-- Se elimina el efecto de portal blanco.
-- La escena final se desvanece y las cortinas revelan directamente el directorio que ya está cargado detrás.
-- La transición final se reduce a 1.1 segundos.
-- No requiere SQL ni cambios en Supabase.
+FECHA DE LANZAMIENTO
+La cuenta regresiva consulta automáticamente la misma tabla configuracion_sistema de Aliados Fantasma.
+Cuando cambies la fecha desde el Dashboard de Aliados, se reflejará también en Fantasmas Biker's Shop.
 
-Reemplazar en GitHub:
-- index.html
-- lanzamiento.css
-- lanzamiento.js
+TRANSMISIÓN DE YOUTUBE
+Cuando programes el directo, abre index.html y localiza:
+const YOUTUBE_LIVE_URL = '';
+Pega el enlace público entre las comillas. Ejemplo:
+const YOUTUBE_LIVE_URL = 'https://www.youtube.com/watch?v=XXXXXXXXXXX';
+Al hacerlo aparecerá el botón “Ver transmisión en vivo”.
 
-Pruebas:
-/?reveal=event&preview=1
-/?reveal=short&preview=1
+IMPORTANTE
+Esta versión es autónoma: contiene su CSS y JavaScript dentro del mismo index.html.
+No elimina la información de la tienda; la reorganiza debajo del lanzamiento.

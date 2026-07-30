@@ -1,0 +1,50 @@
+PLAN DE TRANSMISIÓN — ALIADOS FANTASMA
+
+FORMATO RECOMENDADO
+- Producción principal: OBS Studio en formato horizontal 16:9.
+- Destinos principales: YouTube + Facebook.
+- Instagram: transmisión vertical complementaria desde un teléfono, atendida por una segunda persona, o historias que envíen al directo principal.
+
+POR QUÉ
+- La revelación de la plataforma está diseñada para pantalla horizontal.
+- YouTube conserva el evento y permite compartir la página programada antes del lanzamiento.
+- Facebook permite llegar a la comunidad local.
+- Instagram funciona mejor como cobertura vertical, recordatorio y detrás de cámaras.
+
+ESCENAS EN OBS
+1. Espera: logo, cuenta regresiva, QR y “Comenzamos en unos momentos”.
+2. Cámara: bienvenida y explicación breve.
+3. Video: introducción pregrabada de 45–60 segundos.
+4. Negocios: logos y nombres de los primeros participantes.
+5. Revelación: navegador a pantalla completa con ?reveal=event&preview=1 durante ensayos.
+6. Directorio: recorrido por banners, buscador y perfiles.
+7. Cierre: QR, URL, WhatsApp y registro gratuito.
+8. Emergencia: “Estamos preparando la revelación. Volvemos en unos momentos”.
+
+CONFIGURACIÓN INICIAL DE OBS
+- Resolución del lienzo: 1920 × 1080.
+- Resolución de salida: 1920 × 1080 o 1280 × 720 si la conexión es limitada.
+- FPS: 30.
+- Codificador: H.264 por hardware cuando esté disponible.
+- Bitrate inicial: 4,500–6,000 Kbps para 1080p30.
+- Intervalo de fotograma clave: 2 segundos.
+- Audio: AAC estéreo, 48 kHz, 128–160 Kbps.
+- Grabar una copia local del evento.
+
+PRUEBAS
+- Activar YouTube Live con anticipación; la primera habilitación puede tardar.
+- Crear una transmisión no listada de prueba.
+- Ensayar audio, cambio de escenas, navegador, revelación y plan de emergencia.
+- Probar con el mismo movimiento y volumen del evento real.
+- No mostrar claves de transmisión en pantalla.
+
+PLAN DE PUBLICACIÓN
+- 7 días antes: anuncio oficial y enlace programado.
+- 3 días antes: teaser de 15 segundos.
+- 24 horas antes: recordatorio y QR.
+- 1 hora antes: “Hoy despierta la red”.
+- 10 minutos antes: pantalla de espera en vivo.
+- Al terminar: publicar repetición, clips verticales y enlace al directorio.
+
+MÚSICA
+Usar música propia, licenciada o libre de derechos. Mantener la música como apoyo y no como contenido principal para reducir riesgos de silenciamiento o bloqueo.
