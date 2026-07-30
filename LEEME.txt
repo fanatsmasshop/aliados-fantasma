@@ -1,13 +1,17 @@
-AF-REVELACIÓN-CINEMATOGRÁFICA HOTFIX 2.1
+AF-REVELACIÓN-CINEMATOGRÁFICA HOTFIX 2.2
 
-PROBLEMA CORREGIDO
-Las dos cortinas opacas tenían z-index 8 y cubrían las escenas, cuyo z-index era 5. Por eso solo se veía la línea central, el botón Omitir y la barra de progreso.
+CAMBIOS
+- Se eliminó la línea luminosa vertical del centro.
+- Se ocultó por completo la barra inferior de progreso.
+- Se ocultó el contador de tiempo de la presentación.
+- Se mantiene el botón “Omitir presentación”.
+- No se modificaron la duración, las escenas ni la lógica del lanzamiento.
 
 ARCHIVOS A REEMPLAZAR EN GITHUB
 - index.html
 - lanzamiento.css
 
-NO REQUIERE SQL.
+NO REQUIERE SQL NI CAMBIOS EN SUPABASE.
 
 PRUEBAS
 Evento: https://aliados-fantasma.pages.dev/?reveal=event&preview=1
