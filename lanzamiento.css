@@ -333,3 +333,154 @@ body.launch-reveal-complete.is-live .live-section:nth-of-type(2){animation-delay
 @media(prefers-reduced-motion:reduce){
   body.live-preparing #live-experience,body.live-preparing .site-header,body.live-preparing footer,body.live-preparing .mobile-cta,.launch-reveal__curtain,.launch-reveal__timeline,.launch-reveal__glow,.launch-reveal__portal,.launch-scene,.launch-dynamic-copy{transition:none!important;animation:none!important}.launch-reveal__ambient,.launch-reveal__network{display:none}.launch-scene.is-active{opacity:1;visibility:visible;transform:none;filter:none}
 }
+
+/* =========================================================
+   RC2.3 — CONTENCIÓN ESTRICTA DE LA PRESENTACIÓN
+   Mantiene el escenario dentro del viewport real y evita que
+   escenas inactivas o elementos SVG amplíen el lienzo.
+   ========================================================= */
+body.launch-reveal-active{
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+
+.launch-reveal{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  width:100dvw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  contain:strict!important;
+}
+
+.launch-reveal__timeline{
+  position:absolute!important;
+  z-index:5!important;
+  inset:50% auto auto 50%!important;
+  width:min(92vw,1060px)!important;
+  width:min(92dvw,1060px)!important;
+  height:min(72vh,650px)!important;
+  height:min(72dvh,650px)!important;
+  max-width:calc(100dvw - 36px)!important;
+  max-height:calc(100dvh - 128px)!important;
+  margin:0!important;
+  padding:0!important;
+  transform:translate(-50%,-50%)!important;
+  overflow:hidden!important;
+  contain:layout paint!important;
+}
+
+.launch-scene{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  margin:0!important;
+  padding:clamp(20px,4vw,42px)!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  place-items:center!important;
+  align-content:center!important;
+}
+
+/* Solo la escena activa participa en el layout y en la pintura. */
+.launch-scene:not(.is-active):not(.is-leaving){
+  display:none!important;
+}
+.launch-scene.is-active,
+.launch-scene.is-leaving{
+  display:grid!important;
+}
+
+.launch-scene > *{
+  min-width:0!important;
+  max-width:100%!important;
+}
+.launch-scene h1,
+.launch-scene h2,
+.launch-scene p,
+.launch-scene span,
+.launch-scene strong{
+  overflow-wrap:break-word!important;
+}
+.launch-scene--intro h1{font-size:clamp(3rem,8vw,7.4rem)!important}
+.launch-scene--story p{font-size:clamp(2.1rem,5.4vw,5rem)!important}
+.launch-scene--connection h2{font-size:clamp(2.1rem,4.8vw,4.7rem)!important}
+.launch-promise-words strong{font-size:clamp(3.8rem,11vw,9rem)!important}
+.launch-scene--count strong{font-size:clamp(9rem,26vw,20rem)!important}
+.launch-scene--final h2{font-size:clamp(3rem,8vw,7.2rem)!important}
+
+.launch-reveal__network{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  overflow:hidden!important;
+  contain:strict!important;
+}
+.launch-reveal__network svg{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  overflow:hidden!important;
+}
+.launch-reveal__network circle{
+  transform-box:fill-box!important;
+  transform-origin:center!important;
+  vector-effect:non-scaling-stroke!important;
+}
+
+.launch-reveal__glow{
+  width:min(82vw,900px)!important;
+  width:min(82dvw,900px)!important;
+  max-width:900px!important;
+}
+.launch-reveal__skip{
+  position:fixed!important;
+  max-width:calc(100dvw - 28px)!important;
+}
+
+@media(max-width:720px){
+  .launch-reveal__timeline{
+    width:100dvw!important;
+    height:76dvh!important;
+    max-width:100dvw!important;
+    max-height:calc(100dvh - 92px)!important;
+  }
+  .launch-scene{padding:24px 18px!important}
+  .launch-scene--intro h1{font-size:clamp(2.8rem,16vw,5rem)!important}
+  .launch-scene--story p{font-size:clamp(2rem,10vw,3.7rem)!important}
+  .launch-scene--connection h2{font-size:clamp(2rem,10vw,3.7rem)!important}
+  .launch-promise-words strong{font-size:clamp(3.6rem,18vw,6.6rem)!important}
+  .launch-scene--count strong{font-size:clamp(8rem,45vw,15rem)!important}
+  .launch-scene--final h2{font-size:clamp(2.8rem,15vw,5rem)!important}
+}
+
+@media(max-height:700px) and (min-width:721px){
+  .launch-reveal__timeline{
+    height:76dvh!important;
+    max-height:calc(100dvh - 96px)!important;
+  }
+  .launch-scene{padding:18px 28px!important}
+  .launch-reveal__mark{width:126px!important;height:126px!important;margin-bottom:15px!important}
+  .launch-reveal__mark img{width:82px!important;height:82px!important}
+  .launch-scene--final img{width:88px!important;height:88px!important;margin-bottom:14px!important}
+}
