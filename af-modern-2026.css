@@ -1021,3 +1021,170 @@ body.af-page-home .signal-strip article:nth-child(5){box-shadow:inset 0 1px 0 rg
 body.af-page-home .hero-actions .button-primary{box-shadow:0 18px 40px rgba(117,79,255,.25),0 0 28px rgba(255,79,163,.17),inset 0 1px rgba(255,255,255,.26)!important}
 body.af-page-home .hero-actions .button-secondary{border-color:rgba(129,145,255,.15)!important;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03))!important}
 body.af-page-home .trust-row span{color:#aab6cb!important}
+
+
+/* =========================================================
+   RC1.4M — Corrección integral para móvil
+   Compacta el primer pantallazo sin perder identidad ni color.
+   ========================================================= */
+@media(max-width:720px){
+  body.af-page{
+    background:
+      radial-gradient(540px circle at 8% 2%,rgba(69,214,255,.17),transparent 58%),
+      radial-gradient(500px circle at 100% 9%,rgba(255,79,163,.14),transparent 60%),
+      radial-gradient(620px circle at 48% 78%,rgba(156,108,255,.12),transparent 64%),
+      linear-gradient(180deg,#070d1b 0%,#070914 48%,#050711 100%)!important;
+  }
+  body.af-page-home .site-header{
+    min-height:62px!important;
+    padding:8px 10px 8px 13px!important;
+  }
+  body.af-page-home .brand img{
+    width:38px!important;
+    height:38px!important;
+  }
+  body.af-page-home .brand small{display:none!important}
+  body.af-page-home .menu-button{
+    width:44px!important;
+    height:44px!important;
+  }
+  body.af-page-home .hero{
+    margin-top:8px!important;
+    padding:28px 18px 24px!important;
+    gap:26px!important;
+    border-radius:22px!important;
+    background:
+      radial-gradient(430px circle at 7% 7%,rgba(69,214,255,.15),transparent 54%),
+      radial-gradient(390px circle at 96% 25%,rgba(255,79,163,.13),transparent 58%),
+      radial-gradient(520px circle at 50% 95%,rgba(156,108,255,.10),transparent 63%),
+      linear-gradient(145deg,rgba(13,22,42,.98),rgba(8,12,28,.97) 52%,rgba(22,12,35,.96))!important;
+  }
+  body.af-page-home .hero::before{
+    background:
+      linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
+      linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px)!important;
+    background-size:40px 40px!important;
+    opacity:.8!important;
+  }
+  body.af-page-home .hero::after{
+    right:-8px!important;
+    bottom:5px!important;
+    font-size:3.8rem!important;
+    color:rgba(177,190,255,.04)!important;
+  }
+  body.af-page-home .badge-row{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+  }
+  body.af-page-home .launch-badge{
+    min-height:29px!important;
+    padding:6px 8px!important;
+    font-size:.49rem!important;
+    letter-spacing:.08em!important;
+    white-space:nowrap!important;
+  }
+  body.af-page-home .main-logo{
+    width:min(176px,56%)!important;
+    max-height:132px!important;
+    margin:17px 0 8px!important;
+  }
+  body.af-page-home .hero .eyebrow{
+    margin:0 0 10px!important;
+    font-size:.55rem!important;
+    letter-spacing:.13em!important;
+  }
+  body.af-page-home .hero h1.af-hero-title{
+    width:100%!important;
+    max-width:100%!important;
+    font-size:clamp(2.42rem,10.8vw,3.15rem)!important;
+    line-height:.94!important;
+    letter-spacing:-.058em!important;
+  }
+  body.af-page-home .hero h1.af-hero-title > .line{
+    white-space:normal!important;
+  }
+  body.af-page-home .hero h1.af-hero-title > .word-slider{
+    height:1.06em!important;
+    min-height:1.06em!important;
+  }
+  body.af-page-home .hero h1.af-hero-title > .word-slider > .word-current{
+    height:1.06em!important;
+    line-height:1.06!important;
+  }
+  body.af-page-home .lead{
+    margin-top:18px!important;
+    font-size:.84rem!important;
+    line-height:1.58!important;
+    color:#bec9dc!important;
+  }
+  body.af-page-home .hero-actions{
+    margin-top:21px!important;
+    gap:8px!important;
+  }
+  body.af-page-home .hero-actions .button{
+    min-height:47px!important;
+    padding:11px 15px!important;
+  }
+  body.af-page-home .trust-row{
+    margin-top:19px!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px 10px!important;
+    font-size:.57rem!important;
+  }
+  body.af-page-home .trust-row span{
+    padding-left:15px!important;
+  }
+  body.af-page-home .trust-row span::before{
+    width:7px!important;
+    height:7px!important;
+  }
+  body.af-page-home .countdown-card{
+    padding:18px!important;
+    border-radius:19px!important;
+  }
+  body.af-page-home .countdown-card h2{
+    margin:18px 0!important;
+    font-size:1.76rem!important;
+  }
+  body.af-page-home .countdown{
+    gap:7px!important;
+  }
+  body.af-page-home .countdown>div{
+    min-height:78px!important;
+    padding:11px 6px!important;
+    border-radius:14px!important;
+  }
+  body.af-page-home .countdown strong{
+    font-size:2.08rem!important;
+  }
+  body.af-page-home .countdown span{
+    font-size:.5rem!important;
+  }
+  body.af-page-home .progress-shell{
+    margin:17px 0 14px!important;
+  }
+  body.af-page-home .countdown-card>p{
+    font-size:.73rem!important;
+    line-height:1.55!important;
+  }
+  body.af-page-home .panel-link{
+    min-height:45px!important;
+    margin-top:14px!important;
+  }
+}
+
+@media(max-width:390px){
+  body.af-page-home .launch-badge{
+    padding-inline:7px!important;
+    font-size:.46rem!important;
+  }
+  body.af-page-home .main-logo{
+    width:164px!important;
+  }
+  body.af-page-home .hero h1.af-hero-title{
+    font-size:clamp(2.28rem,10.5vw,2.85rem)!important;
+  }
+}
