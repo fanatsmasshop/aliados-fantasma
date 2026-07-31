@@ -1374,3 +1374,67 @@ body.af-page-home .benefit-chart{border:0;border-radius:0}.benefit-chart::before
     width:min(360px,94%)!important;
   }
 }
+
+/* =========================================================
+   RC2.2 — Rotador único y estable del hero
+   Neutraliza las dos animaciones heredadas y usa una sola
+   transición de opacidad, sin palabras cruzadas.
+   ========================================================= */
+body.af-page-home .hero h1.af-hero-title .word-slider,
+body.af-page-home .hero h1.af-neon-title .word-slider{
+  position:relative!important;
+  display:inline-block!important;
+  height:1.08em!important;
+  min-height:1.08em!important;
+  overflow:hidden!important;
+  contain:layout paint!important;
+  vertical-align:baseline!important;
+  color:transparent!important;
+  background:none!important;
+  animation:none!important;
+}
+body.af-page-home .hero h1.af-hero-title .word-current,
+body.af-page-home .hero h1.af-neon-title .word-current{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  height:1.08em!important;
+  line-height:1.08!important;
+  white-space:nowrap!important;
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  transition:opacity .21s ease!important;
+  background:linear-gradient(90deg,#55adff 0%,#8b61ff 48%,#ff47aa 100%)!important;
+  background-position:50% 50%!important;
+  background-size:100% 100%!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+  animation:none!important;
+  will-change:opacity;
+}
+body.af-page-home .hero h1.af-hero-title .word-slider.is-leaving .word-current,
+body.af-page-home .hero h1.af-hero-title .word-slider.is-entering .word-current,
+body.af-page-home .hero h1.af-neon-title .word-slider.is-leaving .word-current,
+body.af-page-home .hero h1.af-neon-title .word-slider.is-entering .word-current{
+  opacity:1!important;
+  transform:none!important;
+}
+body.af-page-home .hero h1 .word-current.is-fading-out{
+  opacity:0!important;
+}
+body.af-page-home .hero h1 .word-current.is-fading-in{
+  opacity:0!important;
+  transition:none!important;
+}
+body.af-page-home .hero h1.af-hero-title .track,
+body.af-page-home .hero h1.af-neon-title .track{
+  display:none!important;
+  animation:none!important;
+}
+@media (prefers-reduced-motion:reduce){
+  body.af-page-home .hero h1 .word-current{transition:none!important}
+}
