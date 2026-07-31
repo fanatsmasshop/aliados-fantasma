@@ -892,3 +892,71 @@ body.af-page-home .live-directory-cta>*{position:relative;z-index:1}
   body.af-page-home .live-directory-cta{grid-template-columns:1fr!important;padding:24px!important;border-radius:21px!important}
   body.af-page-home .live-directory-cta .button{width:100%!important}
 }
+
+/* =========================================================
+   RC1.1 — Corrección del título cinético del hero principal
+   Mantiene una sola frase visible y evita el solapamiento de
+   las palabras generado por la animación heredada.
+   ========================================================= */
+body.af-page-home .hero h1{
+  max-width:none!important;
+  font-size:clamp(3.45rem,5.45vw,5.85rem)!important;
+  line-height:.91!important;
+}
+body.af-page-home .hero h1 > .line{
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  color:var(--afm-text)!important;
+  background:none!important;
+  -webkit-background-clip:initial!important;
+  background-clip:initial!important;
+  animation:none!important;
+  white-space:nowrap!important;
+}
+body.af-page-home .hero h1 > .word-slider{
+  position:relative!important;
+  display:block!important;
+  width:min(100%,10.9ch)!important;
+  height:.98em!important;
+  overflow:hidden!important;
+  color:transparent!important;
+  background:var(--afm-gradient-text)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  background-size:180% 100%!important;
+  animation:afmTextFlow 7s ease-in-out infinite alternate!important;
+}
+body.af-page-home .hero h1 > .word-slider > .track{
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  height:auto!important;
+  animation:afWordSlide 9s cubic-bezier(.75,0,.25,1) infinite!important;
+}
+body.af-page-home .hero h1 > .word-slider > .track > span{
+  display:block!important;
+  flex:0 0 1.08em!important;
+  width:100%!important;
+  height:1.08em!important;
+  line-height:1.08em!important;
+  color:transparent!important;
+  background:inherit!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  animation:none!important;
+  white-space:nowrap!important;
+}
+@media(max-width:720px){
+  body.af-page-home .hero h1{
+    font-size:clamp(3rem,14vw,4.45rem)!important;
+    line-height:.92!important;
+  }
+  body.af-page-home .hero h1 > .line{
+    width:auto!important;
+    white-space:normal!important;
+  }
+  body.af-page-home .hero h1 > .word-slider{
+    width:100%!important;
+  }
+}
