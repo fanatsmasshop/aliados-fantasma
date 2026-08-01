@@ -9,45 +9,11 @@
   <meta property="og:description" content="Perfiles digitales, directorio, promociones y recursos para impulsar negocios locales.">
   <title>Aliados Fantasma | Próximo lanzamiento</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260801-NEON-STABLE">
   <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10.3">
   <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
   <link rel="stylesheet" href="af-fantasmas-style.css?v=20260730-FANTASMAS1">
-  <link rel="stylesheet" href="af-modern-2026.css?v=20260731-RC2.6">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260801-RC5.5">
-  <script>
-    // Fail-safe de portada: el reveal nunca debe bloquear la URL normal.
-    (() => {
-      const params = new URLSearchParams(location.search);
-      const revealRequested = params.has('reveal') || params.has('presentacion');
-      document.documentElement.classList.toggle('af-reveal-requested', revealRequested);
-      if (revealRequested) return;
-
-      const restoreLanding = () => {
-        const overlay = document.getElementById('launch-reveal');
-        const prelaunch = document.getElementById('prelaunch-experience');
-        if (overlay) {
-          overlay.hidden = true;
-          overlay.setAttribute('aria-hidden', 'true');
-          overlay.classList.remove('is-running','is-opening','is-complete','can-skip');
-        }
-        if (prelaunch) prelaunch.hidden = false;
-        document.body?.classList.remove('launch-reveal-active','live-preparing','live-reveal-opening');
-      };
-
-      document.addEventListener('DOMContentLoaded', restoreLanding, { once: true });
-      window.addEventListener('load', () => window.setTimeout(restoreLanding, 250), { once: true });
-      window.setTimeout(restoreLanding, 4500);
-    })();
-  </script>
-  <style id="af-root-visibility-guard">
-    /* La portada normal nunca puede quedar cubierta por el reveal. */
-    html:not(.af-reveal-requested) #launch-reveal { display:none !important; visibility:hidden !important; opacity:0 !important; pointer-events:none !important; }
-    html:not(.af-reveal-requested) body .site-header { display:flex !important; visibility:visible !important; opacity:1 !important; filter:none !important; transform:none !important; }
-    html:not(.af-reveal-requested) body #prelaunch-experience { display:block !important; visibility:visible !important; opacity:1 !important; filter:none !important; transform:none !important; }
-    html:not(.af-reveal-requested) body #live-experience { display:none !important; }
-    html:not(.af-reveal-requested) body footer { visibility:visible !important; opacity:1 !important; filter:none !important; }
-    html:not(.af-reveal-requested) body .mobile-cta { visibility:visible !important; opacity:1 !important; filter:none !important; }
-  </style>
+  <link rel="stylesheet" href="af-modern-2026.css?v=20260801-NEON-STABLE">
 </head>
 <body class="af-page af-page-home">
 
@@ -75,11 +41,6 @@
     </div>
 
     <button id="launch-reveal-skip" class="launch-reveal__skip" type="button">Omitir presentación</button>
-
-    <button id="launch-sound-prompt" class="launch-sound-prompt" type="button" aria-label="Activar sonido de la presentación">
-      <span class="launch-sound-prompt__icon" aria-hidden="true">🔊</span>
-      <span><strong>Toca para una mejor experiencia</strong><small>Activar sonido</small></span>
-    </button>
 
     <div class="launch-reveal__timeline" role="status" aria-live="polite">
       <section class="launch-scene launch-scene--intro" data-scene="intro">
@@ -435,8 +396,8 @@
     <a href="login.html">Iniciar sesión</a>
     <a href="registro.html">Registrar negocio</a>
   </div>
-  <script type="module" src="lanzamiento.js?v=20260801-RC5.5"></script>
-  <script src="af-fantasmas-home.js?v=20260731-RC2.6"></script>
+  <script type="module" src="lanzamiento.js?v=20260801-NEON-STABLE"></script>
+  <script src="af-fantasmas-home.js?v=20260801-NEON-STABLE"></script>
   <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>
 </body>
 </html>

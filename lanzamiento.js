@@ -8,130 +8,8 @@ import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
-const settleWithin = async (promise, milliseconds = 4500) => {
-  try {
-    await Promise.race([Promise.resolve(promise), wait(milliseconds)]);
-  } catch (error) {
-    console.warn('Aliados Fantasma: la preparación pública no terminó a tiempo.', error);
-  }
-};
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
 const OPEN_TRANSITION_MS = 1100;
-
-function isExplicitRevealRequest() {
-  const params = new URLSearchParams(window.location.search);
-  return params.has('reveal') || params.has('presentacion');
-}
-
-function forceCloseReveal() {
-  const overlay = document.getElementById('launch-reveal');
-  if (overlay) {
-    overlay.hidden = true;
-    overlay.setAttribute('aria-hidden', 'true');
-    overlay.classList.remove('is-running','is-opening','is-complete','can-skip');
-  }
-  document.body.classList.remove('launch-reveal-active','live-preparing','live-reveal-opening');
-}
-
-const isShortMobileDevice = () =>
-  window.matchMedia('(max-width: 760px)').matches ||
-  window.matchMedia('(pointer: coarse)').matches;
-
-
-let launchMusic = null;
-let launchAudioUnlocked = false;
-let launchSoundStarting = false;
-
-const launchTracks = {
-  evento: 'af-lanzamiento-28s.mp3?v=20260731-MUSIC1',
-  breve: 'af-lanzamiento-8s.mp3?v=20260731-MUSIC1'
-};
-
-function getLaunchMusic(mode = 'breve') {
-  const src = launchTracks[mode] || launchTracks.breve;
-  if (!launchMusic) {
-    launchMusic = new Audio();
-    launchMusic.preload = 'auto';
-    launchMusic.playsInline = true;
-    launchMusic.volume = .88;
-  }
-
-  if (launchMusic.dataset.mode !== mode) {
-    try { launchMusic.pause(); } catch {}
-    launchMusic.src = src;
-    launchMusic.dataset.mode = mode;
-    launchMusic.currentTime = 0;
-    launchMusic.load();
-  }
-
-  return launchMusic;
-}
-
-function stopLaunchAudio() {
-  if (!launchMusic) return;
-  try {
-    launchMusic.pause();
-    launchMusic.currentTime = 0;
-  } catch {}
-  launchMusic = null;
-}
-
-async function activateLaunchSound(overlay, mode, startedAt, duration) {
-  if (launchSoundStarting) return false;
-  launchSoundStarting = true;
-
-  try {
-    const audio = getLaunchMusic(mode);
-    audio.muted = false;
-    audio.volume = .88;
-
-    const elapsedSeconds = Math.min(
-      Math.max(0, (duration - 80) / 1000),
-      Math.max(0, (performance.now() - startedAt) / 1000)
-    );
-
-    const seekToElapsed = () => {
-      try {
-        if (Number.isFinite(audio.duration) && audio.duration > 0) {
-          audio.currentTime = Math.min(elapsedSeconds, Math.max(0, audio.duration - .08));
-        }
-      } catch {}
-    };
-
-    if (audio.readyState >= 1) seekToElapsed();
-    else audio.addEventListener('loadedmetadata', seekToElapsed, { once: true });
-
-    // Debe ejecutarse dentro de la misma interacción del usuario en escritorio.
-    const playPromise = audio.play();
-    if (playPromise && typeof playPromise.then === 'function') await playPromise;
-
-    launchAudioUnlocked = true;
-    overlay?.classList.add('sound-active');
-    const prompt = document.getElementById('launch-sound-prompt');
-    if (prompt) {
-      prompt.setAttribute('aria-hidden', 'true');
-      prompt.tabIndex = -1;
-    }
-    return true;
-  } catch (error) {
-    launchAudioUnlocked = false;
-    overlay?.classList.remove('sound-active');
-    const prompt = document.getElementById('launch-sound-prompt');
-    if (prompt) {
-      prompt.hidden = false;
-      prompt.setAttribute('aria-hidden', 'false');
-      prompt.tabIndex = 0;
-    }
-    console.warn('Aliados Fantasma: el navegador bloqueó el audio.', error);
-    return false;
-  } finally {
-    launchSoundStarting = false;
-  }
-}
-
-// El audio se activa desde el control visible de la presentación.
-// Evitamos el desbloqueo silencioso porque algunos navegadores de escritorio
-// no conservan ese permiso cuando la pista cambia después.
 
 let launchState = null;
 let launchRefreshInProgress = false;
@@ -238,9 +116,9 @@ function createRevealBusinessPreview() {
 function setRevealScene(overlay, sceneName) {
   overlay.querySelectorAll('.launch-scene').forEach(scene => {
     const active = scene.dataset.scene === sceneName;
-    scene.classList.remove('is-leaving');
+    if (!active && scene.classList.contains('is-active')) scene.classList.add('is-leaving');
     scene.classList.toggle('is-active', active);
-    scene.setAttribute('aria-hidden', active ? 'false' : 'true');
+    if (active) scene.classList.remove('is-leaving');
   });
 
   [...overlay.classList]
@@ -249,38 +127,12 @@ function setRevealScene(overlay, sceneName) {
   overlay.classList.add(`scene-${sceneName}`);
 }
 
-const VERSION_STAGES = {
-  idea: { scene:'intro', version:'v0.1', state:'INICIANDO', eyebrow:'EL ORIGEN', title:'La idea', copy:'Crear una red para impulsar y conectar negocios locales.', visual:'spark' },
-  prototype: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'PRIMER PROTOTIPO', title:'La plataforma toma forma', copy:'La idea comenzó a convertirse en una experiencia digital real.', visual:'form' },
-  access: { scene:'connection', version:'v0.7', state:'PREPARANDO ACCESO', eyebrow:'BASE DEL PROYECTO', title:'Registro y acceso', copy:'Se construyeron las primeras puertas de entrada a la plataforma.', visual:'profiles' },
-  preregistration: { scene:'identity', version:'v1.2', state:'RECIBIENDO SOLICITUDES', eyebrow:'PRIMEROS NEGOCIOS', title:'Preregistro de negocios', copy:'Los primeros comercios enviaron su solicitud para formar parte.', visual:'directory' },
-  approval: { scene:'promise', version:'v1.8', state:'VALIDANDO', eyebrow:'CONTROL Y REVISIÓN', title:'Revisión y aprobación', copy:'Cada solicitud pasó por un proceso de revisión antes de ser aprobada.', visual:'dashboard' },
-  profilePrep: { scene:'story', version:'v2.2', state:'PREPARANDO INFORMACIÓN', eyebrow:'IDENTIDAD DE CADA NEGOCIO', title:'Preparación de perfiles', copy:'Logos, portadas, datos y contactos comenzaron a tomar forma.', visual:'visibility' },
-  directoryReady: { scene:'count', version:'v2.6', state:'ESTRUCTURANDO', eyebrow:'LISTO PARA MOSTRARSE', title:'Directorio preparado', copy:'La estructura quedó lista para mostrar los negocios al público.', visual:'marketing' },
-  testing: { scene:'connection', version:'v2.9', state:'CORRIGIENDO', eyebrow:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'Pruebas y correcciones', copy:'Cada revisión hizo la plataforma más estable, clara y preparada.', visual:'ready' },
-  launch: { scene:'connection', version:'v3.0', state:'ONLINE', eyebrow:'LANZAMIENTO OFICIAL', title:'Aliados Fantasma', copy:'La red abre oficialmente sus puertas a negocios y comunidad.', visual:'ready' }
-};
-
-function renderVersionStage(overlay, stage) {
-  if (!overlay || !stage) return;
-  const scene = overlay.querySelector(`[data-scene="${stage.scene}"]`);
-  if (!scene) return;
-
-  scene.className = `launch-scene launch-scene--version version-visual--${stage.visual}`;
-  scene.dataset.scene = stage.scene;
-  scene.querySelector('.version-stage__number')?.replaceChildren(document.createTextNode(stage.version));
-  scene.querySelector('.version-stage__state')?.replaceChildren(document.createTextNode(stage.state));
-  scene.querySelector('.version-stage__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
-  const titleElement = scene.querySelector('.version-stage__title');
-  titleElement?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.version-stage__copy')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.classList.toggle('title-long', stage.title.length >= 20);
-  scene.classList.toggle('title-very-long', stage.title.length >= 24);
-
-  scene.classList.remove('version-hit');
-  void scene.offsetWidth;
-  scene.classList.add('version-hit');
-  setRevealScene(overlay, stage.scene);
+function pulseCount(scene, value) {
+  const count = document.getElementById('launch-final-count');
+  if (count) count.textContent = value;
+  scene?.classList.remove('count-pulse');
+  void scene?.offsetWidth;
+  scene?.classList.add('count-pulse');
 }
 
 function startRevealProgress(duration) {
@@ -311,163 +163,113 @@ function startRevealProgress(duration) {
   };
 }
 
-async function runVersionSequence(overlay, pause, steps) {
-  for (const [stage, hold] of steps) {
-    renderVersionStage(overlay, stage);
-    if (!await pause(hold)) return false;
+const REVEAL_COPY_OUT_MS = 280;
+const REVEAL_COPY_IN_MS = 520;
+
+async function transitionRevealCopy(element, nextText, pause) {
+  if (!element) return true;
+
+  element.classList.add('launch-dynamic-copy');
+  const normalizedNext = String(nextText ?? '');
+  if ((element.textContent || '').trim() === normalizedNext.trim()) return true;
+
+  const cleanup = () => {
+    element.classList.remove('is-copy-leaving', 'is-copy-entering');
+  };
+
+  cleanup();
+  element.classList.add('is-copy-leaving');
+  if (!await pause(REVEAL_COPY_OUT_MS)) {
+    cleanup();
+    return false;
   }
-  return true;
-}
 
-function ensureReleaseLogScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="release-cinema"]');
-  if (scene) return scene;
-  scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--fullscreen-cinema';
-  scene.dataset.scene = 'release-cinema';
-  scene.setAttribute('aria-hidden', 'true');
-  scene.innerHTML = `
-    <div class="af5-stage af5-stage--event">
-      <header class="af5-top">
-        <span class="af5-brand">ALIADOS FANTASMA</span>
-        <span class="af5-count">ETAPA <b>01</b> / 09</span>
-      </header>
-      <main class="af5-main">
-        <div class="af5-mark" aria-hidden="true">
-          <span></span><span></span>
-          <img src="aliados-fantasma-icono.webp" alt="">
-        </div>
-        <div class="af5-copy">
-          <div class="af5-meta"><em>v0.1</em><small>EL ORIGEN</small></div>
-          <h2>La idea</h2>
-          <p>Crear una red para impulsar y conectar negocios locales.</p>
-        </div>
-      </main>
-      <footer class="af5-bottom">
-        <div class="af5-dots">${Array.from({length:9},(_,i)=>`<i data-af5-step="${i}"></i>`).join('')}</div>
-        <div class="af5-progress"><i></i></div>
-      </footer>
-    </div>`;
-  overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
-  return scene;
-}
+  element.textContent = normalizedNext;
+  element.classList.remove('is-copy-leaving');
+  void element.offsetWidth;
+  element.classList.add('is-copy-entering');
 
-function updateReleaseLog(scene, stage, index) {
-  scene.querySelector('.af5-count b')?.replaceChildren(document.createTextNode(String(index + 1).padStart(2, '0')));
-  scene.querySelector('.af5-meta em')?.replaceChildren(document.createTextNode(stage.version));
-  scene.querySelector('.af5-meta small')?.replaceChildren(document.createTextNode(stage.eyebrow));
-  scene.querySelector('.af5-copy h2')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.af5-copy p')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.querySelectorAll('[data-af5-step]').forEach((dot, dotIndex) => {
-    dot.classList.toggle('is-complete', dotIndex < index);
-    dot.classList.toggle('is-active', dotIndex === index);
-  });
-  const progress = scene.querySelector('.af5-progress i');
-  if (progress) progress.style.transform = `scaleX(${(index + 1) / 9})`;
-  scene.classList.remove('af5-hit');
-  void scene.offsetWidth;
-  scene.classList.add('af5-hit');
-}
-
-function ensureShortBuildScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="short-cinema"]');
-  if (scene) return scene;
-  scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--fullscreen-cinema';
-  scene.dataset.scene = 'short-cinema';
-  scene.setAttribute('aria-hidden', 'true');
-  scene.innerHTML = `
-    <div class="af5-stage af5-stage--short">
-      <header class="af5-top">
-        <span class="af5-brand">ALIADOS FANTASMA</span>
-        <span class="af5-count">SECUENCIA DE ARRANQUE</span>
-      </header>
-      <main class="af5-main">
-        <div class="af5-mark" aria-hidden="true">
-          <span></span><span></span>
-          <img src="aliados-fantasma-icono.webp" alt="">
-        </div>
-        <div class="af5-copy">
-          <div class="af5-meta"><em>01</em><small>ETAPA 01</small></div>
-          <h2>IDEA</h2>
-          <p>Todo comenzó con una visión local.</p>
-        </div>
-      </main>
-      <footer class="af5-bottom">
-        <div class="af5-dots">${Array.from({length:5},(_,i)=>`<i data-af5-short="${i}"></i>`).join('')}</div>
-        <div class="af5-progress"><i></i></div>
-      </footer>
-    </div>`;
-  overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
-  return scene;
-}
-
-const SHORT_STAGES = [
-  { kicker:'ETAPA 01', title:'IDEA', copy:'Todo comenzó con una visión local.' },
-  { kicker:'ETAPA 02', title:'CONSTRUCCIÓN', copy:'La plataforma empezó a tomar forma.' },
-  { kicker:'ETAPA 03', title:'PREREGISTROS', copy:'Los primeros negocios enviaron su solicitud.' },
-  { kicker:'ETAPA 04', title:'PREPARACIÓN', copy:'La información y el directorio quedaron preparados.' },
-  { kicker:'ETAPA 05', title:'LANZAMIENTO', copy:'Aliados Fantasma abre oficialmente sus puertas.' }
-];
-
-function updateShortBuild(scene, index) {
-  const stage = SHORT_STAGES[Math.min(index, SHORT_STAGES.length - 1)];
-  scene.querySelector('.af5-meta em')?.replaceChildren(document.createTextNode(String(index + 1).padStart(2, '0')));
-  scene.querySelector('.af5-meta small')?.replaceChildren(document.createTextNode(stage.kicker));
-  scene.querySelector('.af5-copy h2')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.af5-copy p')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.querySelector('.af5-mark img')?.classList.toggle('is-final', index === SHORT_STAGES.length - 1);
-  scene.querySelectorAll('[data-af5-short]').forEach((dot, dotIndex) => {
-    dot.classList.toggle('is-complete', dotIndex < index);
-    dot.classList.toggle('is-active', dotIndex === index);
-  });
-  const bar = scene.querySelector('.af5-progress i');
-  if (bar) bar.style.transform = `scaleX(${(index + 1) / SHORT_STAGES.length})`;
-  scene.classList.remove('af5-hit');
-  void scene.offsetWidth;
-  scene.classList.add('af5-hit');
+  const completed = await pause(REVEAL_COPY_IN_MS);
+  cleanup();
+  return completed;
 }
 
 async function runEventTimeline(overlay, pause) {
-  const scene = ensureReleaseLogScene(overlay);
-  setRevealScene(overlay, 'release-cinema');
-  const stages = [
-    VERSION_STAGES.idea,
-    VERSION_STAGES.prototype,
-    VERSION_STAGES.access,
-    VERSION_STAGES.preregistration,
-    VERSION_STAGES.approval,
-    VERSION_STAGES.profilePrep,
-    VERSION_STAGES.directoryReady,
-    VERSION_STAGES.testing,
-    VERSION_STAGES.launch
-  ];
-  const holds = [2400, 2500, 2500, 2700, 2700, 2700, 2500, 2600, 1900];
-  for (let index = 0; index < stages.length; index += 1) {
-    updateReleaseLog(scene, stages[index], index);
-    if (!await pause(holds[index])) return;
+  setRevealScene(overlay, 'intro');
+  if (!await pause(3000)) return;
+
+  setRevealScene(overlay, 'story');
+  const story = document.getElementById('launch-story-line');
+  if (story) {
+    story.textContent = 'Cada negocio tiene una historia.';
+    story.classList.add('launch-dynamic-copy');
   }
+  if (!await pause(2500)) return;
+  if (!await transitionRevealCopy(story, 'Pero muchas historias aún esperan ser descubiertas.', pause)) return;
+  if (!await pause(1700)) return;
+
+  const status = document.getElementById('launch-connection-status');
+  if (status) {
+    status.textContent = 'Conectando negocios…';
+    status.classList.add('launch-dynamic-copy');
+  }
+  setRevealScene(overlay, 'connection');
+  createRevealBusinessPreview();
+  if (!await pause(2000)) return;
+  if (!await transitionRevealCopy(status, 'Activando perfiles…', pause)) return;
+  if (!await pause(1200)) return;
+  if (!await transitionRevealCopy(status, 'Construyendo comunidad…', pause)) return;
+  if (!await pause(1200)) return;
+
+  setRevealScene(overlay, 'identity');
+  if (!await pause(5000)) return;
+
+  const word = document.getElementById('launch-promise-word');
+  if (word) {
+    word.textContent = 'Descubre.';
+    word.classList.add('launch-dynamic-copy');
+  }
+  setRevealScene(overlay, 'promise');
+  if (!await pause(1000)) return;
+  for (const value of ['Conecta.', 'Crece.', 'Juntos.']) {
+    if (!await transitionRevealCopy(word, value, pause)) return;
+    if (!await pause(200)) return;
+  }
+
+  setRevealScene(overlay, 'count');
+  const countScene = overlay.querySelector('[data-scene="count"]');
+  for (const value of ['3', '2', '1']) {
+    pulseCount(countScene, value);
+    if (!await pause(1000)) return;
+  }
+
   setRevealScene(overlay, 'final');
-  await pause(4000);
+  createRevealBusinessPreview();
+  await pause(2000);
 }
 
 async function runShortTimeline(overlay, pause) {
-  const scene = ensureShortBuildScene(overlay);
-  setRevealScene(overlay, 'short-cinema');
-  const holds = [1050, 1050, 1150, 1150, 1250];
-  for (let index = 0; index < holds.length; index += 1) {
-    updateShortBuild(scene, index);
-    if (!await pause(holds[index])) return;
+  setRevealScene(overlay, 'identity');
+  if (!await pause(2200)) return;
+
+  const status = document.getElementById('launch-connection-status');
+  if (status) {
+    status.textContent = 'Abriendo la red…';
+    status.classList.add('launch-dynamic-copy');
   }
+  setRevealScene(overlay, 'connection');
+  createRevealBusinessPreview();
+  if (!await pause(2500)) return;
+
   setRevealScene(overlay, 'final');
-  await pause(2350);
+  createRevealBusinessPreview();
+  await pause(3300);
 }
 
 async function runLaunchReveal(mode, state) {
   if (revealInProgress) return;
 
   const overlay = document.getElementById('launch-reveal');
-  overlay?.querySelectorAll('.launch-scene:not(.launch-scene--final)').forEach(node => node.remove());
   const skipButton = document.getElementById('launch-reveal-skip');
   if (!overlay) {
     document.body.classList.add('launch-reveal-complete');
@@ -481,10 +283,8 @@ async function runLaunchReveal(mode, state) {
   const skipPromise = new Promise(resolve => { skipResolve = resolve; });
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const duration = reducedMotion ? 1800 : PRESENTATION_DURATION[mode] || PRESENTATION_DURATION.breve;
-  const soundPrompt = document.getElementById('launch-sound-prompt');
-  const revealStartedAt = performance.now();
   const modeLabel = document.getElementById('launch-reveal-mode-label');
-  if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'HISTORIAL DE VERSIONES · 28 S' : 'HISTORIAL DE VERSIONES · 8 S';
+  if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'EVENTO CINEMATOGRÁFICO' : 'PRESENTACIÓN BREVE';
 
   const requestSkip = () => {
     if (skipped) return;
@@ -508,36 +308,12 @@ async function runLaunchReveal(mode, state) {
   overlay.hidden = false;
   overlay.setAttribute('aria-hidden', 'false');
   overlay.className = `launch-reveal mode-${mode === 'evento' ? 'event' : 'short'}`;
-  const shortMobile = mode === 'breve' && isShortMobileDevice();
-  overlay.classList.toggle('mobile-lite', shortMobile);
   void overlay.offsetWidth;
   overlay.classList.add('is-running');
-  overlay.classList.remove('sound-active');
-  if (soundPrompt) {
-    soundPrompt.hidden = false;
-    soundPrompt.setAttribute('aria-hidden', 'false');
-    soundPrompt.tabIndex = 0;
-  }
-
-  const onSoundRequest = event => {
-    event.preventDefault();
-    event.stopPropagation();
-    activateLaunchSound(overlay, mode, revealStartedAt, duration);
-  };
-  soundPrompt?.addEventListener('pointerdown', onSoundRequest);
-  soundPrompt?.addEventListener('click', onSoundRequest);
-
-  // Se permite un intento automático únicamente cuando ya existe permiso real.
-  if (launchAudioUnlocked && launchMusic) {
-    activateLaunchSound(overlay, mode, revealStartedAt, duration);
-  }
 
   const finishProgress = startRevealProgress(duration);
-
-  // En celulares, la versión breve no debe preparar toda la landing
-  // mientras anima audio, SVG y escenas. Se difiere hasta el cierre.
-  let liveHomePromise = shortMobile ? null : activateLiveHome();
-  liveHomePromise?.then(createRevealBusinessPreview).catch(() => {});
+  const liveHomePromise = activateLiveHome();
+  liveHomePromise.then(createRevealBusinessPreview).catch(() => {});
 
   window.setTimeout(() => overlay.classList.add('can-skip'), reducedMotion ? 0 : mode === 'evento' ? 2600 : 1000);
 
@@ -551,11 +327,7 @@ async function runLaunchReveal(mode, state) {
       await runShortTimeline(overlay, pause);
     }
 
-    if (!liveHomePromise && state.presentationTarget !== 'directorio') {
-      // Solo preparamos la portada cuando el destino final será el inicio.
-      liveHomePromise = activateLiveHome();
-    }
-    if (liveHomePromise) await settleWithin(liveHomePromise, 4500);
+    await liveHomePromise;
     createRevealBusinessPreview();
     setRevealScene(overlay, 'final');
     finishProgress();
@@ -574,20 +346,10 @@ async function runLaunchReveal(mode, state) {
     overlay.setAttribute('aria-hidden', 'true');
 
     if (state.presentationTarget === 'directorio') {
-      window.location.replace('explorar.html?from=lanzamiento');
-      return;
+      window.location.assign('explorar.html?from=lanzamiento');
     }
   } finally {
     finishProgress();
-    stopLaunchAudio();
-    soundPrompt?.removeEventListener('pointerdown', onSoundRequest);
-    soundPrompt?.removeEventListener('click', onSoundRequest);
-    overlay?.classList.remove('sound-active');
-    if (soundPrompt) {
-      soundPrompt.hidden = true;
-      soundPrompt.setAttribute('aria-hidden', 'true');
-      soundPrompt.tabIndex = -1;
-    }
     document.removeEventListener('keydown', onKeydown);
     revealInProgress = false;
   }
@@ -618,10 +380,8 @@ async function renderLaunchIdentity(state, { revealMode = null } = {}) {
     if (revealMode) {
       await runLaunchReveal(revealMode, state);
     } else {
-      // La portada activa anterior podía dejar la página vacía si fallaba su carga.
-      // En estado abierto, la URL principal entra directamente al directorio.
-      forceCloseReveal();
-      window.location.replace('explorar.html?from=inicio');
+      document.body.classList.add('launch-reveal-complete');
+      await activateLiveHome();
     }
     return;
   }
@@ -708,7 +468,7 @@ async function refreshLaunchState({ initial = false } = {}) {
       if (nextState.open) {
         revealMode = request.mode;
       } else if (request.preview && await isAdministrator()) {
-        stateForRender = { ...nextState, open: true, presentationTarget: 'directorio' };
+        stateForRender = { ...nextState, open: true, presentationTarget: 'inicio' };
         revealMode = request.mode;
       }
     }
@@ -722,10 +482,6 @@ async function refreshLaunchState({ initial = false } = {}) {
     updateCountdown();
   } catch (error) {
     console.error('No fue posible actualizar la fecha de lanzamiento.', error);
-    if (!isExplicitRevealRequest()) {
-      forceCloseReveal();
-      deactivateLiveHome();
-    }
   } finally {
     launchRefreshInProgress = false;
   }
@@ -783,11 +539,6 @@ document.addEventListener('keydown', event => {
 window.addEventListener('resize', () => {
   if (window.innerWidth > 720) closeMenu();
 });
-
-if (!isExplicitRevealRequest()) {
-  forceCloseReveal();
-  deactivateLiveHome();
-}
 
 await refreshLaunchState({ initial: true });
 window.setInterval(updateCountdown, 1000);
