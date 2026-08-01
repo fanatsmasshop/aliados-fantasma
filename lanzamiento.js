@@ -228,14 +228,15 @@ function setRevealScene(overlay, sceneName) {
 }
 
 const VERSION_STAGES = {
-  idea: { scene:'intro', version:'v0.1', state:'INICIANDO', eyebrow:'PRIMERA ETAPA', title:'La idea', copy:'Todo comenzó con una visión: conectar y apoyar negocios locales.', visual:'spark' },
-  register: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'EVOLUCIÓN DEL PROYECTO', title:'Primer registro', copy:'La idea comenzó a convertirse en una plataforma real.', visual:'form' },
-  profiles: { scene:'connection', version:'v0.7', state:'ACTUALIZANDO', eyebrow:'NUEVA FUNCIÓN', title:'Perfiles de negocio', copy:'Cada comercio empezó a tener identidad y presencia propia.', visual:'profiles' },
-  directory: { scene:'identity', version:'v1.2', state:'CONECTANDO', eyebrow:'LA RED TOMA FORMA', title:'Directorio local', copy:'Los negocios comenzaron a reunirse dentro de una misma red.', visual:'directory' },
-  dashboard: { scene:'promise', version:'v2.0', state:'AMPLIANDO', eyebrow:'MÁS HERRAMIENTAS', title:'Panel de comerciantes', copy:'Más control, más herramientas y nuevas posibilidades.', visual:'dashboard' },
-  visibility: { scene:'story', version:'v2.4', state:'PUBLICANDO', eyebrow:'LA RED SE HACE VISIBLE', title:'Visibilidad local', copy:'Los perfiles comenzaron a ser visibles para toda la comunidad.', visual:'visibility' },
-  marketing: { scene:'count', version:'v2.8', state:'IMPULSANDO', eyebrow:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'Marketing y crecimiento', copy:'Más presencia, más alcance y recursos para crecer.', visual:'marketing' },
-  ready: { scene:'connection', version:'v3.0', state:'LISTA', eyebrow:'VERSIÓN FINAL', title:'Red preparada', copy:'La plataforma quedó conectada y preparada para su lanzamiento.', visual:'ready' }
+  idea: { scene:'intro', version:'v0.1', state:'INICIANDO', eyebrow:'EL ORIGEN', title:'La idea', copy:'Crear una red para impulsar y conectar negocios locales.', visual:'spark' },
+  prototype: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'PRIMER PROTOTIPO', title:'La plataforma toma forma', copy:'La idea comenzó a convertirse en una experiencia digital real.', visual:'form' },
+  access: { scene:'connection', version:'v0.7', state:'PREPARANDO ACCESO', eyebrow:'BASE DEL PROYECTO', title:'Registro y acceso', copy:'Se construyeron las primeras puertas de entrada a la plataforma.', visual:'profiles' },
+  preregistration: { scene:'identity', version:'v1.2', state:'RECIBIENDO SOLICITUDES', eyebrow:'PRIMEROS NEGOCIOS', title:'Preregistro de negocios', copy:'Los primeros comercios enviaron su solicitud para formar parte.', visual:'directory' },
+  approval: { scene:'promise', version:'v1.8', state:'VALIDANDO', eyebrow:'CONTROL Y REVISIÓN', title:'Revisión y aprobación', copy:'Cada solicitud pasó por un proceso de revisión antes de ser aprobada.', visual:'dashboard' },
+  profilePrep: { scene:'story', version:'v2.2', state:'PREPARANDO INFORMACIÓN', eyebrow:'IDENTIDAD DE CADA NEGOCIO', title:'Preparación de perfiles', copy:'Logos, portadas, datos y contactos comenzaron a tomar forma.', visual:'visibility' },
+  directoryReady: { scene:'count', version:'v2.6', state:'ESTRUCTURANDO', eyebrow:'LISTO PARA MOSTRARSE', title:'Directorio preparado', copy:'La estructura quedó lista para mostrar los negocios al público.', visual:'marketing' },
+  testing: { scene:'connection', version:'v2.9', state:'CORRIGIENDO', eyebrow:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'Pruebas y correcciones', copy:'Cada revisión hizo la plataforma más estable, clara y preparada.', visual:'ready' },
+  launch: { scene:'connection', version:'v3.0', state:'ONLINE', eyebrow:'LANZAMIENTO OFICIAL', title:'Aliados Fantasma', copy:'La red abre oficialmente sus puertas a negocios y comunidad.', visual:'ready' }
 };
 
 function renderVersionStage(overlay, stage) {
@@ -312,14 +313,15 @@ function ensureReleaseLogScene(overlay) {
       </header>
       <div class="release-log__body">
         <nav class="release-log__rail" aria-label="Historial de versiones">
-          <button data-release-step="0"><i></i><b>v0.1</b><span>La idea</span></button>
-          <button data-release-step="1"><i></i><b>v0.3</b><span>Registro</span></button>
-          <button data-release-step="2"><i></i><b>v0.7</b><span>Perfiles</span></button>
-          <button data-release-step="3"><i></i><b>v1.2</b><span>Directorio</span></button>
-          <button data-release-step="4"><i></i><b>v2.0</b><span>Panel</span></button>
-          <button data-release-step="5"><i></i><b>v2.4</b><span>Visibilidad</span></button>
-          <button data-release-step="6"><i></i><b>v2.8</b><span>Marketing</span></button>
-          <button data-release-step="7"><i></i><b>v3.0</b><span>Red lista</span></button>
+          <button data-release-step="0"><i></i><b>v0.1</b><span>Idea</span></button>
+          <button data-release-step="1"><i></i><b>v0.3</b><span>Prototipo</span></button>
+          <button data-release-step="2"><i></i><b>v0.7</b><span>Acceso</span></button>
+          <button data-release-step="3"><i></i><b>v1.2</b><span>Preregistros</span></button>
+          <button data-release-step="4"><i></i><b>v1.8</b><span>Aprobación</span></button>
+          <button data-release-step="5"><i></i><b>v2.2</b><span>Perfiles</span></button>
+          <button data-release-step="6"><i></i><b>v2.6</b><span>Directorio</span></button>
+          <button data-release-step="7"><i></i><b>v2.9</b><span>Pruebas</span></button>
+          <button data-release-step="8"><i></i><b>v3.0</b><span>Lanzamiento</span></button>
         </nav>
         <article class="release-log__content">
           <div class="release-log__meta"><span class="release-log__version">v0.1</span><small class="release-log__eyebrow">PRIMERA ETAPA</small></div>
@@ -349,7 +351,7 @@ function updateReleaseLog(scene, stage, index) {
     item.classList.toggle('is-active', itemIndex === index);
   });
   const progress = scene.querySelector('.release-log__progress i');
-  if (progress) progress.style.transform = `scaleX(${(index + 1) / 8})`;
+  if (progress) progress.style.transform = `scaleX(${(index + 1) / 9})`;
   scene.classList.remove('release-log-hit');
   void scene.offsetWidth;
   scene.classList.add('release-log-hit');
@@ -365,14 +367,14 @@ function ensureShortBuildScene(overlay) {
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
     <div class="short-build">
-      <header><span>ALIADOS FANTASMA</span><b>COMPILANDO LANZAMIENTO</b></header>
+      <header><span>ALIADOS FANTASMA</span><b>DEL CONCEPTO AL LANZAMIENTO</b></header>
       <div class="short-build__canvas">
         <div class="short-build__stack" aria-hidden="true">
           <article data-build-step="0"><small>01</small><strong>IDEA</strong><i></i></article>
-          <article data-build-step="1"><small>02</small><strong>PERFILES</strong><i></i></article>
-          <article data-build-step="2"><small>03</small><strong>DIRECTORIO</strong><i></i></article>
-          <article data-build-step="3"><small>04</small><strong>PANEL</strong><i></i></article>
-          <article data-build-step="4"><small>05</small><strong>MARKETING</strong><i></i></article>
+          <article data-build-step="1"><small>02</small><strong>CONSTRUCCIÓN</strong><i></i></article>
+          <article data-build-step="2"><small>03</small><strong>PREREGISTROS</strong><i></i></article>
+          <article data-build-step="3"><small>04</small><strong>PREPARACIÓN</strong><i></i></article>
+          <article data-build-step="4"><small>05</small><strong>LANZAMIENTO</strong><i></i></article>
         </div>
         <div class="short-build__brand">
           <span class="short-build__ring"></span>
@@ -388,12 +390,12 @@ function ensureShortBuildScene(overlay) {
 
 function updateShortBuild(scene, index) {
   const labels = [
-    'UNA IDEA EMPIEZA A TOMAR FORMA',
-    'CREANDO IDENTIDAD PARA CADA NEGOCIO',
-    'ORGANIZANDO LA RED LOCAL',
-    'ACTIVANDO HERRAMIENTAS',
-    'PREPARANDO CRECIMIENTO',
-    'ALIADOS FANTASMA ESTÁ LISTO'
+    'TODO COMENZÓ CON UNA IDEA',
+    'LA PLATAFORMA TOMÓ FORMA',
+    'LOS PRIMEROS NEGOCIOS SE PREREGISTRARON',
+    'PERFILES Y DIRECTORIO QUEDARON PREPARADOS',
+    'ALIADOS FANTASMA ABRE SUS PUERTAS',
+    'LANZAMIENTO OFICIAL'
   ];
   scene.dataset.activeStep = String(index);
   scene.querySelectorAll('[data-build-step]').forEach((item, itemIndex) => {
@@ -414,17 +416,19 @@ async function runEventTimeline(overlay, pause) {
   setRevealScene(overlay, 'release-log');
   const stages = [
     VERSION_STAGES.idea,
-    VERSION_STAGES.register,
-    VERSION_STAGES.profiles,
-    VERSION_STAGES.directory,
-    VERSION_STAGES.dashboard,
-    VERSION_STAGES.visibility,
-    VERSION_STAGES.marketing,
-    VERSION_STAGES.ready
+    VERSION_STAGES.prototype,
+    VERSION_STAGES.access,
+    VERSION_STAGES.preregistration,
+    VERSION_STAGES.approval,
+    VERSION_STAGES.profilePrep,
+    VERSION_STAGES.directoryReady,
+    VERSION_STAGES.testing,
+    VERSION_STAGES.launch
   ];
+  const holds = [2400, 2500, 2500, 2800, 2700, 2800, 2600, 2700, 2000];
   for (let index = 0; index < stages.length; index += 1) {
     updateReleaseLog(scene, stages[index], index);
-    if (!await pause(3000)) return;
+    if (!await pause(holds[index])) return;
   }
   setRevealScene(overlay, 'final');
   await pause(4000);
