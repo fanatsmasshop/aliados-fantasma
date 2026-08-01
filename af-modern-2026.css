@@ -1359,3 +1359,69 @@ body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider.is-entering 
 @media(max-width:760px){
   body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{width:5.9em!important}
 }
+
+/* NEON STABLE RC6.1 — rotador único, sin capas duplicadas */
+body.af-page-home .hero h1.af-neon-title > .line-dynamic{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  min-height:.98em!important;
+  margin:.04em 0 0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+body.af-page-home .hero h1.af-neon-title > .line-dynamic .word-slider{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:1.02em!important;
+  min-height:1.02em!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  contain:layout paint!important;
+  background:none!important;
+  color:transparent!important;
+  animation:none!important;
+  transform:none!important;
+}
+body.af-page-home .hero h1.af-neon-title > .line-dynamic .word-current{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  height:1.02em!important;
+  margin:0!important;
+  padding:0!important;
+  white-space:nowrap!important;
+  line-height:1.02!important;
+  opacity:1;
+  transform:translateY(0);
+  transition:none!important;
+  animation:none!important;
+  filter:none!important;
+  text-shadow:none!important;
+  background:linear-gradient(90deg,#55adff 0%,#8b61ff 48%,#ff47aa 100%)!important;
+  background-size:100% 100%!important;
+  background-position:50% 50%!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+  will-change:opacity,transform;
+}
+body.af-page-home .hero h1.af-neon-title > .line-dynamic .word-current::before,
+body.af-page-home .hero h1.af-neon-title > .line-dynamic .word-current::after{
+  content:none!important;
+  display:none!important;
+}
+body.af-page-home .hero h1.af-neon-title .track,
+body.af-page-home .hero h1.af-neon-title .word-slider > :not(.word-current){
+  display:none!important;
+}
+@media(max-width:760px){
+  body.af-page-home .hero h1.af-neon-title > .line-dynamic .word-current{
+    max-width:100%!important;
+    white-space:nowrap!important;
+  }
+}
