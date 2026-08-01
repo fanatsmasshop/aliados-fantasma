@@ -18,6 +18,21 @@ const settleWithin = async (promise, milliseconds = 4500) => {
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
 const OPEN_TRANSITION_MS = 1100;
 
+function isExplicitRevealRequest() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has('reveal') || params.has('presentacion');
+}
+
+function forceCloseReveal() {
+  const overlay = document.getElementById('launch-reveal');
+  if (overlay) {
+    overlay.hidden = true;
+    overlay.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('is-running','is-opening','is-complete','can-skip');
+  }
+  document.body.classList.remove('launch-reveal-active','live-preparing','live-reveal-opening');
+}
+
 const isShortMobileDevice = () =>
   window.matchMedia('(max-width: 760px)').matches ||
   window.matchMedia('(pointer: coarse)').matches;
@@ -603,8 +618,10 @@ async function renderLaunchIdentity(state, { revealMode = null } = {}) {
     if (revealMode) {
       await runLaunchReveal(revealMode, state);
     } else {
-      document.body.classList.add('launch-reveal-complete');
-      await activateLiveHome();
+      // La portada activa anterior podía dejar la página vacía si fallaba su carga.
+      // En estado abierto, la URL principal entra directamente al directorio.
+      forceCloseReveal();
+      window.location.replace('explorar.html?from=inicio');
     }
     return;
   }
@@ -705,6 +722,10 @@ async function refreshLaunchState({ initial = false } = {}) {
     updateCountdown();
   } catch (error) {
     console.error('No fue posible actualizar la fecha de lanzamiento.', error);
+    if (!isExplicitRevealRequest()) {
+      forceCloseReveal();
+      deactivateLiveHome();
+    }
   } finally {
     launchRefreshInProgress = false;
   }
@@ -762,6 +783,11 @@ document.addEventListener('keydown', event => {
 window.addEventListener('resize', () => {
   if (window.innerWidth > 720) closeMenu();
 });
+
+if (!isExplicitRevealRequest()) {
+  forceCloseReveal();
+  deactivateLiveHome();
+}
 
 await refreshLaunchState({ initial: true });
 window.setInterval(updateCountdown, 1000);
