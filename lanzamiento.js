@@ -298,33 +298,49 @@ async function runVersionSequence(overlay, pause, steps) {
 }
 
 function ensureReleaseLogScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="release-cinema"]');
+  let scene = overlay.querySelector('[data-scene="release-log"]');
   if (scene) return scene;
 
   scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--release-cinema';
-  scene.dataset.scene = 'release-cinema';
+  scene.className = 'launch-scene launch-scene--story-cinema';
+  scene.dataset.scene = 'release-log';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="release-cinema">
-      <header class="release-cinema__head">
-        <div><span>ALIADOS FANTASMA</span><small>HISTORIA DEL PROYECTO</small></div>
-        <b class="release-cinema__state">INICIANDO</b>
+    <div class="story-cinema">
+      <header class="story-cinema__head">
+        <div class="story-cinema__brand">
+          <img src="aliados-fantasma-icono.webp" alt="">
+          <div><strong>ALIADOS FANTASMA</strong><span>Cómo se construyó la plataforma</span></div>
+        </div>
+        <span class="story-cinema__state">INICIANDO</span>
       </header>
-      <main class="release-cinema__stage">
-        <section class="release-cinema__copy">
-          <div class="release-cinema__meta"><span class="release-cinema__version">v0.1</span><small class="release-cinema__eyebrow">EL ORIGEN</small></div>
-          <h2 class="release-cinema__title">La idea</h2>
-          <p class="release-cinema__text">Crear una red para impulsar y conectar negocios locales.</p>
+
+      <main class="story-cinema__main">
+        <section class="story-cinema__copy">
+          <div class="story-cinema__meta">
+            <span class="story-cinema__version">v0.1</span>
+            <small class="story-cinema__eyebrow">EL ORIGEN</small>
+          </div>
+          <h2 class="story-cinema__title">La idea</h2>
+          <p class="story-cinema__description">Crear una red para impulsar y conectar negocios locales.</p>
         </section>
-        <div class="release-cinema__visual visual-spark" aria-hidden="true">
-          <div class="release-cinema__core"><img src="aliados-fantasma-icono.webp" alt=""></div>
-          <i></i><i></i><i></i><i></i>
+
+        <div class="story-cinema__visual" aria-hidden="true">
+          <div class="story-cinema__halo"></div>
+          <div class="story-cinema__node node-a"></div>
+          <div class="story-cinema__node node-b"></div>
+          <div class="story-cinema__node node-c"></div>
+          <div class="story-cinema__node node-d"></div>
+          <div class="story-cinema__core"><img src="aliados-fantasma-icono.webp" alt=""></div>
+          <span class="story-cinema__visual-label">IDEA</span>
         </div>
       </main>
-      <footer class="release-cinema__footer">
-        <div class="release-cinema__steps" aria-hidden="true">${Array.from({length:9},(_,i)=>`<i data-cinema-step="${i}"></i>`).join('')}</div>
-        <div class="release-cinema__progress"><i></i></div>
+
+      <footer class="story-cinema__foot">
+        <div class="story-cinema__steps" aria-hidden="true">
+          ${Array.from({ length: 9 }, (_, index) => `<i data-story-step="${index}"></i>`).join('')}
+        </div>
+        <div class="story-cinema__progress"><i></i></div>
       </footer>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
@@ -333,77 +349,82 @@ function ensureReleaseLogScene(overlay) {
 
 function updateReleaseLog(scene, stage, index) {
   scene.dataset.activeStep = String(index);
-  scene.querySelector('.release-cinema__state')?.replaceChildren(document.createTextNode(stage.state));
-  scene.querySelector('.release-cinema__version')?.replaceChildren(document.createTextNode(stage.version));
-  scene.querySelector('.release-cinema__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
-  scene.querySelector('.release-cinema__title')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.release-cinema__text')?.replaceChildren(document.createTextNode(stage.copy));
-  const visual = scene.querySelector('.release-cinema__visual');
-  if (visual) visual.className = `release-cinema__visual visual-${stage.visual}`;
-  scene.querySelectorAll('[data-cinema-step]').forEach((dot, dotIndex) => {
+  scene.dataset.visual = stage.visual;
+  scene.querySelector('.story-cinema__state')?.replaceChildren(document.createTextNode(stage.state));
+  scene.querySelector('.story-cinema__version')?.replaceChildren(document.createTextNode(stage.version));
+  scene.querySelector('.story-cinema__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
+  scene.querySelector('.story-cinema__title')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.story-cinema__description')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.querySelector('.story-cinema__visual-label')?.replaceChildren(document.createTextNode(stage.title.toUpperCase()));
+  scene.querySelectorAll('[data-story-step]').forEach((dot, dotIndex) => {
     dot.classList.toggle('is-complete', dotIndex < index);
     dot.classList.toggle('is-active', dotIndex === index);
   });
-  const progress = scene.querySelector('.release-cinema__progress i');
+  const progress = scene.querySelector('.story-cinema__progress i');
   if (progress) progress.style.transform = `scaleX(${(index + 1) / 9})`;
-  scene.classList.remove('release-cinema-hit');
+  scene.classList.remove('story-cinema-hit');
   void scene.offsetWidth;
-  scene.classList.add('release-cinema-hit');
+  scene.classList.add('story-cinema-hit');
 }
 
 function ensureShortBuildScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="short-cinema"]');
+  let scene = overlay.querySelector('[data-scene="short-build"]');
   if (scene) return scene;
 
   scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--short-cinema';
-  scene.dataset.scene = 'short-cinema';
+  scene.className = 'launch-scene launch-scene--short-trailer';
+  scene.dataset.scene = 'short-build';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="short-cinema">
-      <header><span>ALIADOS FANTASMA</span><small>DEL CONCEPTO AL LANZAMIENTO</small></header>
+    <div class="short-trailer">
+      <header>
+        <img src="aliados-fantasma-icono.webp" alt="">
+        <strong>ALIADOS FANTASMA</strong>
+      </header>
       <main>
-        <div class="short-cinema__pulse" aria-hidden="true"><i></i><i></i><i></i></div>
-        <img src="aliados-fantasma-icono.webp" alt="" class="short-cinema__icon">
-        <p class="short-cinema__kicker">ETAPA 01</p>
-        <h2 class="short-cinema__title">IDEA</h2>
-        <p class="short-cinema__copy">Todo comenzó con una visión local.</p>
+        <div class="short-trailer__symbol"><span></span><img src="aliados-fantasma-icono.webp" alt=""></div>
+        <p class="short-trailer__kicker">TODO COMENZÓ CON</p>
+        <h2 class="short-trailer__title">UNA IDEA</h2>
+        <p class="short-trailer__copy">Una plataforma pensada para negocios locales.</p>
       </main>
-      <footer><div class="short-cinema__steps" aria-hidden="true">${Array.from({length:5},(_,i)=>`<i data-short-step="${i}"></i>`).join('')}</div><div class="short-cinema__progress"><i></i></div></footer>
+      <footer>
+        <div class="short-trailer__dots">${Array.from({ length: 5 }, (_, index) => `<i data-trailer-step="${index}"></i>`).join('')}</div>
+        <div class="short-trailer__progress"><i></i></div>
+      </footer>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
   return scene;
 }
 
 const SHORT_STAGES = [
-  { kicker:'ETAPA 01', title:'IDEA', copy:'Todo comenzó con una visión local.' },
-  { kicker:'ETAPA 02', title:'CONSTRUCCIÓN', copy:'La plataforma empezó a tomar forma.' },
-  { kicker:'ETAPA 03', title:'PREREGISTROS', copy:'Los primeros negocios enviaron su solicitud.' },
-  { kicker:'ETAPA 04', title:'PREPARACIÓN', copy:'Perfiles y directorio quedaron listos.' },
-  { kicker:'ETAPA 05', title:'LANZAMIENTO', copy:'Aliados Fantasma abre oficialmente sus puertas.' }
+  { kicker:'TODO COMENZÓ CON', title:'UNA IDEA', copy:'Una plataforma pensada para negocios locales.', visual:'idea' },
+  { kicker:'DESPUÉS LLEGÓ', title:'LA CONSTRUCCIÓN', copy:'Registro, acceso y estructura comenzaron a tomar forma.', visual:'build' },
+  { kicker:'LOS PRIMEROS NEGOCIOS', title:'SE PREREGISTRARON', copy:'Las primeras solicitudes empezaron a llegar.', visual:'requests' },
+  { kicker:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'TODO QUEDÓ LISTO', copy:'Perfiles, directorio y revisión fueron preparados.', visual:'ready' },
+  { kicker:'HOY COMIENZA', title:'ALIADOS FANTASMA', copy:'La red abre oficialmente sus puertas.', visual:'launch' }
 ];
 
 function updateShortBuild(scene, index) {
   const stage = SHORT_STAGES[Math.min(index, SHORT_STAGES.length - 1)];
   scene.dataset.activeStep = String(index);
-  scene.querySelector('.short-cinema__kicker')?.replaceChildren(document.createTextNode(stage.kicker));
-  scene.querySelector('.short-cinema__title')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.short-cinema__copy')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.querySelector('.short-cinema__icon')?.classList.toggle('is-final', index === SHORT_STAGES.length - 1);
-  scene.querySelectorAll('[data-short-step]').forEach((dot, dotIndex) => {
+  scene.dataset.visual = stage.visual;
+  scene.querySelector('.short-trailer__kicker')?.replaceChildren(document.createTextNode(stage.kicker));
+  scene.querySelector('.short-trailer__title')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.short-trailer__copy')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.querySelectorAll('[data-trailer-step]').forEach((dot, dotIndex) => {
     dot.classList.toggle('is-complete', dotIndex < index);
     dot.classList.toggle('is-active', dotIndex === index);
   });
-  const bar = scene.querySelector('.short-cinema__progress i');
+  const bar = scene.querySelector('.short-trailer__progress i');
   if (bar) bar.style.transform = `scaleX(${(index + 1) / SHORT_STAGES.length})`;
-  scene.classList.remove('short-cinema-hit');
+  scene.classList.remove('short-trailer-hit');
   void scene.offsetWidth;
-  scene.classList.add('short-cinema-hit');
+  scene.classList.add('short-trailer-hit');
 }
 
 async function runEventTimeline(overlay, pause) {
   const scene = ensureReleaseLogScene(overlay);
-  setRevealScene(overlay, 'release-cinema');
+  setRevealScene(overlay, 'release-log');
   const stages = [
     VERSION_STAGES.idea,
     VERSION_STAGES.prototype,
@@ -415,25 +436,25 @@ async function runEventTimeline(overlay, pause) {
     VERSION_STAGES.testing,
     VERSION_STAGES.launch
   ];
-  const holds = [2400, 2500, 2500, 2700, 2700, 2700, 2500, 2600, 1900];
+  const holds = [2450, 2500, 2500, 2650, 2600, 2600, 2450, 2550, 1800];
   for (let index = 0; index < stages.length; index += 1) {
     updateReleaseLog(scene, stages[index], index);
     if (!await pause(holds[index])) return;
   }
   setRevealScene(overlay, 'final');
-  await pause(4000);
+  await pause(3750);
 }
 
 async function runShortTimeline(overlay, pause) {
   const scene = ensureShortBuildScene(overlay);
-  setRevealScene(overlay, 'short-cinema');
-  const holds = [1050, 1050, 1150, 1150, 1250];
-  for (let index = 0; index < holds.length; index += 1) {
+  setRevealScene(overlay, 'short-build');
+  const holds = [1050, 1150, 1250, 1350, 1200];
+  for (let index = 0; index < SHORT_STAGES.length; index += 1) {
     updateShortBuild(scene, index);
     if (!await pause(holds[index])) return;
   }
   setRevealScene(overlay, 'final');
-  await pause(2350);
+  await pause(2000);
 }
 
 async function runLaunchReveal(mode, state) {
