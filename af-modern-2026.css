@@ -1438,3 +1438,155 @@ body.af-page-home .hero h1.af-neon-title .track{
 @media (prefers-reduced-motion:reduce){
   body.af-page-home .hero h1 .word-current{transition:none!important}
 }
+
+/* =========================================================
+   RC2.4 — Retícula y alineación integral del hero
+   Mantiene el lenguaje neón, corrige centros visuales,
+   anchos, separaciones y comportamiento responsivo.
+   ========================================================= */
+@media (min-width:1181px){
+  body.af-page-home .af-neon-hero{
+    grid-template-columns:minmax(430px,1.08fr) minmax(350px,.88fr) minmax(260px,.54fr)!important;
+    align-items:stretch!important;
+    column-gap:clamp(26px,2.55vw,42px)!important;
+    min-height:640px!important;
+    padding:42px clamp(34px,3.2vw,52px)!important;
+  }
+
+  body.af-page-home .af-neon-hero .hero-copy{
+    width:100%!important;
+    max-width:650px!important;
+    min-width:0!important;
+    align-self:stretch!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    padding:20px 0 14px!important;
+  }
+
+  body.af-page-home .af-neon-hero .badge-row{
+    width:100%!important;
+    margin:0 0 27px!important;
+    justify-content:flex-start!important;
+  }
+
+  body.af-page-home .af-neon-hero .eyebrow{
+    width:100%!important;
+    margin:0 0 20px!important;
+  }
+
+  body.af-page-home .hero h1.af-neon-title{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    font-size:clamp(3.05rem,3.9vw,4.65rem)!important;
+    line-height:.94!important;
+  }
+
+  body.af-page-home .hero h1.af-neon-title>.line,
+  body.af-page-home .hero h1.af-neon-title>.line-gradient,
+  body.af-page-home .hero h1.af-neon-title>.line-final{
+    max-width:100%!important;
+  }
+
+  body.af-page-home .af-neon-hero .lead{
+    width:100%!important;
+    max-width:620px!important;
+    margin:25px 0 0!important;
+  }
+
+  body.af-page-home .af-neon-hero .hero-actions{
+    width:100%!important;
+    align-items:center!important;
+    margin:26px 0 0!important;
+  }
+
+  body.af-page-home .af-neon-hero .trust-row{
+    width:100%!important;
+    margin:20px 0 0!important;
+    align-items:center!important;
+  }
+
+  body.af-page-home .hero-identity{
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    height:auto!important;
+    align-self:stretch!important;
+    justify-content:center!important;
+    padding:18px 0 12px!important;
+  }
+
+  body.af-page-home .hero-identity .main-logo{
+    width:min(100%,410px)!important;
+    max-width:100%!important;
+    margin:0 auto!important;
+  }
+
+  body.af-page-home .identity-tag{
+    margin:0 auto!important;
+    transform:translateY(-2px);
+  }
+
+  body.af-page-home .holo-platform{
+    bottom:20px!important;
+    width:92%!important;
+  }
+
+  body.af-page-home .af-neon-hero .countdown-card{
+    width:100%!important;
+    min-width:0!important;
+    max-width:300px!important;
+    align-self:center!important;
+    justify-self:end!important;
+    margin:0!important;
+    padding:22px!important;
+  }
+
+  body.af-page-home .af-neon-hero .countdown-top,
+  body.af-page-home .af-neon-hero .countdown-content,
+  body.af-page-home .af-neon-hero .countdown-card>p,
+  body.af-page-home .af-neon-hero .panel-link{
+    width:100%!important;
+  }
+
+  body.af-page-home .af-neon-hero .countdown-card h2{
+    max-width:100%!important;
+    overflow-wrap:normal!important;
+  }
+}
+
+@media (min-width:1181px) and (max-width:1360px){
+  body.af-page-home .af-neon-hero{
+    grid-template-columns:minmax(405px,1.12fr) minmax(320px,.84fr) minmax(245px,.55fr)!important;
+    column-gap:24px!important;
+    padding-inline:36px!important;
+  }
+  body.af-page-home .hero h1.af-neon-title{
+    font-size:clamp(2.9rem,3.65vw,4.05rem)!important;
+  }
+  body.af-page-home .hero-identity .main-logo{
+    width:min(100%,370px)!important;
+  }
+  body.af-page-home .af-neon-hero .countdown-card{
+    max-width:276px!important;
+    padding:20px!important;
+  }
+}
+
+@media (min-width:961px) and (max-width:1180px){
+  body.af-page-home .af-neon-hero{
+    grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr)!important;
+    align-items:center!important;
+    gap:28px!important;
+  }
+  body.af-page-home .af-neon-hero .hero-copy,
+  body.af-page-home .hero-identity{
+    align-self:center!important;
+  }
+  body.af-page-home .af-neon-hero .countdown-card{
+    width:100%!important;
+    max-width:none!important;
+    justify-self:stretch!important;
+  }
+}
