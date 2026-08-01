@@ -216,9 +216,9 @@ function createRevealBusinessPreview() {
 function setRevealScene(overlay, sceneName) {
   overlay.querySelectorAll('.launch-scene').forEach(scene => {
     const active = scene.dataset.scene === sceneName;
-    if (!active && scene.classList.contains('is-active')) scene.classList.add('is-leaving');
+    scene.classList.remove('is-leaving');
     scene.classList.toggle('is-active', active);
-    if (active) scene.classList.remove('is-leaving');
+    scene.setAttribute('aria-hidden', active ? 'false' : 'true');
   });
 
   [...overlay.classList]
@@ -229,13 +229,13 @@ function setRevealScene(overlay, sceneName) {
 
 const VERSION_STAGES = {
   idea: { scene:'intro', version:'v0.1', state:'INICIANDO', eyebrow:'PRIMERA ETAPA', title:'La idea', copy:'Todo comenzó con una visión: conectar y apoyar negocios locales.', visual:'spark' },
-  register: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'EVOLUCIÓN DEL PROYECTO', title:'Primer registro', copy:'La idea empezó a convertirse en una plataforma real.', visual:'form' },
+  register: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'EVOLUCIÓN DEL PROYECTO', title:'Primer registro', copy:'La idea comenzó a convertirse en una plataforma real.', visual:'form' },
   profiles: { scene:'connection', version:'v0.7', state:'ACTUALIZANDO', eyebrow:'NUEVA FUNCIÓN', title:'Perfiles de negocio', copy:'Cada comercio empezó a tener identidad y presencia propia.', visual:'profiles' },
   directory: { scene:'identity', version:'v1.2', state:'CONECTANDO', eyebrow:'LA RED TOMA FORMA', title:'Directorio local', copy:'Los negocios comenzaron a reunirse dentro de una misma red.', visual:'directory' },
   dashboard: { scene:'promise', version:'v2.0', state:'AMPLIANDO', eyebrow:'MÁS HERRAMIENTAS', title:'Panel de comerciantes', copy:'Más control, más herramientas y nuevas posibilidades.', visual:'dashboard' },
-  visibility: { scene:'story', version:'v2.4', state:'PUBLICANDO', eyebrow:'LA RED SE HACE VISIBLE', title:'Visibilidad local', copy:'Los perfiles comenzaron a mostrarse hacia afuera.', visual:'visibility' },
+  visibility: { scene:'story', version:'v2.4', state:'PUBLICANDO', eyebrow:'LA RED SE HACE VISIBLE', title:'Visibilidad local', copy:'Los perfiles comenzaron a ser visibles para toda la comunidad.', visual:'visibility' },
   marketing: { scene:'count', version:'v2.8', state:'IMPULSANDO', eyebrow:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'Marketing y crecimiento', copy:'Más presencia, más alcance y recursos para crecer.', visual:'marketing' },
-  ready: { scene:'connection', version:'v3.0', state:'LISTA', eyebrow:'VERSIÓN FINAL', title:'Red preparada', copy:'Todo quedó conectado y preparado para despertar.', visual:'ready' }
+  ready: { scene:'connection', version:'v3.0', state:'LISTA', eyebrow:'VERSIÓN FINAL', title:'Red preparada', copy:'La plataforma quedó conectada y preparada para su lanzamiento.', visual:'ready' }
 };
 
 function renderVersionStage(overlay, stage) {
@@ -293,6 +293,49 @@ async function runVersionSequence(overlay, pause, steps) {
   return true;
 }
 
+function ensureShortHistoryScene(overlay) {
+  let scene = overlay.querySelector('[data-scene="short-history"]');
+  if (scene) return scene;
+
+  scene = document.createElement('section');
+  scene.className = 'launch-scene launch-scene--short-history';
+  scene.dataset.scene = 'short-history';
+  scene.setAttribute('aria-hidden', 'true');
+  scene.innerHTML = `
+    <div class="short-history">
+      <div class="short-history__head">
+        <span>ALIADOS FANTASMA</span>
+        <strong>8 SEGUNDOS DE EVOLUCIÓN</strong>
+      </div>
+      <div class="short-history__pulse" aria-hidden="true"></div>
+      <h2>De una idea<br><em>a una red.</em></h2>
+      <div class="short-history__versions" aria-label="Historial resumido de versiones">
+        <span data-short-step="0"><b>v0.1</b> Idea</span>
+        <span data-short-step="1"><b>v0.7</b> Perfiles</span>
+        <span data-short-step="2"><b>v1.2</b> Directorio</span>
+        <span data-short-step="3"><b>v2.0</b> Panel</span>
+        <span data-short-step="4"><b>v2.8</b> Marketing</span>
+        <span data-short-step="5"><b>v3.0</b> Red lista</span>
+      </div>
+      <div class="short-history__bar"><i></i></div>
+      <p class="short-history__status">INICIANDO</p>
+    </div>`;
+  overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
+  return scene;
+}
+
+function updateShortHistory(scene, index) {
+  const labels = ['LA IDEA', 'PERFILES ACTIVADOS', 'DIRECTORIO CONECTADO', 'PANEL CONSTRUIDO', 'MARKETING INTEGRADO', 'RED PREPARADA'];
+  scene.querySelectorAll('[data-short-step]').forEach((item, itemIndex) => {
+    item.classList.toggle('is-done', itemIndex < index);
+    item.classList.toggle('is-current', itemIndex === index);
+  });
+  const status = scene.querySelector('.short-history__status');
+  if (status) status.textContent = labels[index] || 'RED PREPARADA';
+  const bar = scene.querySelector('.short-history__bar i');
+  if (bar) bar.style.transform = `scaleX(${Math.min(1, (index + 1) / 6)})`;
+}
+
 async function runEventTimeline(overlay, pause) {
   const completed = await runVersionSequence(overlay, pause, [
     [VERSION_STAGES.idea, 3000],
@@ -310,17 +353,20 @@ async function runEventTimeline(overlay, pause) {
 }
 
 async function runShortTimeline(overlay, pause) {
-  const completed = await runVersionSequence(overlay, pause, [
-    [VERSION_STAGES.idea, 950],
-    [VERSION_STAGES.profiles, 950],
-    [VERSION_STAGES.directory, 950],
-    [VERSION_STAGES.dashboard, 950],
-    [VERSION_STAGES.marketing, 950],
-    [VERSION_STAGES.ready, 1250]
-  ]);
-  if (!completed) return;
+  const scene = ensureShortHistoryScene(overlay);
+  setRevealScene(overlay, 'short-history');
+
+  const holds = [760, 720, 720, 720, 720, 1050];
+  for (let index = 0; index < holds.length; index += 1) {
+    updateShortHistory(scene, index);
+    scene.classList.remove('short-hit');
+    void scene.offsetWidth;
+    scene.classList.add('short-hit');
+    if (!await pause(holds[index])) return;
+  }
+
   setRevealScene(overlay, 'final');
-  await pause(1050);
+  await pause(2310);
 }
 
 async function runLaunchReveal(mode, state) {
