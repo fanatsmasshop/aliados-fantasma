@@ -1425,3 +1425,115 @@ body.af-page-home .hero h1.af-neon-title .word-slider > :not(.word-current){
     white-space:nowrap!important;
   }
 }
+
+
+/* NEON STABLE RC6.2 — tipografía fluida y rotador visible */
+body.af-page-home .hero h1.af-neon-title{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:clamp(2.85rem,3.55vw,4.15rem)!important;
+  line-height:.96!important;
+  letter-spacing:-.058em!important;
+  overflow:visible!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:visible!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-one,
+body.af-page-home .hero h1.af-neon-title>.line-final{
+  white-space:nowrap!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-gradient{
+  width:100%!important;
+  white-space:nowrap!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic{
+  display:block!important;
+  width:100%!important;
+  min-height:1.12em!important;
+  margin:.04em 0 0!important;
+  overflow:hidden!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+  height:1.12em!important;
+  overflow:hidden!important;
+  contain:layout paint!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  display:block!important;
+  width:max-content!important;
+  max-width:100%!important;
+  height:auto!important;
+  white-space:nowrap!important;
+  line-height:1.02!important;
+  opacity:1!important;
+  transform:translate3d(0,0,0)!important;
+  transition:opacity .26s ease,transform .26s cubic-bezier(.22,1,.36,1)!important;
+  animation:none!important;
+  background:linear-gradient(90deg,#55adff 0%,#8b61ff 48%,#ff47aa 100%)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+  will-change:opacity,transform;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current.af-word-out{
+  opacity:0!important;
+  transform:translate3d(0,-.36em,0)!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current.af-word-prep{
+  opacity:0!important;
+  transform:translate3d(0,.36em,0)!important;
+  transition:none!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current.af-word-in{
+  opacity:1!important;
+  transform:translate3d(0,0,0)!important;
+}
+@media (min-width:1181px) and (max-width:1380px){
+  body.af-page-home .hero h1.af-neon-title{
+    font-size:clamp(2.65rem,3.35vw,3.7rem)!important;
+  }
+}
+@media (min-width:761px) and (max-width:1180px){
+  body.af-page-home .hero h1.af-neon-title{
+    font-size:clamp(2.55rem,5.2vw,3.45rem)!important;
+    letter-spacing:-.052em!important;
+  }
+}
+@media (max-width:760px){
+  body.af-page-home .hero h1.af-neon-title{
+    font-size:clamp(2.18rem,10.8vw,3.15rem)!important;
+    line-height:.98!important;
+    letter-spacing:-.05em!important;
+  }
+  body.af-page-home .hero h1.af-neon-title>.line-one,
+  body.af-page-home .hero h1.af-neon-title>.line-final,
+  body.af-page-home .hero h1.af-neon-title>.line-gradient{
+    white-space:normal!important;
+  }
+  body.af-page-home .hero h1.af-neon-title>.line-gradient{
+    max-width:9.8ch!important;
+  }
+  body.af-page-home .hero h1.af-neon-title>.line-dynamic{
+    min-height:1.16em!important;
+  }
+}
+@media (max-width:390px){
+  body.af-page-home .hero h1.af-neon-title{
+    font-size:clamp(2rem,10.4vw,2.65rem)!important;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current{
+    transition:none!important;
+  }
+}

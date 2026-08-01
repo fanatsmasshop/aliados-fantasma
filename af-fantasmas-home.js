@@ -24,49 +24,37 @@
     const words = ['crecer.', 'conectar.', 'despegar.'];
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let index = 0;
-    let running = false;
+    let changing = false;
 
-    const changeWord = async () => {
-      if (running || document.hidden) return;
-      running = true;
+    const changeWord = () => {
+      if (changing || document.hidden) return;
+      changing = true;
 
-      try {
-        if (!reducedMotion && currentWord.animate) {
-          await currentWord.animate(
-            [
-              { opacity: 1, transform: 'translateY(0)' },
-              { opacity: 0, transform: 'translateY(-0.22em)' }
-            ],
-            { duration: 220, easing: 'ease-in', fill: 'forwards' }
-          ).finished;
-        }
+      currentWord.classList.remove('af-word-in');
+      currentWord.classList.add('af-word-out');
 
+      window.setTimeout(() => {
         index = (index + 1) % words.length;
         currentWord.textContent = words[index];
+        currentWord.classList.remove('af-word-out');
+        currentWord.classList.add('af-word-prep');
 
-        if (!reducedMotion && currentWord.animate) {
-          await currentWord.animate(
-            [
-              { opacity: 0, transform: 'translateY(0.22em)' },
-              { opacity: 1, transform: 'translateY(0)' }
-            ],
-            { duration: 280, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }
-          ).finished;
-        } else {
-          currentWord.style.opacity = '1';
-          currentWord.style.transform = 'none';
-        }
-      } catch (_) {
-        currentWord.style.opacity = '1';
-        currentWord.style.transform = 'none';
-      } finally {
-        running = false;
-      }
+        // Fuerza un nuevo frame para que la entrada sí sea visible.
+        void currentWord.offsetWidth;
+        currentWord.classList.remove('af-word-prep');
+        currentWord.classList.add('af-word-in');
+
+        window.setTimeout(() => {
+          currentWord.classList.remove('af-word-in');
+          changing = false;
+        }, 360);
+      }, 260);
     };
 
     window.clearInterval(window.afHeroWordTimer);
     if (!reducedMotion) {
-      window.afHeroWordTimer = window.setInterval(changeWord, 3200);
+      window.setTimeout(changeWord, 1400);
+      window.afHeroWordTimer = window.setInterval(changeWord, 3000);
     }
 
     const lead = document.querySelector('.hero-copy .lead');
