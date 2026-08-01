@@ -8,6 +8,13 @@ import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
+const settleWithin = async (promise, milliseconds = 4500) => {
+  try {
+    await Promise.race([Promise.resolve(promise), wait(milliseconds)]);
+  } catch (error) {
+    console.warn('Aliados Fantasma: la preparación pública no terminó a tiempo.', error);
+  }
+};
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
 const OPEN_TRANSITION_MS = 1100;
 
@@ -529,11 +536,11 @@ async function runLaunchReveal(mode, state) {
       await runShortTimeline(overlay, pause);
     }
 
-    if (!liveHomePromise) {
-      // El overlay sigue cubriendo la pantalla mientras se prepara la landing.
+    if (!liveHomePromise && state.presentationTarget !== 'directorio') {
+      // Solo preparamos la portada cuando el destino final será el inicio.
       liveHomePromise = activateLiveHome();
     }
-    await liveHomePromise;
+    if (liveHomePromise) await settleWithin(liveHomePromise, 4500);
     createRevealBusinessPreview();
     setRevealScene(overlay, 'final');
     finishProgress();
@@ -552,7 +559,8 @@ async function runLaunchReveal(mode, state) {
     overlay.setAttribute('aria-hidden', 'true');
 
     if (state.presentationTarget === 'directorio') {
-      window.location.assign('explorar.html?from=lanzamiento');
+      window.location.replace('explorar.html?from=lanzamiento');
+      return;
     }
   } finally {
     finishProgress();
@@ -683,7 +691,7 @@ async function refreshLaunchState({ initial = false } = {}) {
       if (nextState.open) {
         revealMode = request.mode;
       } else if (request.preview && await isAdministrator()) {
-        stateForRender = { ...nextState, open: true, presentationTarget: 'inicio' };
+        stateForRender = { ...nextState, open: true, presentationTarget: 'directorio' };
         revealMode = request.mode;
       }
     }
