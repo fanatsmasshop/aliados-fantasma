@@ -248,8 +248,11 @@ function renderVersionStage(overlay, stage) {
   scene.querySelector('.version-stage__number')?.replaceChildren(document.createTextNode(stage.version));
   scene.querySelector('.version-stage__state')?.replaceChildren(document.createTextNode(stage.state));
   scene.querySelector('.version-stage__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
-  scene.querySelector('.version-stage__title')?.replaceChildren(document.createTextNode(stage.title));
+  const titleElement = scene.querySelector('.version-stage__title');
+  titleElement?.replaceChildren(document.createTextNode(stage.title));
   scene.querySelector('.version-stage__copy')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.classList.toggle('title-long', stage.title.length >= 20);
+  scene.classList.toggle('title-very-long', stage.title.length >= 24);
 
   scene.classList.remove('version-hit');
   void scene.offsetWidth;
@@ -302,36 +305,52 @@ function ensureShortHistoryScene(overlay) {
   scene.dataset.scene = 'short-history';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="short-history">
-      <div class="short-history__head">
+    <div class="short-evolution">
+      <div class="short-evolution__head">
         <span>ALIADOS FANTASMA</span>
-        <strong>8 SEGUNDOS DE EVOLUCIÓN</strong>
+        <strong>SECUENCIA DE LANZAMIENTO</strong>
       </div>
-      <div class="short-history__pulse" aria-hidden="true"></div>
-      <h2>De una idea<br><em>a una red.</em></h2>
-      <div class="short-history__versions" aria-label="Historial resumido de versiones">
-        <span data-short-step="0"><b>v0.1</b> Idea</span>
-        <span data-short-step="1"><b>v0.7</b> Perfiles</span>
-        <span data-short-step="2"><b>v1.2</b> Directorio</span>
-        <span data-short-step="3"><b>v2.0</b> Panel</span>
-        <span data-short-step="4"><b>v2.8</b> Marketing</span>
-        <span data-short-step="5"><b>v3.0</b> Red lista</span>
+      <div class="short-evolution__stage" aria-label="Evolución resumida de Aliados Fantasma">
+        <div class="short-evolution__core">
+          <span class="short-evolution__halo"></span>
+          <img src="aliados-fantasma-icono.webp" alt="">
+          <b>RED</b>
+        </div>
+        <span class="short-node short-node--idea" data-short-step="0"><i></i><b>v0.1</b><em>IDEA</em></span>
+        <span class="short-node short-node--profiles" data-short-step="1"><i></i><b>v0.7</b><em>PERFILES</em></span>
+        <span class="short-node short-node--directory" data-short-step="2"><i></i><b>v1.2</b><em>DIRECTORIO</em></span>
+        <span class="short-node short-node--panel" data-short-step="3"><i></i><b>v2.0</b><em>PANEL</em></span>
+        <span class="short-node short-node--marketing" data-short-step="4"><i></i><b>v2.8</b><em>MARKETING</em></span>
+        <span class="short-node short-node--ready" data-short-step="5"><i></i><b>v3.0</b><em>LISTA</em></span>
+        <div class="short-evolution__beam" aria-hidden="true"></div>
       </div>
-      <div class="short-history__bar"><i></i></div>
-      <p class="short-history__status">INICIANDO</p>
+      <div class="short-evolution__foot">
+        <p class="short-history__status">INICIANDO LA IDEA</p>
+        <div class="short-history__bar"><i></i></div>
+      </div>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
   return scene;
 }
 
 function updateShortHistory(scene, index) {
-  const labels = ['LA IDEA', 'PERFILES ACTIVADOS', 'DIRECTORIO CONECTADO', 'PANEL CONSTRUIDO', 'MARKETING INTEGRADO', 'RED PREPARADA'];
+  const labels = [
+    'UNA IDEA EMPIEZA A TOMAR FORMA',
+    'CADA NEGOCIO OBTIENE IDENTIDAD',
+    'LOS NEGOCIOS SE ENCUENTRAN',
+    'NACEN NUEVAS HERRAMIENTAS',
+    'LA RED EMPIEZA A CRECER',
+    'ALIADOS FANTASMA ESTÁ LISTO'
+  ];
+  scene.dataset.activeStep = String(index);
   scene.querySelectorAll('[data-short-step]').forEach((item, itemIndex) => {
     item.classList.toggle('is-done', itemIndex < index);
     item.classList.toggle('is-current', itemIndex === index);
   });
+  const core = scene.querySelector('.short-evolution__core');
+  if (core) core.dataset.level = String(index + 1);
   const status = scene.querySelector('.short-history__status');
-  if (status) status.textContent = labels[index] || 'RED PREPARADA';
+  if (status) status.textContent = labels[index] || labels[labels.length - 1];
   const bar = scene.querySelector('.short-history__bar i');
   if (bar) bar.style.transform = `scaleX(${Math.min(1, (index + 1) / 6)})`;
 }
