@@ -85,10 +85,21 @@ async function activateLaunchSound(overlay, mode, startedAt, duration) {
 
     launchAudioUnlocked = true;
     overlay?.classList.add('sound-active');
+    const prompt = document.getElementById('launch-sound-prompt');
+    if (prompt) {
+      prompt.setAttribute('aria-hidden', 'true');
+      prompt.tabIndex = -1;
+    }
     return true;
   } catch (error) {
     launchAudioUnlocked = false;
     overlay?.classList.remove('sound-active');
+    const prompt = document.getElementById('launch-sound-prompt');
+    if (prompt) {
+      prompt.hidden = false;
+      prompt.setAttribute('aria-hidden', 'false');
+      prompt.tabIndex = 0;
+    }
     console.warn('Aliados Fantasma: el navegador bloqueó el audio.', error);
     return false;
   } finally {
@@ -404,6 +415,11 @@ async function runLaunchReveal(mode, state) {
   void overlay.offsetWidth;
   overlay.classList.add('is-running');
   overlay.classList.remove('sound-active');
+  if (soundPrompt) {
+    soundPrompt.hidden = false;
+    soundPrompt.setAttribute('aria-hidden', 'false');
+    soundPrompt.tabIndex = 0;
+  }
 
   const onSoundRequest = event => {
     event.preventDefault();
@@ -468,6 +484,11 @@ async function runLaunchReveal(mode, state) {
     soundPrompt?.removeEventListener('pointerdown', onSoundRequest);
     soundPrompt?.removeEventListener('click', onSoundRequest);
     overlay?.classList.remove('sound-active');
+    if (soundPrompt) {
+      soundPrompt.hidden = true;
+      soundPrompt.setAttribute('aria-hidden', 'true');
+      soundPrompt.tabIndex = -1;
+    }
     document.removeEventListener('keydown', onKeydown);
     revealInProgress = false;
   }
