@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     heroTitle.innerHTML = `
       <span class="line line-one">La red de</span>
       <span class="line line-gradient">negocios locales</span>
-      <span class="line line-final">está por <span class="word-slider" aria-live="polite" aria-atomic="true"><span class="word-current">crecer.</span></span></span>
+      <span class="line line-final">está por</span>
+      <span class="line line-dynamic"><span class="word-slider" aria-live="polite" aria-atomic="true"><span class="word-current">crecer.</span></span></span>
     `;
 
     const slider = heroTitle.querySelector('.word-slider');
@@ -20,14 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const changeWord = () => {
         if (changing || document.hidden) return;
         changing = true;
-        slider.classList.add('is-leaving');
+        currentWord.classList.add('is-fading');
         window.setTimeout(() => {
           index = (index + 1) % words.length;
           currentWord.textContent = words[index];
-          slider.classList.remove('is-leaving');
-          slider.classList.add('is-entering');
+          currentWord.classList.remove('is-fading');
+          currentWord.classList.add('is-fading-in');
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            slider.classList.remove('is-entering');
+            currentWord.classList.remove('is-fading-in');
             changing = false;
           }));
         }, 240);

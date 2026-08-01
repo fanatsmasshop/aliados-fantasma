@@ -1314,3 +1314,48 @@ body.af-page-home .benefit-chart{border:0;border-radius:0}.benefit-chart::before
   body.af-page-home .af-neon-benefits{grid-template-columns:1fr!important;gap:10px!important}
   body.af-page-home .af-neon-benefits article{min-height:112px;padding:18px!important;gap:15px!important}.benefit-icon{flex-basis:62px!important;width:62px!important;height:62px!important}
 }
+
+
+/* NEON STABLE RC6 — palabra dinámica en línea inferior */
+body.af-page-home .hero h1.af-neon-title>.line-final{
+  display:block!important;
+  white-space:nowrap!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic{
+  display:block!important;
+  width:100%!important;
+  margin-top:.02em!important;
+  line-height:.92!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{
+  position:relative!important;
+  display:inline-block!important;
+  width:5.8em!important;
+  height:1.06em!important;
+  overflow:hidden!important;
+  vertical-align:top!important;
+  color:transparent!important;
+}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  display:block!important;
+  width:max-content!important;
+  line-height:1!important;
+  opacity:1!important;
+  transform:none!important;
+  transition:opacity .22s ease!important;
+  background:linear-gradient(90deg,#55adff,#8b61ff 46%,#ff47aa)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  color:transparent!important;
+}
+body.af-page-home .hero h1 .word-current.is-fading,
+body.af-page-home .hero h1 .word-current.is-fading-in{opacity:0!important}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider.is-leaving .word-current,
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider.is-entering .word-current{
+  transform:none!important;
+}
+@media(max-width:760px){
+  body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{width:5.9em!important}
+}

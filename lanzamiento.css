@@ -333,3 +333,86 @@ body.launch-reveal-complete.is-live .live-section:nth-of-type(2){animation-delay
 @media(prefers-reduced-motion:reduce){
   body.live-preparing #live-experience,body.live-preparing .site-header,body.live-preparing footer,body.live-preparing .mobile-cta,.launch-reveal__curtain,.launch-reveal__timeline,.launch-reveal__glow,.launch-reveal__portal,.launch-scene,.launch-dynamic-copy{transition:none!important;animation:none!important}.launch-reveal__ambient,.launch-reveal__network{display:none}.launch-scene.is-active{opacity:1;visibility:visible;transform:none;filter:none}
 }
+
+
+/* NEON STABLE RC6 — reveal adaptado al viewport visible */
+html:has(.launch-reveal:not([hidden])),
+body.launch-reveal-active{
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+.launch-reveal{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  width:100dvw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  min-height:0!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
+  padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+  box-sizing:border-box!important;
+}
+.launch-reveal__timeline{
+  width:min(94vw,1060px)!important;
+  width:min(94dvw,1060px)!important;
+  height:min(72vh,650px)!important;
+  height:min(calc(100dvh - 96px),650px)!important;
+  max-height:calc(100dvh - 96px)!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  align-self:center!important;
+}
+.launch-scene{
+  inset:0!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  padding:clamp(18px,3.2vh,32px) clamp(16px,3vw,32px)!important;
+}
+.launch-scene>*{max-width:100%!important}
+.launch-reveal__network{
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+}
+.launch-reveal__network svg{width:100%!important;height:100%!important;display:block!important}
+.launch-reveal__skip{
+  top:max(14px,env(safe-area-inset-top))!important;
+  right:max(14px,env(safe-area-inset-right))!important;
+}
+.launch-scene--intro h1{font-size:clamp(2.7rem,min(8vw,11vh),7.4rem)!important}
+.launch-scene--story p{font-size:clamp(1.8rem,min(5vw,8vh),4.7rem)!important}
+.launch-scene--connection h2{font-size:clamp(2rem,min(4.7vw,7vh),4.5rem)!important}
+.launch-promise-words strong{font-size:clamp(3.2rem,min(10vw,14vh),8.5rem)!important}
+.launch-scene--count strong{font-size:clamp(7rem,min(25vw,34vh),18rem)!important}
+.launch-scene--final h2{font-size:clamp(2.7rem,min(8vw,11vh),7.2rem)!important}
+@media(max-width:720px){
+  .launch-reveal{padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))!important}
+  .launch-reveal__timeline{
+    width:100%!important;
+    height:calc(100dvh - 76px)!important;
+    max-height:calc(100dvh - 76px)!important;
+  }
+  .launch-scene{padding:54px 16px 28px!important}
+  .launch-reveal__network{inset:0!important;width:100%!important;height:100%!important}
+  .launch-scene--intro h1{font-size:clamp(2.7rem,16vw,5rem)!important}
+  .launch-scene--story p{font-size:clamp(1.8rem,9vw,3.5rem)!important}
+  .launch-scene--connection h2{font-size:clamp(2rem,10vw,3.7rem)!important}
+  .launch-promise-words strong{font-size:clamp(3.2rem,18vw,6.2rem)!important}
+  .launch-scene--count strong{font-size:clamp(7rem,42vw,13rem)!important}
+  .launch-scene--final h2{font-size:clamp(2.7rem,15vw,5rem)!important}
+}
+@media(max-height:620px){
+  .launch-reveal__timeline{height:calc(100dvh - 64px)!important;max-height:calc(100dvh - 64px)!important}
+  .launch-scene{padding:42px 14px 18px!important;transform:none!important}
+  .launch-scene.is-active{transform:none!important}
+  .launch-reveal__mark{width:110px!important;height:110px!important;margin-bottom:12px!important}
+  .launch-reveal__mark img{width:72px!important;height:72px!important}
+}
