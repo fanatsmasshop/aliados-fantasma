@@ -14,6 +14,7 @@ const OPEN_TRANSITION_MS = 1100;
 
 let launchMusic = null;
 let launchAudioUnlocked = false;
+let launchSoundStarting = false;
 
 const launchTracks = {
   evento: 'af-lanzamiento-28s.mp3?v=20260731-MUSIC1',
@@ -22,14 +23,21 @@ const launchTracks = {
 
 function getLaunchMusic(mode = 'breve') {
   const src = launchTracks[mode] || launchTracks.breve;
-  if (launchMusic && launchMusic.dataset.mode === mode) return launchMusic;
+  if (!launchMusic) {
+    launchMusic = new Audio();
+    launchMusic.preload = 'auto';
+    launchMusic.playsInline = true;
+    launchMusic.volume = .88;
+  }
 
-  stopLaunchAudio();
-  launchMusic = new Audio(src);
-  launchMusic.dataset.mode = mode;
-  launchMusic.preload = 'auto';
-  launchMusic.playsInline = true;
-  launchMusic.volume = .88;
+  if (launchMusic.dataset.mode !== mode) {
+    try { launchMusic.pause(); } catch {}
+    launchMusic.src = src;
+    launchMusic.dataset.mode = mode;
+    launchMusic.currentTime = 0;
+    launchMusic.load();
+  }
+
   return launchMusic;
 }
 
@@ -43,52 +51,50 @@ function stopLaunchAudio() {
 }
 
 async function activateLaunchSound(overlay, mode, startedAt, duration) {
+  if (launchSoundStarting) return false;
+  launchSoundStarting = true;
+
   try {
     const audio = getLaunchMusic(mode);
+    audio.muted = false;
+    audio.volume = .88;
+
     const elapsedSeconds = Math.min(
       Math.max(0, (duration - 80) / 1000),
       Math.max(0, (performance.now() - startedAt) / 1000)
     );
 
-    if (Number.isFinite(audio.duration) && audio.duration > 0) {
-      audio.currentTime = Math.min(elapsedSeconds, Math.max(0, audio.duration - .08));
-    } else {
-      audio.addEventListener('loadedmetadata', () => {
-        try {
+    const seekToElapsed = () => {
+      try {
+        if (Number.isFinite(audio.duration) && audio.duration > 0) {
           audio.currentTime = Math.min(elapsedSeconds, Math.max(0, audio.duration - .08));
-        } catch {}
-      }, { once: true });
-    }
+        }
+      } catch {}
+    };
 
-    await audio.play();
+    if (audio.readyState >= 1) seekToElapsed();
+    else audio.addEventListener('loadedmetadata', seekToElapsed, { once: true });
+
+    // Debe ejecutarse dentro de la misma interacción del usuario en escritorio.
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === 'function') await playPromise;
+
     launchAudioUnlocked = true;
     overlay?.classList.add('sound-active');
     return true;
-  } catch {
-    overlay?.classList.remove('sound-active');
-    return false;
-  }
-}
-
-async function prepareLaunchSoundFromInteraction() {
-  if (launchAudioUnlocked) return;
-  try {
-    const audio = getLaunchMusic('breve');
-    audio.muted = true;
-    audio.volume = 0;
-    await audio.play();
-    audio.pause();
-    audio.currentTime = 0;
-    audio.muted = false;
-    audio.volume = .88;
-    launchAudioUnlocked = true;
-  } catch {
+  } catch (error) {
     launchAudioUnlocked = false;
+    overlay?.classList.remove('sound-active');
+    console.warn('Aliados Fantasma: el navegador bloqueó el audio.', error);
+    return false;
+  } finally {
+    launchSoundStarting = false;
   }
 }
 
-document.addEventListener('pointerdown', prepareLaunchSoundFromInteraction, { once: true, passive: true });
-document.addEventListener('keydown', prepareLaunchSoundFromInteraction, { once: true });
+// El audio se activa desde el control visible de la presentación.
+// Evitamos el desbloqueo silencioso porque algunos navegadores de escritorio
+// no conservan ese permiso cuando la pista cambia después.
 
 let launchState = null;
 let launchRefreshInProgress = false;
@@ -393,13 +399,16 @@ async function runLaunchReveal(mode, state) {
   overlay.classList.add('is-running');
   overlay.classList.remove('sound-active');
 
-  const onSoundRequest = async () => {
-    await activateLaunchSound(overlay, mode, revealStartedAt, duration);
+  const onSoundRequest = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    activateLaunchSound(overlay, mode, revealStartedAt, duration);
   };
+  soundPrompt?.addEventListener('pointerdown', onSoundRequest);
   soundPrompt?.addEventListener('click', onSoundRequest);
 
-  // Si el visitante ya interactuó antes del cero, el audio puede arrancar de inmediato.
-  if (launchAudioUnlocked) {
+  // Se permite un intento automático únicamente cuando ya existe permiso real.
+  if (launchAudioUnlocked && launchMusic) {
     activateLaunchSound(overlay, mode, revealStartedAt, duration);
   }
 
@@ -443,6 +452,7 @@ async function runLaunchReveal(mode, state) {
   } finally {
     finishProgress();
     stopLaunchAudio();
+    soundPrompt?.removeEventListener('pointerdown', onSoundRequest);
     soundPrompt?.removeEventListener('click', onSoundRequest);
     overlay?.classList.remove('sound-active');
     document.removeEventListener('keydown', onKeydown);
