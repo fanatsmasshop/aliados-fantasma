@@ -227,12 +227,34 @@ function setRevealScene(overlay, sceneName) {
   overlay.classList.add(`scene-${sceneName}`);
 }
 
-function pulseCount(scene, value) {
-  const count = document.getElementById('launch-final-count');
-  if (count) count.textContent = value;
-  scene?.classList.remove('count-pulse');
-  void scene?.offsetWidth;
-  scene?.classList.add('count-pulse');
+const VERSION_STAGES = {
+  idea: { scene:'intro', version:'v0.1', state:'INICIANDO', eyebrow:'PRIMERA ETAPA', title:'La idea', copy:'Todo comenzó con una visión: conectar y apoyar negocios locales.', visual:'spark' },
+  register: { scene:'story', version:'v0.3', state:'CONSTRUYENDO', eyebrow:'EVOLUCIÓN DEL PROYECTO', title:'Primer registro', copy:'La idea empezó a convertirse en una plataforma real.', visual:'form' },
+  profiles: { scene:'connection', version:'v0.7', state:'ACTUALIZANDO', eyebrow:'NUEVA FUNCIÓN', title:'Perfiles de negocio', copy:'Cada comercio empezó a tener identidad y presencia propia.', visual:'profiles' },
+  directory: { scene:'identity', version:'v1.2', state:'CONECTANDO', eyebrow:'LA RED TOMA FORMA', title:'Directorio local', copy:'Los negocios comenzaron a reunirse dentro de una misma red.', visual:'directory' },
+  dashboard: { scene:'promise', version:'v2.0', state:'AMPLIANDO', eyebrow:'MÁS HERRAMIENTAS', title:'Panel de comerciantes', copy:'Más control, más herramientas y nuevas posibilidades.', visual:'dashboard' },
+  visibility: { scene:'story', version:'v2.4', state:'PUBLICANDO', eyebrow:'LA RED SE HACE VISIBLE', title:'Visibilidad local', copy:'Los perfiles comenzaron a mostrarse hacia afuera.', visual:'visibility' },
+  marketing: { scene:'count', version:'v2.8', state:'IMPULSANDO', eyebrow:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'Marketing y crecimiento', copy:'Más presencia, más alcance y recursos para crecer.', visual:'marketing' },
+  ready: { scene:'connection', version:'v3.0', state:'LISTA', eyebrow:'VERSIÓN FINAL', title:'Red preparada', copy:'Todo quedó conectado y preparado para despertar.', visual:'ready' }
+};
+
+function renderVersionStage(overlay, stage) {
+  if (!overlay || !stage) return;
+  const scene = overlay.querySelector(`[data-scene="${stage.scene}"]`);
+  if (!scene) return;
+
+  scene.className = `launch-scene launch-scene--version version-visual--${stage.visual}`;
+  scene.dataset.scene = stage.scene;
+  scene.querySelector('.version-stage__number')?.replaceChildren(document.createTextNode(stage.version));
+  scene.querySelector('.version-stage__state')?.replaceChildren(document.createTextNode(stage.state));
+  scene.querySelector('.version-stage__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
+  scene.querySelector('.version-stage__title')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.version-stage__copy')?.replaceChildren(document.createTextNode(stage.copy));
+
+  scene.classList.remove('version-hit');
+  void scene.offsetWidth;
+  scene.classList.add('version-hit');
+  setRevealScene(overlay, stage.scene);
 }
 
 function startRevealProgress(duration) {
@@ -263,107 +285,42 @@ function startRevealProgress(duration) {
   };
 }
 
-const REVEAL_COPY_OUT_MS = 280;
-const REVEAL_COPY_IN_MS = 520;
-
-async function transitionRevealCopy(element, nextText, pause) {
-  if (!element) return true;
-
-  element.classList.add('launch-dynamic-copy');
-  const normalizedNext = String(nextText ?? '');
-  if ((element.textContent || '').trim() === normalizedNext.trim()) return true;
-
-  const cleanup = () => {
-    element.classList.remove('is-copy-leaving', 'is-copy-entering');
-  };
-
-  cleanup();
-  element.classList.add('is-copy-leaving');
-  if (!await pause(REVEAL_COPY_OUT_MS)) {
-    cleanup();
-    return false;
+async function runVersionSequence(overlay, pause, steps) {
+  for (const [stage, hold] of steps) {
+    renderVersionStage(overlay, stage);
+    if (!await pause(hold)) return false;
   }
-
-  element.textContent = normalizedNext;
-  element.classList.remove('is-copy-leaving');
-  void element.offsetWidth;
-  element.classList.add('is-copy-entering');
-
-  const completed = await pause(REVEAL_COPY_IN_MS);
-  cleanup();
-  return completed;
+  return true;
 }
 
 async function runEventTimeline(overlay, pause) {
-  setRevealScene(overlay, 'intro');
-  if (!await pause(3000)) return;
-
-  setRevealScene(overlay, 'story');
-  const story = document.getElementById('launch-story-line');
-  if (story) {
-    story.textContent = 'Cada negocio tiene una historia.';
-    story.classList.add('launch-dynamic-copy');
-  }
-  if (!await pause(2500)) return;
-  if (!await transitionRevealCopy(story, 'Pero muchas historias aún esperan ser descubiertas.', pause)) return;
-  if (!await pause(1700)) return;
-
-  const status = document.getElementById('launch-connection-status');
-  if (status) {
-    status.textContent = 'Conectando negocios…';
-    status.classList.add('launch-dynamic-copy');
-  }
-  setRevealScene(overlay, 'connection');
-  createRevealBusinessPreview();
-  if (!await pause(2000)) return;
-  if (!await transitionRevealCopy(status, 'Activando perfiles…', pause)) return;
-  if (!await pause(1200)) return;
-  if (!await transitionRevealCopy(status, 'Construyendo comunidad…', pause)) return;
-  if (!await pause(1200)) return;
-
-  setRevealScene(overlay, 'identity');
-  if (!await pause(5000)) return;
-
-  const word = document.getElementById('launch-promise-word');
-  if (word) {
-    word.textContent = 'Descubre.';
-    word.classList.add('launch-dynamic-copy');
-  }
-  setRevealScene(overlay, 'promise');
-  if (!await pause(1000)) return;
-  for (const value of ['Conecta.', 'Crece.', 'Juntos.']) {
-    if (!await transitionRevealCopy(word, value, pause)) return;
-    if (!await pause(200)) return;
-  }
-
-  setRevealScene(overlay, 'count');
-  const countScene = overlay.querySelector('[data-scene="count"]');
-  for (const value of ['3', '2', '1']) {
-    pulseCount(countScene, value);
-    if (!await pause(1000)) return;
-  }
-
+  const completed = await runVersionSequence(overlay, pause, [
+    [VERSION_STAGES.idea, 3000],
+    [VERSION_STAGES.register, 3000],
+    [VERSION_STAGES.profiles, 3000],
+    [VERSION_STAGES.directory, 3000],
+    [VERSION_STAGES.dashboard, 3000],
+    [VERSION_STAGES.visibility, 3000],
+    [VERSION_STAGES.marketing, 3000],
+    [VERSION_STAGES.ready, 3000]
+  ]);
+  if (!completed) return;
   setRevealScene(overlay, 'final');
-  createRevealBusinessPreview();
-  await pause(2000);
+  await pause(4000);
 }
 
 async function runShortTimeline(overlay, pause) {
-  setRevealScene(overlay, 'identity');
-  if (!await pause(2200)) return;
-
-  const status = document.getElementById('launch-connection-status');
-  if (status) {
-    status.textContent = 'Abriendo la red…';
-    status.classList.add('launch-dynamic-copy');
-  }
-  setRevealScene(overlay, 'connection');
-  createRevealBusinessPreview();
-  if (!await pause(2500)) return;
-
+  const completed = await runVersionSequence(overlay, pause, [
+    [VERSION_STAGES.idea, 950],
+    [VERSION_STAGES.profiles, 950],
+    [VERSION_STAGES.directory, 950],
+    [VERSION_STAGES.dashboard, 950],
+    [VERSION_STAGES.marketing, 950],
+    [VERSION_STAGES.ready, 1250]
+  ]);
+  if (!completed) return;
   setRevealScene(overlay, 'final');
-  createRevealBusinessPreview();
-  await pause(3300);
+  await pause(1050);
 }
 
 async function runLaunchReveal(mode, state) {
@@ -386,7 +343,7 @@ async function runLaunchReveal(mode, state) {
   const soundPrompt = document.getElementById('launch-sound-prompt');
   const revealStartedAt = performance.now();
   const modeLabel = document.getElementById('launch-reveal-mode-label');
-  if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'EVENTO CINEMATOGRÁFICO' : 'PRESENTACIÓN BREVE';
+  if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'HISTORIAL DE VERSIONES · 28 S' : 'HISTORIAL DE VERSIONES · 8 S';
 
   const requestSkip = () => {
     if (skipped) return;
