@@ -298,49 +298,32 @@ async function runVersionSequence(overlay, pause, steps) {
 }
 
 function ensureReleaseLogScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="release-log"]');
+  let scene = overlay.querySelector('[data-scene="release-cinema"]');
   if (scene) return scene;
-
   scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--story-cinema';
-  scene.dataset.scene = 'release-log';
+  scene.className = 'launch-scene launch-scene--fullscreen-cinema';
+  scene.dataset.scene = 'release-cinema';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="story-cinema">
-      <header class="story-cinema__head">
-        <div class="story-cinema__brand">
-          <img src="aliados-fantasma-icono.webp" alt="">
-          <div><strong>ALIADOS FANTASMA</strong><span>Cómo se construyó la plataforma</span></div>
-        </div>
-        <span class="story-cinema__state">INICIANDO</span>
+    <div class="af5-stage af5-stage--event">
+      <header class="af5-top">
+        <span class="af5-brand">ALIADOS FANTASMA</span>
+        <span class="af5-count">ETAPA <b>01</b> / 09</span>
       </header>
-
-      <main class="story-cinema__main">
-        <section class="story-cinema__copy">
-          <div class="story-cinema__meta">
-            <span class="story-cinema__version">v0.1</span>
-            <small class="story-cinema__eyebrow">EL ORIGEN</small>
-          </div>
-          <h2 class="story-cinema__title">La idea</h2>
-          <p class="story-cinema__description">Crear una red para impulsar y conectar negocios locales.</p>
-        </section>
-
-        <div class="story-cinema__visual" aria-hidden="true">
-          <div class="story-cinema__halo"></div>
-          <div class="story-cinema__node node-a"></div>
-          <div class="story-cinema__node node-b"></div>
-          <div class="story-cinema__node node-c"></div>
-          <div class="story-cinema__node node-d"></div>
-          <div class="story-cinema__core"><img src="aliados-fantasma-icono.webp" alt=""></div>
-          <span class="story-cinema__visual-label">IDEA</span>
+      <main class="af5-main">
+        <div class="af5-mark" aria-hidden="true">
+          <span></span><span></span>
+          <img src="aliados-fantasma-icono.webp" alt="">
+        </div>
+        <div class="af5-copy">
+          <div class="af5-meta"><em>v0.1</em><small>EL ORIGEN</small></div>
+          <h2>La idea</h2>
+          <p>Crear una red para impulsar y conectar negocios locales.</p>
         </div>
       </main>
-
-      <footer class="story-cinema__foot">
-        <div class="story-cinema__steps" aria-hidden="true">
-          ${Array.from({ length: 9 }, (_, index) => `<i data-story-step="${index}"></i>`).join('')}
-        </div>
-        <div class="story-cinema__progress"><i></i></div>
+      <footer class="af5-bottom">
+        <div class="af5-dots">${Array.from({length:9},(_,i)=>`<i data-af5-step="${i}"></i>`).join('')}</div>
+        <div class="af5-progress"><i></i></div>
       </footer>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
@@ -348,48 +331,49 @@ function ensureReleaseLogScene(overlay) {
 }
 
 function updateReleaseLog(scene, stage, index) {
-  scene.dataset.activeStep = String(index);
-  scene.dataset.visual = stage.visual;
-  scene.querySelector('.story-cinema__state')?.replaceChildren(document.createTextNode(stage.state));
-  scene.querySelector('.story-cinema__version')?.replaceChildren(document.createTextNode(stage.version));
-  scene.querySelector('.story-cinema__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
-  scene.querySelector('.story-cinema__title')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.story-cinema__description')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.querySelector('.story-cinema__visual-label')?.replaceChildren(document.createTextNode(stage.title.toUpperCase()));
-  scene.querySelectorAll('[data-story-step]').forEach((dot, dotIndex) => {
+  scene.querySelector('.af5-count b')?.replaceChildren(document.createTextNode(String(index + 1).padStart(2, '0')));
+  scene.querySelector('.af5-meta em')?.replaceChildren(document.createTextNode(stage.version));
+  scene.querySelector('.af5-meta small')?.replaceChildren(document.createTextNode(stage.eyebrow));
+  scene.querySelector('.af5-copy h2')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.af5-copy p')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.querySelectorAll('[data-af5-step]').forEach((dot, dotIndex) => {
     dot.classList.toggle('is-complete', dotIndex < index);
     dot.classList.toggle('is-active', dotIndex === index);
   });
-  const progress = scene.querySelector('.story-cinema__progress i');
+  const progress = scene.querySelector('.af5-progress i');
   if (progress) progress.style.transform = `scaleX(${(index + 1) / 9})`;
-  scene.classList.remove('story-cinema-hit');
+  scene.classList.remove('af5-hit');
   void scene.offsetWidth;
-  scene.classList.add('story-cinema-hit');
+  scene.classList.add('af5-hit');
 }
 
 function ensureShortBuildScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="short-build"]');
+  let scene = overlay.querySelector('[data-scene="short-cinema"]');
   if (scene) return scene;
-
   scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--short-trailer';
-  scene.dataset.scene = 'short-build';
+  scene.className = 'launch-scene launch-scene--fullscreen-cinema';
+  scene.dataset.scene = 'short-cinema';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="short-trailer">
-      <header>
-        <img src="aliados-fantasma-icono.webp" alt="">
-        <strong>ALIADOS FANTASMA</strong>
+    <div class="af5-stage af5-stage--short">
+      <header class="af5-top">
+        <span class="af5-brand">ALIADOS FANTASMA</span>
+        <span class="af5-count">SECUENCIA DE ARRANQUE</span>
       </header>
-      <main>
-        <div class="short-trailer__symbol"><span></span><img src="aliados-fantasma-icono.webp" alt=""></div>
-        <p class="short-trailer__kicker">TODO COMENZÓ CON</p>
-        <h2 class="short-trailer__title">UNA IDEA</h2>
-        <p class="short-trailer__copy">Una plataforma pensada para negocios locales.</p>
+      <main class="af5-main">
+        <div class="af5-mark" aria-hidden="true">
+          <span></span><span></span>
+          <img src="aliados-fantasma-icono.webp" alt="">
+        </div>
+        <div class="af5-copy">
+          <div class="af5-meta"><em>01</em><small>ETAPA 01</small></div>
+          <h2>IDEA</h2>
+          <p>Todo comenzó con una visión local.</p>
+        </div>
       </main>
-      <footer>
-        <div class="short-trailer__dots">${Array.from({ length: 5 }, (_, index) => `<i data-trailer-step="${index}"></i>`).join('')}</div>
-        <div class="short-trailer__progress"><i></i></div>
+      <footer class="af5-bottom">
+        <div class="af5-dots">${Array.from({length:5},(_,i)=>`<i data-af5-short="${i}"></i>`).join('')}</div>
+        <div class="af5-progress"><i></i></div>
       </footer>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
@@ -397,34 +381,34 @@ function ensureShortBuildScene(overlay) {
 }
 
 const SHORT_STAGES = [
-  { kicker:'TODO COMENZÓ CON', title:'UNA IDEA', copy:'Una plataforma pensada para negocios locales.', visual:'idea' },
-  { kicker:'DESPUÉS LLEGÓ', title:'LA CONSTRUCCIÓN', copy:'Registro, acceso y estructura comenzaron a tomar forma.', visual:'build' },
-  { kicker:'LOS PRIMEROS NEGOCIOS', title:'SE PREREGISTRARON', copy:'Las primeras solicitudes empezaron a llegar.', visual:'requests' },
-  { kicker:'ACTUALIZACIÓN TRAS ACTUALIZACIÓN', title:'TODO QUEDÓ LISTO', copy:'Perfiles, directorio y revisión fueron preparados.', visual:'ready' },
-  { kicker:'HOY COMIENZA', title:'ALIADOS FANTASMA', copy:'La red abre oficialmente sus puertas.', visual:'launch' }
+  { kicker:'ETAPA 01', title:'IDEA', copy:'Todo comenzó con una visión local.' },
+  { kicker:'ETAPA 02', title:'CONSTRUCCIÓN', copy:'La plataforma empezó a tomar forma.' },
+  { kicker:'ETAPA 03', title:'PREREGISTROS', copy:'Los primeros negocios enviaron su solicitud.' },
+  { kicker:'ETAPA 04', title:'PREPARACIÓN', copy:'La información y el directorio quedaron preparados.' },
+  { kicker:'ETAPA 05', title:'LANZAMIENTO', copy:'Aliados Fantasma abre oficialmente sus puertas.' }
 ];
 
 function updateShortBuild(scene, index) {
   const stage = SHORT_STAGES[Math.min(index, SHORT_STAGES.length - 1)];
-  scene.dataset.activeStep = String(index);
-  scene.dataset.visual = stage.visual;
-  scene.querySelector('.short-trailer__kicker')?.replaceChildren(document.createTextNode(stage.kicker));
-  scene.querySelector('.short-trailer__title')?.replaceChildren(document.createTextNode(stage.title));
-  scene.querySelector('.short-trailer__copy')?.replaceChildren(document.createTextNode(stage.copy));
-  scene.querySelectorAll('[data-trailer-step]').forEach((dot, dotIndex) => {
+  scene.querySelector('.af5-meta em')?.replaceChildren(document.createTextNode(String(index + 1).padStart(2, '0')));
+  scene.querySelector('.af5-meta small')?.replaceChildren(document.createTextNode(stage.kicker));
+  scene.querySelector('.af5-copy h2')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.af5-copy p')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.querySelector('.af5-mark img')?.classList.toggle('is-final', index === SHORT_STAGES.length - 1);
+  scene.querySelectorAll('[data-af5-short]').forEach((dot, dotIndex) => {
     dot.classList.toggle('is-complete', dotIndex < index);
     dot.classList.toggle('is-active', dotIndex === index);
   });
-  const bar = scene.querySelector('.short-trailer__progress i');
+  const bar = scene.querySelector('.af5-progress i');
   if (bar) bar.style.transform = `scaleX(${(index + 1) / SHORT_STAGES.length})`;
-  scene.classList.remove('short-trailer-hit');
+  scene.classList.remove('af5-hit');
   void scene.offsetWidth;
-  scene.classList.add('short-trailer-hit');
+  scene.classList.add('af5-hit');
 }
 
 async function runEventTimeline(overlay, pause) {
   const scene = ensureReleaseLogScene(overlay);
-  setRevealScene(overlay, 'release-log');
+  setRevealScene(overlay, 'release-cinema');
   const stages = [
     VERSION_STAGES.idea,
     VERSION_STAGES.prototype,
@@ -436,31 +420,32 @@ async function runEventTimeline(overlay, pause) {
     VERSION_STAGES.testing,
     VERSION_STAGES.launch
   ];
-  const holds = [2450, 2500, 2500, 2650, 2600, 2600, 2450, 2550, 1800];
+  const holds = [2400, 2500, 2500, 2700, 2700, 2700, 2500, 2600, 1900];
   for (let index = 0; index < stages.length; index += 1) {
     updateReleaseLog(scene, stages[index], index);
     if (!await pause(holds[index])) return;
   }
   setRevealScene(overlay, 'final');
-  await pause(3750);
+  await pause(4000);
 }
 
 async function runShortTimeline(overlay, pause) {
   const scene = ensureShortBuildScene(overlay);
-  setRevealScene(overlay, 'short-build');
-  const holds = [1050, 1150, 1250, 1350, 1200];
-  for (let index = 0; index < SHORT_STAGES.length; index += 1) {
+  setRevealScene(overlay, 'short-cinema');
+  const holds = [1050, 1050, 1150, 1150, 1250];
+  for (let index = 0; index < holds.length; index += 1) {
     updateShortBuild(scene, index);
     if (!await pause(holds[index])) return;
   }
   setRevealScene(overlay, 'final');
-  await pause(2000);
+  await pause(2350);
 }
 
 async function runLaunchReveal(mode, state) {
   if (revealInProgress) return;
 
   const overlay = document.getElementById('launch-reveal');
+  overlay?.querySelectorAll('.launch-scene:not(.launch-scene--final)').forEach(node => node.remove());
   const skipButton = document.getElementById('launch-reveal-skip');
   if (!overlay) {
     document.body.classList.add('launch-reveal-complete');
