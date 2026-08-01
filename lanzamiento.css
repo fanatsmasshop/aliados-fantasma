@@ -486,64 +486,53 @@ body.launch-reveal-active{
 }
 
 
-/* =========================================================
-   RC2.7 — Activación de sonido integrada a la presentación
-   ========================================================= */
-.launch-sound-prompt{
-  position:absolute;
-  left:50%;
-  bottom:max(34px,calc(env(safe-area-inset-bottom) + 22px));
-  z-index:30;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  min-height:54px;
-  max-width:min(92vw,390px);
-  padding:10px 16px 10px 11px;
-  border:1px solid rgba(118,134,255,.34);
-  border-radius:999px;
-  color:#fff;
-  background:linear-gradient(120deg,rgba(6,14,34,.88),rgba(28,8,42,.9));
-  box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 30px rgba(89,95,255,.18),0 0 24px rgba(255,55,169,.12);
-  backdrop-filter:blur(18px);
-  transform:translate(-50%,18px) scale(.97);
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:opacity .35s ease,transform .35s ease,visibility .35s ease,border-color .2s ease;
-  cursor:pointer;
+/* RC2.11 — Versión breve móvil optimizada */
+@media (max-width:760px), (pointer:coarse){
+  .launch-reveal.mode-short.mobile-lite{
+    background:#030611!important;
+  }
+  .launch-reveal.mode-short.mobile-lite::before,
+  .launch-reveal.mode-short.mobile-lite::after{
+    filter:none!important;
+    animation:none!important;
+    opacity:.38!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__network{
+    display:none!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__ambient{
+    animation:none!important;
+    filter:none!important;
+    opacity:.42!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__glow{
+    animation:none!important;
+    filter:blur(14px)!important;
+    opacity:.38!important;
+    transform:none!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__curtain{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-scene,
+  .launch-reveal.mode-short.mobile-lite .launch-scene>*{
+    filter:none!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__ring{
+    animation:none!important;
+    box-shadow:0 0 22px rgba(92,93,255,.22)!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__business{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    animation-duration:.32s!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__mark img,
+  .launch-reveal.mode-short.mobile-lite .launch-scene--final img{
+    filter:drop-shadow(0 0 20px rgba(112,86,255,.45))!important;
+  }
+  .launch-reveal.mode-short.mobile-lite .launch-reveal__footer{
+    display:none!important;
+  }
 }
-.launch-reveal.is-running:not(.sound-active) .launch-sound-prompt{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-  transform:translate(-50%,0) scale(1);
-  animation:launchSoundPromptPulse 2.2s ease-in-out infinite;
-}
-.launch-sound-prompt:hover{border-color:rgba(255,88,188,.52)}
-.launch-sound-prompt:focus-visible{outline:2px solid #64dfff;outline-offset:4px}
-.launch-sound-prompt__icon{
-  display:grid;
-  place-items:center;
-  flex:0 0 35px;
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#24caff,#765bff 53%,#ff3eaa);
-  box-shadow:0 0 18px rgba(103,96,255,.45);
-  font-size:1rem;
-}
-.launch-sound-prompt>span:last-child{display:grid;gap:1px;text-align:left;line-height:1.15}
-.launch-sound-prompt strong{font-size:.75rem;letter-spacing:.01em}
-.launch-sound-prompt small{color:#9faac1;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
-.launch-reveal.sound-active .launch-sound-prompt{opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,12px) scale(.96);animation:none}
-@keyframes launchSoundPromptPulse{
-  0%,100%{box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 24px rgba(89,95,255,.15),0 0 18px rgba(255,55,169,.1)}
-  50%{box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 42px rgba(89,95,255,.28),0 0 30px rgba(255,55,169,.18)}
-}
-@media(max-width:720px){
-  .launch-sound-prompt{bottom:max(22px,calc(env(safe-area-inset-bottom) + 14px));min-height:50px;padding:9px 14px 9px 9px}
-  .launch-sound-prompt__icon{flex-basis:32px;width:32px;height:32px}
-  .launch-sound-prompt strong{font-size:.7rem}.launch-sound-prompt small{font-size:.57rem}
-}
-@media(prefers-reduced-motion:reduce){.launch-sound-prompt{animation:none!important}}

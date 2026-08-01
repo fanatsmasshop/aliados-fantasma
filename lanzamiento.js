@@ -11,6 +11,10 @@ const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, m
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
 const OPEN_TRANSITION_MS = 1100;
 
+const isShortMobileDevice = () =>
+  window.matchMedia('(max-width: 760px)').matches ||
+  window.matchMedia('(pointer: coarse)').matches;
+
 
 let launchMusic = null;
 let launchAudioUnlocked = false;
@@ -395,6 +399,8 @@ async function runLaunchReveal(mode, state) {
   overlay.hidden = false;
   overlay.setAttribute('aria-hidden', 'false');
   overlay.className = `launch-reveal mode-${mode === 'evento' ? 'event' : 'short'}`;
+  const shortMobile = mode === 'breve' && isShortMobileDevice();
+  overlay.classList.toggle('mobile-lite', shortMobile);
   void overlay.offsetWidth;
   overlay.classList.add('is-running');
   overlay.classList.remove('sound-active');
@@ -413,8 +419,11 @@ async function runLaunchReveal(mode, state) {
   }
 
   const finishProgress = startRevealProgress(duration);
-  const liveHomePromise = activateLiveHome();
-  liveHomePromise.then(createRevealBusinessPreview).catch(() => {});
+
+  // En celulares, la versión breve no debe preparar toda la landing
+  // mientras anima audio, SVG y escenas. Se difiere hasta el cierre.
+  let liveHomePromise = shortMobile ? null : activateLiveHome();
+  liveHomePromise?.then(createRevealBusinessPreview).catch(() => {});
 
   window.setTimeout(() => overlay.classList.add('can-skip'), reducedMotion ? 0 : mode === 'evento' ? 2600 : 1000);
 
@@ -428,6 +437,10 @@ async function runLaunchReveal(mode, state) {
       await runShortTimeline(overlay, pause);
     }
 
+    if (!liveHomePromise) {
+      // El overlay sigue cubriendo la pantalla mientras se prepara la landing.
+      liveHomePromise = activateLiveHome();
+    }
     await liveHomePromise;
     createRevealBusinessPreview();
     setRevealScene(overlay, 'final');
