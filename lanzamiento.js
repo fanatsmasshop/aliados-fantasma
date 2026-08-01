@@ -11,6 +11,123 @@ const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, m
 const PRESENTATION_DURATION = { evento: 28000, breve: 8000 };
 const OPEN_TRANSITION_MS = 1100;
 
+
+let launchAudioContext = null;
+let launchAudioNodes = [];
+let launchAudioStartedAt = 0;
+let launchAudioMode = 'breve';
+let launchAudioDuration = 0;
+
+function getLaunchAudioContext() {
+  if (launchAudioContext) return launchAudioContext;
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+  launchAudioContext = new AudioContextClass();
+  return launchAudioContext;
+}
+
+function rememberAudioNode(node) {
+  launchAudioNodes.push(node);
+  node.addEventListener?.('ended', () => {
+    launchAudioNodes = launchAudioNodes.filter(item => item !== node);
+  }, { once: true });
+  return node;
+}
+
+function stopLaunchAudio() {
+  launchAudioNodes.forEach(node => {
+    try { node.stop?.(); } catch {}
+    try { node.disconnect?.(); } catch {}
+  });
+  launchAudioNodes = [];
+}
+
+function makeTone(context, destination, startAt, duration, frequency, gainValue, type = 'sine', endFrequency = null) {
+  const oscillator = rememberAudioNode(context.createOscillator());
+  const gain = context.createGain();
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, startAt);
+  if (endFrequency) oscillator.frequency.exponentialRampToValueAtTime(Math.max(20, endFrequency), startAt + duration);
+  gain.gain.setValueAtTime(0.0001, startAt);
+  gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, gainValue), startAt + Math.min(.08, duration * .22));
+  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+  oscillator.connect(gain).connect(destination);
+  oscillator.start(startAt);
+  oscillator.stop(startAt + duration + .03);
+}
+
+function makeImpact(context, destination, startAt, strength = .18) {
+  makeTone(context, destination, startAt, .55, 86, strength, 'sine', 38);
+  makeTone(context, destination, startAt, .18, 240, strength * .34, 'triangle', 120);
+}
+
+function makeShimmer(context, destination, startAt, strength = .06) {
+  [620, 930, 1240].forEach((frequency, index) => {
+    makeTone(context, destination, startAt + index * .035, .62, frequency, strength / (index + 1), 'sine', frequency * 1.22);
+  });
+}
+
+function scheduleLaunchAudio(mode, elapsedMs, durationMs) {
+  const context = getLaunchAudioContext();
+  if (!context || context.state !== 'running') return false;
+
+  stopLaunchAudio();
+  launchAudioMode = mode;
+  launchAudioDuration = durationMs;
+  const elapsed = Math.max(0, elapsedMs / 1000);
+  const remaining = Math.max(.15, durationMs / 1000 - elapsed);
+  const now = context.currentTime + .03;
+  const master = context.createGain();
+  const compressor = context.createDynamicsCompressor();
+  master.gain.setValueAtTime(.0001, now);
+  master.gain.exponentialRampToValueAtTime(.3, now + .45);
+  master.gain.setValueAtTime(.3, Math.max(now + .46, now + remaining - .7));
+  master.gain.exponentialRampToValueAtTime(.0001, now + remaining);
+  master.connect(compressor).connect(context.destination);
+  launchAudioNodes.push(master, compressor);
+
+  // Capa ambiental continua, iniciada en el segundo actual de la presentación.
+  const phase = mode === 'evento' ? 48 + Math.min(28, elapsed * 1.15) : 62 + Math.min(22, elapsed * 2.4);
+  makeTone(context, master, now, remaining, phase, .10, 'sine', phase * 1.12);
+  makeTone(context, master, now, remaining, phase * 1.5, .035, 'triangle', phase * 1.72);
+
+  const cueTimes = mode === 'evento'
+    ? [0, 3, 7.2, 9.2, 12.2, 14.6, 19.6, 20.8, 22, 23.2, 24.2, 25.2, 26.2]
+    : [0, 2.2, 4.7, 7.1];
+
+  cueTimes.forEach((cue, index) => {
+    if (cue < elapsed - .08) return;
+    const cueAt = now + Math.max(0, cue - elapsed);
+    makeImpact(context, master, cueAt, index === cueTimes.length - 1 ? .28 : .14 + (index % 3) * .025);
+    if (index % 2 === 0 || index === cueTimes.length - 1) makeShimmer(context, master, cueAt + .05, index === cueTimes.length - 1 ? .095 : .045);
+  });
+
+  return true;
+}
+
+async function activateLaunchSound(overlay, mode, startedAt, duration) {
+  const context = getLaunchAudioContext();
+  if (!context) return false;
+  try {
+    if (context.state !== 'running') await context.resume();
+    const elapsed = Math.min(duration - 50, Math.max(0, performance.now() - startedAt));
+    const started = scheduleLaunchAudio(mode, elapsed, duration);
+    overlay?.classList.toggle('sound-active', started);
+    return started;
+  } catch {
+    return false;
+  }
+}
+
+function prepareLaunchSoundFromInteraction() {
+  const context = getLaunchAudioContext();
+  if (!context) return;
+  context.resume().catch(() => {});
+}
+
+document.addEventListener('pointerdown', prepareLaunchSoundFromInteraction, { once: true, passive: true });
+document.addEventListener('keydown', prepareLaunchSoundFromInteraction, { once: true });
+
 let launchState = null;
 let launchRefreshInProgress = false;
 let revealInProgress = false;
@@ -283,6 +400,8 @@ async function runLaunchReveal(mode, state) {
   const skipPromise = new Promise(resolve => { skipResolve = resolve; });
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const duration = reducedMotion ? 1800 : PRESENTATION_DURATION[mode] || PRESENTATION_DURATION.breve;
+  const soundPrompt = document.getElementById('launch-sound-prompt');
+  const revealStartedAt = performance.now();
   const modeLabel = document.getElementById('launch-reveal-mode-label');
   if (modeLabel) modeLabel.textContent = mode === 'evento' ? 'EVENTO CINEMATOGRÁFICO' : 'PRESENTACIÓN BREVE';
 
@@ -310,6 +429,17 @@ async function runLaunchReveal(mode, state) {
   overlay.className = `launch-reveal mode-${mode === 'evento' ? 'event' : 'short'}`;
   void overlay.offsetWidth;
   overlay.classList.add('is-running');
+  overlay.classList.remove('sound-active');
+
+  const onSoundRequest = async () => {
+    await activateLaunchSound(overlay, mode, revealStartedAt, duration);
+  };
+  soundPrompt?.addEventListener('click', onSoundRequest);
+
+  // Si el visitante ya interactuó antes del cero, el audio puede arrancar de inmediato.
+  if (launchAudioContext?.state === 'running') {
+    activateLaunchSound(overlay, mode, revealStartedAt, duration);
+  }
 
   const finishProgress = startRevealProgress(duration);
   const liveHomePromise = activateLiveHome();
@@ -350,6 +480,9 @@ async function runLaunchReveal(mode, state) {
     }
   } finally {
     finishProgress();
+    stopLaunchAudio();
+    soundPrompt?.removeEventListener('click', onSoundRequest);
+    overlay?.classList.remove('sound-active');
     document.removeEventListener('keydown', onKeydown);
     revealInProgress = false;
   }

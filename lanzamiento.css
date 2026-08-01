@@ -484,3 +484,66 @@ body.launch-reveal-active{
   .launch-reveal__mark img{width:82px!important;height:82px!important}
   .launch-scene--final img{width:88px!important;height:88px!important;margin-bottom:14px!important}
 }
+
+
+/* =========================================================
+   RC2.7 — Activación de sonido integrada a la presentación
+   ========================================================= */
+.launch-sound-prompt{
+  position:absolute;
+  left:50%;
+  bottom:max(34px,calc(env(safe-area-inset-bottom) + 22px));
+  z-index:30;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:54px;
+  max-width:min(92vw,390px);
+  padding:10px 16px 10px 11px;
+  border:1px solid rgba(118,134,255,.34);
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(120deg,rgba(6,14,34,.88),rgba(28,8,42,.9));
+  box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 30px rgba(89,95,255,.18),0 0 24px rgba(255,55,169,.12);
+  backdrop-filter:blur(18px);
+  transform:translate(-50%,18px) scale(.97);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .35s ease,transform .35s ease,visibility .35s ease,border-color .2s ease;
+  cursor:pointer;
+}
+.launch-reveal.is-running:not(.sound-active) .launch-sound-prompt{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translate(-50%,0) scale(1);
+  animation:launchSoundPromptPulse 2.2s ease-in-out infinite;
+}
+.launch-sound-prompt:hover{border-color:rgba(255,88,188,.52)}
+.launch-sound-prompt:focus-visible{outline:2px solid #64dfff;outline-offset:4px}
+.launch-sound-prompt__icon{
+  display:grid;
+  place-items:center;
+  flex:0 0 35px;
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#24caff,#765bff 53%,#ff3eaa);
+  box-shadow:0 0 18px rgba(103,96,255,.45);
+  font-size:1rem;
+}
+.launch-sound-prompt>span:last-child{display:grid;gap:1px;text-align:left;line-height:1.15}
+.launch-sound-prompt strong{font-size:.75rem;letter-spacing:.01em}
+.launch-sound-prompt small{color:#9faac1;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+.launch-reveal.sound-active .launch-sound-prompt{opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,12px) scale(.96);animation:none}
+@keyframes launchSoundPromptPulse{
+  0%,100%{box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 24px rgba(89,95,255,.15),0 0 18px rgba(255,55,169,.1)}
+  50%{box-shadow:0 18px 55px rgba(0,0,0,.4),0 0 42px rgba(89,95,255,.28),0 0 30px rgba(255,55,169,.18)}
+}
+@media(max-width:720px){
+  .launch-sound-prompt{bottom:max(22px,calc(env(safe-area-inset-bottom) + 14px));min-height:50px;padding:9px 14px 9px 9px}
+  .launch-sound-prompt__icon{flex-basis:32px;width:32px;height:32px}
+  .launch-sound-prompt strong{font-size:.7rem}.launch-sound-prompt small{font-size:.57rem}
+}
+@media(prefers-reduced-motion:reduce){.launch-sound-prompt{animation:none!important}}
