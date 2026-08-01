@@ -296,94 +296,148 @@ async function runVersionSequence(overlay, pause, steps) {
   return true;
 }
 
-function ensureShortHistoryScene(overlay) {
-  let scene = overlay.querySelector('[data-scene="short-history"]');
+function ensureReleaseLogScene(overlay) {
+  let scene = overlay.querySelector('[data-scene="release-log"]');
   if (scene) return scene;
 
   scene = document.createElement('section');
-  scene.className = 'launch-scene launch-scene--short-history';
-  scene.dataset.scene = 'short-history';
+  scene.className = 'launch-scene launch-scene--release-log';
+  scene.dataset.scene = 'release-log';
   scene.setAttribute('aria-hidden', 'true');
   scene.innerHTML = `
-    <div class="short-evolution">
-      <div class="short-evolution__head">
-        <span>ALIADOS FANTASMA</span>
-        <strong>SECUENCIA DE LANZAMIENTO</strong>
-      </div>
-      <div class="short-evolution__stage" aria-label="Evolución resumida de Aliados Fantasma">
-        <div class="short-evolution__core">
-          <span class="short-evolution__halo"></span>
-          <img src="aliados-fantasma-icono.webp" alt="">
-          <b>RED</b>
-        </div>
-        <span class="short-node short-node--idea" data-short-step="0"><i></i><b>v0.1</b><em>IDEA</em></span>
-        <span class="short-node short-node--profiles" data-short-step="1"><i></i><b>v0.7</b><em>PERFILES</em></span>
-        <span class="short-node short-node--directory" data-short-step="2"><i></i><b>v1.2</b><em>DIRECTORIO</em></span>
-        <span class="short-node short-node--panel" data-short-step="3"><i></i><b>v2.0</b><em>PANEL</em></span>
-        <span class="short-node short-node--marketing" data-short-step="4"><i></i><b>v2.8</b><em>MARKETING</em></span>
-        <span class="short-node short-node--ready" data-short-step="5"><i></i><b>v3.0</b><em>LISTA</em></span>
-        <div class="short-evolution__beam" aria-hidden="true"></div>
-      </div>
-      <div class="short-evolution__foot">
-        <p class="short-history__status">INICIANDO LA IDEA</p>
-        <div class="short-history__bar"><i></i></div>
+    <div class="release-log">
+      <header class="release-log__head">
+        <div><span>ALIADOS FANTASMA</span><strong>REGISTRO DE EVOLUCIÓN</strong></div>
+        <b class="release-log__state">INICIANDO</b>
+      </header>
+      <div class="release-log__body">
+        <nav class="release-log__rail" aria-label="Historial de versiones">
+          <button data-release-step="0"><i></i><b>v0.1</b><span>La idea</span></button>
+          <button data-release-step="1"><i></i><b>v0.3</b><span>Registro</span></button>
+          <button data-release-step="2"><i></i><b>v0.7</b><span>Perfiles</span></button>
+          <button data-release-step="3"><i></i><b>v1.2</b><span>Directorio</span></button>
+          <button data-release-step="4"><i></i><b>v2.0</b><span>Panel</span></button>
+          <button data-release-step="5"><i></i><b>v2.4</b><span>Visibilidad</span></button>
+          <button data-release-step="6"><i></i><b>v2.8</b><span>Marketing</span></button>
+          <button data-release-step="7"><i></i><b>v3.0</b><span>Red lista</span></button>
+        </nav>
+        <article class="release-log__content">
+          <div class="release-log__meta"><span class="release-log__version">v0.1</span><small class="release-log__eyebrow">PRIMERA ETAPA</small></div>
+          <h2 class="release-log__title">La idea</h2>
+          <p class="release-log__copy">Todo comenzó con una visión: conectar y apoyar negocios locales.</p>
+          <div class="release-log__module" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+            <div class="release-log__module-core"><img src="aliados-fantasma-icono.webp" alt=""></div>
+          </div>
+          <div class="release-log__progress"><i></i></div>
+        </article>
       </div>
     </div>`;
   overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
   return scene;
 }
 
-function updateShortHistory(scene, index) {
+function updateReleaseLog(scene, stage, index) {
+  scene.dataset.activeStep = String(index);
+  scene.querySelector('.release-log__state')?.replaceChildren(document.createTextNode(stage.state));
+  scene.querySelector('.release-log__version')?.replaceChildren(document.createTextNode(stage.version));
+  scene.querySelector('.release-log__eyebrow')?.replaceChildren(document.createTextNode(stage.eyebrow));
+  scene.querySelector('.release-log__title')?.replaceChildren(document.createTextNode(stage.title));
+  scene.querySelector('.release-log__copy')?.replaceChildren(document.createTextNode(stage.copy));
+  scene.querySelectorAll('[data-release-step]').forEach((item, itemIndex) => {
+    item.classList.toggle('is-complete', itemIndex < index);
+    item.classList.toggle('is-active', itemIndex === index);
+  });
+  const progress = scene.querySelector('.release-log__progress i');
+  if (progress) progress.style.transform = `scaleX(${(index + 1) / 8})`;
+  scene.classList.remove('release-log-hit');
+  void scene.offsetWidth;
+  scene.classList.add('release-log-hit');
+}
+
+function ensureShortBuildScene(overlay) {
+  let scene = overlay.querySelector('[data-scene="short-build"]');
+  if (scene) return scene;
+
+  scene = document.createElement('section');
+  scene.className = 'launch-scene launch-scene--short-build';
+  scene.dataset.scene = 'short-build';
+  scene.setAttribute('aria-hidden', 'true');
+  scene.innerHTML = `
+    <div class="short-build">
+      <header><span>ALIADOS FANTASMA</span><b>COMPILANDO LANZAMIENTO</b></header>
+      <div class="short-build__canvas">
+        <div class="short-build__stack" aria-hidden="true">
+          <article data-build-step="0"><small>01</small><strong>IDEA</strong><i></i></article>
+          <article data-build-step="1"><small>02</small><strong>PERFILES</strong><i></i></article>
+          <article data-build-step="2"><small>03</small><strong>DIRECTORIO</strong><i></i></article>
+          <article data-build-step="3"><small>04</small><strong>PANEL</strong><i></i></article>
+          <article data-build-step="4"><small>05</small><strong>MARKETING</strong><i></i></article>
+        </div>
+        <div class="short-build__brand">
+          <span class="short-build__ring"></span>
+          <img src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
+          <strong>RED LISTA</strong>
+        </div>
+      </div>
+      <footer><p class="short-build__status">INICIANDO PROYECTO</p><div><i></i></div></footer>
+    </div>`;
+  overlay.querySelector('.launch-reveal__timeline')?.appendChild(scene);
+  return scene;
+}
+
+function updateShortBuild(scene, index) {
   const labels = [
     'UNA IDEA EMPIEZA A TOMAR FORMA',
-    'CADA NEGOCIO OBTIENE IDENTIDAD',
-    'LOS NEGOCIOS SE ENCUENTRAN',
-    'NACEN NUEVAS HERRAMIENTAS',
-    'LA RED EMPIEZA A CRECER',
+    'CREANDO IDENTIDAD PARA CADA NEGOCIO',
+    'ORGANIZANDO LA RED LOCAL',
+    'ACTIVANDO HERRAMIENTAS',
+    'PREPARANDO CRECIMIENTO',
     'ALIADOS FANTASMA ESTÁ LISTO'
   ];
   scene.dataset.activeStep = String(index);
-  scene.querySelectorAll('[data-short-step]').forEach((item, itemIndex) => {
-    item.classList.toggle('is-done', itemIndex < index);
-    item.classList.toggle('is-current', itemIndex === index);
+  scene.querySelectorAll('[data-build-step]').forEach((item, itemIndex) => {
+    item.classList.toggle('is-complete', itemIndex < index);
+    item.classList.toggle('is-active', itemIndex === index);
   });
-  const core = scene.querySelector('.short-evolution__core');
-  if (core) core.dataset.level = String(index + 1);
-  const status = scene.querySelector('.short-history__status');
-  if (status) status.textContent = labels[index] || labels[labels.length - 1];
-  const bar = scene.querySelector('.short-history__bar i');
+  scene.querySelector('.short-build__brand')?.classList.toggle('is-ready', index >= 5);
+  scene.querySelector('.short-build__status')?.replaceChildren(document.createTextNode(labels[index] || labels.at(-1)));
+  const bar = scene.querySelector('footer div i');
   if (bar) bar.style.transform = `scaleX(${Math.min(1, (index + 1) / 6)})`;
+  scene.classList.remove('short-build-hit');
+  void scene.offsetWidth;
+  scene.classList.add('short-build-hit');
 }
 
 async function runEventTimeline(overlay, pause) {
-  const completed = await runVersionSequence(overlay, pause, [
-    [VERSION_STAGES.idea, 3000],
-    [VERSION_STAGES.register, 3000],
-    [VERSION_STAGES.profiles, 3000],
-    [VERSION_STAGES.directory, 3000],
-    [VERSION_STAGES.dashboard, 3000],
-    [VERSION_STAGES.visibility, 3000],
-    [VERSION_STAGES.marketing, 3000],
-    [VERSION_STAGES.ready, 3000]
-  ]);
-  if (!completed) return;
+  const scene = ensureReleaseLogScene(overlay);
+  setRevealScene(overlay, 'release-log');
+  const stages = [
+    VERSION_STAGES.idea,
+    VERSION_STAGES.register,
+    VERSION_STAGES.profiles,
+    VERSION_STAGES.directory,
+    VERSION_STAGES.dashboard,
+    VERSION_STAGES.visibility,
+    VERSION_STAGES.marketing,
+    VERSION_STAGES.ready
+  ];
+  for (let index = 0; index < stages.length; index += 1) {
+    updateReleaseLog(scene, stages[index], index);
+    if (!await pause(3000)) return;
+  }
   setRevealScene(overlay, 'final');
   await pause(4000);
 }
 
 async function runShortTimeline(overlay, pause) {
-  const scene = ensureShortHistoryScene(overlay);
-  setRevealScene(overlay, 'short-history');
-
-  const holds = [760, 720, 720, 720, 720, 1050];
+  const scene = ensureShortBuildScene(overlay);
+  setRevealScene(overlay, 'short-build');
+  const holds = [700, 700, 700, 700, 850, 1040];
   for (let index = 0; index < holds.length; index += 1) {
-    updateShortHistory(scene, index);
-    scene.classList.remove('short-hit');
-    void scene.offsetWidth;
-    scene.classList.add('short-hit');
+    updateShortBuild(scene, index);
     if (!await pause(holds[index])) return;
   }
-
   setRevealScene(overlay, 'final');
   await pause(2310);
 }
