@@ -1290,26 +1290,24 @@ body.af-page-home .benefit-chart{border:0;border-radius:0}.benefit-chart::before
 }
 
 @media(max-width:760px){
-  body.af-page-home .af-neon-hero{display:grid!important;grid-template-columns:1fr!important;gap:18px!important;padding:22px 18px 18px!important;min-height:auto!important;border-radius:24px!important}
-  body.af-page-home .af-neon-hero .hero-copy{order:1;display:grid;grid-template-columns:1fr;max-width:none!important;text-align:left!important}
-  body.af-page-home .af-neon-hero .badge-row{order:0;display:flex!important;flex-wrap:nowrap!important;gap:7px!important;margin:0 0 18px!important}.af-neon-hero .launch-badge{padding:7px 10px!important;font-size:.51rem!important;white-space:nowrap}
-  body.af-page-home .af-neon-hero .eyebrow{order:1;margin:0 0 11px!important;font-size:.61rem!important}
+  body.af-page-home .af-neon-hero{display:grid!important;grid-template-columns:1fr!important;gap:24px!important;padding:22px 18px 20px!important;min-height:auto!important;border-radius:24px!important}
+  body.af-page-home .af-neon-hero .hero-copy{display:grid;grid-template-columns:1fr;max-width:none!important;text-align:left!important}
+  body.af-page-home .af-neon-hero .badge-row{order:0;display:flex!important;flex-wrap:nowrap!important;gap:7px!important;margin:0 0 21px!important}.af-neon-hero .launch-badge{padding:7px 10px!important;font-size:.51rem!important;white-space:nowrap}
+  body.af-page-home .af-neon-hero .eyebrow{order:1;margin:0 0 13px!important;font-size:.61rem!important}
   body.af-page-home .hero h1.af-neon-title{order:2;max-width:none!important;width:100%!important;font-size:clamp(2.72rem,12.9vw,4rem)!important;line-height:.91!important}
   body.af-page-home .hero h1.af-neon-title>.line{white-space:normal!important}
   body.af-page-home .hero h1.af-neon-title>.line-gradient{width:auto!important}
   body.af-page-home .hero h1.af-neon-title>.line-final{display:block!important}
   body.af-page-home .hero h1.af-neon-title .word-slider{width:5.4em!important;vertical-align:bottom!important}
-  body.af-page-home .af-neon-hero .lead{order:3;margin-top:17px!important;font-size:.83rem!important;line-height:1.65!important}
-  body.af-page-home .af-neon-hero .hero-actions{order:4;display:grid!important;grid-template-columns:1fr!important;margin-top:18px!important}.af-neon-hero .hero-actions .button{width:100%!important}.af-neon-hero .button-primary{min-width:0!important}
+  body.af-page-home .af-neon-hero .lead{order:3;margin-top:20px!important;font-size:.83rem!important;line-height:1.65!important}
+  body.af-page-home .af-neon-hero .hero-actions{order:4;display:grid!important;grid-template-columns:1fr!important;margin-top:20px!important}.af-neon-hero .hero-actions .button{width:100%!important}.af-neon-hero .button-primary{min-width:0!important}
   body.af-page-home .af-neon-hero .hero-actions .button-secondary{display:none!important}
   body.af-page-home .af-neon-hero .trust-row{order:5;display:none!important}
-  body.af-page-home .hero-identity{grid-column:1;grid-row:auto;order:2;min-height:286px;margin-top:0!important;padding:10px 0 14px!important;border:1px solid rgba(63,117,255,.18);border-radius:22px;background:linear-gradient(145deg,rgba(3,12,30,.75),rgba(16,5,28,.72))}
-  body.af-page-home .hero-identity .main-logo{width:min(286px,78%)!important}
-  body.af-page-home .holo-platform{bottom:16px;height:70px;width:80%}
-  body.af-page-home .identity-tag{font-size:.5rem;padding:6px 10px;margin-top:2px}
-  body.af-page-home .orbit-one{width:380px;height:380px;right:-165px;top:-180px}
-  body.af-page-home .orbit-two{width:300px;height:300px;left:-155px;bottom:-150px}
-  body.af-page-home .af-neon-hero .countdown-card{order:3;grid-column:1;display:block!important;padding:18px!important;margin:0!important}
+  body.af-page-home .hero-identity{grid-column:1;grid-row:auto;min-height:330px;margin-top:-2px;order:2;border:1px solid rgba(63,117,255,.18);border-radius:22px;background:linear-gradient(145deg,rgba(3,12,30,.75),rgba(16,5,28,.72))}
+  body.af-page-home .hero-identity .main-logo{width:min(330px,82%)!important}
+  body.af-page-home .holo-platform{bottom:20px;height:84px}
+  body.af-page-home .identity-tag{font-size:.52rem;padding:7px 11px}
+  body.af-page-home .af-neon-hero .countdown-card{grid-column:1;display:block!important;padding:20px!important;margin:0!important}
   body.af-page-home .countdown-rocket{display:none!important}
   body.af-page-home .countdown{grid-template-columns:repeat(2,1fr)!important}
   body.af-page-home .countdown-card h2{font-size:1.8rem!important}
@@ -1594,10 +1592,11 @@ body.af-page-home .hero h1.af-neon-title .track{
 }
 
 
-/* RC2.5 — Orden y compactación móvil */
-@media(max-width:420px){
-  body.af-page-home .af-neon-hero{gap:16px!important;padding:20px 16px 16px!important}
-  body.af-page-home .hero-identity{min-height:268px!important}
-  body.af-page-home .hero-identity .main-logo{width:min(270px,76%)!important}
-  body.af-page-home .af-neon-hero .countdown-card{padding:16px!important}
-}
+/* RC2.6 — Palabra dinámica en línea inferior */
+body.af-page-home .hero h1.af-neon-title>.line-final{display:block!important;max-width:100%!important;white-space:nowrap!important}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic{display:block!important;max-width:100%!important;line-height:.92!important;margin-top:.02em!important}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{display:inline-block!important;width:5.7em!important;height:1.08em!important;vertical-align:top!important}
+body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-current{font:inherit!important;line-height:1.02!important}
+@media (min-width:1181px){body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{width:5.65em!important}}
+@media (max-width:760px){body.af-page-home .hero h1.af-neon-title>.line-final{display:block!important}body.af-page-home .hero h1.af-neon-title>.line-dynamic{display:block!important;margin-top:.03em!important}body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{width:5.9em!important}}
+@media (max-width:420px){body.af-page-home .hero h1.af-neon-title>.line-dynamic .word-slider{width:5.6em!important}}
