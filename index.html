@@ -164,10 +164,11 @@
         </div>
         <h2 id="launch-date-heading"><span>24 de agosto de 2026</span><br><em>11:00 a. m.</em></h2>
         <p id="launch-card-message">Regístrate hoy y deja tu perfil listo antes del lanzamiento oficial.</p>
+        <p class="pre2-network-proof" id="pre2-network-proof">La red ya tiene negocios registrados.</p>
         <div class="pre2-launch-list">
           <div><span>01</span><p><b>Cuenta inmediata</b><small>Verifica tu correo y entra a tu panel.</small></p></div>
           <div><span>02</span><p><b>Perfil listo</b><small>Completa datos, fotos, horarios y promociones.</small></p></div>
-          <div><span>03</span><p><b>Salida pública</b><small>Tu perfil se publica después de revisión.</small></p></div>
+          <div><span>03</span><p><b>Red en preparación</b><small>Los perfiles aprobados quedarán listos para abrir al público.</small></p></div>
         </div>
         <div class="countdown pre2-countdown" id="countdown">
           <div><strong id="days">00</strong><span>días</span></div>
@@ -179,29 +180,18 @@
       </aside>
     </section>
 
-    <section class="pre2-preview" id="que-es">
+    <section class="pre2-preview pre2-real-network" id="que-es">
       <div class="pre2-heading reveal">
-        <div><p class="pre2-eyebrow">VISTA PREVIA</p><h2>Así se verá un negocio dentro de la red.</h2></div>
-        <span>Perfiles diseñados para convertir visitas en clientes.</span>
+        <div><p class="pre2-eyebrow">LA RED YA EMPEZÓ</p><h2>Negocios reales que ya forman parte de Aliados.</h2></div>
+        <span id="pre2-real-summary">Cargando negocios registrados…</span>
       </div>
-      <div class="pre2-preview-grid">
-        <article class="pre2-profile-card reveal">
-          <div class="pre2-card-cover pre2-cover-one"><span>VISTA PREVIA</span></div>
-          <div class="pre2-card-body"><div class="pre2-avatar">AF</div><div><h3>Café Horizonte</h3><p>Cafetería · CDMX</p></div><b>4.8 ★</b></div>
-          <div class="pre2-card-meta"><span>WhatsApp directo</span><span>Cómo llegar</span></div>
-        </article>
-        <article class="pre2-profile-card reveal">
-          <div class="pre2-card-cover pre2-cover-two"><span>VISTA PREVIA</span></div>
-          <div class="pre2-card-body"><div class="pre2-avatar">ET</div><div><h3>Elite Training</h3><p>Gimnasio · Estado de México</p></div><b>4.9 ★</b></div>
-          <div class="pre2-card-meta"><span>Horarios</span><span>Promociones</span></div>
-        </article>
-        <article class="pre2-profile-card reveal">
-          <div class="pre2-card-cover pre2-cover-three"><span>VISTA PREVIA</span></div>
-          <div class="pre2-card-body"><div class="pre2-avatar">VV</div><div><h3>Verde Vivo</h3><p>Hogar · Jalisco</p></div><b>4.7 ★</b></div>
-          <div class="pre2-card-meta"><span>Galería</span><span>Ubicación</span></div>
-        </article>
+      <div class="pre2-real-grid" id="pre2-real-businesses" aria-live="polite">
+        <article class="pre2-real-loading"><span></span><div><b>Cargando la red…</b><small>Consultando negocios registrados.</small></div></article>
       </div>
-      <p class="pre2-preview-note">🔒 Antes del lanzamiento estas tarjetas son solo una referencia visual. Los perfiles reales aparecerán cuando la red abra.</p>
+      <div class="pre2-real-proof reveal">
+        <span><i></i> Datos conectados a Aliados Fantasma</span>
+        <p>Estos no son ejemplos: son negocios que ya están registrados en la plataforma. Sus perfiles completos se abrirán al público con el lanzamiento.</p>
+      </div>
     </section>
 
     <section class="pre2-benefits" id="beneficios">
@@ -340,6 +330,7 @@
     <a href="login.html">Iniciar sesión</a>
     <a href="registro.html">Registrar negocio</a>
   </div>
+  <script type="module" src="prelaunch-real.js?v=20260814-REAL1"></script>
   <script type="module" src="lanzamiento.js?v=20260814-NACIONAL1"></script>
   <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>
   <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>

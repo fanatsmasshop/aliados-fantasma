@@ -1,0 +1,12 @@
+ALIADOS FANTASMA — PRELANZAMIENTO CON DATOS REALES
+14/08/2026
+
+Reemplaza en la raíz:
+- index.html
+- prelaunch-v2.css
+
+Agrega en la raíz:
+- prelaunch-real.js
+
+La sección de negocios del prelanzamiento ya no usa ejemplos ni ratings inventados.
+Carga negocios activos directamente desde Supabase.
