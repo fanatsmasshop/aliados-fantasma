@@ -1,0 +1,23 @@
+ALIADOS FANTASMA — REDISEÑO ESTRUCTURAL PRELANZAMIENTO
+Fecha: 14 agosto 2026
+
+SUBIR A LA RAÍZ DE GITHUB:
+- index.html (reemplazar)
+- prelaunch-v2.css (nuevo)
+
+CAMBIO REAL:
+- Reemplaza el HTML de la portada de prelanzamiento, no es un simple overlay CSS.
+- Hero nuevo y más compacto.
+- Cuenta regresiva compacta.
+- Vista previa de perfiles.
+- Beneficios en franja.
+- Flujo de cuenta en 3 pasos.
+- Cobertura nacional destacada.
+- Responsive móvil estructural.
+
+SUPABASE:
+La fecha de lanzamiento ya fue corregida directamente a:
+24 de agosto de 2026, 11:00 a. m. CDMX
+(2026-08-24 17:00:00+00)
+
+No ejecutar SQL adicional para este parche.
