@@ -29,7 +29,7 @@ function render(items) {
     return;
   }
   grid.innerHTML = items.map(business => {
-    const location = [business.colonia,business.municipio].filter(Boolean).join(', ');
+    const location = [business.colonia,business.localidad,business.municipio,business.estado_region].filter(Boolean).join(', ');
     return `<article class="business-card"><div class="business-cover" ${business.portada_url ? `style="background-image:url('${esc(business.portada_url)}')"` : ''}><div class="business-logo">${business.logo_url ? `<img src="${esc(business.logo_url)}" alt="Logo de ${esc(business.nombre)}">` : esc(business.nombre.charAt(0))}</div></div><div class="business-content"><small>${esc(business.categorias?.nombre || 'Negocio aliado')}</small><h3>${esc(business.nombre)}</h3><p>${esc(business.descripcion_corta || 'Conoce este negocio participante de Aliados Fantasma.')}</p><span class="business-location">${esc(location || 'Ubicación por confirmar')}</span><a href="perfil.html?slug=${encodeURIComponent(business.slug)}">Ver perfil digital →</a></div></article>`;
   }).join('');
 }
@@ -40,7 +40,7 @@ async function loadBusinesses() {
     total.textContent = 'Demo sin conexión';
     return;
   }
-  const { data, error } = await supabase.from('negocios').select('nombre,slug,descripcion_corta,logo_url,portada_url,colonia,municipio,destacado,categorias(nombre)').eq('activo',true).order('destacado',{ascending:false}).order('nombre',{ascending:true});
+  const { data, error } = await supabase.from('negocios').select('nombre,slug,descripcion_corta,logo_url,portada_url,colonia,localidad,municipio,estado_region,destacado,categorias(nombre)').eq('activo',true).order('destacado',{ascending:false}).order('nombre',{ascending:true});
   if (error) {
     console.error(error);
     grid.innerHTML = `<article class="business-placeholder">No fue posible cargar los negocios: ${esc(error.message)}</article>`;
@@ -53,7 +53,7 @@ async function loadBusinesses() {
 
 search?.addEventListener('input', () => {
   const term = search.value.trim().toLowerCase();
-  render(businesses.filter(business => [business.nombre,business.descripcion_corta,business.colonia,business.municipio,business.categorias?.nombre].some(value => (value || '').toLowerCase().includes(term))));
+  render(businesses.filter(business => [business.nombre,business.descripcion_corta,business.colonia,business.localidad,business.municipio,business.estado_region,business.categorias?.nombre].some(value => (value || '').toLowerCase().includes(term))));
 });
 
 loadBusinesses();

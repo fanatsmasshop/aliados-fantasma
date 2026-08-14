@@ -64,7 +64,7 @@ function render() {
   const term = search.value.trim().toLowerCase();
   const selectedStatus = filter.value;
   const visible = rows.filter(row => {
-    const text = [row.nombre_negocio, row.nombre_responsable, row.correo, row.municipio, row.colonia, row.whatsapp, row.categoria].join(' ').toLowerCase();
+    const text = [row.nombre_negocio, row.nombre_responsable, row.correo, row.estado_region, row.municipio, row.colonia, row.whatsapp, row.categoria].join(' ').toLowerCase();
     return (!selectedStatus || row.estado === selectedStatus) && (!term || text.includes(term));
   });
 
@@ -84,7 +84,7 @@ function render() {
         <div><dt>Responsable</dt><dd>${esc(row.nombre_responsable || '—')}</dd></div>
         <div><dt>Correo</dt><dd><a href="mailto:${esc(row.correo || '')}">${esc(row.correo || '—')}</a>${row.correo_verificado ? '<em class="verified">✓ Verificado</em>' : '<em>Sin verificar</em>'}</dd></div>
         <div><dt>WhatsApp</dt><dd>${row.whatsapp ? `<a href="https://wa.me/52${esc(String(row.whatsapp).replace(/\D/g, '').replace(/^52/, ''))}" target="_blank" rel="noopener">${esc(row.whatsapp)}</a>` : '—'}</dd></div>
-        <div><dt>Ubicación</dt><dd>${esc([row.colonia, row.municipio].filter(Boolean).join(', ') || '—')}</dd></div>
+        <div><dt>Ubicación</dt><dd>${esc([row.colonia, row.municipio, row.estado_region].filter(Boolean).join(', ') || '—')}</dd></div>
         <div><dt>Registro</dt><dd>${esc(fmt(row.created_at))}</dd></div>
         <div><dt>Última revisión</dt><dd>${row.revisado_at ? esc(fmt(row.revisado_at)) : 'Sin revisar'}</dd></div>
         ${row.notas_admin ? `<div class="wide"><dt>Notas internas</dt><dd>${esc(row.notas_admin)}</dd></div>` : ''}

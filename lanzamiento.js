@@ -4,7 +4,7 @@ import {
   formatLaunchDate,
   isAdministrator
 } from './launch-control.js?v=20260730-CINEMA2';
-import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260730-LIVE1';
+import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260814-NACIONAL1';
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));

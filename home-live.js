@@ -78,7 +78,7 @@ function categoryName(business) {
 }
 
 function locationText(business) {
-  return [business.colonia, business.municipio].filter(Boolean).join(', ') || business.municipio || 'Estado de México';
+  return [business.colonia, business.localidad, business.municipio, business.estado_region].filter(Boolean).join(', ') || 'México';
 }
 
 function activePromotions(business) {
@@ -294,7 +294,9 @@ function applyFilters() {
       business.descripcion,
       category,
       business.colonia,
-      business.municipio
+      business.localidad,
+      business.municipio,
+      business.estado_region
     ].join(' '));
     return haystack.includes(query);
   });

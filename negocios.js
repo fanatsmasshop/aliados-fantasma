@@ -1,8 +1,10 @@
 import { requireAdmin, logout } from './auth.js?v=20260717-2';
 import { supabase } from './supabase-client.js?v=20260717-2';
 import { shell, esc, slugify, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260717-2';
+import { populateStateSelect } from './mexico-geo.js?v=20260814-NACIONAL1';
 
 let businesses = [];
+populateStateSelect(document.querySelector('#business-region'));
 let categories = [];
 
 const MEDIA_BUCKET = 'negocios-media';
@@ -116,7 +118,7 @@ function render() {
   const status = document.querySelector('#status-filter').value;
   const category = document.querySelector('#category-filter').value;
   const filtered = businesses.filter(item =>
-    (!term || [item.nombre,item.slug,item.municipio].some(value => (value || '').toLowerCase().includes(term))) &&
+    (!term || [item.nombre,item.slug,item.estado_region,item.municipio,item.localidad].some(value => (value || '').toLowerCase().includes(term))) &&
     (!status || (status === 'active' ? item.activo : !item.activo)) &&
     (!category || item.categoria_id === category)
   );
@@ -125,7 +127,7 @@ function render() {
     <tr>
       <td><div class="business-cell"><span class="business-logo">${item.logo_url ? `<img src="${esc(item.logo_url)}" alt="">` : esc(item.nombre.charAt(0))}</span><div><strong>${esc(item.nombre)}</strong><small class="muted">/${esc(item.slug)}</small></div></div></td>
       <td>${esc(item.categorias?.nombre || 'Sin categoría')}</td>
-      <td>${esc([item.colonia,item.municipio].filter(Boolean).join(', ') || 'Sin ubicación')}</td>
+      <td>${esc([item.colonia,item.localidad,item.municipio,item.estado_region].filter(Boolean).join(', ') || 'Sin ubicación')}</td>
       <td><span class="badge ${item.estado_operativo==='activo' ? 'active' : 'inactive'}">${({activo:'Activo',cerrado_temporalmente:'Cerrado temporalmente',suspendido:'Suspendido',eliminacion_programada:'Eliminación programada'})[item.estado_operativo||'activo']}</span>${item.motivo_suspension ? `<small class="muted">${esc(item.motivo_suspension)}</small>` : ''}</td>
       <td><span class="badge">${({aliados:'Aliados',compartido:'Compartido',autoadministrado:'Autoadministrado'})[item.modo_gestion||'aliados']}</span></td>
       <td><strong>${Number(item.porcentaje_perfil||calculateCompletion(item))}%</strong><div class="progress" style="min-width:90px"><i style="width:${Number(item.porcentaje_perfil||calculateCompletion(item))}%"></i></div></td>
@@ -148,7 +150,7 @@ function newBusiness() {
 window.editBusiness = (id) => {
   const item = businesses.find(business => business.id === id);
   if (!item) return;
-  const mapping = {id:'business-id',nombre:'business-name',slug:'business-slug',categoria_id:'business-category',whatsapp:'business-whatsapp',correo:'business-email',telefono:'business-phone',descripcion_corta:'business-short',descripcion:'business-description',direccion:'business-address',colonia:'business-colony',municipio:'business-municipality',codigo_postal:'business-zip',enlace_maps:'business-maps',logo_url:'business-logo',portada_url:'business-cover',color_primario:'business-primary',color_secundario:'business-secondary'};
+  const mapping = {id:'business-id',nombre:'business-name',slug:'business-slug',categoria_id:'business-category',whatsapp:'business-whatsapp',correo:'business-email',telefono:'business-phone',descripcion_corta:'business-short',descripcion:'business-description',direccion:'business-address',colonia:'business-colony',localidad:'business-locality',municipio:'business-municipality',estado_region:'business-region',codigo_postal:'business-zip',enlace_maps:'business-maps',logo_url:'business-logo',portada_url:'business-cover',color_primario:'business-primary',color_secundario:'business-secondary'};
   Object.entries(mapping).forEach(([key, element]) => document.querySelector(`#${element}`).value = item[key] || '');
   document.querySelector('#business-active').checked = Boolean(item.activo);
   document.querySelector('#business-featured').checked = Boolean(item.destacado);
@@ -171,7 +173,7 @@ async function saveBusiness(event) {
     correo:document.querySelector('#business-email').value.trim() || null, telefono:document.querySelector('#business-phone').value.trim() || null,
     descripcion_corta:document.querySelector('#business-short').value.trim() || null, descripcion:document.querySelector('#business-description').value.trim() || null,
     direccion:document.querySelector('#business-address').value.trim() || null, colonia:document.querySelector('#business-colony').value.trim() || null,
-    municipio:document.querySelector('#business-municipality').value.trim() || null, codigo_postal:document.querySelector('#business-zip').value.trim() || null,
+    localidad:document.querySelector('#business-locality').value.trim() || null, municipio:document.querySelector('#business-municipality').value.trim() || null, estado_region:document.querySelector('#business-region').value || null, pais:'México', codigo_postal:document.querySelector('#business-zip').value.trim() || null,
     enlace_maps:document.querySelector('#business-maps').value.trim() || null, logo_url:document.querySelector('#business-logo').value.trim() || null,
     portada_url:document.querySelector('#business-cover').value.trim() || null, color_primario:document.querySelector('#business-primary').value.trim() || '#111111',
     color_secundario:document.querySelector('#business-secondary').value.trim() || '#ffffff', activo:document.querySelector('#business-active').checked,
@@ -613,7 +615,7 @@ window.suspendBusiness=suspendBusiness;window.liftSuspension=liftSuspension;
 
 
 function calculateCompletion(item){
-  const checks=[item.nombre,item.categoria_id,item.descripcion_corta,item.whatsapp,item.direccion,item.municipio,item.logo_url,item.portada_url];
+  const checks=[item.nombre,item.categoria_id,item.descripcion_corta,item.whatsapp,item.direccion,item.estado_region,item.municipio,item.logo_url,item.portada_url];
   return Math.round(checks.filter(Boolean).length/checks.length*100);
 }
 

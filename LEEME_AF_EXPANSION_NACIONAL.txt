@@ -1,0 +1,26 @@
+ALIADOS FANTASMA — EXPANSIÓN NACIONAL NACIONAL1
+Fecha: 14 de agosto de 2026
+
+OBJETIVO
+Aliados Fantasma deja de estar limitado a Ecatepec y queda preparado para registrar, publicar y filtrar negocios de los 32 estados de México.
+
+CAMBIOS PRINCIPALES
+- Registro: ahora solicita Estado + Municipio/Alcaldía + Colonia.
+- Panel del negocio: agrega Estado, Municipio/Alcaldía, Ciudad/Localidad y Código Postal.
+- Directorio: agrega filtro por Estado y después filtra los municipios disponibles dentro de ese estado.
+- Búsqueda: incluye estado, municipio, localidad, colonia y dirección.
+- Perfil público/SEO: usa la ubicación real del negocio; ya no fuerza "Estado de México".
+- Administración: permite guardar y buscar negocios por estado/municipio.
+- Portada: Aliados Fantasma se presenta como red nacional nacida en Ecatepec.
+- Datos existentes de Ecatepec: se conservan y se marcan como Estado de México cuando no tenían estado guardado.
+
+PASO DE BASE DE DATOS OBLIGATORIO
+1. Abre Supabase > SQL Editor.
+2. Ejecuta completo: 076_expansion_nacional.sql
+3. Debe terminar mostrando: expansion_nacional_ok
+
+DESPLIEGUE
+Sube/reemplaza únicamente los archivos de esta entrega en la raíz del repositorio. No uses carpetas nuevas.
+
+IMPORTANTE
+No se eliminaron negocios, usuarios, pre-registros, perfiles, promociones ni imágenes existentes.

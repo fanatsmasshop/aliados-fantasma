@@ -39,12 +39,12 @@
       <div class="directory-hero-copy">
         <p class="eyebrow">DESCUBRE LO QUE ESTÁ CERCA</p>
         <h1 id="directory-title">Negocios locales que vale la pena conocer.</h1>
-        <p>Busca por nombre, categoría, colonia o municipio. Descubre promociones y nuevos integrantes de la red.</p>
+        <p>Busca por nombre, categoría, estado, municipio, alcaldía o colonia. Descubre negocios de cualquier parte de México.</p>
       </div>
       <div class="directory-search-shell" role="search">
         <label class="directory-search">
           <span aria-hidden="true">⌕</span>
-          <input id="directory-search" type="search" autocomplete="off" placeholder="Ej. comida, ropa, Cd. Azteca…" aria-label="Buscar negocios">
+          <input id="directory-search" type="search" autocomplete="off" placeholder="Ej. comida, ropa, Guadalajara, Mérida…" aria-label="Buscar negocios">
           <button id="clear-search" class="clear-search hidden" type="button" aria-label="Limpiar búsqueda">×</button>
         </label>
         <button id="search-button" class="button primary" type="button">Buscar</button>
@@ -65,7 +65,12 @@
         </label>
 
         <label class="filter-field">
-          <span>Municipio</span>
+          <span>Estado</span>
+          <select id="region-filter"><option value="">Todos los estados</option></select>
+        </label>
+
+        <label class="filter-field">
+          <span>Municipio o alcaldía</span>
           <select id="municipality-filter"><option value="">Todos los municipios</option></select>
         </label>
 
@@ -90,7 +95,7 @@
 
         <div class="local-support-card">
           <span aria-hidden="true">✦</span>
-          <div><strong>Apoyemos lo local</strong><p>Cada visita fortalece a los negocios de nuestra comunidad.</p></div>
+          <div><strong>Apoyemos lo local</strong><p>Descubre y fortalece negocios de tu comunidad, estés donde estés en México.</p></div>
         </div>
       </aside>
 

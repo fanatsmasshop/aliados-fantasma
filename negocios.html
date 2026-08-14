@@ -31,7 +31,7 @@
       <main class="content">
 <section class="page-head"><div><p class="eyebrow">DIRECTORIO</p><h2>Gestión de negocios</h2><p class="muted">Crea, edita, activa y revisa perfiles.</p></div><button id="new-business" class="button primary" type="button">+ Nuevo negocio</button></section>
 <div class="panel">
-  <div class="toolbar"><input id="search" class="search" placeholder="Buscar por nombre, municipio o slug" aria-label="Buscar negocios"><select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select><select id="category-filter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select></div>
+  <div class="toolbar"><input id="search" class="search" placeholder="Buscar por nombre, estado, municipio o slug" aria-label="Buscar negocios"><select id="status-filter" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select><select id="category-filter" aria-label="Filtrar por categoría"><option value="">Todas las categorías</option></select></div>
   <div class="table-wrap"><table class="data-table"><thead><tr><th>Negocio</th><th>Categoría</th><th>Ubicación</th><th>Estado</th><th>Gestión</th><th>Perfil</th><th>Creación</th><th>Acciones</th></tr></thead><tbody id="business-body"><tr><td colspan="8">Cargando…</td></tr></tbody></table></div>
 </div>
 <div id="business-modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">FORMULARIO</p><h2 id="business-modal-title">Nuevo negocio</h2></div><button class="icon-button" data-close="#business-modal" type="button">✕</button></div>
@@ -42,7 +42,8 @@
   <label><span>Correo</span><input id="business-email" type="email"></label><label><span>Teléfono</span><input id="business-phone"></label>
   <label class="wide"><span>Descripción corta</span><input id="business-short"></label><label class="wide"><span>Descripción</span><textarea id="business-description"></textarea></label>
   <label><span>Dirección</span><input id="business-address"></label><label><span>Colonia</span><input id="business-colony"></label>
-  <label><span>Municipio</span><input id="business-municipality"></label><label><span>Código postal</span><input id="business-zip"></label>
+  <label><span>Ciudad o localidad</span><input id="business-locality"></label><label><span>Municipio o alcaldía</span><input id="business-municipality"></label>
+  <label><span>Estado</span><select id="business-region"><option value="">Selecciona estado</option></select></label><label><span>Código postal</span><input id="business-zip" inputmode="numeric" maxlength="5"></label>
 
   <label class="wide"><span>Google Maps</span><input id="business-maps" type="url"></label>
 
@@ -114,7 +115,7 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="negocios.js?v=20260729-INVITE10"></script>
+  <script type="module" src="negocios.js?v=20260814-NACIONAL1"></script>
   <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>
 </body>
 </html>

@@ -1,11 +1,13 @@
 import { supabase } from './supabase-client.js?v=20260720-600';
 import { getLaunchState } from './launch-control.js?v=20260730-DATE1';
 import { requireContext, clearActiveContext, getActiveContext, setActiveContext } from './auth-context.js?v=20260724-CTX-LOCK-002';
+import { populateStateSelect } from './mexico-geo.js?v=20260814-NACIONAL1';
 
 let launchOpen = false;
 let launchState = { open:false, hasDate:false, launchLabel:'Fecha por confirmar' };
 const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 const stepNames = ['Identidad','Contacto','Ubicación','Horarios','Galería','Promociones','Revisión'];
+populateStateSelect(document.querySelector('[name="estado_region"]'));
 let currentStep = 0;
 let user;
 let pre;
@@ -111,7 +113,8 @@ function normalizeSocialFields(){
 function serialize(){
   const data = {...draft.datos};
   normalizeSocialFields();
-  ['nombre','categoria','descripcion_corta','descripcion','logo_url','portada_url','whatsapp','telefono','facebook','instagram','tiktok','youtube','web','direccion','colonia','municipio','maps','como_llegar'].forEach(key => data[key] = field(key)?.value.trim() || '');
+  ['nombre','categoria','descripcion_corta','descripcion','logo_url','portada_url','whatsapp','telefono','facebook','instagram','tiktok','youtube','web','direccion','colonia','localidad','municipio','estado_region','codigo_postal','maps','como_llegar'].forEach(key => data[key] = field(key)?.value.trim() || '');
+  data.pais = 'México';
   data.horarios = days.map((day,index) => ({
     dia:day,
     cerrado:document.querySelector(`[name="closed-${index}"]`).checked,
@@ -129,8 +132,8 @@ function serialize(){
 
 function calc(data){
   let score = 0;
-  const total = 12;
-  ['nombre','categoria','descripcion_corta','whatsapp','direccion','municipio','logo_url','portada_url'].forEach(key => { if(data[key]) score++; });
+  const total = 13;
+  ['nombre','categoria','descripcion_corta','whatsapp','direccion','estado_region','municipio','logo_url','portada_url'].forEach(key => { if(data[key]) score++; });
   if((data.horarios || []).some(item => !item.cerrado && item.abre && item.cierra)) score++;
   if((data.galeria || []).length) score++;
   if(data.facebook || data.instagram || data.tiktok || data.youtube || data.web) score++;
@@ -143,6 +146,7 @@ function missingFields(data){
   if(!data.descripcion) missing.push('descripción completa');
   if(!data.logo_url) missing.push('logo');
   if(!data.portada_url) missing.push('portada');
+  if(!data.estado_region) missing.push('estado');
   if(!data.direccion) missing.push('dirección');
   if(!data.maps) missing.push('mapa');
   if(!(data.galeria || []).length) missing.push('galería');
@@ -199,7 +203,7 @@ function addPromotion(item={}){
 }
 
 function fill(data){
-  ['nombre','categoria','descripcion_corta','descripcion','logo_url','portada_url','whatsapp','telefono','facebook','instagram','tiktok','youtube','web','direccion','colonia','municipio','maps','como_llegar'].forEach(key => { if(field(key)) field(key).value = data[key] || ''; });
+  ['nombre','categoria','descripcion_corta','descripcion','logo_url','portada_url','whatsapp','telefono','facebook','instagram','tiktok','youtube','web','direccion','colonia','localidad','municipio','estado_region','codigo_postal','maps','como_llegar'].forEach(key => { if(field(key)) field(key).value = data[key] || ''; });
   renderSchedule(data.horarios);
   renderGallery();
   document.querySelector('#promotions-list').innerHTML = '';
@@ -420,7 +424,8 @@ function validateCurrentStep(){
   if(currentStep === 1 && !data.whatsapp && !data.telefono) errors.push('WhatsApp o teléfono');
   if(currentStep === 2){
     if(!data.direccion) errors.push('dirección');
-    if(!data.municipio) errors.push('municipio');
+    if(!data.estado_region) errors.push('estado');
+    if(!data.municipio) errors.push('municipio o alcaldía');
   }
   if(currentStep === 3 && !(data.horarios || []).some(item => !item.cerrado && item.abre && item.cierra)) errors.push('al menos un horario abierto');
   if(errors.length){
@@ -534,7 +539,7 @@ async function init(){
 
     const {data:business,error:businessError} = await supabase
       .from('negocios')
-      .select('id,nombre,slug,whatsapp,telefono,descripcion_corta,descripcion,direccion,colonia,municipio,enlace_maps,logo_url,portada_url,activo,estado')
+      .select('id,nombre,slug,whatsapp,telefono,descripcion_corta,descripcion,direccion,colonia,localidad,municipio,estado_region,codigo_postal,enlace_maps,logo_url,portada_url,activo,estado')
       .eq('id',adminBusinessId)
       .maybeSingle();
     if(businessError) throw businessError;
@@ -571,7 +576,7 @@ async function init(){
           nombre:business.nombre || '', categoria:'', descripcion_corta:business.descripcion_corta || '',
           descripcion:business.descripcion || '', logo_url:business.logo_url || '', portada_url:business.portada_url || '',
           whatsapp:business.whatsapp || '', telefono:business.telefono || '', direccion:business.direccion || '',
-          colonia:business.colonia || '', municipio:business.municipio || '', maps:business.enlace_maps || '',
+          colonia:business.colonia || '', localidad:business.localidad || '', municipio:business.municipio || '', estado_region:business.estado_region || '', codigo_postal:business.codigo_postal || '', maps:business.enlace_maps || '',
           galeria:[], promociones:[], horarios:[]
         }
       };
@@ -646,7 +651,7 @@ async function init(){
       const {data:draftData,error} = await supabase.from('perfiles_borrador').select('*').eq('usuario_id',authenticatedUser.id).maybeSingle();
       if(error) throw error;
       if(draftData){ draft = draftData; draftOwnerId = authenticatedUser.id; }
-      else { draftOwnerId = authenticatedUser.id; draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]}; }
+      else { draftOwnerId = authenticatedUser.id; draft.datos = {nombre:pre.nombre_negocio || '',categoria:pre.categoria || '',whatsapp:pre.whatsapp || '',estado_region:pre.estado_region || '',municipio:pre.municipio || '',colonia:pre.colonia || '',galeria:[],promociones:[]}; }
       await loadPublishedBusiness();
       if(draft.negocio_id){
         setActiveContext(authenticatedUser.id,{
@@ -691,8 +696,8 @@ document.querySelector('#submit-review').onclick = async () => {
     const percentage = updateProgress();
     if(percentage < 60){ showMessage('Completa al menos 60% del perfil antes de enviarlo.','error'); return; }
     const currentData = serialize();
-    if(!currentData.nombre || !currentData.categoria || (!currentData.whatsapp && !currentData.telefono) || !currentData.direccion || !currentData.municipio){
-      showMessage('Completa nombre, categoría, un medio de contacto, dirección y municipio antes de enviar.','error',7000);
+    if(!currentData.nombre || !currentData.categoria || (!currentData.whatsapp && !currentData.telefono) || !currentData.direccion || !currentData.estado_region || !currentData.municipio){
+      showMessage('Completa nombre, categoría, un medio de contacto, dirección, estado y municipio o alcaldía antes de enviar.','error',7000);
       return;
     }
     const missing = missingFields(currentData);

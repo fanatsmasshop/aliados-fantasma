@@ -45,7 +45,7 @@ function safeUrl(value){
 }
 
 function whatsappUrl(number,name=''){const digits=String(number||'').replace(/\D/g,'');return digits?`https://wa.me/${digits}?text=${encodeURIComponent(`Hola, vi el perfil de ${name} en Aliados Fantasma.`)}`:'';}
-function fullAddress(b){return [b.direccion,b.colonia,b.municipio,b.estado_region,b.codigo_postal].filter(Boolean).join(', ');}
+function fullAddress(b){return [b.direccion,b.colonia,b.localidad,b.municipio,b.estado_region,b.codigo_postal,'México'].filter(Boolean).join(', ');}
 function formatTime(value){return String(value||'').slice(0,5);}
 function formatDate(value){if(!value)return '';const d=new Date(value);return Number.isNaN(d.getTime())?'':new Intl.DateTimeFormat('es-MX',{day:'numeric',month:'long',year:'numeric'}).format(d);}
 function socialName(platform=''){const key=platform.toLowerCase().trim();return ({facebook:'Facebook',instagram:'Instagram',tiktok:'TikTok',youtube:'YouTube','sitio web':'Sitio web',web:'Sitio web',whatsapp:'WhatsApp'})[key]||platform;}
@@ -54,7 +54,7 @@ function mapEmbed(address){return address?`https://www.google.com/maps?q=${encod
 function normalizeDraft(d){
   const b=d.datos||{};
   return {
-    id:d.negocio_id||'',slug:'',nombre:b.nombre||'Tu negocio',categoria:b.categoria||'Negocio aliado',descripcion_corta:b.descripcion_corta||'',descripcion:b.descripcion||b.descripcion_corta||'',whatsapp:b.whatsapp||'',telefono:b.telefono||'',correo:b.correo||'',sitio_web:b.web||'',direccion:b.direccion||'',colonia:b.colonia||'',municipio:b.municipio||'',estado_region:'Estado de México',codigo_postal:'',enlace_maps:b.maps||'',logo_url:b.logo_url||'',portada_url:b.portada_url||'',destacado:false,
+    id:d.negocio_id||'',slug:'',nombre:b.nombre||'Tu negocio',categoria:b.categoria||'Negocio aliado',descripcion_corta:b.descripcion_corta||'',descripcion:b.descripcion||b.descripcion_corta||'',whatsapp:b.whatsapp||'',telefono:b.telefono||'',correo:b.correo||'',sitio_web:b.web||'',direccion:b.direccion||'',colonia:b.colonia||'',localidad:b.localidad||'',municipio:b.municipio||'',estado_region:b.estado_region||'',codigo_postal:b.codigo_postal||'',enlace_maps:b.maps||'',logo_url:b.logo_url||'',portada_url:b.portada_url||'',destacado:false,
     horarios:(b.horarios||[]).map((x,i)=>({dia_semana:i+1,hora_apertura:x.abre,hora_cierre:x.cierra,cerrado:!!x.cerrado})),
     redes:[['facebook',b.facebook],['instagram',b.instagram],['tiktok',b.tiktok],['youtube',b.youtube],['sitio web',b.web]].filter(x=>x[1]).map(([plataforma,value])=>({plataforma,url:/^https?:\/\//i.test(value)?value:({facebook:`https://facebook.com/${value}`,instagram:`https://instagram.com/${value}`,tiktok:`https://tiktok.com/@${value}`,youtube:`https://youtube.com/@${value}`,'sitio web':value})[plataforma]})),
     galeria:(b.galeria||[]).map((imagen_url,orden)=>({imagen_url,orden})),promociones:(b.promociones||[]).map(x=>({titulo:x.titulo,descripcion:x.descripcion,fecha_fin:x.vigencia,activa:true}))
@@ -84,7 +84,7 @@ function updateSeo(p,isPreview){
   set('meta[name="description"]','content',description);set('meta[property="og:title"]','content',title);set('meta[property="og:description"]','content',description);set('meta[property="og:image"]','content',image);set('meta[property="og:url"]','content',canonical);set('link[rel="canonical"]','href',canonical);set('meta[name="robots"]','content',isPreview?'noindex,nofollow':'index,follow,max-image-preview:large');
   document.querySelector('#business-schema')?.remove();
   if(!isPreview){
-    const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:p.nombre,description,address:{"@type":"PostalAddress",streetAddress:p.direccion||'',addressLocality:p.municipio||'',addressRegion:p.estado_region||'Estado de México',postalCode:p.codigo_postal||'',addressCountry:'MX'},url:canonical,image:[p.logo_url,p.portada_url,...p.galeria.map(x=>x.imagen_url)].filter(Boolean),telephone:p.telefono||p.whatsapp||undefined,sameAs:p.redes.map(x=>x.url).filter(Boolean),openingHoursSpecification:p.horarios.filter(x=>!x.cerrado).map(x=>({"@type":"OpeningHoursSpecification",dayOfWeek:DB_DAYS[Number(x.dia_semana)-1],opens:formatTime(x.hora_apertura),closes:formatTime(x.hora_cierre)}))};
+    const schema={"@context":"https://schema.org","@type":"LocalBusiness",name:p.nombre,description,address:{"@type":"PostalAddress",streetAddress:p.direccion||'',addressLocality:p.localidad||p.municipio||'',addressRegion:p.estado_region||'',postalCode:p.codigo_postal||'',addressCountry:'MX'},url:canonical,image:[p.logo_url,p.portada_url,...p.galeria.map(x=>x.imagen_url)].filter(Boolean),telephone:p.telefono||p.whatsapp||undefined,sameAs:p.redes.map(x=>x.url).filter(Boolean),openingHoursSpecification:p.horarios.filter(x=>!x.cerrado).map(x=>({"@type":"OpeningHoursSpecification",dayOfWeek:DB_DAYS[Number(x.dia_semana)-1],opens:formatTime(x.hora_apertura),closes:formatTime(x.hora_cierre)}))};
     const script=document.createElement('script');script.id='business-schema';script.type='application/ld+json';script.textContent=JSON.stringify(schema);document.head.appendChild(script);
   }
 }

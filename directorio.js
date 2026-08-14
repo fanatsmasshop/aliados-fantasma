@@ -7,7 +7,7 @@ const DEFAULT_LOGO = 'aliados-fantasma-icono.webp';
 
 const state = {
   businesses: [], filtered: [], categories: [], visible: PAGE_SIZE,
-  query: '', category: '', municipality: '', open: false,
+  query: '', category: '', region: '', municipality: '', open: false,
   promotion: false, isNew: false, featured: false, sort: 'recommended'
 };
 
@@ -16,7 +16,7 @@ const el = {
   content: $('#directory-content'), gate: $('#directory-gate'), gateMessage: $('#gate-message'),
   preview: $('#launch-preview-banner'), search: $('#directory-search'), searchButton: $('#search-button'),
   clear: $('#clear-search'), quick: $('#quick-categories'), category: $('#category-filter'),
-  municipality: $('#municipality-filter'), open: $('#open-filter'), promotion: $('#promotion-filter'),
+  region: $('#region-filter'), municipality: $('#municipality-filter'), open: $('#open-filter'), promotion: $('#promotion-filter'),
   newFilter: $('#new-filter'), featured: $('#featured-filter'), sort: $('#sort-filter'),
   reset: $('#reset-filters'), emptyReset: $('#empty-reset'), grid: $('#directory-grid'),
   empty: $('#directory-empty'), summary: $('#results-summary'), active: $('#active-filters'),
@@ -83,7 +83,7 @@ function relevance(business, query) {
   const fields = {
     name: normalize(business.nombre), category: normalize(business.categoria),
     description: normalize(`${business.descripcion_corta || ''} ${business.descripcion || ''}`),
-    location: normalize(`${business.colonia || ''} ${business.municipio || ''} ${business.direccion || ''}`)
+    location: normalize(`${business.colonia || ''} ${business.localidad || ''} ${business.municipio || ''} ${business.estado_region || ''} ${business.direccion || ''}`)
   };
   return terms.reduce((score, term) => score +
     (fields.name === term ? 100 : 0) + (fields.name.includes(term) ? 45 : 0) +
@@ -113,7 +113,7 @@ function showToast(message) {
 }
 
 function businessLocation(business) {
-  return [business.colonia, business.municipio].filter(Boolean).join(', ') || business.municipio || 'Estado de México';
+  return [business.colonia, business.localidad, business.municipio, business.estado_region].filter(Boolean).join(', ') || 'México';
 }
 function profileUrl(business) { return `perfil.html?slug=${encodeURIComponent(business.slug || '')}`; }
 function logoUrl(business) { return safeUrl(business.logo_url) || DEFAULT_LOGO; }
@@ -200,9 +200,10 @@ function bindImageFallbacks(root) {
 function populateFilters() {
   el.category.innerHTML = '<option value="">Todas las categorías</option>' + state.categories
     .map(category => `<option value="${esc(category.nombre)}">${esc(category.nombre)}</option>`).join('');
-  const municipalities = [...new Set(state.businesses.map(item => item.municipio).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
-  el.municipality.innerHTML = '<option value="">Todos los municipios</option>' + municipalities
+  const regions = [...new Set(state.businesses.map(item => item.estado_region).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+  el.region.innerHTML = '<option value="">Todos los estados</option>' + regions
     .map(name => `<option value="${esc(name)}">${esc(name)}</option>`).join('');
+  populateMunicipalities();
   el.quick.innerHTML = state.categories.slice(0, 8).map(category =>
     `<button class="quick-category" type="button" data-category="${esc(category.nombre)}">${esc(category.icono || '')} ${esc(category.nombre)}</button>`).join('');
   el.quick.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
@@ -213,11 +214,23 @@ function populateFilters() {
   }));
 }
 
+function populateMunicipalities() {
+  const municipalities = [...new Set(state.businesses
+    .filter(item => !state.region || item.estado_region === state.region)
+    .map(item => item.municipio).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'es'));
+  el.municipality.innerHTML = '<option value="">Todos los municipios</option>' + municipalities
+    .map(name => `<option value="${esc(name)}">${esc(name)}</option>`).join('');
+  if (state.municipality && !municipalities.includes(state.municipality)) state.municipality = '';
+  el.municipality.value = state.municipality;
+}
+
 function filterBusinesses() {
   const query = normalize(state.query);
   return state.businesses.filter(business => {
     if (query && !relevance(business, query)) return false;
     if (state.category && business.categoria !== state.category) return false;
+    if (state.region && business.estado_region !== state.region) return false;
     if (state.municipality && business.municipio !== state.municipality) return false;
     if (state.open && !isOpenNow(business)) return false;
     if (state.promotion && !activePromotions(business).length) return false;
@@ -241,6 +254,7 @@ function renderActiveFilters() {
   const chips = [];
   if (state.query) chips.push(['query', `Búsqueda: ${state.query}`]);
   if (state.category) chips.push(['category', state.category]);
+  if (state.region) chips.push(['region', state.region]);
   if (state.municipality) chips.push(['municipality', state.municipality]);
   if (state.open) chips.push(['open', 'Abiertos ahora']);
   if (state.promotion) chips.push(['promotion', 'Con promoción']);
@@ -254,6 +268,7 @@ function renderActiveFilters() {
 function removeFilter(key) {
   if (key === 'query') { state.query = ''; el.search.value = ''; }
   if (key === 'category') { state.category = ''; el.category.value = ''; }
+  if (key === 'region') { state.region = ''; el.region.value = ''; state.municipality = ''; populateMunicipalities(); }
   if (key === 'municipality') { state.municipality = ''; el.municipality.value = ''; }
   if (key === 'open') { state.open = false; el.open.checked = false; }
   if (key === 'promotion') { state.promotion = false; el.promotion.checked = false; }
@@ -264,7 +279,7 @@ function removeFilter(key) {
 }
 
 function renderFeatured() {
-  const filteredMode = state.query || state.category || state.municipality || state.open || state.promotion || state.isNew || state.featured;
+  const filteredMode = state.query || state.category || state.region || state.municipality || state.open || state.promotion || state.isNew || state.featured;
   if (filteredMode) { el.featuredSection.classList.add('hidden'); return; }
   const selection = sortBusinesses(state.businesses).slice(0, 2);
   el.featuredSection.classList.toggle('hidden', !selection.length);
@@ -295,8 +310,8 @@ function applyFilters({ trackSearch = false } = {}) {
 }
 
 function resetAll() {
-  Object.assign(state, { query: '', category: '', municipality: '', open: false, promotion: false, isNew: false, featured: false, sort: 'recommended', visible: PAGE_SIZE });
-  el.search.value = ''; el.category.value = ''; el.municipality.value = '';
+  Object.assign(state, { query: '', category: '', region: '', municipality: '', open: false, promotion: false, isNew: false, featured: false, sort: 'recommended', visible: PAGE_SIZE });
+  el.search.value = ''; el.category.value = ''; el.region.value = ''; populateMunicipalities(); el.municipality.value = '';
   el.open.checked = false; el.promotion.checked = false; el.newFilter.checked = false; el.featured.checked = false;
   el.sort.value = 'recommended';
   applyFilters();
@@ -324,6 +339,7 @@ function wireEvents() {
   el.searchButton.addEventListener('click', () => { state.query = el.search.value.trim(); state.visible = PAGE_SIZE; applyFilters({ trackSearch: true }); });
   el.clear.addEventListener('click', () => removeFilter('query'));
   el.category.addEventListener('change', () => { state.category = el.category.value; state.visible = PAGE_SIZE; applyFilters(); });
+  el.region.addEventListener('change', () => { state.region = el.region.value; state.municipality = ''; populateMunicipalities(); state.visible = PAGE_SIZE; applyFilters(); });
   el.municipality.addEventListener('change', () => { state.municipality = el.municipality.value; state.visible = PAGE_SIZE; applyFilters(); });
   [[el.open, 'open'], [el.promotion, 'promotion'], [el.newFilter, 'isNew'], [el.featured, 'featured']].forEach(([node, key]) =>
     node.addEventListener('change', () => { state[key] = node.checked; state.visible = PAGE_SIZE; applyFilters(); }));
