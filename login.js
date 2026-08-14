@@ -111,11 +111,9 @@ async function getRegistrationDestination(user){
     if(preError) throw preError;
     if(draftError) throw draftError;
     const pre=Array.isArray(preData)?preData[0]:preData;
-    const approved=pre?.correo_verificado===true&&pre?.estado==='aprobado';
-    if(approved) return 'panel.html';
-    // Un borrador no autoriza el acceso mientras el pre-registro siga pendiente.
-    // Solo administración puede habilitar el onboarding aprobando el pre-registro.
-    if(draftData && approved) return 'panel.html';
+    const verified=pre?.correo_verificado===true || Boolean(user?.email_confirmed_at);
+    if(verified) return 'panel.html';
+    if(draftData && verified) return 'panel.html';
   }catch(error){
     console.warn('No se pudo resolver el flujo de registro:',error);
   }

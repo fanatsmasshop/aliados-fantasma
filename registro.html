@@ -1,11 +1,75 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crear cuenta | Aliados Fantasma</title><link rel="icon" href="aliados-fantasma-icono.png"><link rel="stylesheet" href="app.css?v=20260725-RC7"><link rel="stylesheet" href="logos.css?v=20260717-2"><link rel="stylesheet" href="sistema-visual.css?v=20260717-1">  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Crear cuenta | Aliados Fantasma</title>
+  <link rel="icon" href="aliados-fantasma-icono.png">
+  <link rel="stylesheet" href="app.css?v=20260725-RC7">
+  <link rel="stylesheet" href="logos.css?v=20260717-2">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260717-1">
+  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC7">
   <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
   <link rel="stylesheet" href="af-modern-2026.css?v=20260731-MODERN1">
+  <link rel="stylesheet" href="af-ux-2026.css?v=20260814-UX2">
 </head>
-<body class="af-page af-page-auth"><div class="demo-banner">📝 REGISTRO DE NEGOCIO</div><a class="page-back-link" href="index.html">← Volver al sitio</a><div class="login-page"><main class="register-shell"><section class="register-brand"><img class="af-login-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma"><p class="eyebrow">RED NACIONAL DE NEGOCIOS</p><h1>Únete a Aliados Fantasma</h1><p class="login-intro">Registra tu negocio desde cualquier estado de México: crea tu acceso, confirma tu correo y prepara tu perfil para que clientes de tu zona puedan encontrarte.</p><div class="feature-list"><span>Cuenta personal</span><span>Correo verificado</span><span>Recuperación de contraseña</span></div><div class="auth-note" style="margin-top:22px"><strong>Tu negocio no se publica automáticamente.</strong> Primero revisaremos la información para mantener la calidad de la red.</div></section><section class="register-card"><p class="eyebrow">CREAR CUENTA</p><h2 id="step-title">Datos de acceso</h2><p class="muted" id="step-subtitle">Comienza con tu nombre, correo y contraseña.</p><div id="config-warning" class="notice warning hidden">La conexión con Supabase no está configurada.</div><div class="auth-progress" aria-label="Progreso del registro"><div class="auth-step active" data-progress="1">1. Tu cuenta</div><div class="auth-step" data-progress="2">2. Tu negocio</div><div class="auth-step" data-progress="3">3. Confirmar</div></div>
-<form id="register-form" class="form-stack" novalidate>
-<section class="form-step active" data-step="1"><div class="register-grid"><label class="wide"><span>Nombre completo</span><input id="responsable" type="text" maxlength="100" required autocomplete="name" placeholder="Nombre de la persona responsable"><small class="field-error" data-error-for="responsable"></small></label><label class="wide"><span>Correo electrónico</span><input id="email" type="email" required autocomplete="email" inputmode="email" placeholder="nombre@correo.com"><small class="field-error" data-error-for="email"></small></label><label><span>Contraseña</span><div class="password-field"><input id="password" type="password" minlength="8" required autocomplete="new-password"><button id="toggle-password" class="icon-button" type="button">Ver</button></div><div class="password-meter"><span id="password-meter-fill"></span></div><small id="password-strength" class="password-strength">Usa 8 caracteres, una mayúscula y un número.</small><small class="field-error" data-error-for="password"></small></label><label><span>Confirmar contraseña</span><input id="password-confirm" type="password" minlength="8" required autocomplete="new-password"><small class="field-error" data-error-for="password-confirm"></small></label></div><div class="form-actions"><span></span><button class="button primary" type="button" data-next>Continuar</button></div></section>
-<section class="form-step" data-step="2"><div class="register-grid"><label class="wide"><span>Nombre del negocio</span><input id="negocio" type="text" maxlength="120" required placeholder="Nombre comercial"><small class="field-error" data-error-for="negocio"></small></label><label><span>Giro o categoría</span><input id="categoria" type="text" maxlength="100" placeholder="Ej. comida, estética, tecnología" required><small class="field-error" data-error-for="categoria"></small></label><label><span>WhatsApp</span><input id="whatsapp" type="tel" maxlength="20" placeholder="55 1234 5678" required autocomplete="tel" inputmode="tel"><small class="field-error" data-error-for="whatsapp"></small></label><label><span>Estado</span><select id="estado_region" required><option value="">Selecciona tu estado</option></select><small class="field-error" data-error-for="estado_region"></small></label><label><span>Municipio o alcaldía</span><input id="municipio" type="text" maxlength="100" required placeholder="Ej. Ecatepec, Guadalajara, Mérida"><small class="field-error" data-error-for="municipio"></small></label><label><span>Colonia o zona</span><input id="colonia" type="text" maxlength="120" required placeholder="Colonia o zona de servicio"><small class="field-error" data-error-for="colonia"></small></label></div><div class="form-actions"><button class="button secondary" type="button" data-prev>Anterior</button><button class="button primary" type="button" data-next>Revisar datos</button></div></section>
-<section class="form-step" data-step="3"><div id="register-summary" class="summary-card"></div><label class="wide checkbox-label" style="margin-top:18px"><input id="terms" type="checkbox" required><span>Acepto los <a href="terminos.html?from=registro" target="_blank" rel="noopener">términos</a> y el <a href="privacidad.html?from=registro" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label><small class="field-error" data-error-for="terms"></small><div class="form-actions"><button class="button secondary" type="button" data-prev>Corregir datos</button><button id="register-button" class="button primary" type="submit"><span>Crear mi cuenta</span></button></div></section><p id="register-message" class="form-message" aria-live="polite"></p></form><p class="login-help">¿Ya tienes cuenta? <a href="login.html">Inicia sesión.</a></p></section></main></div><script type="module" src="registro.js?v=20260814-NACIONAL1"></script>  <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>
-</body></html>
+<body class="af-page af-page-auth">
+  <a class="page-back-link" href="index.html">← Volver al sitio</a>
+  <div class="login-page">
+    <main class="register-shell">
+      <section class="register-brand">
+        <img class="af-login-logo" src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
+        <p class="eyebrow">RED NACIONAL DE NEGOCIOS</p>
+        <h1>Tu negocio empieza aquí.</h1>
+        <p class="login-intro">Crea tu cuenta, verifica tu correo y entra directamente a construir el perfil digital de tu negocio. Sin esperar aprobación de cuenta.</p>
+        <div class="feature-list"><span>Registro gratis</span><span>Acceso inmediato al verificar</span><span>Perfil editable</span></div>
+        <div class="auth-note" style="margin-top:20px"><strong>Solo revisamos el perfil antes de hacerlo público.</strong> Tu acceso al panel no depende de una aprobación manual.</div>
+      </section>
+
+      <section class="register-card">
+        <p class="eyebrow">CREAR CUENTA</p>
+        <h2 id="step-title">Tu acceso</h2>
+        <p class="muted" id="step-subtitle">Primero crea tus datos de acceso.</p>
+        <div id="config-warning" class="notice warning hidden">La conexión con Supabase no está configurada.</div>
+
+        <div class="auth-progress" aria-label="Progreso del registro">
+          <div class="auth-step active" data-progress="1">1. Cuenta</div>
+          <div class="auth-step" data-progress="2">2. Negocio</div>
+        </div>
+
+        <form id="register-form" class="form-stack" novalidate>
+          <section class="form-step active" data-step="1">
+            <div class="register-grid">
+              <label class="wide"><span>Nombre completo</span><input id="responsable" type="text" maxlength="100" required autocomplete="name" placeholder="Nombre de la persona responsable"><small class="field-error" data-error-for="responsable"></small></label>
+              <label class="wide"><span>Correo electrónico</span><input id="email" type="email" required autocomplete="email" inputmode="email" placeholder="nombre@correo.com"><small class="field-error" data-error-for="email"></small></label>
+              <label><span>Contraseña</span><div class="password-field"><input id="password" type="password" minlength="8" required autocomplete="new-password"><button id="toggle-password" class="icon-button" type="button">Ver</button></div><div class="password-meter"><span id="password-meter-fill"></span></div><small id="password-strength" class="password-strength">Usa 8 caracteres, una mayúscula y un número.</small><small class="field-error" data-error-for="password"></small></label>
+              <label><span>Confirmar contraseña</span><input id="password-confirm" type="password" minlength="8" required autocomplete="new-password"><small class="field-error" data-error-for="password-confirm"></small></label>
+            </div>
+            <div class="form-actions"><span></span><button class="button primary" type="button" data-next>Continuar</button></div>
+          </section>
+
+          <section class="form-step" data-step="2">
+            <div class="register-grid">
+              <label class="wide"><span>Nombre del negocio</span><input id="negocio" type="text" maxlength="120" required placeholder="Nombre comercial"><small class="field-error" data-error-for="negocio"></small></label>
+              <label><span>Giro o categoría</span><input id="categoria" type="text" maxlength="100" placeholder="Ej. cafetería, estética, tecnología" required><small class="field-error" data-error-for="categoria"></small></label>
+              <label><span>WhatsApp</span><input id="whatsapp" type="tel" maxlength="20" placeholder="55 1234 5678" required autocomplete="tel" inputmode="tel"><small class="field-error" data-error-for="whatsapp"></small></label>
+              <label><span>Estado</span><select id="estado_region" required><option value="">Selecciona tu estado</option></select><small class="field-error" data-error-for="estado_region"></small></label>
+              <label><span>Municipio o alcaldía</span><input id="municipio" type="text" maxlength="100" required placeholder="Ej. Ecatepec, Guadalajara, Mérida"><small class="field-error" data-error-for="municipio"></small></label>
+            </div>
+
+            <label class="wide checkbox-label" style="margin-top:16px"><input id="terms" type="checkbox" required><span>Acepto los <a href="terminos.html?from=registro" target="_blank" rel="noopener">términos</a> y el <a href="privacidad.html?from=registro" target="_blank" rel="noopener">aviso de privacidad</a>.</span></label>
+            <small class="field-error" data-error-for="terms"></small>
+
+            <div class="auth-note" style="margin-top:14px">Después de crear tu cuenta te enviaremos un correo. <strong>Al confirmarlo entrarás directo a tu panel.</strong></div>
+            <div class="form-actions"><button class="button secondary" type="button" data-prev>Anterior</button><button id="register-button" class="button primary" type="submit"><span>Crear cuenta y verificar</span></button></div>
+          </section>
+          <p id="register-message" class="form-message" aria-live="polite"></p>
+        </form>
+        <p class="login-help">¿Ya tienes cuenta? <a href="login.html">Inicia sesión.</a></p>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="registro.js?v=20260814-UX2"></script>
+  <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>
+</body>
+</html>

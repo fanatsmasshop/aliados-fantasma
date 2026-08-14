@@ -1,0 +1,13 @@
+ALIADOS FANTASMA — OPTIMIZACIÓN MASIVA UX + ACCESO DIRECTO
+Fecha: 14 agosto 2026
+
+Cambios principales:
+- Cuenta activa al verificar correo; sin aprobación manual de alta.
+- Revisión administrativa se conserva únicamente antes de publicar el perfil.
+- Registro simplificado a 2 pasos.
+- Optimización visual/responsive global en 31 páginas.
+- Panel de registros admin convertido a seguimiento, sin aprobar/rechazar altas.
+- Mejoras de panel de negocio, admin, directorio, perfiles públicos, ayuda y páginas legales.
+- Migración Supabase incluida como respaldo; YA FUE APLICADA al proyecto conectado.
+
+Para GitHub/Cloudflare: subir los archivos de este ZIP a la raíz del repositorio, reemplazando los existentes.

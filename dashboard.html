@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
   <link rel="stylesheet" href="af-fantasmas-style.css?v=20260730-FANTASMAS1">
   <link rel="stylesheet" href="af-modern-2026.css?v=20260731-MODERN1">
+  <link rel="stylesheet" href="af-ux-2026.css?v=20260814-UX2">
 </head>
 <body class="af-page af-page-admin">
   <div class="demo-banner">⚡ PANEL ADMINISTRATIVO <small>— Resumen general</small></div>
@@ -21,9 +22,9 @@
       <a class="sidebar-brand" href="dashboard.html"><img class="af-sidebar-logo" src="aliados-fantasma-icono.webp" alt="Aliados Fantasma"><span><strong>Aliados Fantasma</strong><small>Administración central</small></span></a>
       <nav class="nav-list">
         <a class="nav-link active" href="dashboard.html"><span>▦</span>Dashboard</a>
-        <a class="nav-link" href="pre-registros.html"><span>✉</span>Pre-registros</a>
+        <a class="nav-link" href="pre-registros.html"><span>✉</span>Registros</a>
         <a class="nav-link" href="negocios.html"><span>◇</span>Negocios</a>
-        <a class="nav-link" href="solicitudes.html"><span>✓</span>Solicitudes</a>
+        <a class="nav-link" href="solicitudes.html"><span>✓</span>Revisión de perfiles</a>
         <a class="nav-link" href="promociones.html"><span>★</span>Promociones</a>
       </nav>
       <div class="sidebar-footer"><a class="button secondary full" href="index.html" target="_blank" rel="noopener">🌐 Ver sitio público</a><button id="logout-button" class="button secondary full" type="button">Cerrar sesión</button></div>
@@ -138,36 +139,36 @@
   </section>
 
   <section class="stats-grid admin-stats">
-    <a class="stat-card admin-stat" href="pre-registros.html?estado=pendiente">
-      <div class="stat-icon">✉</div><div><p>Pendientes</p><strong id="pre-count">—</strong><small>Requieren revisión</small></div>
+    <a class="stat-card admin-stat" href="pre-registros.html?filtro=pending">
+      <div class="stat-icon">✉</div><div><p>Por verificar</p><strong id="pre-count">—</strong><small>Aún no confirman correo</small></div>
     </a>
-    <a class="stat-card admin-stat" href="pre-registros.html?estado=contactado">
-      <div class="stat-icon">☎</div><div><p>Contactados</p><strong id="contacted-count">—</strong><small>En seguimiento</small></div>
+    <a class="stat-card admin-stat" href="pre-registros.html?filtro=verified">
+      <div class="stat-icon">✓</div><div><p>Verificados</p><strong id="contacted-count">—</strong><small>Ya tienen acceso al panel</small></div>
     </a>
-    <a class="stat-card admin-stat" href="pre-registros.html?estado=aprobado">
-      <div class="stat-icon">✓</div><div><p>Aprobados</p><strong id="approved-count">—</strong><small>Listos para avanzar</small></div>
+    <a class="stat-card admin-stat" href="solicitudes.html">
+      <div class="stat-icon">◇</div><div><p>Perfiles por revisar</p><strong id="approved-count">—</strong><small>Esperando publicación</small></div>
     </a>
     <a class="stat-card admin-stat" href="pre-registros.html">
-      <div class="stat-icon">◇</div><div><p>Total</p><strong id="total-count">—</strong><small>Pre-registros recibidos</small></div>
+      <div class="stat-icon">◇</div><div><p>Total</p><strong id="total-count">—</strong><small>Registros recibidos</small></div>
     </a>
   </section>
 
   <section class="admin-dashboard-grid">
     <article class="panel recent-panel">
       <div class="section-heading">
-        <div><p class="eyebrow">ACTIVIDAD RECIENTE</p><h2>Pre-registros recientes</h2></div>
+        <div><p class="eyebrow">ACTIVIDAD RECIENTE</p><h2>Registros recientes</h2></div>
         <a class="text-link" href="pre-registros.html">Ver todos →</a>
       </div>
-      <div id="requests-list" class="recent-list"><div class="dashboard-loading"><span class="spinner"></span><p>Consultando solicitudes…</p></div></div>
+      <div id="requests-list" class="recent-list"><div class="dashboard-loading"><span class="spinner"></span><p>Consultando registros…</p></div></div>
     </article>
 
     <aside class="quick-panel">
       <p class="eyebrow">ACCESOS RÁPIDOS</p>
       <h2>Gestión diaria</h2>
       <nav class="quick-actions">
-        <a href="pre-registros.html"><span>✉</span><div><strong>Revisar pre-registros</strong><small>Contactar, aprobar o rechazar</small></div><b>→</b></a>
+        <a href="pre-registros.html"><span>✉</span><div><strong>Ver nuevos registros</strong><small>Seguimiento de cuentas y perfiles</small></div><b>→</b></a>
         <a href="negocios.html"><span>◇</span><div><strong>Administrar negocios</strong><small>Estados, sanciones y apelaciones</small></div><b>→</b></a>
-        <a href="solicitudes.html"><span>✓</span><div><strong>Solicitudes de cambios</strong><small>Comparar y aprobar información</small></div><b>→</b></a>
+        <a href="solicitudes.html"><span>✓</span><div><strong>Revisión de perfiles</strong><small>Validar información antes de publicarla</small></div><b>→</b></a>
         <a href="promociones.html"><span>★</span><div><strong>Revisar promociones</strong><small>Publicaciones pendientes</small></div><b>→</b></a>
       </nav>
     </aside>
@@ -176,7 +177,7 @@
     </div>
   </div>
   <div id="overlay" class="overlay hidden"></div>
-  <script type="module" src="dashboard.js?v=20260730-CINEMA2"></script>
+  <script type="module" src="dashboard.js?v=20260814-UX2"></script>
   <script src="af-modern-2026.js?v=20260731-MODERN1" defer></script>
 </body>
 </html>

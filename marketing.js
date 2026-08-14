@@ -645,4 +645,4 @@ function bind(){
   $('#regenerate-calendar')?.addEventListener('click',()=>{state.calendarSeed++;renderCalendar();});
 }
 
-bind();loadBusiness().catch(error=>{console.error(error);document.body.classList.add('marketing-load-error');showMessage(`No fue posible cargar el Centro de Marketing: ${error.message}`,'error',0);const subtitle=$('#marketing-subtitle');if(subtitle)subtitle.textContent='Regresa al panel y vuelve a intentarlo. Si el problema continúa, verifica que el negocio esté aprobado y vinculado a tu cuenta.';});
+bind();loadBusiness().catch(error=>{console.error(error);document.body.classList.add('marketing-load-error');showMessage(`No fue posible cargar el Centro de Marketing: ${error.message}`,'error',0);const subtitle=$('#marketing-subtitle');if(subtitle)subtitle.textContent='Regresa al panel y vuelve a intentarlo. Si el problema continúa, verifica que el perfil esté publicado y el negocio vinculado a tu cuenta.';});

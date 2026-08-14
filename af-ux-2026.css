@@ -1,0 +1,293 @@
+/* Aliados Fantasma — UX Massive 2026.08
+   Capa final de optimización visual y responsive. */
+:root{
+  --ux-bg:#070a12;
+  --ux-panel:#0d121e;
+  --ux-panel-2:#111827;
+  --ux-panel-3:#161e30;
+  --ux-text:#f7f9ff;
+  --ux-muted:#9fa9bc;
+  --ux-line:rgba(255,255,255,.085);
+  --ux-line-strong:rgba(255,255,255,.15);
+  --ux-blue:#55b7ff;
+  --ux-purple:#826dff;
+  --ux-pink:#ff4f9d;
+  --ux-green:#4ade80;
+  --ux-danger:#fb7185;
+  --ux-warning:#fbbf24;
+  --ux-radius:18px;
+  --ux-radius-lg:26px;
+  --ux-shadow:0 20px 60px rgba(0,0,0,.24);
+  --ux-max:1240px;
+}
+
+html{background:var(--ux-bg);scroll-behavior:smooth}
+body.af-page{overflow-x:hidden;background:
+  radial-gradient(circle at 12% -5%,rgba(85,183,255,.09),transparent 24rem),
+  radial-gradient(circle at 88% 0%,rgba(255,79,157,.085),transparent 25rem),
+  linear-gradient(180deg,#070a12 0%,#080c15 55%,#070a12 100%)!important;color:var(--ux-text)!important}
+body.af-page::before,body.af-page::after{display:none!important}
+body.af-page *{scroll-margin-top:90px}
+body.af-page .demo-banner{display:none!important}
+body.af-page .page-back-link{top:18px!important;left:18px!important;background:rgba(9,13,22,.78)!important;border:1px solid var(--ux-line)!important;box-shadow:none!important;backdrop-filter:blur(18px)!important}
+
+/* Tipografía y densidad */
+body.af-page h1,body.af-page h2,body.af-page h3{letter-spacing:-.035em!important;text-wrap:balance}
+body.af-page p{line-height:1.65}
+body.af-page .eyebrow{font-size:.69rem!important;letter-spacing:.16em!important;color:#8bd9ff!important}
+body.af-page .muted,body.af-page small{color:var(--ux-muted)!important}
+body.af-page .content{max-width:var(--ux-max);width:100%;margin:0 auto;padding:32px clamp(22px,3vw,42px) 64px!important}
+
+/* Botones y controles */
+body.af-page .button,body.af-page button.button,body.af-page a.button{min-height:44px;border-radius:13px!important;padding:.72rem 1rem!important;font-weight:750!important;box-shadow:none!important;transition:transform .16s ease,border-color .16s ease,background .16s ease,opacity .16s ease}
+body.af-page .button:hover{transform:translateY(-1px)!important}
+body.af-page .button.primary{background:linear-gradient(135deg,#4b8dff 0%,#7667ff 48%,#d94fbb 100%)!important}
+body.af-page .button.secondary{background:rgba(255,255,255,.035)!important;border:1px solid var(--ux-line)!important}
+body.af-page input,body.af-page textarea,body.af-page select{min-height:46px;border-radius:13px!important;border:1px solid var(--ux-line)!important;background:rgba(255,255,255,.026)!important;padding:.78rem .9rem!important;box-shadow:none!important}
+body.af-page textarea{min-height:116px}
+body.af-page input:focus,body.af-page textarea:focus,body.af-page select:focus{border-color:rgba(105,149,255,.78)!important;box-shadow:0 0 0 3px rgba(85,183,255,.09)!important}
+body.af-page label>span,body.af-page .field>span{font-size:.8rem!important;color:#dfe5f1;font-weight:700!important}
+body.af-page .field-help{font-size:.76rem!important;line-height:1.45}
+
+/* Superficies: menos glow, más lectura */
+body.af-page .panel,body.af-page .card,body.af-page .stat-card,body.af-page .login-card,body.af-page .register-card,
+body.af-page .workflow-center,body.af-page .profile-access-card,body.af-page .onboarding-step,
+body.af-page .launch-card,body.af-page .application-card,body.af-page .business-card,body.af-page .directory-card,
+body.af-page .summary-card,body.af-page .submit-card,body.af-page .account-management,body.af-page .notice,
+body.af-page .info-section,body.af-page .feature,body.af-page .offer-card{
+  background:linear-gradient(180deg,rgba(15,21,34,.94),rgba(10,15,25,.96))!important;
+  border:1px solid var(--ux-line)!important;
+  box-shadow:none!important;
+}
+body.af-page .panel:hover,body.af-page .application-card:hover,body.af-page .business-card:hover,body.af-page .directory-card:hover{transform:none!important;box-shadow:none!important}
+
+/* Auth / Registro */
+body.af-page-auth .login-page{min-height:100vh!important;padding:32px 20px!important;align-items:center}
+body.af-page-auth .login-shell,body.af-page-auth .register-shell{width:min(980px,100%)!important;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;border-radius:28px!important;border:1px solid var(--ux-line)!important;background:rgba(10,15,25,.9)!important;box-shadow:var(--ux-shadow)!important}
+body.af-page-auth .login-brand,body.af-page-auth .register-brand{min-height:560px!important;padding:48px!important;background:
+  radial-gradient(circle at 18% 15%,rgba(85,183,255,.14),transparent 31%),
+  radial-gradient(circle at 86% 12%,rgba(255,79,157,.13),transparent 30%),
+  linear-gradient(160deg,#101729,#0a0f1a 72%)!important}
+body.af-page-auth .login-card,body.af-page-auth .register-card{padding:44px!important;background:rgba(10,15,25,.88)!important}
+body.af-page-auth .af-login-logo{max-width:210px!important;height:auto!important;margin-bottom:28px}
+body.af-page-auth .login-brand h1,body.af-page-auth .register-brand h1{font-size:clamp(2rem,4vw,3.25rem)!important;line-height:1!important;margin-bottom:18px}
+body.af-page-auth .login-intro{max-width:43ch;font-size:.96rem!important;color:#bec7d8!important}
+body.af-page-auth .feature-list{gap:7px!important}
+body.af-page-auth .feature-list span{padding:.43rem .65rem!important;font-size:.75rem!important;border-radius:999px!important;background:rgba(255,255,255,.035)!important}
+body.af-page-auth .form-stack{gap:14px!important;margin-top:20px!important}
+body.af-page-auth .auth-note{border-radius:14px!important;padding:14px 15px!important;background:rgba(85,183,255,.055)!important;border:1px solid rgba(85,183,255,.16)!important;line-height:1.55}
+
+/* Registro de 2 etapas */
+body.af-page-auth .auth-progress{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:20px 0!important}
+body.af-page-auth .auth-step{min-height:40px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:8px!important;border:1px solid var(--ux-line)!important;border-radius:12px!important;background:rgba(255,255,255,.025)!important;color:var(--ux-muted)!important;font-size:.76rem!important;font-weight:700!important}
+body.af-page-auth .auth-step.active{background:rgba(85,183,255,.09)!important;border-color:rgba(85,183,255,.28)!important;color:#eef8ff!important}
+body.af-page-auth .auth-step.done{color:#bff5d0!important;border-color:rgba(74,222,128,.22)!important}
+body.af-page-auth .register-grid{gap:13px!important}
+body.af-page-auth .form-actions{margin-top:6px!important;gap:10px!important}
+body.af-page-auth .form-actions .button{min-width:132px}
+body.af-page-auth .checkbox-label{display:flex!important;align-items:flex-start!important;gap:10px!important;padding:12px!important;border:1px solid var(--ux-line)!important;border-radius:13px!important;background:rgba(255,255,255,.02)!important}
+body.af-page-auth .checkbox-label input{width:18px!important;height:18px!important;min-height:18px!important;margin-top:2px;padding:0!important}
+
+/* Sidebar administrativa */
+body.af-page-admin .app-layout{grid-template-columns:238px minmax(0,1fr)!important;min-height:100vh!important}
+body.af-page-admin .sidebar{top:0!important;height:100vh!important;padding:20px 14px!important;background:rgba(7,10,17,.92)!important;border-right:1px solid var(--ux-line)!important}
+body.af-page-admin .sidebar-brand{padding:5px 8px 22px!important}
+body.af-page-admin .sidebar-brand strong{font-size:.94rem}
+body.af-page-admin .nav-list{gap:4px!important}
+body.af-page-admin .nav-link{min-height:43px;padding:.68rem .78rem!important;border-radius:11px!important;font-size:.84rem!important;color:#b6c0d2!important}
+body.af-page-admin .nav-link.active{background:rgba(100,111,255,.105)!important;color:#fff!important;box-shadow:inset 2px 0 0 #7882ff!important}
+body.af-page-admin .topbar{top:0!important;min-height:76px!important;padding:14px clamp(20px,3vw,38px)!important;background:rgba(7,10,17,.79)!important;border-bottom:1px solid var(--ux-line)!important;box-shadow:none!important}
+body.af-page-admin .topbar h1{font-size:1.35rem!important}
+body.af-page-admin .user-chip{font-size:.8rem!important}
+body.af-page-admin .user-avatar{width:36px!important;height:36px!important}
+body.af-page-admin .admin-hero,body.af-page-admin .page-head{padding:0!important;margin-bottom:20px!important}
+body.af-page-admin .admin-hero h2,body.af-page-admin .page-head h2{font-size:clamp(1.65rem,2.4vw,2.2rem)!important}
+body.af-page-admin .stats-grid,body.af-page-admin .admin-stats{gap:10px!important}
+body.af-page-admin .stat-card{padding:16px!important;border-radius:16px!important}
+body.af-page-admin .stat-card strong{font-size:1.45rem!important}
+body.af-page-admin .stat-icon{width:38px!important;height:38px!important;border-radius:11px!important}
+body.af-page-admin .launch-card{border-radius:20px!important;padding:20px!important}
+body.af-page-admin .toolbar{padding:12px!important;border:1px solid var(--ux-line)!important;border-radius:15px!important;background:rgba(255,255,255,.018)!important}
+
+/* Registro admin ahora informativo */
+body.af-page-admin .application-card{padding:18px!important;border-radius:18px!important}
+body.af-page-admin .application-actions.registration-contact-actions{border-top:1px solid var(--ux-line)!important;margin-top:15px!important;padding-top:13px!important;display:flex!important;gap:8px!important;flex-wrap:wrap!important}
+body.af-page-admin .verified{color:#86efac!important}
+body.af-page-admin .registration-auto-badge{display:inline-flex;align-items:center;gap:6px;padding:.42rem .62rem;border-radius:999px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.18);color:#bff5d0;font-size:.72rem;font-weight:800}
+
+/* Panel del negocio */
+body.af-page-owner .owner-layout{min-height:100vh!important;background:transparent!important}
+body.af-page-owner .owner-sidebar{background:rgba(7,10,17,.91)!important;border-right:1px solid var(--ux-line)!important}
+body.af-page-owner .owner-main{min-width:0!important;padding-bottom:80px!important}
+body.af-page-owner .owner-topbar{min-height:88px!important;padding:22px clamp(22px,3.4vw,44px)!important;border-bottom:1px solid var(--ux-line)!important;background:rgba(7,10,17,.75)!important;backdrop-filter:blur(18px)!important}
+body.af-page-owner .owner-topbar h1{font-size:clamp(1.55rem,2.6vw,2.15rem)!important;margin-bottom:4px!important}
+body.af-page-owner .owner-overview-grid,body.af-page-owner #onboarding-form,body.af-page-owner #account-management{max-width:1100px!important;margin-left:auto!important;margin-right:auto!important}
+body.af-page-owner .owner-overview-grid{padding:24px 28px 0!important;gap:12px!important}
+body.af-page-owner #onboarding-form{padding:16px 28px 0!important}
+body.af-page-owner .workflow-center,body.af-page-owner .profile-access-card{border-radius:18px!important;padding:18px!important}
+body.af-page-owner .workflow-head{gap:12px!important}
+body.af-page-owner .workflow-head h2{font-size:1.25rem!important;margin-bottom:5px!important}
+body.af-page-owner .workflow-timeline{gap:7px!important;margin-top:15px!important}
+body.af-page-owner .workflow-stage{min-height:82px!important;padding:11px!important;border-radius:13px!important;background:rgba(255,255,255,.022)!important;border:1px solid var(--ux-line)!important}
+body.af-page-owner .workflow-stage span{width:27px!important;height:27px!important;font-size:.75rem!important}
+body.af-page-owner .workflow-stage strong{font-size:.78rem!important}
+body.af-page-owner .workflow-stage small{font-size:.68rem!important}
+body.af-page-owner .onboarding-step{border-radius:20px!important;padding:clamp(20px,3vw,30px)!important}
+body.af-page-owner .step-heading{margin-bottom:22px!important;padding-bottom:16px!important;border-bottom:1px solid var(--ux-line)!important}
+body.af-page-owner .step-heading>span{width:38px!important;height:38px!important;display:grid!important;place-items:center!important;border-radius:11px!important;background:rgba(100,120,255,.1)!important;border:1px solid rgba(100,120,255,.18)!important;color:#a9c8ff!important;font-size:.78rem!important}
+body.af-page-owner .step-heading h2{font-size:1.35rem!important;margin-bottom:4px!important}
+body.af-page-owner .step-heading p{font-size:.86rem!important;margin:0!important;color:var(--ux-muted)!important}
+body.af-page-owner .form-grid{gap:14px!important}
+body.af-page-owner .wizard-actions{position:sticky!important;bottom:12px!important;z-index:15!important;margin:14px 0 0!important;padding:10px!important;border:1px solid var(--ux-line)!important;border-radius:16px!important;background:rgba(9,13,22,.88)!important;backdrop-filter:blur(18px)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important}
+body.af-page-owner .wizard-actions .button{min-width:118px!important}
+body.af-page-owner .submit-card{padding:18px!important;border-radius:16px!important;background:rgba(85,183,255,.045)!important;border-color:rgba(85,183,255,.14)!important}
+body.af-page-owner .gallery-editor img{border-radius:12px!important}
+body.af-page-owner .schedule-grid{gap:8px!important}
+body.af-page-owner .schedule-row{border-radius:13px!important;background:rgba(255,255,255,.018)!important;border:1px solid var(--ux-line)!important}
+body.af-page-owner .mobile-step-summary{border-bottom:1px solid var(--ux-line)!important;background:rgba(7,10,17,.94)!important}
+
+/* Directorio / explorar */
+body.af-page-directory .directory-shell,body.af-page-directory .explore-shell,body.af-page-public .directory-shell{max-width:var(--ux-max)!important;margin:0 auto!important}
+body.af-page-directory .directory-card,body.af-page-directory .business-card{border-radius:18px!important;overflow:hidden!important}
+body.af-page-directory .directory-card img,body.af-page-directory .business-card img{aspect-ratio:16/10!important;object-fit:cover!important}
+body.af-page-directory .directory-grid,body.af-page-directory .business-grid{gap:14px!important}
+body.af-page-directory .filters-panel,body.af-page-directory .directory-toolbar{border-radius:16px!important;border:1px solid var(--ux-line)!important;background:rgba(13,18,30,.88)!important}
+
+/* Landing */
+body.af-page-home .site-header{min-height:72px!important;background:rgba(7,10,17,.72)!important;border-bottom:1px solid var(--ux-line)!important;box-shadow:none!important}
+body.af-page-home .hero{border:0!important;box-shadow:none!important;background:transparent!important}
+body.af-page-home .hero::before,body.af-page-home .hero::after{opacity:.6!important}
+body.af-page-home .section{padding-top:88px!important;padding-bottom:88px!important}
+body.af-page-home .problem-grid,body.af-page-home .benefit-grid,body.af-page-home .roadmap{gap:12px!important}
+body.af-page-home .problem-grid article,body.af-page-home .benefit-grid .feature,body.af-page-home .roadmap article{border-radius:18px!important;box-shadow:none!important}
+body.af-page-home .steps article{padding:17px!important;border-radius:16px!important}
+body.af-page-home .faq-list details{border-radius:14px!important}
+body.af-page-home .offer-card{border-radius:22px!important}
+
+/* Perfiles públicos / edición administrativa */
+body.af-page-profile .premium-profile-nav{min-height:68px!important;padding:12px clamp(16px,3vw,34px)!important;background:rgba(7,10,17,.78)!important;border-bottom:1px solid var(--ux-line)!important;backdrop-filter:blur(18px)!important}
+body.af-page-profile .profile-cover{min-height:330px!important;box-shadow:none!important}
+body.af-page-profile .profile-cover-inner{max-width:1120px!important;margin:0 auto!important;padding-left:clamp(18px,4vw,48px)!important;padding-right:clamp(18px,4vw,48px)!important}
+body.af-page-profile .profile-main-logo{width:108px!important;height:108px!important;border-radius:24px!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:none!important}
+body.af-page-profile .profile-title{font-size:clamp(2rem,5vw,3.65rem)!important;line-height:1!important}
+body.af-page-profile .profile-action-bar{max-width:1120px!important;margin-left:auto!important;margin-right:auto!important;padding:14px clamp(18px,4vw,48px)!important;gap:8px!important}
+body.af-page-profile .profile-action{min-height:42px!important;border-radius:12px!important;box-shadow:none!important}
+body.af-page-profile .profile-main{max-width:1120px!important;margin:0 auto!important;padding:24px clamp(18px,4vw,48px) 64px!important}
+body.af-page-profile .profile-layout{gap:16px!important}
+body.af-page-profile .profile-section,body.af-page-profile .profile-contact-card{border-radius:19px!important;border:1px solid var(--ux-line)!important;box-shadow:none!important;background:linear-gradient(180deg,rgba(15,21,34,.94),rgba(10,15,25,.96))!important}
+body.af-page-profile .promotion-card,body.af-page-profile .profile-fact,body.af-page-profile .schedule-row{border-radius:13px!important;box-shadow:none!important}
+body.af-page-profile .premium-gallery{gap:9px!important}
+body.af-page-profile .gallery-photo,body.af-page-profile .gallery-more{border-radius:14px!important;overflow:hidden!important}
+body.af-page-profile .profile-floating-whatsapp{box-shadow:0 12px 30px rgba(0,0,0,.25)!important}
+body.af-page-profile .layout{max-width:1240px!important;margin:0 auto!important;gap:20px!important;padding:28px clamp(16px,3vw,34px) 64px!important}
+body.af-page-profile .layout>.sidebar{border-radius:18px!important;border:1px solid var(--ux-line)!important;background:rgba(11,16,27,.88)!important;box-shadow:none!important}
+body.af-page-profile .layout>.main{min-width:0!important}
+body.af-page-profile .card.form-grid{border-radius:20px!important;padding:22px!important;gap:14px!important}
+
+/* Ayuda, privacidad y términos */
+body.af-page-info .info-header{position:sticky!important;top:0!important;z-index:40!important;background:rgba(7,10,17,.82)!important;border-bottom:1px solid var(--ux-line)!important;backdrop-filter:blur(18px)!important}
+body.af-page-info .info-header-inner{max-width:1160px!important;margin:0 auto!important;min-height:66px!important;padding:10px 20px!important}
+body.af-page-info .info-main{max-width:1080px!important;margin:0 auto!important;padding:44px 20px 72px!important}
+body.af-page-info .info-hero{margin-bottom:30px!important}
+body.af-page-info .info-hero h1{font-size:clamp(2rem,5vw,3.2rem)!important;line-height:1.02!important}
+body.af-page-info .info-layout{gap:18px!important;align-items:start!important}
+body.af-page-info .info-toc{top:88px!important;border-radius:16px!important;border:1px solid var(--ux-line)!important;background:rgba(13,18,30,.82)!important;box-shadow:none!important}
+body.af-page-info .info-section{border-radius:18px!important;padding:22px!important;margin-bottom:12px!important}
+body.af-page-info .help-search{border-radius:15px!important;background:rgba(13,18,30,.84)!important;border:1px solid var(--ux-line)!important;box-shadow:none!important}
+body.af-page-info .help-categories{gap:7px!important;margin:14px 0 20px!important}
+body.af-page-info .help-filter{min-height:38px!important;border-radius:999px!important;box-shadow:none!important}
+body.af-page-info .help-item{border:1px solid var(--ux-line)!important;border-radius:15px!important;background:rgba(13,18,30,.82)!important;box-shadow:none!important;margin-bottom:8px!important;overflow:hidden!important}
+body.af-page-info .help-question{min-height:52px!important;padding:14px 16px!important}
+body.af-page-info .help-answer{padding:0 16px 16px!important;color:var(--ux-muted)!important}
+
+/* Pantallas utilitarias */
+body.af-page-generic{min-height:100vh!important}
+body.af-page-generic>main,body.af-page-generic>.container{max-width:980px!important;margin-left:auto!important;margin-right:auto!important}
+
+/* Estados */
+body.af-page .status-pill,body.af-page .workflow-badge{border-radius:999px!important;box-shadow:none!important;font-size:.7rem!important;letter-spacing:.02em!important}
+body.af-page .status-pill.ok,body.af-page .workflow-badge.published{background:rgba(74,222,128,.09)!important;border:1px solid rgba(74,222,128,.2)!important;color:#bbf7d0!important}
+body.af-page .status-pill.pending,body.af-page .workflow-badge.review{background:rgba(251,191,36,.07)!important;border:1px solid rgba(251,191,36,.18)!important;color:#fde68a!important}
+
+/* Accesibilidad / movimiento */
+@media (prefers-reduced-motion:reduce){body.af-page *,body.af-page *::before,body.af-page *::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+
+/* Tablet */
+@media (max-width:980px){
+  body.af-page-auth .login-shell,body.af-page-auth .register-shell{grid-template-columns:1fr!important;max-width:680px!important}
+  body.af-page-auth .login-brand,body.af-page-auth .register-brand{min-height:auto!important;padding:34px 38px 30px!important}
+  body.af-page-auth .login-card,body.af-page-auth .register-card{padding:34px 38px 38px!important}
+  body.af-page-auth .feature-list{margin-top:14px!important}
+  body.af-page-admin .app-layout{grid-template-columns:1fr!important}
+  body.af-page-admin .sidebar{position:fixed!important;left:-260px!important;width:238px!important;transition:left .2s ease!important;z-index:100!important}
+  body.af-page-admin .sidebar.open{left:0!important}
+  body.af-page-admin .menu-button{display:inline-flex!important}
+  body.af-page-owner .owner-overview-grid{grid-template-columns:1fr!important}
+  body.af-page-profile .profile-layout{grid-template-columns:1fr!important}
+  body.af-page-info .info-layout{grid-template-columns:1fr!important}
+  body.af-page-info .info-toc{position:static!important}
+}
+
+/* Móvil */
+@media (max-width:680px){
+  body.af-page{font-size:15px}
+  body.af-page .page-back-link{position:static!important;margin:12px 0 0 12px!important;padding:.56rem .72rem!important;font-size:.76rem!important}
+  body.af-page .button,body.af-page button.button,body.af-page a.button{min-height:46px!important}
+  body.af-page .content{padding:20px 14px 52px!important}
+  body.af-page-auth .login-page{display:block!important;min-height:auto!important;padding:12px 12px 28px!important}
+  body.af-page-auth .login-shell,body.af-page-auth .register-shell{border-radius:20px!important;overflow:visible!important;box-shadow:none!important;background:transparent!important;border:0!important}
+  body.af-page-auth .login-brand,body.af-page-auth .register-brand{padding:24px 20px!important;border-radius:20px 20px 0 0!important;border:1px solid var(--ux-line)!important;border-bottom:0!important}
+  body.af-page-auth .login-card,body.af-page-auth .register-card{padding:24px 20px!important;border-radius:0 0 20px 20px!important;border:1px solid var(--ux-line)!important}
+  body.af-page-auth .af-login-logo{max-width:165px!important;margin-bottom:18px!important}
+  body.af-page-auth .login-brand h1,body.af-page-auth .register-brand h1{font-size:2rem!important}
+  body.af-page-auth .feature-list{display:none!important}
+  body.af-page-auth .register-grid,body.af-page-auth .form-grid{grid-template-columns:1fr!important}
+  body.af-page-auth .wide{grid-column:auto!important}
+  body.af-page-auth .form-actions{display:grid!important;grid-template-columns:1fr!important}
+  body.af-page-auth .form-actions .button{width:100%!important}
+  body.af-page-auth .form-actions>span{display:none!important}
+  body.af-page-admin .topbar{min-height:68px!important;padding:12px 14px!important}
+  body.af-page-admin .topbar .user-chip small{display:none!important}
+  body.af-page-admin .stats-grid,body.af-page-admin .admin-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.af-page-admin .stat-card{display:block!important;padding:14px!important}
+  body.af-page-admin .stat-icon{margin-bottom:12px!important}
+  body.af-page-admin .toolbar{display:grid!important;grid-template-columns:1fr!important}
+  body.af-page-admin .toolbar .search{min-width:0!important}
+  body.af-page-owner .owner-topbar{padding:15px 14px!important;min-height:76px!important}
+  body.af-page-owner .owner-topbar .muted{display:none!important}
+  body.af-page-owner .owner-overview-grid{padding:14px 12px 0!important}
+  body.af-page-owner #onboarding-form{padding:10px 12px 0!important}
+  body.af-page-owner .onboarding-step{padding:18px 15px!important;border-radius:17px!important}
+  body.af-page-owner .step-heading{gap:10px!important;margin-bottom:18px!important}
+  body.af-page-owner .step-heading>span{width:34px!important;height:34px!important}
+  body.af-page-owner .form-grid{grid-template-columns:1fr!important}
+  body.af-page-owner .field.wide{grid-column:auto!important}
+  body.af-page-owner .workflow-timeline{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.af-page-owner .workflow-stage{min-height:74px!important}
+  body.af-page-owner .wizard-actions{bottom:8px!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;margin:10px 0!important;padding:8px!important}
+  body.af-page-owner .wizard-actions #save-button{grid-column:1/-1!important;order:3!important}
+  body.af-page-owner .wizard-actions .button{min-width:0!important;width:100%!important}
+  body.af-page-owner .schedule-row{grid-template-columns:1fr!important;gap:7px!important;padding:11px!important}
+  body.af-page-owner .social-input{display:block!important}
+  body.af-page-owner .social-input>span{display:block!important;margin:0 0 6px!important;font-size:.72rem!important}
+  body.af-page-home .section{padding-top:64px!important;padding-bottom:64px!important}
+  body.af-page-profile .profile-cover{min-height:280px!important}
+  body.af-page-profile .profile-main-logo{width:86px!important;height:86px!important;border-radius:19px!important}
+  body.af-page-profile .profile-action-bar{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:10px 14px!important}
+  body.af-page-profile .profile-action{width:100%!important;justify-content:center!important}
+  body.af-page-profile .profile-main{padding:16px 14px 50px!important}
+  body.af-page-profile .profile-section,body.af-page-profile .profile-contact-card{padding:17px!important}
+  body.af-page-profile .layout{grid-template-columns:1fr!important;padding:16px 12px 52px!important}
+  body.af-page-profile .layout>.sidebar{position:static!important;width:auto!important}
+  body.af-page-profile .card.form-grid{grid-template-columns:1fr!important;padding:17px!important}
+  body.af-page-profile .card.form-grid .full{grid-column:auto!important}
+  body.af-page-info .info-main{padding:28px 14px 54px!important}
+  body.af-page-info .info-section{padding:17px!important}
+  body.af-page-info .info-header-inner{padding:9px 14px!important}
+}
+
+@media (max-width:390px){
+  body.af-page-admin .stats-grid,body.af-page-admin .admin-stats{grid-template-columns:1fr!important}
+  body.af-page-owner .workflow-timeline{grid-template-columns:1fr!important}
+  body.af-page-auth .auth-progress{grid-template-columns:1fr!important}
+}

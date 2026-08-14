@@ -25,16 +25,18 @@ async function load() {
   button.disabled = true;
   warning.classList.add('hidden');
   try {
-    const [{ data: summary, error: summaryError }, { data: recent, error: recentError }] = await Promise.all([
+    const [{ data: summary, error: summaryError }, { data: recent, error: recentError }, {data: panelSummary, error: panelError}] = await Promise.all([
       supabase.rpc('admin_resumen_pre_registro'),
-      supabase.rpc('admin_listar_pre_registros')
+      supabase.rpc('admin_listar_pre_registros'),
+      supabase.rpc('admin_resumen_panel')
     ]);
     if (summaryError) throw summaryError;
     if (recentError) throw recentError;
+    if (panelError) throw panelError;
 
     document.querySelector('#pre-count').textContent = summary.pendientes ?? 0;
-    document.querySelector('#contacted-count').textContent = summary.contactados ?? 0;
-    document.querySelector('#approved-count').textContent = summary.aprobados ?? 0;
+    document.querySelector('#contacted-count').textContent = summary.verificados ?? 0;
+    document.querySelector('#approved-count').textContent = panelSummary?.solicitudes_pendientes ?? 0;
     document.querySelector('#total-count').textContent = summary.total ?? 0;
 
     const items = (recent || []).slice(0, 8);
@@ -42,7 +44,7 @@ async function load() {
       ? items.map(item => {
           const business = item.nombre_negocio || 'Negocio sin nombre';
           const owner = item.nombre_responsable || 'Responsable no indicado';
-          const status = String(item.estado || 'pendiente').toLowerCase();
+          const status = item.correo_verificado ? 'verificado' : 'pendiente';
           const initial = business.trim().charAt(0).toUpperCase() || 'N';
           return `<a class="recent-request" href="pre-registros.html">
             <span class="recent-avatar">${esc(initial)}</span>
@@ -50,7 +52,7 @@ async function load() {
             <span class="recent-meta"><span class="recent-status ${esc(status)}">${esc(status.replaceAll('_', ' '))}</span><span class="recent-date">${fmt(item.created_at)}</span></span>
           </a>`;
         }).join('')
-      : '<div class="dashboard-empty"><span>✉</span><h3>Sin pre-registros todavía</h3><p>Las nuevas solicitudes aparecerán aquí.</p></div>';
+      : '<div class="dashboard-empty"><span>✉</span><h3>Sin registros todavía</h3><p>Las nuevas cuentas aparecerán aquí.</p></div>';
   } catch (error) {
     console.error(error);
     warning.textContent = `No se pudieron consultar los datos: ${error.message || 'error desconocido'}. Ejecuta 050_pre_registro_oficial.sql.`;

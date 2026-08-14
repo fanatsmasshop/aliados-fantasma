@@ -499,6 +499,7 @@ async function init(){
   const {data:{user:authenticatedUser}} = await supabase.auth.getUser();
   if(!authenticatedUser){ location.replace('login.html'); return; }
   user = authenticatedUser;
+  try{ await supabase.rpc('usuario_sincronizar_mi_pre_registro'); }catch(syncError){ console.warn('Sincronización de cuenta:', syncError); }
 
   let activeContext = null;
   if(adminMode){
@@ -506,7 +507,7 @@ async function init(){
     if(!activeContext) return;
   }else{
     // Durante el onboarding inicial todavía puede no existir un negocio ni una membresía.
-    // En ese caso permitimos entrar con el pre-registro aprobado y su borrador.
+    // Un correo verificado es suficiente para entrar y construir el perfil.
     const initialMemberships = await loadOwnerMemberships(authenticatedUser.id);
     if(initialMemberships.length){
       let savedContext = getActiveContext(authenticatedUser.id);
@@ -524,7 +525,7 @@ async function init(){
       const {data:preData,error:preError} = await supabase.rpc('usuario_obtener_mi_pre_registro');
       if(preError) throw preError;
       pre = Array.isArray(preData) ? preData[0] : preData;
-      const allowed = pre && pre.correo_verificado === true && pre.estado === 'aprobado';
+      const allowed = pre && pre.correo_verificado === true;
       if(!allowed){
         const {data:adminFlag} = await supabase.rpc('es_administrador');
         if(adminFlag){ location.replace('dashboard.html'); return; }
@@ -642,9 +643,8 @@ async function init(){
         if(isGlobalAdmin){ location.replace('dashboard.html'); return; }
         location.replace('estado-cuenta.html'); return;
       }
-      // Defensa adicional: sin membresía, el onboarding solo se habilita cuando
-      // el pre-registro está confirmado y aprobado por administración.
-      if(pre.correo_verificado !== true || pre.estado !== 'aprobado'){
+      // Sin membresía publicada, basta con tener el correo confirmado.
+      if(pre.correo_verificado !== true){
         location.replace('estado-cuenta.html'); return;
       }
       document.querySelector('#welcome-title').textContent = `Bienvenido, ${pre.nombre_negocio || 'tu negocio'} 👋`;
@@ -745,7 +745,7 @@ function openMerchantHelp(){
       <div><strong>1. Llena un paso</strong><p>Escribe la información que conozcas. Puedes regresar después.</p></div>
       <div><strong>2. Avanza con “Siguiente”</strong><p>Tu progreso se guarda automáticamente mientras trabajas.</p></div>
       <div><strong>3. Revisa antes de enviar</strong><p>En el paso 7 podrás comprobar la información y solicitar revisión.</p></div>
-      <div><strong>4. Espera la aprobación</strong><p>Te avisaremos cuando el perfil esté aprobado y publicado.</p></div>
+      <div><strong>4. Espera la revisión del perfil</strong><p>La cuenta ya está activa; solo revisaremos esta versión antes de hacerla pública.</p></div>
     </div>
     <div class="tutorial-actions"><button type="button" class="button primary" id="merchant-help-close">Entendido</button></div>`;
   modal.classList.remove('hidden');
