@@ -24,7 +24,7 @@ function cardMarkup(business) {
   const cover = safeUrl(business.portada_url) || logo;
   const description = business.descripcion_corta || business.descripcion || 'Negocio local que ya forma parte de Aliados Fantasma.';
   const category = business.categorias?.nombre || 'Negocio aliado';
-  return `<article class="pre2-real-card reveal is-visible">
+  return `<article class="pre2-real-card">
     <div class="pre2-real-cover">
       <img src="${esc(cover)}" alt="" loading="lazy" decoding="async">
       <span class="pre2-real-shade"></span>
