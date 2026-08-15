@@ -78,6 +78,71 @@
     document.querySelectorAll('.af-enter').forEach((element) => element.classList.add('af-in'));
   }
 
+
+
+  // Ventanas y mensajes siempre relativos al viewport visible.
+  // Algunos paneles antiguos contienen modales dentro de elementos transformados;
+  // mover el overlay al body evita que position:fixed se vuelva relativo al contenedor.
+  const viewportModalSelector = [
+    '.modal', '.af-modal', '.rules-modal', '.context-modal',
+    '.profile-report-modal', '.profile-lightbox',
+    '#admin-action-modal', '#moderation-list-modal', '#delete-business-modal-runtime',
+    '#delete-business-modal', '#af-action-modal'
+  ].join(',');
+
+  const portalizeModal = (element) => {
+    if (!(element instanceof Element) || !element.matches(viewportModalSelector)) return;
+    element.classList.add('af-viewport-modal');
+    if (element.parentElement !== body) body.appendChild(element);
+  };
+
+  const modalIsOpen = (element) => {
+    if (!element || element.classList.contains('hidden')) return false;
+    if (element.getAttribute('aria-hidden') === 'true') return false;
+    return getComputedStyle(element).display !== 'none';
+  };
+
+  const syncDialogState = () => {
+    const open = [...document.querySelectorAll(viewportModalSelector)].some(modalIsOpen);
+    body.classList.toggle('af-dialog-open', open);
+    root.classList.toggle('af-dialog-open', open);
+  };
+
+  const scanViewportModals = (scope = document) => {
+    if (scope instanceof Element && scope.matches(viewportModalSelector)) portalizeModal(scope);
+    scope.querySelectorAll?.(viewportModalSelector).forEach(portalizeModal);
+    syncDialogState();
+  };
+
+  scanViewportModals();
+  let dialogFrame = 0;
+  const scheduleDialogSync = () => {
+    cancelAnimationFrame(dialogFrame);
+    dialogFrame = requestAnimationFrame(() => scanViewportModals());
+  };
+  const dialogObserver = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'childList') {
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof Element)) return;
+          if (node.matches(viewportModalSelector)) portalizeModal(node);
+          node.querySelectorAll?.(viewportModalSelector).forEach(portalizeModal);
+        });
+      }
+    }
+    scheduleDialogSync();
+  });
+  dialogObserver.observe(body, {subtree:true, childList:true, attributes:true, attributeFilter:['class','style','aria-hidden']});
+
+  // Mantiene el foco dentro de la ventana visible cuando se abre mediante teclado.
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    const visible = [...document.querySelectorAll(viewportModalSelector)].filter(modalIsOpen).pop();
+    if (!visible) return;
+    const close = visible.querySelector('[data-close], [data-af-cancel], #report-close, #lightbox-close, .lightbox-close');
+    if (close instanceof HTMLElement) close.click();
+  });
+
   // Mantiene accesible el menú móvil aunque las hojas antiguas utilicen clases distintas.
   const menuButton = document.querySelector('.menu-button');
   const navigation = document.querySelector('#main-nav');

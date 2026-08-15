@@ -291,3 +291,141 @@ body.af-page .status-pill.pending,body.af-page .workflow-badge.review{background
   body.af-page-owner .workflow-timeline{grid-template-columns:1fr!important}
   body.af-page-auth .auth-progress{grid-template-columns:1fr!important}
 }
+
+
+/* =========================================================
+   AF VIEWPORT DIALOGS v2026-08-15
+   Ventanas siempre centradas en el viewport visible.
+   Los listados dentro de ventanas priorizan formato lista.
+   ========================================================= */
+html.af-dialog-open,body.af-dialog-open,body.modal-open{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+
+/* Portales de ventana: siempre relativos al viewport, nunca al documento. */
+body>.af-viewport-modal,
+body>:is(.modal,.af-modal,.rules-modal,.context-modal,.profile-report-modal,.profile-lightbox){
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  z-index:10000!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+  overflow:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+  background:rgba(2,4,10,.78)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  overscroll-behavior:contain!important;
+}
+body>.af-viewport-modal.hidden,
+body>:is(.modal,.af-modal,.rules-modal,.context-modal,.profile-report-modal,.profile-lightbox).hidden{
+  display:none!important;
+}
+
+/* La tarjeta nunca puede crecer fuera de la zona visible. */
+body>.af-viewport-modal>:is(section,div,form,figure),
+body>:is(.modal,.af-modal,.rules-modal,.context-modal,.profile-report-modal) > :is(.modal-card,.af-modal-card,.rules-card,.context-dialog,.profile-report-card),
+body>.profile-lightbox>figure{
+  position:relative!important;
+  inset:auto!important;
+  margin:auto!important;
+  width:min(760px,calc(100vw - 28px))!important;
+  max-width:calc(100vw - 28px)!important;
+  max-height:calc(100dvh - 28px)!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+body>#business-modal .modal-card{width:min(860px,calc(100vw - 28px))!important}
+
+/* Encabezado y acciones permanecen accesibles en ventanas largas. */
+body>.modal .modal-head,
+body>.af-modal .modal-head,
+body>.profile-report-modal .modal-head{
+  position:sticky!important;
+  top:0!important;
+  z-index:3!important;
+  padding-bottom:10px!important;
+  background:linear-gradient(180deg,rgba(17,20,28,.98) 0%,rgba(17,20,28,.94) 76%,rgba(17,20,28,0) 100%)!important;
+}
+body>.modal .actions:last-child,
+body>.af-modal .af-modal-actions{
+  position:sticky!important;
+  bottom:0!important;
+  z-index:3!important;
+  padding-top:12px!important;
+  background:linear-gradient(0deg,rgba(17,20,28,.98) 0%,rgba(17,20,28,.94) 72%,rgba(17,20,28,0) 100%)!important;
+}
+
+/* Mensajes breves: visibles en el viewport y no pegados al final del documento. */
+body>.toast-box{
+  position:fixed!important;
+  top:max(14px,env(safe-area-inset-top))!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:min(440px,calc(100vw - 24px))!important;
+  transform:translateX(-50%)!important;
+  z-index:12000!important;
+  gap:8px!important;
+  pointer-events:none!important;
+}
+body>.toast-box .toast{width:100%!important;pointer-events:auto!important;box-shadow:0 18px 52px rgba(0,0,0,.42)!important}
+
+/* Selecciones y resultados dentro de ventanas: formato lista antes que mosaico. */
+.context-options,.af-modal-list,.modal-list{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:8px!important;
+}
+.context-option,.af-modal-list>*,.modal-list>*{
+  width:100%!important;
+  min-width:0!important;
+}
+
+/* Accesos del negocio: tabla convertida a lista en pantallas estrechas. */
+@media(max-width:760px){
+  body>.modal,body>.af-modal,body>.rules-modal,body>.context-modal,body>.profile-report-modal{
+    padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))!important;
+    align-items:center!important;
+    justify-items:center!important;
+  }
+  body>.modal .modal-card,
+  body>.af-modal .af-modal-card,
+  body>.rules-modal .rules-card,
+  body>.context-modal .context-dialog,
+  body>.profile-report-modal .profile-report-card{
+    width:calc(100vw - 20px)!important;
+    max-width:calc(100vw - 20px)!important;
+    max-height:calc(100dvh - 20px)!important;
+    border-radius:18px!important;
+    padding:18px!important;
+    margin:auto!important;
+  }
+  body>.modal .modal-head{align-items:flex-start!important;flex-wrap:nowrap!important}
+  body>.modal .actions,body>.af-modal .af-modal-actions{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+  body>.modal .actions .button,body>.af-modal .af-modal-actions .button{width:100%!important}
+
+  #owners-modal .table-wrap{overflow:visible!important;border:0!important}
+  #owners-modal .data-table,#owners-modal .data-table tbody,#owners-modal .data-table tr,#owners-modal .data-table td{display:block!important;width:100%!important}
+  #owners-modal .data-table thead{display:none!important}
+  #owners-modal .data-table tbody{display:grid!important;gap:9px!important}
+  #owners-modal .data-table tr{padding:13px 14px!important;border:1px solid var(--ux-line)!important;border-radius:14px!important;background:rgba(255,255,255,.025)!important}
+  #owners-modal .data-table td{display:grid!important;grid-template-columns:minmax(88px,.55fr) minmax(0,1fr)!important;gap:10px!important;padding:5px 0!important;border:0!important;white-space:normal!important;overflow-wrap:anywhere!important}
+  #owners-modal .data-table td:nth-child(1)::before{content:'Correo';color:var(--ux-muted);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  #owners-modal .data-table td:nth-child(2)::before{content:'Rol';color:var(--ux-muted);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  #owners-modal .data-table td:nth-child(3)::before{content:'Estado';color:var(--ux-muted);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  #owners-modal .data-table td:nth-child(4)::before{content:'Vence';color:var(--ux-muted);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  #owners-modal .data-table td:nth-child(5){display:flex!important;justify-content:flex-end!important;margin-top:4px!important}
+
+  /* Evita el antiguo comportamiento de bottom-sheet: el usuario pidió centro visible. */
+  body>.modal,body>.af-modal{place-items:center!important;align-items:center!important}
+}
