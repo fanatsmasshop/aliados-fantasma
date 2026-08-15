@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="af-modern-2026.css?v=20260731-MODERN1">
   <link rel="stylesheet" href="af-ux-2026.css?v=20260815-VIEWPORT1">
   <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE1">
+  <link rel="stylesheet" href="directorio-2026.css?v=20260815-DIR2">
 </head>
 <body class="directory-page af-page af-page-directory">
   <div id="launch-preview-banner" class="directory-preview-banner hidden" role="status">
@@ -39,9 +40,9 @@
   <main>
     <section class="directory-hero" aria-labelledby="directory-title">
       <div class="directory-hero-copy">
-        <p class="eyebrow">DESCUBRE LO QUE ESTÁ CERCA</p>
-        <h1 id="directory-title">Negocios locales que vale la pena conocer.</h1>
-        <p>Busca por nombre, categoría, estado, municipio, alcaldía o colonia. Descubre negocios de cualquier parte de México.</p>
+        <p class="eyebrow">DIRECTORIO NACIONAL</p>
+        <h1 id="directory-title">Encuentra negocios que sí puedes contactar.</h1>
+        <p>Busca por negocio, servicio o ubicación y conecta directamente con comercios de la red.</p>
       </div>
       <div class="directory-search-shell" role="search">
         <label class="directory-search">
@@ -55,7 +56,8 @@
     </section>
 
     <section id="directory-content" class="directory-layout hidden">
-      <aside class="directory-sidebar" aria-label="Filtros del directorio">
+      <button id="directory-filter-toggle" class="af-mobile-filter-toggle" type="button" aria-expanded="false" aria-controls="directory-filters">Filtros <span id="directory-filter-count" class="directory-filter-count"></span></button>
+      <aside id="directory-filters" class="directory-sidebar" aria-label="Filtros del directorio">
         <div class="filter-heading">
           <div><p class="eyebrow">AFINA TU BÚSQUEDA</p><h2>Filtros</h2></div>
           <button id="reset-filters" type="button">Limpiar</button>
@@ -112,7 +114,7 @@
 
         <section class="results-section" aria-labelledby="results-title">
           <div class="results-heading">
-            <div><p class="eyebrow">DIRECTORIO</p><h2 id="results-title">Todos los negocios</h2></div>
+            <div><p class="eyebrow">DIRECTORIO</p><h2 id="results-title">Negocios</h2></div>
             <p id="results-summary" aria-live="polite">Cargando negocios…</p>
           </div>
           <div id="active-filters" class="active-filters hidden"></div>
@@ -120,7 +122,7 @@
           <div id="directory-empty" class="directory-empty hidden">
             <div class="empty-icon">⌕</div>
             <h3>No encontramos coincidencias</h3>
-            <p>Prueba con otra palabra, categoría o elimina algunos filtros.</p>
+            <p>Prueba otra búsqueda o quita los filtros activos.</p>
             <button id="empty-reset" class="button secondary" type="button">Ver todos los negocios</button>
           </div>
           <div class="load-more-wrap"><button id="load-more" class="button secondary hidden" type="button">Ver más negocios</button></div>
@@ -142,7 +144,6 @@
     <p>La información de cada perfil es proporcionada por el negocio.</p>
   </footer>
 
-  <div id="directory-toast" class="directory-toast hidden" role="status"></div>
   <script type="module" src="directorio.js?v=20260730-DATE1"></script>
   <script src="af-modern-2026.js?v=20260815-VIEWPORT1" defer></script>
   <script src="mobile-2026.js?v=20260815-MOBILE1" defer></script>

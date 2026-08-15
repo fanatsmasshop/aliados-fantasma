@@ -106,6 +106,7 @@ function recommendationScore(business) {
 }
 
 function showToast(message) {
+  if (!el.toast) return;
   el.toast.textContent = message;
   el.toast.classList.remove('hidden');
   clearTimeout(showToast.timer);
@@ -172,7 +173,7 @@ function cardMarkup(business) {
       <span class="business-category">${esc(business.categoria || 'Negocio aliado')}</span>
       <h3>${esc(business.nombre)}</h3>
       <p class="business-description">${esc(description)}</p>
-      <div class="business-meta"><span>⌖ ${esc(businessLocation(business))}</span><span>${completeness(business)}% perfil</span></div>
+      <div class="business-meta"><span>⌖ ${esc(businessLocation(business))}</span></div>
       <div class="business-actions">
         <a class="view-profile" href="${esc(profileUrl(business))}" data-event="profile">Ver perfil</a>
         ${wa ? `<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(business.nombre)} por WhatsApp" data-event="whatsapp">WA</a>` : '<button class="quick-contact" type="button" disabled>—</button>'}
@@ -198,16 +199,24 @@ function bindImageFallbacks(root) {
 }
 
 function populateFilters() {
-  el.category.innerHTML = '<option value="">Todas las categorías</option>' + state.categories
+  const represented = [...new Set(state.businesses.map(item => item.categoria).filter(name => name && name !== 'Negocio aliado'))]
+    .sort((a, b) => a.localeCompare(b, 'es'));
+  const categoryMap = new Map(state.categories.map(category => [category.nombre, category]));
+  const availableCategories = represented.map(name => categoryMap.get(name) || { nombre: name, icono: '' });
+
+  el.category.innerHTML = '<option value="">Todas las categorías</option>' + availableCategories
     .map(category => `<option value="${esc(category.nombre)}">${esc(category.nombre)}</option>`).join('');
   const regions = [...new Set(state.businesses.map(item => item.estado_region).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
   el.region.innerHTML = '<option value="">Todos los estados</option>' + regions
     .map(name => `<option value="${esc(name)}">${esc(name)}</option>`).join('');
   populateMunicipalities();
-  el.quick.innerHTML = state.categories.slice(0, 8).map(category =>
-    `<button class="quick-category" type="button" data-category="${esc(category.nombre)}">${esc(category.icono || '')} ${esc(category.nombre)}</button>`).join('');
+
+  const quick = [{ nombre: '', etiqueta: 'Todos', icono: '⌂' }, ...availableCategories.slice(0, 7).map(category => ({ ...category, etiqueta: category.nombre }))];
+  el.quick.innerHTML = quick.map(category =>
+    `<button class="quick-category" type="button" data-category="${esc(category.nombre)}">${esc(category.icono || '')} ${esc(category.etiqueta)}</button>`).join('');
   el.quick.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
-    state.category = state.category === button.dataset.category ? '' : button.dataset.category;
+    const selected = button.dataset.category || '';
+    state.category = state.category === selected && selected ? '' : selected;
     el.category.value = state.category;
     state.visible = PAGE_SIZE;
     applyFilters();
@@ -280,7 +289,12 @@ function removeFilter(key) {
 
 function renderFeatured() {
   const filteredMode = state.query || state.category || state.region || state.municipality || state.open || state.promotion || state.isNew || state.featured;
-  if (filteredMode) { el.featuredSection.classList.add('hidden'); return; }
+  const compactViewport = window.matchMedia('(max-width: 720px)').matches;
+  if (filteredMode || compactViewport || state.businesses.length < 6) {
+    el.featuredSection.classList.add('hidden');
+    el.featuredGrid.innerHTML = '';
+    return;
+  }
   const selection = sortBusinesses(state.businesses).slice(0, 2);
   el.featuredSection.classList.toggle('hidden', !selection.length);
   el.featuredGrid.innerHTML = selection.map(featuredMarkup).join('');
@@ -294,7 +308,7 @@ function renderResults() {
   el.empty.classList.toggle('hidden', state.filtered.length > 0);
   el.grid.classList.toggle('hidden', state.filtered.length === 0);
   el.loadMore.classList.toggle('hidden', state.visible >= state.filtered.length);
-  el.summary.textContent = `${state.filtered.length} negocio${state.filtered.length === 1 ? '' : 's'} encontrado${state.filtered.length === 1 ? '' : 's'}`;
+  el.summary.textContent = `${state.filtered.length} negocio${state.filtered.length === 1 ? '' : 's'}`;
   bindImageFallbacks(el.grid);
   bindTracking(el.grid);
 }
@@ -305,7 +319,10 @@ function applyFilters({ trackSearch = false } = {}) {
   renderFeatured();
   renderResults();
   el.clear.classList.toggle('hidden', !state.query);
-  el.quick.querySelectorAll('button').forEach(button => button.classList.toggle('active', button.dataset.category === state.category));
+  el.quick.querySelectorAll('button').forEach(button => button.classList.toggle('active', (button.dataset.category || '') === state.category));
+  const filterCount = [state.query, state.category, state.region, state.municipality, state.open, state.promotion, state.isNew, state.featured].filter(Boolean).length;
+  const filterCountNode = document.querySelector('#directory-filter-count');
+  if (filterCountNode) filterCountNode.textContent = filterCount ? `• ${filterCount}` : '';
   if (trackSearch && state.query) trackEvent('busqueda', null, { query: state.query, resultados: state.filtered.length });
 }
 
