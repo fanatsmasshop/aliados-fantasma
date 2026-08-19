@@ -61,7 +61,7 @@ function relevance(item){
 async function requireBusiness(){
   if(!supabase){ location.replace('login.html'); return false; }
   const {data:{user:currentUser}} = await supabase.auth.getUser();
-  if(!currentUser){ location.replace(`login.html?next=${encodeURIComponent('oportunidades.html')}`); return false; }
+  if(!currentUser){ location.replace(`login.html?return=${encodeURIComponent('oportunidades.html')}`); return false; }
   user = currentUser;
 
   const {data,error} = await supabase

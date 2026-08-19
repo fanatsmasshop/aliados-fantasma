@@ -1,0 +1,49 @@
+ALIADOS FANTASMA — LO NECESITO INTEGRADO AL INDEX
+19 de agosto de 2026 · HOME2
+
+ESTE PAQUETE REEMPLAZA AL ZIP URGENTE ANTERIOR DE “LO NECESITO”.
+No combines ambos ZIP: usa este paquete como la versión nueva.
+
+QUÉ CAMBIA
+1. index.html ya permite publicar una necesidad REAL sin salir de la portada.
+2. El CTA “Necesito algo” y el menú “Lo necesito” llevan al formulario integrado en el index.
+3. El formulario integrado guarda directamente en public.necesidades.
+4. Un negocio autenticado ve desde el index si existen oportunidades activas y puede entrar directo a oportunidades.html.
+5. oportunidades.html permite cotizar y abrir WhatsApp, registrando el contacto en respuestas_necesidad.
+6. login.html/login.js ahora aceptan return=oportunidades.html y regresan correctamente al negocio después de iniciar sesión.
+7. En modo de lanzamiento abierto, el acceso móvil mantiene “Lo necesito” como acción principal.
+8. necesito.html sigue disponible como formulario detallado (fecha, colonia y rango de presupuesto), pero ya NO es necesario escribir esa URL para usar la función.
+
+SUPABASE
+La base conectada de Aliados Fantasma ya contiene las tablas necesidades y respuestas_necesidad y sus políticas RLS al momento de generar este paquete.
+Por lo tanto, si sigues usando el mismo proyecto Supabase, NO necesitas volver a ejecutar 078_lo_necesito.sql.
+El SQL se incluye únicamente como respaldo/historial del código.
+
+ARCHIVOS A SUBIR A GITHUB/CLOUDFLARE
+- index.html
+- index-necesito.js (NUEVO)
+- lo-necesito.css
+- necesito.html
+- necesito.js
+- oportunidades.html
+- oportunidades.js
+- login.html
+- login.js
+- panel.html
+- explorar.html
+- home-live.js
+- lanzamiento.js
+
+ARCHIVO DE RESPALDO / NO NECESARIO SUBIR SI YA ESTÁ EJECUTADO
+- 078_lo_necesito.sql
+
+PRUEBA RÁPIDA DESPUÉS DE PUBLICAR
+A) Abrir la URL principal de Aliados, sin anexar /necesito.html.
+B) Presionar “Necesito algo”.
+C) Llenar la solicitud desde el mismo index y publicarla.
+D) Iniciar sesión con una cuenta vinculada a un negocio.
+E) Entrar a “Oportunidades”.
+F) Abrir la solicitud, escribir propuesta/precio y pulsar “Registrar y abrir WhatsApp”.
+
+LANZAMIENTO
+La configuración conectada está en modo automático para el 24 de agosto de 2026 a las 11:00 a. m. (Ciudad de México).

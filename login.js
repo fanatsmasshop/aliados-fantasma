@@ -20,7 +20,7 @@ function requestedReturn(context){
     const url=new URL(raw,location.href);
     if(url.origin!==location.origin)return '';
     const page=url.pathname.split('/').pop()||'';
-    const allowed=new Set(['marketing.html','panel.html','dashboard.html','invitacion.html']);
+    const allowed=new Set(['marketing.html','panel.html','dashboard.html','invitacion.html','oportunidades.html']);
     if(!allowed.has(page))return '';
     if(page==='invitacion.html'){
       const token=url.searchParams.get('token')||'';
@@ -35,6 +35,12 @@ function requestedReturn(context){
         url.searchParams.set('business',context.businessId);
         url.searchParams.delete('admin_business');
       }
+    }
+    if(page==='oportunidades.html'){
+      if(context?.type!=='owner'||!context.businessId)return '';
+      const requested=url.searchParams.get('business');
+      if(requested&&requested!==context.businessId)return '';
+      url.searchParams.set('business',context.businessId);
     }
     if(page==='dashboard.html'&&context?.type!=='admin')return '';
     return `${page}${url.search}`;

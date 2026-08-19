@@ -387,8 +387,8 @@ function updateLiveNavigation() {
   document.querySelectorAll('[data-mode="live"]').forEach(node => { node.hidden = false; });
   if (elements.brand) elements.brand.href = '#live-home';
   if (elements.mobileSecondary) {
-    elements.mobileSecondary.href = 'explorar.html';
-    elements.mobileSecondary.textContent = 'Directorio';
+    elements.mobileSecondary.href = '#lo-necesito';
+    elements.mobileSecondary.textContent = 'Lo necesito';
   }
   if (elements.mobilePrimary) {
     elements.mobilePrimary.href = 'login.html';

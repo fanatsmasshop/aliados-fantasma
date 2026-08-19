@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="af-modern-2026.css?v=20260801-RC6.2">
   <link rel="stylesheet" href="prelaunch-v2.css?v=20260814-STRUCTURAL2">
   <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE-RC2">
-  <link rel="stylesheet" href="lo-necesito.css?v=20260819-LN1">
+  <link rel="stylesheet" href="lo-necesito.css?v=20260819-HOME2">
 </head>
 <body class="af-page af-page-home">
 
@@ -124,7 +124,7 @@
       <a href="#live-categories" class="link" data-mode="live" hidden>Categorías</a>
       <a href="#live-businesses" class="link" data-mode="live" hidden>Negocios</a>
       <a href="explorar.html" class="link" data-mode="live" hidden>Directorio completo</a>
-      <a href="necesito.html" class="link">Lo necesito</a>
+      <a href="#lo-necesito" class="link">Lo necesito</a>
       <a href="login.html" class="link">Iniciar sesión</a>
       <a href="registro.html" class="button button-small">Registrar negocio</a>
     </nav>
@@ -150,7 +150,7 @@
         <h1>La red de <span>negocios locales</span> de México está por despegar.</h1>
         <p class="pre2-lead">¿Buscas un producto o servicio? Publica lo que necesitas y deja que negocios registrados puedan proponerte una solución. Si tienes negocio, también puedes entrar a la red.</p>
         <div class="pre2-actions">
-          <a class="pre2-btn pre2-btn-primary" href="necesito.html">Necesito algo <b>→</b></a>
+          <a class="pre2-btn pre2-btn-primary" href="#lo-necesito">Necesito algo <b>→</b></a>
           <a class="pre2-btn pre2-btn-secondary" href="registro.html">Tengo un negocio</a>
         </div>
         <div class="pre2-trust">
@@ -190,8 +190,8 @@
         <p>Publica lo que buscas, dónde lo necesitas y tu presupuesto. Los negocios registrados pueden convertir tu solicitud en una cotización directa por WhatsApp.</p>
       </div>
       <div class="need-promo-actions">
-        <a class="main" href="necesito.html">Publicar lo que necesito →</a>
-        <a class="alt" href="registro.html">Quiero recibir oportunidades</a>
+        <a class="main" href="#lo-necesito">Publicar aquí mismo →</a>
+        <a class="alt" href="login.html?return=oportunidades.html">Soy negocio: ver oportunidades</a>
       </div>
     </section>
 
@@ -258,6 +258,82 @@
     </section>
   </main>
 
+  <section id="lo-necesito" class="home-need-section" aria-labelledby="home-need-title">
+    <div class="home-need-shell">
+      <div class="home-need-heading">
+        <div>
+          <p class="need-eyebrow">LO NECESITO · SOLICITUD REAL</p>
+          <h2 id="home-need-title">Dinos qué buscas. <span>Aliados lo convierte en oportunidad.</span></h2>
+          <p>No necesitas cuenta. Publicas tu necesidad desde esta misma página y los negocios registrados pueden verla y enviarte una propuesta por WhatsApp.</p>
+        </div>
+        <div class="home-need-flow" aria-label="Cómo funciona">
+          <span><b>1</b> Publicas</span><i></i><span><b>2</b> Negocios la ven</span><i></i><span><b>3</b> Te cotizan</span>
+        </div>
+      </div>
+
+      <div class="home-need-layout">
+        <div id="home-need-form-panel" class="need-card need-form-card home-need-form-card">
+          <div class="need-section-head">
+            <div><p class="need-eyebrow">PUBLICAR SIN SALIR DEL INICIO</p><h2>¿Qué necesitas?</h2><p>Da la información suficiente para que un negocio sepa si puede ayudarte.</p></div>
+            <span class="need-step">⚡</span>
+          </div>
+          <div id="home-need-alert" class="need-alert" role="alert"></div>
+          <form id="home-need-form" class="need-form-grid" novalidate>
+            <label class="need-field wide"><span>¿Qué estás buscando? *</span><input name="titulo" maxlength="100" required placeholder="Ej. Busco quien repare un Samsung A55 hoy"></label>
+            <label class="need-field wide"><span>Detalles para cotizar *</span><textarea name="descripcion" maxlength="1500" required placeholder="Modelo, cantidad, medidas, problema, características o cualquier dato que ayude al negocio a darte una opción real."></textarea></label>
+
+            <label class="need-field"><span>Categoría *</span><select id="home-need-category" name="categoria_id" required><option value="">Selecciona una categoría</option></select></label>
+            <label class="need-field"><span>Presupuesto máximo</span><input name="presupuesto_max" type="number" min="0" step="1" inputmode="decimal" placeholder="Ej. 1500"></label>
+
+            <label class="need-field"><span>Estado *</span><select id="home-need-state" name="estado_region" required><option value="">Selecciona tu estado</option></select></label>
+            <label class="need-field"><span>Municipio / alcaldía *</span><input name="municipio" maxlength="100" required placeholder="Ej. Ecatepec de Morelos"></label>
+
+            <div class="need-field wide"><span>¿Qué tan urgente es?</span><div class="need-urgency home-need-urgency">
+              <input id="home-urg-normal" type="radio" name="urgencia" value="normal" checked><label for="home-urg-normal">Sin prisa</label>
+              <input id="home-urg-week" type="radio" name="urgencia" value="esta_semana"><label for="home-urg-week">Esta semana</label>
+              <input id="home-urg-24" type="radio" name="urgencia" value="24_horas"><label for="home-urg-24">24 horas</label>
+              <input id="home-urg-today" type="radio" name="urgencia" value="hoy"><label for="home-urg-today">Hoy</label>
+            </div></div>
+
+            <label class="need-field"><span>Tu nombre *</span><input name="nombre_cliente" maxlength="80" required autocomplete="name" placeholder="Nombre o apodo"></label>
+            <label class="need-field"><span>WhatsApp *</span><input name="whatsapp" inputmode="tel" autocomplete="tel" required placeholder="10 dígitos"></label>
+
+            <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Acepto que mi nombre, solicitud y WhatsApp sean visibles para <strong>negocios registrados en Aliados Fantasma</strong> con el fin de recibir propuestas relacionadas. La solicitud expira automáticamente después de 7 días.</span></label>
+
+            <div class="need-submit-row">
+              <small>Aliados conecta a las partes; precio, disponibilidad, entrega y pago se acuerdan directamente con el negocio.</small>
+              <button id="home-need-submit" class="need-button primary" type="submit">Publicar y recibir opciones <span>→</span></button>
+            </div>
+          </form>
+          <a class="home-need-advanced" href="necesito.html">¿Quieres agregar fecha, colonia y rango de presupuesto? Abrir formulario detallado →</a>
+        </div>
+
+        <div id="home-need-success" class="need-card home-need-success" hidden aria-live="polite">
+          <div class="need-success-icon">✓</div>
+          <p class="need-eyebrow">SOLICITUD PUBLICADA</p>
+          <h2>Ya está dentro de Aliados.</h2>
+          <p>Los negocios habilitados podrán verla durante los próximos 7 días y, si pueden ayudarte, podrán contactarte al WhatsApp que proporcionaste.</p>
+          <div class="home-need-success-actions"><button id="home-need-another" class="need-button secondary" type="button">Publicar otra</button><a class="need-button ghost" href="explorar.html">También explorar negocios</a></div>
+        </div>
+
+        <aside class="home-need-business-card need-card">
+          <span class="home-need-business-icon">🏪</span>
+          <p class="need-eyebrow">PARA NEGOCIOS</p>
+          <h3>No esperes visitas. Revisa quién ya está buscando.</h3>
+          <p id="home-need-business-status">Si tienes un negocio, inicia sesión para ver solicitudes de personas que ya están buscando algo.</p>
+          <div class="home-need-business-benefits">
+            <span>✓ Solicitudes con zona</span>
+            <span>✓ Presupuesto cuando existe</span>
+            <span>✓ Contacto autorizado</span>
+            <span>✓ Cotización por WhatsApp</span>
+          </div>
+          <a id="home-need-business-button" class="need-button primary" href="login.html?return=oportunidades.html">Entrar a oportunidades →</a>
+          <small id="home-need-business-meta">Solo negocios vinculados pueden ver los datos de contacto.</small>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <main id="live-experience" class="live-home" hidden>
     <section class="live-hero" id="live-home" aria-label="Negocios destacados">
       <div class="live-slider-wrap">
@@ -281,6 +357,7 @@
             <button id="live-search-button" type="button">Buscar</button>
           </div>
         </div>
+        <a class="live-need-shortcut" href="#lo-necesito"><span>⚡</span><div><strong>¿No quieres buscar uno por uno?</strong><small>Publica lo que necesitas y deja que los negocios te contacten.</small></div><b>→</b></a>
         <div class="live-stats" aria-label="Resumen de la red">
           <article><strong id="live-business-count">0</strong><span>Negocios</span></article>
           <article><strong id="live-category-count">0</strong><span>Categorías</span></article>
@@ -336,17 +413,18 @@
 
   <footer>
     <div class="footer-brand"><img src="aliados-fantasma-icono.webp" alt=""><span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos.</small></span></div>
-    <div class="footer-links"><a href="necesito.html">Lo necesito</a><a href="terminos.html?from=index">Términos</a><a href="privacidad.html?from=index">Privacidad</a><a href="ayuda.html?from=index">Ayuda</a><a href="registro.html">Registro</a></div>
+    <div class="footer-links"><a href="#lo-necesito">Lo necesito</a><a href="terminos.html?from=index">Términos</a><a href="privacidad.html?from=index">Privacidad</a><a href="ayuda.html?from=index">Ayuda</a><a href="registro.html">Registro</a></div>
     <span class="copyright">© 2026 Aliados Fantasma</span>
   </footer>
 
   <noscript><div class="noscript">Activa JavaScript para ver la cuenta regresiva.</div></noscript>
   <div class="mobile-cta" aria-label="Acciones rápidas">
-    <a href="necesito.html">Lo necesito</a>
-    <a href="registro.html">Registrar negocio</a>
+    <a href="#lo-necesito">Lo necesito</a>
+    <a href="login.html?return=oportunidades.html">Oportunidades</a>
   </div>
+  <script type="module" src="index-necesito.js?v=20260819-HOME2"></script>
   <script type="module" src="prelaunch-real.js?v=20260814-REAL1"></script>
-  <script type="module" src="lanzamiento.js?v=20260814-NACIONAL1"></script>
+  <script type="module" src="lanzamiento.js?v=20260819-HOME2"></script>
   <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>
   <script src="af-modern-2026.js?v=20260815-VIEWPORT1" defer></script>
   <script src="mobile-2026.js?v=20260815-MOBILE-RC2" defer></script>
