@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Dinos qué producto o servicio necesitas y permite que negocios registrados en Aliados Fantasma te contacten con opciones.">
+  <meta name="theme-color" content="#06080d">
+  <title>Lo necesito | Aliados Fantasma</title>
+  <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
+  <link rel="stylesheet" href="sistema-visual.css?v=20260722-2500">
+  <link rel="stylesheet" href="lo-necesito.css?v=20260819-LN1">
+</head>
+<body class="need-page">
+<header class="need-header">
+  <div class="need-header-inner">
+    <a class="need-brand" href="index.html" aria-label="Aliados Fantasma, inicio">
+      <img src="aliados-fantasma-icono.webp" alt="">
+      <span><strong>Aliados Fantasma</strong><small>Negocios que responden a lo que buscas</small></span>
+    </a>
+    <div class="need-header-actions">
+      <a class="need-link" href="explorar.html">Explorar negocios</a>
+      <a class="need-button secondary" href="login.html">Soy negocio</a>
+      <a class="need-button primary" href="#publicar">Publicar necesidad</a>
+    </div>
+  </div>
+</header>
+
+<main class="need-shell">
+  <section class="need-hero">
+    <div class="need-hero-copy">
+      <div class="need-kicker"><span class="need-pill"><i></i> NUEVO EN ALIADOS FANTASMA</span></div>
+      <p class="need-eyebrow">NO BUSQUES NEGOCIO POR NEGOCIO</p>
+      <h1>Dinos qué <span>necesitas.</span></h1>
+      <p>Publica lo que estás buscando, tu zona y presupuesto. Los negocios registrados que puedan ayudarte verán la oportunidad y podrán cotizarte directamente por WhatsApp.</p>
+      <div class="need-hero-actions">
+        <a class="need-button primary" href="#publicar">Publicar gratis <span>→</span></a>
+        <a class="need-button secondary" href="explorar.html">Prefiero buscar negocios</a>
+      </div>
+      <div class="need-proof"><span><b>✓</b> Sin crear cuenta</span><span><b>✓</b> Solicitud gratis</span><span><b>✓</b> Contacto directo</span></div>
+    </div>
+    <aside class="need-hero-card" aria-label="Cómo funciona Lo necesito">
+      <div class="need-hero-card-head"><span>⚡</span><div><small>UNA SOLICITUD</small><strong>Varias posibilidades</strong></div></div>
+      <div class="need-flow">
+        <article><span>01</span><div><strong>Describe lo que buscas</strong><p>Producto, servicio, fecha, zona y presupuesto.</p></div></article>
+        <article><span>02</span><div><strong>Aliados lo convierte en oportunidad</strong><p>Los negocios registrados pueden encontrar solicitudes relevantes.</p></div></article>
+        <article><span>03</span><div><strong>Recibe opciones por WhatsApp</strong><p>El negocio se identifica y te manda su propuesta directamente.</p></div></article>
+      </div>
+    </aside>
+  </section>
+
+  <section id="publicar" class="need-main-grid">
+    <div class="need-card need-form-card">
+      <div id="need-form-wrap">
+        <div class="need-section-head"><div><p class="need-eyebrow">PUBLICAR SOLICITUD</p><h2>¿Qué estás buscando?</h2><p>Entre más claro seas, mejores propuestas podrán enviarte.</p></div><span class="need-step">01</span></div>
+        <div id="need-alert" class="need-alert" role="alert"></div>
+        <form id="need-form" class="need-form-grid" novalidate>
+          <label class="need-field wide"><span>¿Qué necesitas? *</span><input name="titulo" maxlength="100" required placeholder="Ej. Necesito reparar la pantalla de un Samsung A55"></label>
+          <label class="need-field wide"><span>Cuéntanos un poco más *</span><textarea name="descripcion" maxlength="1500" required placeholder="Describe modelo, cantidad, medidas, problema, características o cualquier dato que ayude a cotizarte."></textarea><small>Evita poner datos sensibles. Tu WhatsApp se guarda por separado.</small></label>
+
+          <label class="need-field"><span>Categoría *</span><select id="need-category" name="categoria_id" required><option value="">Selecciona una categoría</option></select></label>
+          <label class="need-field"><span>¿Cuándo lo necesitas?</span><input name="fecha_necesaria" type="date"></label>
+
+          <div class="need-field wide"><span>Urgencia</span><div class="need-urgency">
+            <input id="urg-normal" type="radio" name="urgencia" value="normal" checked><label for="urg-normal">Sin prisa</label>
+            <input id="urg-week" type="radio" name="urgencia" value="esta_semana"><label for="urg-week">Esta semana</label>
+            <input id="urg-24" type="radio" name="urgencia" value="24_horas"><label for="urg-24">24 horas</label>
+            <input id="urg-today" type="radio" name="urgencia" value="hoy"><label for="urg-today">Hoy</label>
+          </div></div>
+
+          <label class="need-field"><span>Estado *</span><select id="need-state" name="estado_region" required><option value="">Selecciona tu estado</option></select></label>
+          <label class="need-field"><span>Municipio / alcaldía *</span><input name="municipio" maxlength="100" required placeholder="Ej. Ecatepec de Morelos"></label>
+          <label class="need-field wide"><span>Colonia o zona</span><input name="colonia" maxlength="100" placeholder="Ej. Ciudad Azteca 1a Sección"></label>
+
+          <div class="need-field wide"><span>Presupuesto aproximado</span><div class="need-budget">
+            <label class="need-field"><small>Desde</small><input name="presupuesto_min" type="number" min="0" step="1" inputmode="decimal" placeholder="$0"></label>
+            <span>—</span>
+            <label class="need-field"><small>Hasta</small><input name="presupuesto_max" type="number" min="0" step="1" inputmode="decimal" placeholder="$0"></label>
+          </div></div>
+
+          <label class="need-field"><span>Tu nombre *</span><input name="nombre_cliente" maxlength="80" required autocomplete="name" placeholder="Nombre o apodo"></label>
+          <label class="need-field"><span>WhatsApp *</span><input name="whatsapp" inputmode="tel" autocomplete="tel" required placeholder="10 dígitos"></label>
+
+          <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Acepto que mi nombre, solicitud y WhatsApp sean visibles para <strong>negocios registrados en Aliados Fantasma</strong> con el fin de recibir propuestas relacionadas con esta solicitud. Mi solicitud expira automáticamente después de 7 días.</span></label>
+
+          <div class="need-submit-row"><small>Aliados Fantasma conecta a las partes. Precios, disponibilidad, entrega y pago se acuerdan directamente con cada negocio.</small><button id="need-submit" class="need-button primary" type="submit">Publicar mi necesidad <span>→</span></button></div>
+        </form>
+      </div>
+
+      <div id="need-success" class="need-success" aria-live="polite">
+        <div class="need-success-icon">✓</div>
+        <p class="need-eyebrow">SOLICITUD PUBLICADA</p>
+        <h2>Ya la convertimos en una oportunidad.</h2>
+        <p>Los negocios registrados podrán verla durante los próximos 7 días. Si alguno puede ayudarte, podrá contactarte directamente al WhatsApp que proporcionaste.</p>
+        <button id="need-another" class="need-button secondary" type="button">Publicar otra necesidad</button>
+      </div>
+    </div>
+
+    <aside class="need-side">
+      <section class="need-card need-info-card">
+        <p class="need-eyebrow">PARA RECIBIR MEJORES OPCIONES</p>
+        <h3>Haz tu solicitud fácil de cotizar.</h3>
+        <div class="need-info-list">
+          <div><span>✎</span><div><strong>Sé específico</strong><small>Modelo, tamaño, cantidad, servicio o problema exacto.</small></div></div>
+          <div><span>$</span><div><strong>Da una referencia de presupuesto</strong><small>Es opcional, pero evita propuestas fuera de rango.</small></div></div>
+          <div><span>⌖</span><div><strong>Escribe tu zona real</strong><small>Ayuda a los negocios a saber si pueden atenderte.</small></div></div>
+        </div>
+      </section>
+      <section class="need-privacy"><strong>Tu contacto no es público en el directorio.</strong><p>La solicitud completa se muestra únicamente a usuarios autenticados vinculados a un negocio de Aliados Fantasma. Nunca publiques contraseñas, datos bancarios o identificaciones.</p></section>
+    </aside>
+  </section>
+</main>
+
+<footer class="need-footer"><div class="need-footer-inner"><span><strong>Aliados Fantasma</strong> · Conectando necesidades con negocios.</span><span>© 2026 · <a href="privacidad.html?from=necesito">Privacidad</a> · <a href="terminos.html?from=necesito">Términos</a></span></div></footer>
+<script type="module" src="necesito.js?v=20260819-LN1"></script>
+</body>
+</html>

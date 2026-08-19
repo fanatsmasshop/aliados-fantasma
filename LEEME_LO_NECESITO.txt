@@ -1,0 +1,41 @@
+ALIADOS FANTASMA — FUNCIÓN "LO NECESITO" · 19/08/2026
+
+OBJETIVO
+Convertir Aliados de un directorio pasivo a un generador de oportunidades:
+1) una persona publica qué producto o servicio necesita;
+2) no necesita crear cuenta;
+3) solo usuarios autenticados vinculados a un negocio pueden ver las solicitudes;
+4) el negocio registra su propuesta y abre WhatsApp con el mensaje preparado;
+5) Aliados conserva el dato de qué negocio contactó cada oportunidad.
+
+ARCHIVOS NUEVOS
+- 078_lo_necesito.sql
+- necesito.html
+- necesito.js
+- oportunidades.html
+- oportunidades.js
+- lo-necesito.css
+
+ARCHIVOS MODIFICADOS
+- index.html
+- explorar.html
+- panel.html
+
+ORDEN DE INSTALACIÓN
+1. En Supabase > SQL Editor ejecuta TODO 078_lo_necesito.sql.
+2. Sube a GitHub/Cloudflare los 9 archivos nuevos/modificados de este paquete.
+3. Abre necesito.html en incógnito y publica una solicitud de prueba.
+4. Inicia sesión con un negocio y abre oportunidades.html.
+5. Pulsa "Cotizar por WhatsApp" y confirma que la propuesta se registra y abre WhatsApp.
+
+SEGURIDAD / PRIVACIDAD
+- Las solicitudes NO tienen política SELECT para anon.
+- El público solo puede INSERTAR las columnas del formulario.
+- Solo cuentas vinculadas a un negocio activo (o administrador) pueden leer oportunidades.
+- El cliente debe autorizar expresamente compartir su WhatsApp con negocios registrados.
+- Se permiten máximo 3 solicitudes por WhatsApp cada 24 horas.
+- Cada solicitud expira automáticamente en 7 días a nivel de consulta.
+- Cada negocio solo puede crear/leer/actualizar su propia respuesta a una solicitud.
+
+NO BORRAR
+No reemplaza directorio, perfiles, Rewards, Marketing ni panel. Es una nueva capa encima de lo existente.
