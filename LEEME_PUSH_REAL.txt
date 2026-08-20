@@ -1,0 +1,24 @@
+ALIADOS FANTASMA — WEB PUSH REAL
+19/08/2026
+
+SUBE ESTOS ARCHIVOS A LA RAIZ DE GITHUB/CLOUDFLARE:
+- panel.html
+- oportunidades.html
+- push-client.js
+- af-sw.js
+- manifest.webmanifest
+
+NO EJECUTES SQL: el backend, RPC y cron ya fueron configurados en Supabase.
+
+PRUEBA EN ANDROID / CHROME:
+1. Sube los 5 archivos y espera el despliegue de Cloudflare Pages.
+2. Abre Aliados Fantasma en Chrome e inicia sesión con una cuenta de negocio.
+3. En panel.html u oportunidades.html aparecerá "Activar alertas".
+4. Pulsa el botón y acepta el permiso de Notificaciones de Chrome.
+5. La alerta reciente que quedó sin dispositivo se vuelve a poner en cola al registrar el celular.
+6. El despachador corre cada minuto. Debería llegar una notificación del sistema sin necesitar tener Aliados abierto.
+7. Toca la notificación: debe abrir la oportunidad correspondiente.
+
+IMPORTANTE:
+- Android/Chrome decide el sonido final. Si el teléfono está en silencio, No molestar o el canal de Chrome tiene sonido desactivado, una web no puede saltarse esa configuración.
+- Cada dispositivo/navegador debe activar las alertas una vez.
