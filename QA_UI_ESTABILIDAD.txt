@@ -1,0 +1,37 @@
+QA RÁPIDO — ALIADOS FANTASMA UI STABILITY
+
+1. ADMIN / solicitudes.html
+   - Baja a mitad de la lista.
+   - Abre “Revisar perfil”.
+   - Debe abrir centrado en LA PANTALLA ACTUAL, no arriba del documento.
+   - Si el contenido es largo, solo la tarjeta debe desplazarse.
+   - Cabecera y botones finales deben permanecer alcanzables.
+   - Cierra y abre otro perfil: debe comenzar arriba, no conservar el scroll anterior.
+
+2. PANEL / panel.html
+   - Ve hasta Revisión final.
+   - Guarda o provoca un mensaje.
+   - El mensaje debe aparecer flotante dentro del viewport actual.
+   - En móvil la barra Anterior/Guardar/Siguiente no debe tapar el contenido final.
+
+3. NEGOCIOS / oportunidades.html
+   - Abre una solicitud y “Sí, puedo atenderlo”.
+   - El modal debe caber en el viewport, incluso con teclado móvil.
+   - Los botones Cancelar/Enviar deben seguir accesibles.
+
+4. LO NECESITO / index.html y necesito.html
+   - Provoca una validación (campo requerido vacío).
+   - El aviso debe ser visible sin saltos extraños de página.
+   - No debe existir scroll horizontal.
+
+5. MÓVIL
+   - Prueba Chrome Android con barra del navegador visible.
+   - Gira vertical ↔ horizontal con un modal abierto.
+   - Abre el teclado dentro de textarea/input del modal.
+   - La ventana debe reajustarse al viewport visual.
+
+6. DIAGNÓSTICO
+   En consola escribe:
+     afUIAudit()
+   “horizontalOverflow” debería estar vacío o contener únicamente elementos
+   intencionalmente desplazables (por ejemplo una tabla dentro de .table-wrap).

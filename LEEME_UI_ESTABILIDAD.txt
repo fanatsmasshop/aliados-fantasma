@@ -1,0 +1,50 @@
+ALIADOS FANTASMA — ESTABILIDAD DE INTERFAZ v1
+Fecha: 20 agosto 2026
+
+SUBIR A LA RAÍZ DE GITHUB/CLOUDFLARE:
+1) af-ui-stability.js        (NUEVO)
+2) supabase-client.js        (REEMPLAZAR)
+
+NO EJECUTAR SQL.
+NO BORRAR NINGÚN CSS EXISTENTE.
+
+DESPUÉS DE SUBIR:
+- Espera a que Cloudflare despliegue.
+- Haz Ctrl + F5 una vez en escritorio.
+- En móvil cierra/reabre la pestaña o recarga sin caché.
+
+QUÉ CORRIGE ESTA CAPA
+- Modales que se abren fuera de la zona visible.
+- Revisión completa cortada arriba o abajo.
+- Modal dependiente del scroll actual de la página.
+- Scroll del fondo mientras una ventana está abierta.
+- Scroll viejo conservado al abrir otro perfil.
+- Acciones inferiores fuera de alcance en ventanas largas.
+- Cabeceras de modal que desaparecen al desplazarse.
+- Mensajes del panel que salen arriba cuando el usuario está abajo.
+- Toasts fuera del viewport visible.
+- VisualViewport móvil con barra de navegador / teclado.
+- Ancho fantasma y overflow horizontal en grids/flex heredados.
+- Inputs y botones que exceden su contenedor.
+- Tablas que rompen el ancho: mantienen scroll horizontal interno.
+- Barra sticky del onboarding que tapa contenido en móvil.
+- Review modal/QR/textarea y botones adaptativos.
+- Quote modal de Oportunidades adaptativo.
+- Foco visible/accesibilidad básica y Escape para cerrar ventanas compatibles.
+
+DIAGNÓSTICO INTERNO
+En consola del navegador puedes ejecutar:
+  afUIAudit()
+Devuelve:
+- viewport actual
+- modales abiertos
+- elementos que causan overflow horizontal
+
+IMPORTANTE
+Esta capa NO toca lógica de negocio, Supabase, matching, push, permisos,
+solicitudes, aprobación, Rewards ni datos. Solo estabiliza interfaz/viewport.
+
+3) _headers                   (REEMPLAZAR)
+   Además cambia JS/CSS a revalidación inmediata (max-age=0) durante esta etapa,
+   para evitar que Cloudflare/Chrome mezclen HTML nuevo con lógica o estilos viejos.
+   Las imágenes siguen con caché larga.
