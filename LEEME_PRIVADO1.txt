@@ -1,0 +1,36 @@
+ALIADOS FANTASMA · SOLICITUDES PRIVADAS v1
+20 agosto 2026
+
+SUPABASE
+- La migración de privacidad/secuencia YA fue aplicada en la base conectada.
+- NO ejecutes 081_solicitudes_privadas_secuenciales.sql de nuevo.
+- El SQL se incluye únicamente como respaldo.
+
+FLUJO CLIENTE
+1) Publica una necesidad.
+2) Recibe inmediatamente un enlace privado de seguimiento.
+3) Puede cerrar la página y volver cuando quiera con ese enlace.
+4) Su WhatsApp NO se muestra a los negocios.
+5) Cuando un negocio confirma que puede atenderlo, el cliente ve el negocio y decide si abre WhatsApp.
+
+FLUJO NEGOCIO
+1) Aliados selecciona una opción compatible.
+2) Solo ese negocio recibe la solicitud activa.
+3) Puede elegir "Sí, puedo atenderlo" o "No lo manejo".
+4) Si rechaza o se vence el turno, Aliados pasa automáticamente a la siguiente opción.
+5) El negocio nunca recibe el teléfono del cliente.
+
+ARCHIVOS A SUBIR A GITHUB/CLOUDFLARE
+Todos van en raíz, sin carpetas:
+- index.html
+- index-necesito.js
+- necesito.html
+- necesito.js
+- seguimiento.html
+- seguimiento.js
+- oportunidades.html
+- oportunidades.js
+- lo-necesito.css
+- push-client.js
+
+No hace falta reemplazar af-sw.js ni manifest.webmanifest si ya subiste PUSH REAL v1.

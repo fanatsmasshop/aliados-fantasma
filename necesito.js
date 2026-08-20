@@ -96,7 +96,7 @@ function validate(payload){
   if(payload.municipio.length < 2) return 'Escribe tu municipio o alcaldía.';
   if(payload.nombre_cliente.length < 2) return 'Escribe tu nombre o apodo.';
   if(payload.whatsapp.length < 10 || payload.whatsapp.length > 15) return 'Escribe un WhatsApp válido de 10 a 15 dígitos.';
-  if(!form.elements.acepta_compartir_contacto.checked) return 'Debes autorizar compartir tu contacto con los negocios registrados.';
+  if(!form.elements.acepta_compartir_contacto.checked) return 'Debes autorizar a Aliados a usar tu WhatsApp para dar seguimiento a esta solicitud.';
   if(payload.presupuesto_min != null && payload.presupuesto_max != null && payload.presupuesto_max < payload.presupuesto_min) return 'El presupuesto máximo no puede ser menor al mínimo.';
   return '';
 }
@@ -144,7 +144,7 @@ form.addEventListener('submit', async event => {
   if(error){
     const text = String(error.message || '');
     if(/Límite alcanzado/i.test(text)) showAlert('Ya publicaste 3 solicitudes con este WhatsApp en las últimas 24 horas. Intenta de nuevo mañana.');
-    else if(/af_publicar_necesidad|schema cache|permission denied|does not exist/i.test(text)) showAlert('El motor MATCH todavía no está disponible en esta publicación.');
+    else if(/af_publicar_necesidad|schema cache|permission denied|does not exist/i.test(text)) showAlert('El sistema de búsqueda todavía no está disponible en esta publicación.');
     else showAlert('No pudimos publicar la solicitud. Revisa los datos e inténtalo de nuevo.');
     console.error(error);
     return;
@@ -176,3 +176,5 @@ if(dateInput){
 
 setDefaultLocation();
 loadCategories();
+
+const needCopy=document.querySelector('#need-copy');needCopy?.addEventListener('click',async()=>{const href=trackLink?.href;if(!href)return;try{await navigator.clipboard.writeText(new URL(href,location.href).href);needCopy.textContent='✓ Enlace copiado';setTimeout(()=>needCopy.textContent='Copiar enlace',1800);}catch{}});

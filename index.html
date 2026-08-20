@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="af-modern-2026.css?v=20260801-RC6.2">
   <link rel="stylesheet" href="prelaunch-v2.css?v=20260814-STRUCTURAL2">
   <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE-RC2">
-  <link rel="stylesheet" href="lo-necesito.css?v=20260819-MATCH1">
+  <link rel="stylesheet" href="lo-necesito.css?v=20260820-PRIVADO1">
 </head>
 <body class="af-page af-page-home">
 
@@ -298,11 +298,11 @@
             <label class="need-field"><span>Tu nombre *</span><input name="nombre_cliente" maxlength="80" required autocomplete="name" placeholder="Nombre o apodo"></label>
             <label class="need-field"><span>WhatsApp *</span><input name="whatsapp" inputmode="tel" autocomplete="tel" required placeholder="10 dígitos"></label>
 
-            <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Acepto que mi nombre, solicitud y WhatsApp sean visibles para <strong>negocios registrados en Aliados Fantasma</strong> con el fin de recibir propuestas relacionadas. La solicitud expira automáticamente después de 7 días.</span></label>
+            <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Acepto que Aliados use mi WhatsApp <strong>solo para dar seguimiento a esta solicitud</strong>. Mi número no se publica ni se muestra a los negocios; yo decido cuándo iniciar el contacto.</span></label>
 
             <div class="need-submit-row">
               <small>Aliados conecta a las partes; precio, disponibilidad, entrega y pago se acuerdan directamente con el negocio.</small>
-              <button id="home-need-submit" class="need-button primary" type="submit">Publicar y recibir opciones <span>→</span></button>
+              <button id="home-need-submit" class="need-button primary" type="submit">Buscar una opción <span>→</span></button>
             </div>
           </form>
           <a class="home-need-advanced" href="necesito.html">¿Quieres agregar fecha, colonia y rango de presupuesto? Abrir formulario detallado →</a>
@@ -311,20 +311,20 @@
         <div id="home-need-success" class="need-card home-need-success" hidden aria-live="polite">
           <div class="need-success-icon">✓</div>
           <p class="need-eyebrow">SOLICITUD PUBLICADA</p>
-          <h2>Ya está dentro de Aliados.</h2>
-          <p>Los negocios habilitados podrán verla durante los próximos 7 días y, si pueden ayudarte, podrán contactarte al WhatsApp que proporcionaste.</p>
-          <div class="home-need-success-actions"><a id="home-need-track" class="need-button primary" href="seguimiento.html">Seguir mi solicitud →</a><button id="home-need-another" class="need-button secondary" type="button">Publicar otra</button><a class="need-button ghost" href="explorar.html">Explorar negocios</a></div>
+          <h2>Aliados ya está buscando por ti.</h2>
+          <p>Aliados consultará opciones compatibles una por una. Tu WhatsApp permanece privado y solo tú decides cuándo iniciar una conversación.</p>
+          <div class="home-need-success-actions"><a id="home-need-track" class="need-button primary" href="seguimiento.html">Abrir mi enlace privado →</a><button id="home-need-copy" class="need-button secondary" type="button">Copiar enlace</button><button id="home-need-another" class="need-button secondary" type="button">Publicar otra</button><a class="need-button ghost" href="explorar.html">Explorar negocios</a></div>
         </div>
 
         <aside class="home-need-business-card need-card">
           <span class="home-need-business-icon">🏪</span>
           <p class="need-eyebrow">PARA NEGOCIOS</p>
-          <h3>No esperes visitas. Revisa quién ya está buscando.</h3>
+          <h3>Recibe solo solicitudes compatibles con tu negocio.</h3>
           <p id="home-need-business-status">Si tienes un negocio, inicia sesión para ver solicitudes de personas que ya están buscando algo.</p>
           <div class="home-need-business-benefits">
             <span>✓ Solicitudes con zona</span>
             <span>✓ Presupuesto cuando existe</span>
-            <span>✓ Contacto autorizado</span>
+            <span>✓ WhatsApp privado</span>
             <span>✓ Cotización por WhatsApp</span>
           </div>
           <a id="home-need-business-button" class="need-button primary" href="login.html?return=oportunidades.html">Entrar a oportunidades →</a>
@@ -431,7 +431,7 @@
     <a href="#lo-necesito">Lo necesito</a>
     <a href="login.html?return=oportunidades.html">Oportunidades</a>
   </div>
-  <script type="module" src="index-necesito.js?v=20260819-MATCH1"></script>
+  <script type="module" src="index-necesito.js?v=20260820-PRIVADO1"></script>
   <script type="module" src="prelaunch-real.js?v=20260814-REAL1"></script>
   <script type="module" src="lanzamiento.js?v=20260819-HOME2"></script>
   <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>

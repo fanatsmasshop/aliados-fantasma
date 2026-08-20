@@ -50,7 +50,7 @@ function renderControl(state='offer',message='Activa alertas para recibir oportu
   const denied=state==='denied';
   box.innerHTML=`
     <div class="af-push-icon">${active?'✅':denied?'🔕':'🔔'}</div>
-    <div class="af-push-copy"><strong>${active?'Alertas activas en este celular':denied?'Notificaciones bloqueadas':'Que Aliados te avise de inmediato'}</strong><small>${message}</small></div>
+    <div class="af-push-copy"><strong>${active?'Alertas activas en este dispositivo':denied?'Notificaciones bloqueadas':'Que Aliados te avise de inmediato'}</strong><small>${message}</small></div>
     ${active?'<button type="button" class="secondary" data-af-push-test>Listo</button>':denied?'<button type="button" class="secondary" data-af-push-help>Cómo activarlas</button>':'<button type="button" data-af-push-enable>Activar alertas</button>'}
     <button type="button" class="af-push-close" data-af-push-close aria-label="Cerrar">×</button>`;
   box.querySelector('[data-af-push-enable]')?.addEventListener('click',enablePush);
