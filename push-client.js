@@ -57,8 +57,7 @@ function renderControl(state='offer',message='Activa alertas para recibir oportu
   box.querySelector('[data-af-push-close]')?.addEventListener('click',()=>box.remove());
   box.querySelector('[data-af-push-test]')?.addEventListener('click',()=>box.remove());
   box.querySelector('[data-af-push-help]')?.addEventListener('click',()=>{
-    const text='En Chrome: abre los ajustes del sitio de Aliados Fantasma, entra a Notificaciones y selecciona Permitir. Después recarga esta página.';
-    alert(text);
+    alert('En Chrome: abre los ajustes del sitio de Aliados Fantasma, entra a Notificaciones y selecciona Permitir. Después recarga esta página.');
   });
 }
 
@@ -94,7 +93,7 @@ async function enablePush(event){
     }
     await saveSubscription(subscription);
     currentSubscription=subscription;
-    renderControl('active','Las nuevas oportunidades pueden aparecer como notificación del sistema. La alerta reciente también se volverá a intentar automáticamente.');
+    renderControl('active','Las nuevas solicitudes pueden aparecer como notificación del sistema.');
   }catch(error){
     console.error('[Aliados Push]',error);
     renderControl('offer',`No se pudo activar: ${error?.message||'intenta de nuevo'}`);
@@ -111,7 +110,7 @@ async function initPush(){
     currentSubscription=await registration.pushManager.getSubscription();
     if(currentSubscription&&Notification.permission==='granted'){
       await saveSubscription(currentSubscription);
-      renderControl('active','Este celular ya está registrado para recibir oportunidades de Aliados.');
+      renderControl('active','Este dispositivo ya está registrado para recibir avisos de Aliados.');
       setTimeout(()=>document.getElementById(UI_ID)?.remove(),5500);
       return;
     }
@@ -125,5 +124,98 @@ async function initPush(){
   }
 }
 
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initPush,{once:true});
-else initPush();
+// ============================================================
+// HOTFIX: ENVÍO DE PERFIL A REVISIÓN
+// El panel antiguo usa un flujo modal/upsert que puede quedar colgado.
+// Este controlador reemplaza SOLO el botón de envío y verifica el resultado.
+// ============================================================
+function reviewMessage(text,type='ok'){
+  const help=document.querySelector('#submit-help');
+  if(help){
+    help.textContent=text;
+    help.style.color=type==='error'?'#fda4af':'#86efac';
+    help.style.fontWeight='700';
+  }
+  const global=document.querySelector('#global-message');
+  if(global){
+    global.textContent=text;
+    global.className=`notice ${type==='error'?'danger':'success'}`;
+  }
+}
+
+async function submitProfileDirectly(){
+  const button=document.querySelector('#submit-review');
+  if(!button||!supabase) return;
+  const original=button.textContent;
+  try{
+    const {data:{user}}=await supabase.auth.getUser();
+    if(!user) throw new Error('Tu sesión terminó. Inicia sesión nuevamente.');
+
+    const {data:row,error:readError}=await supabase
+      .from('perfiles_borrador')
+      .select('usuario_id,estado,porcentaje,enviado_at')
+      .eq('usuario_id',user.id)
+      .maybeSingle();
+    if(readError) throw readError;
+    if(!row) throw new Error('Primero guarda tu perfil antes de enviarlo.');
+    if(Number(row.porcentaje||0)<60) throw new Error('Completa al menos 60% del perfil antes de enviarlo.');
+    if(row.estado==='en_revision'){
+      reviewMessage('Tu perfil ya está en revisión.');
+      button.textContent='Perfil enviado';
+      button.disabled=true;
+      return;
+    }
+
+    if(!window.confirm('¿Enviar esta versión de tu perfil a revisión? Mientras se revisa podrás consultar la vista previa.')) return;
+
+    button.disabled=true;
+    button.textContent='Enviando…';
+    reviewMessage('Enviando tu perfil…');
+    const now=new Date().toISOString();
+    const {data:updated,error:updateError}=await supabase
+      .from('perfiles_borrador')
+      .update({estado:'en_revision',enviado_at:now,updated_at:now})
+      .eq('usuario_id',user.id)
+      .select('estado,enviado_at,porcentaje')
+      .single();
+    if(updateError) throw updateError;
+    if(updated?.estado!=='en_revision'||!updated?.enviado_at) throw new Error('Supabase no confirmó el envío.');
+
+    document.querySelectorAll('#review-summary .review-card').forEach(card=>{
+      if(card.querySelector('span')?.textContent?.trim()==='Estado'){
+        const strong=card.querySelector('strong');
+        if(strong) strong.textContent='En revisión';
+      }
+    });
+    button.textContent='Perfil enviado';
+    button.disabled=true;
+    reviewMessage('✓ Perfil enviado correctamente. Ya está en revisión.');
+    setTimeout(()=>location.reload(),900);
+  }catch(error){
+    console.error('[Aliados revisión]',error);
+    button.disabled=false;
+    button.textContent=original;
+    reviewMessage(`No se pudo enviar: ${error?.message||'intenta de nuevo'}`,'error');
+  }
+}
+
+function installReviewHotfix(){
+  const button=document.querySelector('#submit-review');
+  if(!button||button.dataset.reviewHotfix==='1') return;
+  button.dataset.reviewHotfix='1';
+  // panel.js asigna su handler con .onclick; lo reemplazamos de forma explícita.
+  button.onclick=submitProfileDirectly;
+}
+
+async function boot(){
+  await initPush();
+  // panel.js es otro módulo; damos tiempo a que termine su inicialización y después
+  // imponemos el controlador robusto. También observamos por si el panel se rerenderiza.
+  setTimeout(installReviewHotfix,600);
+  setTimeout(installReviewHotfix,1800);
+  const observer=new MutationObserver(()=>installReviewHotfix());
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+}
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+else boot();

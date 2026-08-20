@@ -1,0 +1,10 @@
+ALIADOS FANTASMA — HOTFIX ENVÍO A REVISIÓN
+
+1. Sube push-client.js a la raíz y reemplaza el existente.
+2. NO ejecutes SQL. El backend ya fue corregido.
+3. En panel.html ya se carga push-client.js.
+4. Después de subir, usa Ctrl+F5 una vez para evitar caché.
+5. Ve a Revisión y pulsa Enviar mi perfil a revisión.
+
+El hotfix reemplaza únicamente el handler del botón de revisión; conserva Web Push.
+Verifica el resultado contra Supabase y recarga automáticamente cuando queda en_revision.
