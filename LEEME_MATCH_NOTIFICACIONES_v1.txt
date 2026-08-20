@@ -1,0 +1,78 @@
+ALIADOS FANTASMA — MATCH + NOTIFICACIONES v1
+Fecha: 19 de agosto de 2026
+Lanzamiento oficial: 24 de agosto de 2026 · 11:00 a. m. (Ciudad de México)
+
+ESTADO DEL BACKEND
+- 079_match_notificaciones_v1.sql YA FUE APLICADO al proyecto Supabase conectado aliados-fantasma.
+- 080_match_notificaciones_v1_hardening.sql YA FUE APLICADO al mismo proyecto.
+- NO vuelvas a ejecutarlos en esta base de producción.
+- Se incluyen únicamente como respaldo/historial y para otro entorno si alguna vez se necesita.
+- pg_cron quedó activo cada 5 minutos para escalar solicitudes sin respuesta.
+- notificaciones_plataforma quedó habilitada en Supabase Realtime.
+- Se hizo una prueba real con cleanup: generó match + notificación y quedaron 0 datos de prueba residuales.
+
+ARCHIVOS QUE SÍ SUBES A GITHUB / CLOUDFLARE (RAÍZ, SIN CARPETAS)
+1. index.html
+2. index-necesito.js
+3. lo-necesito.css
+4. necesito.html
+5. necesito.js
+6. seguimiento.html
+7. seguimiento.js
+8. oportunidades.html
+9. oportunidades.js
+10. panel.html
+11. panel.js
+12. dashboard.html
+13. demanda.html
+14. demanda.js
+
+ARCHIVOS QUE NO VAN A GITHUB
+- 079_match_notificaciones_v1.sql
+- 080_match_notificaciones_v1_hardening.sql
+- LEEME_MATCH_NOTIFICACIONES_v1.txt (opcional, es documentación)
+
+QUÉ QUEDA FUNCIONANDO
+CLIENTE
+- Publica desde index.html o necesito.html sin cuenta.
+- La publicación entra por af_publicar_necesidad y dispara MATCH inmediatamente.
+- Recibe un token privado de seguimiento.
+- seguimiento.html muestra: publicada → negocios encontrados → propuestas → resuelta.
+- Si nadie responde, ve que Aliados sigue buscando proveedor.
+- Puede cerrar la solicitud cuando ya resolvió.
+- El index muestra actividad REAL y anonimizada; si hay 0 solicitudes, muestra 0 sin inventar actividad.
+
+NEGOCIO
+- MATCH prioriza misma categoría + municipio.
+- Ola 1: hasta 3 negocios de la misma categoría y municipio.
+- Ola 2: si nadie responde, amplía al estado.
+- Ola 3: si nadie responde, amplía más la zona sin cambiar la categoría.
+- Cada match se registra con score, ola y razones.
+- Oportunidades muestra por defecto solo los matches asignados y permite explorar toda la red.
+- Campana en Oportunidades y centro del Panel reciben nuevas notificaciones en tiempo real.
+- La notificación abre directamente la oportunidad.
+- Al cotizar, se registra respuesta, se detiene el escalamiento y se abre WhatsApp del cliente.
+
+ADMINISTRACIÓN
+- dashboard.html agrega acceso a Demanda y MATCH.
+- demanda.html muestra demanda de 30 días, respuestas y solicitudes sin cobertura.
+- Cuando las 3 olas fallan, la solicitud pasa a sin_cobertura y administración recibe el hueco de oferta.
+- Incluye texto para captar manualmente un proveedor sin revelar datos personales del cliente.
+
+SEGURIDAD
+- matches_necesidad tiene RLS.
+- anon no tiene acceso a notificaciones_plataforma.
+- authenticated solo puede SELECT/UPDATE/DELETE según RLS en notificaciones.
+- El cliente no consulta la tabla necesidades: usa un token UUID privado y RPCs sanitizados.
+- La actividad pública no muestra nombre ni WhatsApp.
+
+PRUEBA DESPUÉS DE SUBIR
+A) Abre index.html y publica UNA necesidad real de prueba.
+B) Debes llegar a seguimiento.html y ver “negocios avisados” si existe cobertura.
+C) Inicia sesión con el negocio compatible: la campana y Oportunidades deben mostrar el match.
+D) Pulsa “Puedo resolver esto”, registra propuesta y abre WhatsApp.
+E) Vuelve a seguimiento del cliente: debe aparecer la propuesta.
+F) En dashboard → Demanda y MATCH comprueba el tablero.
+
+NOTA SOBRE AVISOS AL CLIENTE
+El cliente no necesita cuenta. La propuesta se refleja en seguimiento.html y, al responder, el negocio abre WhatsApp para contactar directamente. Push/WhatsApp automático fuera del sitio requeriría una integración externa específica; esta v1 no envía mensajes automatizados desde un número de Aliados.

@@ -8,12 +8,12 @@
   <title>Oportunidades | Aliados Fantasma</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
   <link rel="stylesheet" href="sistema-visual.css?v=20260722-2500">
-  <link rel="stylesheet" href="lo-necesito.css?v=20260819-HOME2">
+  <link rel="stylesheet" href="lo-necesito.css?v=20260819-MATCH1">
 </head>
 <body class="need-page">
 <header class="need-header"><div class="need-header-inner">
   <a class="need-brand" href="panel.html"><img src="aliados-fantasma-icono.webp" alt=""><span><strong>Aliados Fantasma</strong><small>Oportunidades para tu negocio</small></span></a>
-  <div class="need-header-actions"><a class="need-link" href="panel.html">Mi panel</a><a class="need-link" href="marketing.html">Marketing</a><a class="need-button secondary" href="rewards.html">Rewards</a></div>
+  <div class="need-header-actions"><div class="opp-notification-wrap"><button id="opp-notification-bell" class="opp-bell" type="button" aria-label="Notificaciones">🔔<span id="opp-notification-badge" class="opp-bell-badge" hidden>0</span></button><div id="opp-notification-panel" class="opp-notifications" hidden><div class="opp-notification-head"><strong>Notificaciones</strong><button id="opp-read-all" type="button">Marcar todas leídas</button></div><div id="opp-notification-list"></div></div></div><a class="need-link" href="panel.html">Mi panel</a><a class="need-link" href="marketing.html">Marketing</a><a class="need-button secondary" href="rewards.html">Rewards</a></div>
 </div></header>
 
 <main class="need-shell need-business-body">
@@ -23,10 +23,10 @@
   </section>
 
   <section class="need-stats" aria-label="Resumen de oportunidades">
-    <article class="need-stat"><small>ABIERTAS</small><strong id="stat-open">—</strong><em>en la red</em></article>
-    <article class="need-stat"><small>EN TU ESTADO</small><strong id="stat-state">—</strong><em>más cercanas</em></article>
-    <article class="need-stat"><small>MISMA CATEGORÍA</small><strong id="stat-category">—</strong><em>alta relevancia</em></article>
-    <article class="need-stat"><small>CONTACTADAS</small><strong id="stat-contacted">—</strong><em>por tu negocio</em></article>
+    <article class="need-stat"><small>PARA TI</small><strong id="stat-matched">—</strong><em>asignadas por MATCH</em></article>
+    <article class="need-stat"><small>NUEVAS</small><strong id="stat-new">—</strong><em>por revisar</em></article>
+    <article class="need-stat"><small>RESPONDIDAS</small><strong id="stat-contacted">—</strong><em>por tu negocio</em></article>
+    <article class="need-stat"><small>RED ABIERTA</small><strong id="stat-open">—</strong><em>solicitudes activas</em></article>
   </section>
 
   <section class="need-card need-filters" aria-label="Filtros">
@@ -34,13 +34,13 @@
     <select id="opp-category"><option value="">Todas las categorías</option></select>
     <select id="opp-location"><option value="">Todas las ubicaciones</option><option value="state">Mi estado</option><option value="municipality">Mi municipio</option></select>
     <select id="opp-urgency"><option value="">Cualquier urgencia</option><option value="hoy">Hoy</option><option value="24_horas">24 horas</option><option value="esta_semana">Esta semana</option><option value="normal">Sin prisa</option></select>
-    <div class="need-filter-actions"><button id="opp-recommended" class="need-button small secondary" type="button">Primero las recomendadas</button><button id="opp-clear" class="need-button small ghost" type="button">Limpiar filtros</button></div>
+    <div class="need-filter-actions"><button id="opp-scope" class="need-button small secondary opp-scope-active" type="button">Explorar toda la red</button><button id="opp-recommended" class="need-button small secondary" type="button">Primero las recomendadas</button><button id="opp-clear" class="need-button small ghost" type="button">Limpiar filtros</button></div>
   </section>
 
-  <div class="need-results-head"><h2>Oportunidades abiertas</h2><p id="opp-summary" aria-live="polite">Cargando…</p></div>
+  <div class="need-results-head"><h2>Tus mejores oportunidades</h2><p id="opp-summary" aria-live="polite">Cargando…</p></div>
   <div id="opp-loading" class="need-card need-loading"><div class="need-spinner"></div>Buscando oportunidades disponibles…</div>
   <section id="opp-grid" class="need-opportunities" aria-live="polite"></section>
-  <section id="opp-empty" class="need-card need-empty"><div>⌕</div><h3>No hay coincidencias.</h3><p>Quita filtros o vuelve más tarde para ver nuevas necesidades.</p></section>
+  <section id="opp-empty" class="need-card need-empty"><div>👻</div><h3>No tienes matches nuevos.</h3><p>MATCH te avisará automáticamente cuando aparezca una solicitud compatible. También puedes usar “Explorar toda la red”.</p></section>
 </main>
 
 <div id="quote-modal" class="need-modal" role="dialog" aria-modal="true" aria-labelledby="quote-title">
@@ -58,6 +58,6 @@
 </div>
 
 <footer class="need-footer"><div class="need-footer-inner"><span><strong>Aliados Fantasma</strong> · Oportunidades reales para negocios registrados.</span><span><a href="panel.html">Volver al panel</a></span></div></footer>
-<script type="module" src="oportunidades.js?v=20260819-HOME2"></script>
+<script type="module" src="oportunidades.js?v=20260819-MATCH1"></script>
 </body>
 </html>

@@ -31,6 +31,7 @@ let isGlobalAdmin = false;
 // pueda llamar a initNotificationCenter(), evitando errores de zona temporal.
 let notificationRows = [];
 let notificationFilter = 'all';
+let notificationRealtimeChannel = null;
 
 function preferredBusinessId(){
   const params = new URLSearchParams(location.search);
@@ -1050,6 +1051,9 @@ function notificationDate(value){
 }
 
 function notificationIcon(type=''){
+  if(type.includes('oportunidad_urgente')) return '🔥';
+  if(type.includes('oportunidad')) return '👻';
+  if(type.includes('demanda_sin_cobertura')) return '🚨';
   if(type.includes('suspension')) return '🛡️';
   if(type.includes('apelacion')) return '⚖️';
   if(type.includes('reporte')) return '🚩';
@@ -1127,7 +1131,7 @@ function ensureNotificationCenter(){
 
 async function fetchNotifications(){
   const {data,error}=await supabase.from('notificaciones_plataforma')
-    .select('id,titulo,mensaje,tipo,leida,leida_at,importante,obligatoria,created_at')
+    .select('id,titulo,mensaje,tipo,leida,leida_at,importante,obligatoria,created_at,accion_url,metadata')
     .eq('usuario_id',user.id)
     .order('created_at',{ascending:false})
     .limit(100);
@@ -1166,6 +1170,7 @@ function renderNotificationList(){
       <div class="notification-title-row"><strong>${esc(item.titulo)}</strong>${item.obligatoria?'<span class="notification-pin">Obligatoria</span>':item.importante?'<span class="notification-pin">Importante</span>':''}</div>
       <p>${esc(item.mensaje)}</p><small>${notificationDate(item.created_at)}${item.leida_at?` · Leída ${notificationDate(item.leida_at)}`:''}</small>
       <div class="notification-actions">
+        ${item.accion_url?'<button type="button" data-open-notification class="primary">Abrir</button>':''}
         ${item.leida?'<button type="button" data-mark-unread>Marcar sin leer</button>':'<button type="button" data-mark-read>Marcar como leída</button>'}
         <button type="button" data-toggle-important>${item.importante?'Quitar importante':'Marcar importante'}</button>
         <button type="button" data-delete-notification class="danger" ${item.obligatoria&&!item.leida?'disabled title="Primero debes leer este aviso"':''}>Eliminar</button>
@@ -1174,6 +1179,7 @@ function renderNotificationList(){
   </article>`).join('');
   list.querySelectorAll('[data-notification-id]').forEach(card=>{
     const id=card.dataset.notificationId;
+    card.querySelector('[data-open-notification]')?.addEventListener('click',()=>openNotificationAction(id));
     card.querySelector('[data-mark-read]')?.addEventListener('click',()=>setNotificationRead(id,true));
     card.querySelector('[data-mark-unread]')?.addEventListener('click',()=>setNotificationRead(id,false));
     card.querySelector('[data-toggle-important]')?.addEventListener('click',()=>toggleNotificationImportant(id));
@@ -1237,16 +1243,48 @@ function renderUnreadNotificationSpotlight(){
   const item=notificationRows.find(row=>!row.leida);
   if(!item){spotlight.classList.add('hidden');spotlight.innerHTML='';return;}
   spotlight.classList.remove('hidden');
-  spotlight.innerHTML=`<div class="notification-spotlight-icon">${notificationIcon(item.tipo)}</div><div><span>Nuevo aviso</span><strong>${esc(item.titulo)}</strong><p>${esc(item.mensaje)}</p></div><div class="notification-spotlight-actions"><button type="button" class="button secondary small" data-open-center>Ver notificaciones</button><button type="button" class="button primary small" data-read-spotlight>Entendido</button></div>`;
+  spotlight.innerHTML=`<div class="notification-spotlight-icon">${notificationIcon(item.tipo)}</div><div><span>Nuevo aviso</span><strong>${esc(item.titulo)}</strong><p>${esc(item.mensaje)}</p></div><div class="notification-spotlight-actions">${item.accion_url?'<button type="button" class="button primary small" data-open-action>Abrir oportunidad</button>':''}<button type="button" class="button secondary small" data-open-center>Ver notificaciones</button><button type="button" class="button secondary small" data-read-spotlight>Entendido</button></div>`;
+  spotlight.querySelector('[data-open-action]')?.addEventListener('click',()=>openNotificationAction(item.id));
   spotlight.querySelector('[data-open-center]').onclick=()=>document.querySelector('#notification-bell')?.click();
   spotlight.querySelector('[data-read-spotlight]').onclick=()=>setNotificationRead(item.id,true);
 }
 
+function safeNotificationUrl(value){
+  const url=String(value||'').trim();
+  if(!url || /^(?:javascript|data):/i.test(url)) return '';
+  if(/^https?:\/\//i.test(url)){
+    try{const parsed=new URL(url);if(parsed.origin!==location.origin)return'';}catch{return'';}
+  }
+  return url;
+}
+
+async function openNotificationAction(id){
+  const row=notificationRows.find(item=>item.id===id);if(!row)return;
+  if(!row.leida) await setNotificationRead(id,true);
+  const target=safeNotificationUrl(row.accion_url);if(target)location.href=target;
+}
+
+function showRealtimeNotification(item){
+  if(item?.tipo?.includes('oportunidad')) showMessage(`${notificationIcon(item.tipo)} ${item.titulo}: ${item.mensaje}`,'ok',8000);
+  else showMessage(`${notificationIcon(item.tipo)} ${item.titulo}`,'ok',6000);
+}
+
+function subscribeNotificationRealtime(){
+  if(notificationRealtimeChannel || !user?.id) return;
+  notificationRealtimeChannel=supabase.channel(`af-panel-notifications-${user.id}`)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'notificaciones_plataforma',filter:`usuario_id=eq.${user.id}`},payload=>{
+      const item=payload.new;if(!item?.id || notificationRows.some(row=>row.id===item.id))return;
+      notificationRows.unshift(item);renderNotificationList();updateNotificationBadge();renderUnreadNotificationSpotlight();showRealtimeNotification(item);
+    }).subscribe();
+}
+
 async function initNotificationCenter(){
   ensureNotificationCenter();
-  try{await fetchNotifications();}
+  try{await fetchNotifications();subscribeNotificationRealtime();}
   catch(error){console.error('No fue posible cargar las notificaciones:',error);}
 }
+
+window.addEventListener('beforeunload',()=>{if(notificationRealtimeChannel)supabase.removeChannel(notificationRealtimeChannel);});
 
 // CENTRO DE MARKETING — acceso seguro
 function configureMarketingCenterAccess(){

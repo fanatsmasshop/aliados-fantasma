@@ -9,6 +9,7 @@ const success = document.querySelector('#need-success');
 const another = document.querySelector('#need-another');
 const categorySelect = document.querySelector('#need-category');
 const stateSelect = document.querySelector('#need-state');
+const trackLink = document.querySelector('#need-track');
 
 const FALLBACK_CATEGORIES = [
   ['Alimentos y bebidas','alimentos-y-bebidas'],
@@ -133,7 +134,9 @@ form.addEventListener('submit', async event => {
   submitButton.disabled = true;
   submitButton.innerHTML = 'Publicando…';
 
-  const {error} = await supabase.from('necesidades').insert(payload);
+  const {data,error} = await supabase.rpc('af_publicar_necesidad',{
+    p_categoria_id:payload.categoria_id,p_categoria_texto:payload.categoria_texto,p_nombre_cliente:payload.nombre_cliente,p_whatsapp:payload.whatsapp,p_titulo:payload.titulo,p_descripcion:payload.descripcion,p_estado_region:payload.estado_region,p_municipio:payload.municipio,p_colonia:payload.colonia,p_presupuesto_min:payload.presupuesto_min,p_presupuesto_max:payload.presupuesto_max,p_fecha_necesaria:payload.fecha_necesaria,p_urgencia:payload.urgencia
+  });
 
   submitButton.disabled = false;
   submitButton.innerHTML = 'Publicar mi necesidad <span>→</span>';
@@ -141,11 +144,13 @@ form.addEventListener('submit', async event => {
   if(error){
     const text = String(error.message || '');
     if(/Límite alcanzado/i.test(text)) showAlert('Ya publicaste 3 solicitudes con este WhatsApp en las últimas 24 horas. Intenta de nuevo mañana.');
-    else if(/relation .*necesidades.* does not exist|schema cache/i.test(text)) showAlert('La función todavía no está activada en la base de datos. Ejecuta primero 078_lo_necesito.sql.');
+    else if(/af_publicar_necesidad|schema cache|permission denied|does not exist/i.test(text)) showAlert('El motor MATCH todavía no está disponible en esta publicación.');
     else showAlert('No pudimos publicar la solicitud. Revisa los datos e inténtalo de nuevo.');
     console.error(error);
     return;
   }
+  const result=Array.isArray(data)?data[0]:data;
+  if(result?.tracking_token){localStorage.setItem('af_last_need_token',result.tracking_token);if(trackLink)trackLink.href=`seguimiento.html?t=${encodeURIComponent(result.tracking_token)}`;}
 
   form.reset();
   setDefaultLocation();
