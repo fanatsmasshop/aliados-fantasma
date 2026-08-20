@@ -36,6 +36,46 @@ function injectStyles(){
   #${UI_ID} button.secondary{background:#171b25;border:1px solid rgba(255,255,255,.1)}
   #${UI_ID} button:disabled{opacity:.6;cursor:wait}
   #${UI_ID} .af-push-close{position:absolute;right:7px;top:5px;width:24px;height:24px;padding:0;border-radius:9px;background:transparent;color:#8892a5;font-size:17px}
+
+  /* Avisos del panel siempre dentro de la zona visible del usuario. */
+  #global-message:not(.hidden){
+    position:fixed!important;
+    top:max(14px,env(safe-area-inset-top))!important;
+    left:50%!important;
+    right:auto!important;
+    transform:translateX(-50%)!important;
+    width:min(620px,calc(100vw - 28px))!important;
+    max-width:620px!important;
+    z-index:100002!important;
+    margin:0!important;
+    padding:15px 48px 15px 46px!important;
+    border-radius:16px!important;
+    box-shadow:0 20px 70px rgba(0,0,0,.5)!important;
+    backdrop-filter:blur(18px)!important;
+    -webkit-backdrop-filter:blur(18px)!important;
+    font-weight:750!important;
+    line-height:1.45!important;
+    animation:afViewportNoticeIn .2s ease both!important;
+  }
+  #global-message:not(.hidden)::before{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:19px;
+    line-height:1;
+  }
+  #global-message.success:not(.hidden){background:rgba(12,39,30,.96)!important;border-color:rgba(74,222,128,.42)!important;color:#dcfce7!important}
+  #global-message.success:not(.hidden)::before{content:'✓';color:#86efac}
+  #global-message.warning:not(.hidden){background:rgba(45,34,10,.97)!important;border-color:rgba(251,191,36,.42)!important;color:#fef3c7!important}
+  #global-message.warning:not(.hidden)::before{content:'!';color:#fbbf24;font-weight:900}
+  #global-message.danger:not(.hidden){background:rgba(48,17,25,.97)!important;border-color:rgba(251,113,133,.46)!important;color:#ffe4e6!important}
+  #global-message.danger:not(.hidden)::before{content:'×';color:#fda4af;font-weight:900}
+  @keyframes afViewportNoticeIn{from{opacity:0;transform:translate(-50%,-12px)}to{opacity:1;transform:translate(-50%,0)}}
+  @media(max-width:700px){
+    #global-message:not(.hidden){top:max(10px,env(safe-area-inset-top))!important;width:calc(100vw - 20px)!important;padding:13px 16px 13px 42px!important;font-size:.9rem!important;border-radius:14px!important}
+    #global-message:not(.hidden)::before{left:14px}
+  }
   @media(min-width:760px){#${UI_ID}{left:auto;right:20px;max-width:520px;margin:0}}
   `;
   document.head.appendChild(style);
@@ -208,6 +248,8 @@ function installReviewHotfix(){
 }
 
 async function boot(){
+  // Los estilos de avisos deben existir aunque el dispositivo no admita Web Push.
+  injectStyles();
   await initPush();
   // panel.js es otro módulo; damos tiempo a que termine su inicialización y después
   // imponemos el controlador robusto. También observamos por si el panel se rerenderiza.
