@@ -19,67 +19,89 @@ function locationText(business) {
   return [business.municipio, business.estado_region].filter(Boolean).join(', ') || 'México';
 }
 
-function cardMarkup(business) {
-  const logo = safeUrl(business.logo_url) || DEFAULT_LOGO;
-  const cover = safeUrl(business.portada_url) || logo;
-  const description = business.descripcion_corta || business.descripcion || 'Negocio local que ya forma parte de Aliados Fantasma.';
-  const category = business.categorias?.nombre || 'Negocio aliado';
-  return `<article class="pre2-real-card">
+function buildSamples(businesses, gallery) {
+  const groups = businesses.map(business => gallery
+    .filter(item => item.negocio_id === business.id && safeUrl(item.imagen_url))
+    .map(item => ({ business, image: safeUrl(item.imagen_url), realGallery: true })))
+    .filter(group => group.length);
+  const samples = [];
+  for (let row = 0; groups.some(group => group[row]); row += 1) {
+    groups.forEach(group => { if (group[row]) samples.push(group[row]); });
+  }
+  if (samples.length) return samples;
+  return businesses
+    .map(business => ({ business, image: safeUrl(business.portada_url), realGallery: false }))
+    .filter(item => item.image);
+}
+
+function cardMarkup(sample) {
+  const business = sample.business;
+  const description = business.descripcion_corta || business.descripcion || 'Muestra publicada en un perfil real de Aliados Fantasma.';
+  const category = business.categorias?.nombre || 'Negocio local';
+  return `<article class="pre2-real-card pre2-sample-card">
     <div class="pre2-real-cover">
-      <img src="${esc(cover)}" alt="" loading="lazy" decoding="async">
+      <img src="${esc(sample.image)}" alt="Muestra real publicada por ${esc(business.nombre)}" loading="lazy" decoding="async">
       <span class="pre2-real-shade"></span>
-      <span class="pre2-real-status"><i></i> Ya forma parte</span>
+      <span class="pre2-real-status"><i></i> ${sample.realGallery ? 'Foto real' : 'Portada real'}</span>
     </div>
     <div class="pre2-real-body">
-      <img class="pre2-real-logo" src="${esc(logo)}" alt="Logo de ${esc(business.nombre)}" loading="lazy" decoding="async">
       <div class="pre2-real-copy">
         <small>${esc(category)}</small>
-        <h3>${esc(business.nombre)}</h3>
-        <p>${esc(description)}</p>
+        <h3>${esc(description)}</h3>
+        <p>Publicado por <strong>${esc(business.nombre)}</strong></p>
         <span>⌖ ${esc(locationText(business))}</span>
       </div>
     </div>
   </article>`;
 }
 
-async function loadRealBusinesses() {
+async function loadRealSamples() {
   if (!grid) return;
   if (!supabase) {
-    grid.innerHTML = '<p class="pre2-real-error">No pudimos consultar la red en este momento.</p>';
+    grid.innerHTML = '<p class="pre2-real-error">No pudimos consultar las muestras en este momento.</p>';
     return;
   }
 
-  const { data, error, count: totalCount } = await supabase
+  const { data, error } = await supabase
     .from('negocios')
-    .select('id,nombre,slug,descripcion_corta,descripcion,municipio,estado_region,logo_url,portada_url,activo,created_at,categorias(nombre)', { count: 'exact' })
+    .select('id,nombre,descripcion_corta,descripcion,municipio,estado_region,portada_url,activo,categorias(nombre)')
     .eq('activo', true)
-    .order('created_at', { ascending: true })
-    .limit(6);
+    .order('created_at', { ascending: true });
 
   if (error) {
     console.error('Aliados prelaunch:', error);
-    grid.innerHTML = '<p class="pre2-real-error">La red está disponible, pero no pudimos cargar los negocios ahora.</p>';
+    grid.innerHTML = '<p class="pre2-real-error">No pudimos cargar las muestras ahora.</p>';
     return;
   }
 
   const businesses = data || [];
-  if (!businesses.length) {
-    grid.innerHTML = '<p class="pre2-real-error">Los primeros negocios están terminando de preparar sus perfiles.</p>';
-    if (summary) summary.textContent = 'Los primeros perfiles están en preparación.';
+  const ids = businesses.map(item => item.id);
+  let gallery = [];
+  if (ids.length) {
+    const galleryResult = await supabase
+      .from('galeria_negocio')
+      .select('negocio_id,imagen_url,orden')
+      .in('negocio_id', ids)
+      .order('orden');
+    gallery = galleryResult.data || [];
+  }
+
+  const samples = buildSamples(businesses, gallery);
+  if (!samples.length) {
+    grid.innerHTML = '<p class="pre2-real-error">Las primeras muestras están terminando de prepararse.</p>';
+    if (summary) summary.textContent = 'Las primeras fotografías están en preparación.';
     return;
   }
 
-  grid.innerHTML = businesses.map(cardMarkup).join('');
-  const visibleCount = businesses.length;
-  const count = Number.isFinite(totalCount) ? totalCount : visibleCount;
-  if (summary) summary.textContent = `${count} negocio${count === 1 ? '' : 's'} ya ${count === 1 ? 'forma' : 'forman'} parte de la red.`;
-  if (proof) proof.textContent = `${count} negocio${count === 1 ? '' : 's'} ya ${count === 1 ? 'está' : 'están'} dentro antes del lanzamiento.`;
+  grid.innerHTML = samples.slice(0, 6).map(cardMarkup).join('');
+  if (summary) summary.textContent = `${samples.length} muestra${samples.length === 1 ? '' : 's'} real${samples.length === 1 ? '' : 'es'} ya publicada${samples.length === 1 ? '' : 's'}.`;
+  if (proof) proof.textContent = `${samples.length} muestra${samples.length === 1 ? '' : 's'} real${samples.length === 1 ? '' : 'es'} lista${samples.length === 1 ? '' : 's'} antes del lanzamiento.`;
 
-  grid.querySelectorAll('img').forEach(img => {
-    img.addEventListener('error', () => {
-      if (!img.src.endsWith(DEFAULT_LOGO)) img.src = DEFAULT_LOGO;
+  grid.querySelectorAll('img').forEach(image => {
+    image.addEventListener('error', () => {
+      if (!image.src.endsWith(DEFAULT_LOGO)) image.src = DEFAULT_LOGO;
     }, { once: true });
   });
 }
 
-loadRealBusinesses();
+loadRealSamples();

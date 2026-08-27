@@ -9,12 +9,12 @@
   <meta property="og:description" content="Descubre y registra negocios locales de cualquier estado de México. Perfiles digitales, directorio, promociones y contacto directo.">
   <title>Aliados Fantasma | Próximo lanzamiento</title>
   <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260801-NEON-RC6">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260827-HOME3">
   <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10.3">
   <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
   <link rel="stylesheet" href="af-fantasmas-style.css?v=20260730-FANTASMAS1">
   <link rel="stylesheet" href="af-modern-2026.css?v=20260801-RC6.2">
-  <link rel="stylesheet" href="prelaunch-v2.css?v=20260814-STRUCTURAL2">
+  <link rel="stylesheet" href="prelaunch-v2.css?v=20260827-FOLD1">
   <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE-RC2">
   <link rel="stylesheet" href="lo-necesito.css?v=20260820-PRIVADO1">
 </head>
@@ -121,9 +121,9 @@
       <a href="#beneficios" class="link" data-mode="prelaunch">Beneficios</a>
       <a href="#ciudades" class="link" data-mode="prelaunch">Ciudades</a>
       <a href="#live-home" class="link" data-mode="live" hidden>Inicio</a>
-      <a href="#live-categories" class="link" data-mode="live" hidden>Categorías</a>
-      <a href="#live-businesses" class="link" data-mode="live" hidden>Negocios</a>
-      <a href="explorar.html" class="link" data-mode="live" hidden>Directorio completo</a>
+      <a href="#live-categories" class="link" data-mode="live" hidden>Qué buscas</a>
+      <a href="#live-samples" class="link" data-mode="live" hidden>Muestras reales</a>
+      <a href="explorar.html" class="link" data-mode="live" hidden>Directorio</a>
       <a href="#lo-necesito" class="link">Lo necesito</a>
       <a href="login.html" class="link">Iniciar sesión</a>
       <a href="registro.html" class="button button-small">Registrar negocio</a>
@@ -197,15 +197,15 @@
 
     <section class="pre2-preview pre2-real-network" id="que-es">
       <div class="pre2-heading reveal">
-        <div><p class="pre2-eyebrow">LA RED YA EMPEZÓ</p><h2>Negocios reales que ya forman parte de Aliados.</h2></div>
-        <span id="pre2-real-summary">Cargando negocios registrados…</span>
+        <div><p class="pre2-eyebrow">MUESTRAS REALES</p><h2>Así se verá lo que puedes descubrir.</h2></div>
+        <span id="pre2-real-summary">Cargando fotografías publicadas…</span>
       </div>
       <div class="pre2-real-grid" id="pre2-real-businesses" aria-live="polite">
-        <article class="pre2-real-loading"><span></span><div><b>Cargando la red…</b><small>Consultando negocios registrados.</small></div></article>
+        <article class="pre2-real-loading"><span></span><div><b>Cargando muestras…</b><small>Consultando fotografías reales de los perfiles.</small></div></article>
       </div>
       <div class="pre2-real-proof reveal">
-        <span><i></i> Datos conectados a Aliados Fantasma</span>
-        <p>Estos no son ejemplos: son negocios que ya están registrados en la plataforma. Sus perfiles completos se abrirán al público con el lanzamiento.</p>
+        <span><i></i> Fotografías conectadas a perfiles reales</span>
+        <p>Las imágenes fueron publicadas por los propios negocios. En el lanzamiento podrás abrir el perfil, revisar su información y decidir a quién contactar.</p>
       </div>
     </section>
 
@@ -344,77 +344,84 @@
   </section>
 
   <main id="live-experience" class="live-home" hidden>
-    <section class="live-hero" id="live-home" aria-label="Negocios destacados">
-      <div class="live-slider-wrap">
-        <div class="live-slider" id="live-slider" aria-live="polite"></div>
-        <div class="live-slider-controls">
-          <button id="live-slider-prev" type="button" aria-label="Banner anterior">←</button>
-          <div id="live-slider-dots" class="live-slider-dots" aria-label="Seleccionar banner"></div>
-          <button id="live-slider-next" type="button" aria-label="Banner siguiente">→</button>
-        </div>
-      </div>
+    <section class="live-hero" id="live-home" aria-labelledby="live-title">
+      <div class="live-hero-copy-new">
+        <span class="live-network-status"><i></i> DIRECTORIO ACTIVO</span>
+        <p class="live-hero-eyebrow">ENCUENTRA · COMPARA · CONTACTA</p>
+        <h1 id="live-title">Encuentra una solución local <span>sin perder tiempo.</span></h1>
+        <p class="live-hero-lead">Busca un producto, servicio o lugar. Revisa muestras reales y contacta directamente al negocio que pueda ayudarte.</p>
 
-      <aside class="live-discovery-card">
-        <span class="live-network-status"><i></i> RED ACTIVA</span>
-        <img src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
-        <h2>Descubre negocios cerca de ti.</h2>
-        <p id="live-load-status">Cargando negocios de la red…</p>
-        <div class="live-search-box">
-          <label for="live-search">¿Qué estás buscando?</label>
+        <div class="live-search-box live-search-primary" role="search">
+          <label for="live-search">¿Qué necesitas hoy?</label>
           <div>
-            <input id="live-search" type="search" placeholder="Comida, moda, servicios…" autocomplete="off">
-            <button id="live-search-button" type="button">Buscar</button>
+            <input id="live-search" type="search" placeholder="Ej. galletas, ropa biker, diseño, tacos…" autocomplete="off">
+            <button id="live-search-button" type="button">Buscar en el directorio</button>
           </div>
         </div>
-        <a class="live-need-shortcut" href="#lo-necesito"><span>⚡</span><div><strong>¿No quieres buscar uno por uno?</strong><small>Publica lo que necesitas y deja que los negocios te contacten.</small></div><b>→</b></a>
-        <div class="live-stats" aria-label="Resumen de la red">
-          <article><strong id="live-business-count">0</strong><span>Negocios</span></article>
-          <article><strong id="live-category-count">0</strong><span>Categorías</span></article>
+
+        <div class="live-hero-actions">
+          <a class="button button-primary" href="explorar.html">Explorar el directorio <span>→</span></a>
+          <a class="button button-secondary" href="#lo-necesito">Publicar lo que necesito</a>
+        </div>
+        <p id="live-load-status" class="live-load-status">Cargando muestras reales…</p>
+      </div>
+
+      <aside class="live-sample-preview" aria-label="Vista previa de muestras reales">
+        <div class="live-preview-heading">
+          <div><span>MUESTRAS REALES</span><strong>Publicadas en la red</strong></div>
+          <a href="#live-samples">Ver todas ↓</a>
+        </div>
+        <div id="live-preview-grid" class="live-preview-grid" aria-live="polite">
+          <span class="live-preview-skeleton"></span><span class="live-preview-skeleton"></span><span class="live-preview-skeleton"></span>
+        </div>
+        <div class="live-stats" aria-label="Contenido disponible">
+          <article><strong id="live-sample-count">0</strong><span>Muestras</span></article>
+          <article><strong id="live-category-count">0</strong><span>Tipos</span></article>
           <article><strong id="live-promotion-count">0</strong><span>Promociones</span></article>
         </div>
       </aside>
     </section>
 
-    <section class="live-section" id="live-categories">
+    <section class="live-section live-category-section" id="live-categories">
       <div class="live-section-heading">
-        <div><p>EXPLORA POR CATEGORÍA</p><h2>Encuentra lo que necesitas.</h2></div>
-        <a href="explorar.html">Ver directorio completo →</a>
+        <div><p>EMPIEZA POR AQUÍ</p><h2>¿Qué quieres encontrar?</h2><span class="live-section-copy">Elige un tipo de negocio o escribe exactamente lo que necesitas.</span></div>
+        <a href="explorar.html">Abrir directorio →</a>
       </div>
       <div class="live-category-list" id="live-category-list"></div>
     </section>
 
-    <section class="live-section" id="live-featured-section">
+    <section class="live-section" id="live-samples">
       <div class="live-section-heading">
-        <div><p>RECOMENDADOS</p><h2>Negocios destacados.</h2></div>
-        <a href="explorar.html">Explorar todos →</a>
+        <div><p>FOTOS PUBLICADAS POR LOS NEGOCIOS</p><h2>Muestras reales de lo que puedes encontrar.</h2><span class="live-section-copy">Cada imagen pertenece a un perfil público de Aliados Fantasma.</span></div>
+        <a href="explorar.html">Ver todos los perfiles →</a>
       </div>
-      <div class="live-featured-grid" id="live-featured-grid"></div>
+      <div class="live-sample-grid" id="live-sample-grid">
+        <div class="live-skeleton"></div><div class="live-skeleton"></div><div class="live-skeleton"></div>
+      </div>
+      <div class="live-empty hidden" id="live-sample-empty">
+        <img src="aliados-fantasma-icono.webp" alt="">
+        <h3>Las primeras muestras están por publicarse.</h3>
+        <p>Mientras tanto, puedes buscar directamente en el directorio.</p>
+      </div>
     </section>
 
     <section class="live-section hidden" id="live-promotions-section">
       <div class="live-section-heading">
-        <div><p>OPORTUNIDADES DE LA RED</p><h2>Promociones activas.</h2></div>
+        <div><p>OFERTAS PUBLICADAS</p><h2>Promociones reales y vigentes.</h2></div>
       </div>
       <div class="live-promotion-track" id="live-promotion-track"></div>
     </section>
 
-    <section class="live-section" id="live-businesses">
-      <div class="live-section-heading live-business-heading">
-        <div><p>DIRECTORIO NACIONAL</p><h2>Negocios de todo México.</h2></div>
-        <strong id="live-result-count">0 negocios</strong>
+    <section class="live-section live-next-step" aria-labelledby="live-next-title">
+      <div class="live-section-heading">
+        <div><p>DOS FORMAS DE ENCONTRARLO</p><h2 id="live-next-title">Elige la más fácil para ti.</h2></div>
       </div>
-      <div class="live-business-grid" id="live-business-grid">
-        <div class="live-skeleton"></div>
-        <div class="live-skeleton"></div>
-        <div class="live-skeleton"></div>
-      </div>
-      <div class="live-empty hidden" id="live-empty">
-        <img src="aliados-fantasma-icono.webp" alt="">
-        <h3>No encontramos coincidencias.</h3>
-        <p>Prueba con otra búsqueda o selecciona una categoría diferente.</p>
+      <div class="live-choice-grid">
+        <article><span>1</span><div><p>QUIERO BUSCAR</p><h3>Revisar opciones por mi cuenta</h3><small>Usa filtros sencillos y abre el perfil que te interese.</small></div><a href="explorar.html">Ir al directorio →</a></article>
+        <article><span>2</span><div><p>QUIERO QUE ME ENCUENTREN</p><h3>Publicar lo que necesito</h3><small>Describe tu necesidad y deja que los negocios compatibles respondan.</small></div><a href="#lo-necesito">Publicar gratis →</a></article>
       </div>
       <div class="live-directory-cta">
-        <div><span>¿Quieres aparecer aquí?</span><h2>Registra tu negocio y forma parte de la red.</h2></div>
+        <div><span>PARA NEGOCIOS</span><h2>¿Quieres mostrar aquí tu trabajo real?</h2><p>Crea tu perfil, agrega fotografías y envíalo a revisión.</p></div>
         <a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a>
       </div>
     </section>
@@ -432,8 +439,8 @@
     <a href="login.html?return=oportunidades.html">Oportunidades</a>
   </div>
   <script type="module" src="index-necesito.js?v=20260820-PRIVADO1"></script>
-  <script type="module" src="prelaunch-real.js?v=20260814-REAL1"></script>
-  <script type="module" src="lanzamiento.js?v=20260819-HOME2"></script>
+  <script type="module" src="prelaunch-real.js?v=20260827-SAMPLES1"></script>
+  <script type="module" src="lanzamiento.js?v=20260827-HOME3"></script>
   <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>
   <script src="af-modern-2026.js?v=20260815-VIEWPORT1" defer></script>
   <script src="mobile-2026.js?v=20260815-MOBILE-RC2" defer></script>

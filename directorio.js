@@ -8,7 +8,7 @@ const DEFAULT_LOGO = 'aliados-fantasma-icono.webp';
 const state = {
   businesses: [], filtered: [], categories: [], visible: PAGE_SIZE,
   query: '', category: '', region: '', municipality: '', open: false,
-  promotion: false, isNew: false, featured: false, sort: 'recommended'
+  promotion: false, sort: 'recommended'
 };
 
 const $ = selector => document.querySelector(selector);
@@ -17,11 +17,10 @@ const el = {
   preview: $('#launch-preview-banner'), search: $('#directory-search'), searchButton: $('#search-button'),
   clear: $('#clear-search'), quick: $('#quick-categories'), category: $('#category-filter'),
   region: $('#region-filter'), municipality: $('#municipality-filter'), open: $('#open-filter'), promotion: $('#promotion-filter'),
-  newFilter: $('#new-filter'), featured: $('#featured-filter'), sort: $('#sort-filter'),
+  sort: $('#sort-filter'),
   reset: $('#reset-filters'), emptyReset: $('#empty-reset'), grid: $('#directory-grid'),
   empty: $('#directory-empty'), summary: $('#results-summary'), active: $('#active-filters'),
-  loadMore: $('#load-more'), featuredSection: $('#featured-section'), featuredGrid: $('#featured-grid'),
-  toast: $('#directory-toast')
+  loadMore: $('#load-more'), toast: $('#directory-toast')
 };
 
 const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -129,54 +128,33 @@ function statusBadges(business) {
   if (isTemporarilyClosed(business)) badges.push('<span class="business-badge closed">Cerrado temporalmente</span>');
   else if (isOpenNow(business)) badges.push('<span class="business-badge open">● Abierto</span>');
   if (activePromotions(business).length) badges.push('<span class="business-badge promo">🔥 Promoción</span>');
-  if (isNewBusiness(business)) badges.push('<span class="business-badge new">Nuevo</span>');
-  if (business.destacado) badges.push('<span class="business-badge featured">★ Destacado</span>');
   return badges.join('');
 }
 
-function mediaMarkup(business, variant) {
+function mediaMarkup(business) {
   const logo = logoUrl(business);
   const cover = coverUrl(business);
-  const className = variant === 'featured' ? 'featured-media' : 'business-media';
-  const logoClass = variant === 'featured' ? 'featured-logo' : 'business-logo';
-  return `<div class="${className}" data-logo="${esc(logo)}" data-name="${esc(business.nombre)}">
+  return `<div class="business-media" data-logo="${esc(logo)}" data-name="${esc(business.nombre)}">
     <img class="media-background" src="${esc(cover || logo)}" alt="" loading="lazy" decoding="async">
     <div class="media-shade"></div>
-    <img class="${logoClass}" src="${esc(logo)}" alt="Logo de ${esc(business.nombre)}" loading="lazy" decoding="async">
+    <img class="business-logo" src="${esc(logo)}" alt="Logo de ${esc(business.nombre)}" loading="lazy" decoding="async">
   </div>`;
-}
-
-function featuredMarkup(business) {
-  const wa = whatsappUrl(business);
-  return `<article class="featured-card" data-id="${esc(business.id)}">
-    ${mediaMarkup(business, 'featured')}
-    <div class="featured-content">
-      <div class="business-badges">${statusBadges(business)}</div>
-      <h3>${esc(business.nombre)}</h3>
-      <p class="featured-category">${esc(business.categoria || 'Negocio aliado')}</p>
-      <p class="featured-location">⌖ ${esc(businessLocation(business))}</p>
-      <div class="featured-actions">
-        <a href="${esc(profileUrl(business))}" data-event="profile">Ver perfil</a>
-        ${wa ? `<a class="whatsapp" href="${esc(wa)}" target="_blank" rel="noopener" data-event="whatsapp">WhatsApp</a>` : ''}
-      </div>
-    </div>
-  </article>`;
 }
 
 function cardMarkup(business) {
   const wa = whatsappUrl(business);
   const description = business.descripcion_corta || business.descripcion || 'Conoce este negocio local y todo lo que tiene para ofrecer.';
   return `<article class="business-card" data-id="${esc(business.id)}">
-    ${mediaMarkup(business, 'card')}
+    ${mediaMarkup(business)}
     <div class="business-body">
       <div class="business-badges">${statusBadges(business)}</div>
-      <span class="business-category">${esc(business.categoria || 'Negocio aliado')}</span>
+      <span class="business-category">${esc(business.categoria || 'Negocio local')}</span>
       <h3>${esc(business.nombre)}</h3>
       <p class="business-description">${esc(description)}</p>
       <div class="business-meta"><span>⌖ ${esc(businessLocation(business))}</span></div>
       <div class="business-actions">
-        <a class="view-profile" href="${esc(profileUrl(business))}" data-event="profile">Ver perfil</a>
-        ${wa ? `<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(business.nombre)} por WhatsApp" data-event="whatsapp">WA</a>` : '<button class="quick-contact" type="button" disabled>—</button>'}
+        <a class="view-profile" href="${esc(profileUrl(business))}" data-event="profile">Ver detalles</a>
+        ${wa ? `<a class="quick-contact" href="${esc(wa)}" target="_blank" rel="noopener" aria-label="Contactar a ${esc(business.nombre)} por WhatsApp" data-event="whatsapp">WhatsApp</a>` : '<button class="quick-contact" type="button" disabled>Sin contacto</button>'}
       </div>
     </div>
   </article>`;
@@ -193,13 +171,13 @@ function bindImageFallbacks(root) {
     image.addEventListener('error', fallback, { once: true });
     if (image.complete && image.naturalWidth === 0) fallback();
   });
-  root.querySelectorAll('.business-logo,.featured-logo').forEach(image => {
+  root.querySelectorAll('.business-logo').forEach(image => {
     image.addEventListener('error', () => { image.src = DEFAULT_LOGO; }, { once: true });
   });
 }
 
 function populateFilters() {
-  const represented = [...new Set(state.businesses.map(item => item.categoria).filter(name => name && name !== 'Negocio aliado'))]
+  const represented = [...new Set(state.businesses.map(item => item.categoria).filter(name => name && name !== 'Negocio local'))]
     .sort((a, b) => a.localeCompare(b, 'es'));
   const categoryMap = new Map(state.categories.map(category => [category.nombre, category]));
   const availableCategories = represented.map(name => categoryMap.get(name) || { nombre: name, icono: '' });
@@ -221,6 +199,13 @@ function populateFilters() {
     state.visible = PAGE_SIZE;
     applyFilters();
   }));
+
+  el.search.value = state.query;
+  el.category.value = represented.includes(state.category) ? state.category : '';
+  if (!el.category.value) state.category = '';
+  el.region.value = regions.includes(state.region) ? state.region : '';
+  if (!el.region.value) state.region = '';
+  populateMunicipalities();
 }
 
 function populateMunicipalities() {
@@ -243,8 +228,6 @@ function filterBusinesses() {
     if (state.municipality && business.municipio !== state.municipality) return false;
     if (state.open && !isOpenNow(business)) return false;
     if (state.promotion && !activePromotions(business).length) return false;
-    if (state.isNew && !isNewBusiness(business)) return false;
-    if (state.featured && !business.destacado) return false;
     return true;
   });
 }
@@ -267,8 +250,6 @@ function renderActiveFilters() {
   if (state.municipality) chips.push(['municipality', state.municipality]);
   if (state.open) chips.push(['open', 'Abiertos ahora']);
   if (state.promotion) chips.push(['promotion', 'Con promoción']);
-  if (state.isNew) chips.push(['isNew', 'Nuevos']);
-  if (state.featured) chips.push(['featured', 'Destacados']);
   el.active.classList.toggle('hidden', !chips.length);
   el.active.innerHTML = chips.map(([key, label]) => `<span class="filter-chip">${esc(label)} <button type="button" data-remove="${key}" aria-label="Quitar filtro ${esc(label)}">×</button></span>`).join('');
   el.active.querySelectorAll('button').forEach(button => button.addEventListener('click', () => removeFilter(button.dataset.remove)));
@@ -281,25 +262,8 @@ function removeFilter(key) {
   if (key === 'municipality') { state.municipality = ''; el.municipality.value = ''; }
   if (key === 'open') { state.open = false; el.open.checked = false; }
   if (key === 'promotion') { state.promotion = false; el.promotion.checked = false; }
-  if (key === 'isNew') { state.isNew = false; el.newFilter.checked = false; }
-  if (key === 'featured') { state.featured = false; el.featured.checked = false; }
   state.visible = PAGE_SIZE;
   applyFilters();
-}
-
-function renderFeatured() {
-  const filteredMode = state.query || state.category || state.region || state.municipality || state.open || state.promotion || state.isNew || state.featured;
-  const compactViewport = window.matchMedia('(max-width: 720px)').matches;
-  if (filteredMode || compactViewport || state.businesses.length < 6) {
-    el.featuredSection.classList.add('hidden');
-    el.featuredGrid.innerHTML = '';
-    return;
-  }
-  const selection = sortBusinesses(state.businesses).slice(0, 2);
-  el.featuredSection.classList.toggle('hidden', !selection.length);
-  el.featuredGrid.innerHTML = selection.map(featuredMarkup).join('');
-  bindImageFallbacks(el.featuredGrid);
-  bindTracking(el.featuredGrid);
 }
 
 function renderResults() {
@@ -308,7 +272,7 @@ function renderResults() {
   el.empty.classList.toggle('hidden', state.filtered.length > 0);
   el.grid.classList.toggle('hidden', state.filtered.length === 0);
   el.loadMore.classList.toggle('hidden', state.visible >= state.filtered.length);
-  el.summary.textContent = `${state.filtered.length} negocio${state.filtered.length === 1 ? '' : 's'}`;
+  el.summary.textContent = `${state.filtered.length} opción${state.filtered.length === 1 ? '' : 'es'}`;
   bindImageFallbacks(el.grid);
   bindTracking(el.grid);
 }
@@ -316,22 +280,29 @@ function renderResults() {
 function applyFilters({ trackSearch = false } = {}) {
   state.filtered = sortBusinesses(filterBusinesses());
   renderActiveFilters();
-  renderFeatured();
   renderResults();
   el.clear.classList.toggle('hidden', !state.query);
   el.quick.querySelectorAll('button').forEach(button => button.classList.toggle('active', (button.dataset.category || '') === state.category));
-  const filterCount = [state.query, state.category, state.region, state.municipality, state.open, state.promotion, state.isNew, state.featured].filter(Boolean).length;
+  const filterCount = [state.query, state.category, state.region, state.municipality, state.open, state.promotion].filter(Boolean).length;
   const filterCountNode = document.querySelector('#directory-filter-count');
   if (filterCountNode) filterCountNode.textContent = filterCount ? `• ${filterCount}` : '';
   if (trackSearch && state.query) trackEvent('busqueda', null, { query: state.query, resultados: state.filtered.length });
 }
 
 function resetAll() {
-  Object.assign(state, { query: '', category: '', region: '', municipality: '', open: false, promotion: false, isNew: false, featured: false, sort: 'recommended', visible: PAGE_SIZE });
+  Object.assign(state, { query: '', category: '', region: '', municipality: '', open: false, promotion: false, sort: 'recommended', visible: PAGE_SIZE });
   el.search.value = ''; el.category.value = ''; el.region.value = ''; populateMunicipalities(); el.municipality.value = '';
-  el.open.checked = false; el.promotion.checked = false; el.newFilter.checked = false; el.featured.checked = false;
+  el.open.checked = false; el.promotion.checked = false;
   el.sort.value = 'recommended';
   applyFilters();
+}
+
+function readInitialFilters() {
+  const params = new URLSearchParams(location.search);
+  state.query = String(params.get('q') || '').trim().slice(0, 120);
+  state.category = String(params.get('categoria') || '').trim().slice(0, 120);
+  state.region = String(params.get('estado') || '').trim().slice(0, 120);
+  state.municipality = String(params.get('municipio') || '').trim().slice(0, 120);
 }
 
 async function trackEvent(type, businessId = null, metadata = {}) {
@@ -358,7 +329,7 @@ function wireEvents() {
   el.category.addEventListener('change', () => { state.category = el.category.value; state.visible = PAGE_SIZE; applyFilters(); });
   el.region.addEventListener('change', () => { state.region = el.region.value; state.municipality = ''; populateMunicipalities(); state.visible = PAGE_SIZE; applyFilters(); });
   el.municipality.addEventListener('change', () => { state.municipality = el.municipality.value; state.visible = PAGE_SIZE; applyFilters(); });
-  [[el.open, 'open'], [el.promotion, 'promotion'], [el.newFilter, 'isNew'], [el.featured, 'featured']].forEach(([node, key]) =>
+  [[el.open, 'open'], [el.promotion, 'promotion']].forEach(([node, key]) =>
     node.addEventListener('change', () => { state[key] = node.checked; state.visible = PAGE_SIZE; applyFilters(); }));
   el.sort.addEventListener('change', () => { state.sort = el.sort.value; applyFilters(); });
   el.reset.addEventListener('click', resetAll);
@@ -382,7 +353,7 @@ async function loadDirectory() {
   }
   state.businesses = (businesses || []).map(item => ({
     ...item,
-    categoria: item.categorias?.nombre || 'Negocio aliado',
+    categoria: item.categorias?.nombre || 'Negocio local',
     categoriaIcono: item.categorias?.icono || '',
     promociones: promotions.filter(promotion => promotion.negocio_id === item.id),
     horarios: hours.filter(schedule => schedule.negocio_id === item.id)
@@ -395,6 +366,7 @@ async function loadDirectory() {
 }
 
 async function init() {
+  readInitialFilters();
   wireEvents();
   const launch = await getLaunchState();
   const admin = await isAdministrator();
@@ -415,7 +387,7 @@ async function init() {
     el.empty.querySelector('h3').textContent = 'No fue posible cargar el directorio';
     el.empty.querySelector('p').textContent = 'Revisa tu conexión e inténtalo nuevamente.';
     el.summary.textContent = 'Error de conexión';
-    showToast('No fue posible cargar los negocios');
+    showToast('No fue posible cargar las opciones');
   }
 }
 
