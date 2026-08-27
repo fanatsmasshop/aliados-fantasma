@@ -54,13 +54,50 @@ export function shell(profile, user) {
 }
 
 export function openModal(selector) {
-  $(selector)?.classList.remove('hidden');
-  document.body.classList.add('modal-open');
+  const modal = $(selector);
+  if (!modal) return;
+
+  // Los paneles administrativos usan contenedores con transform/overflow.
+  // Si el modal permanece dentro de ellos, position:fixed puede quedar ligado
+  // al documento y abrirse fuera de la parte que el usuario está viendo.
+  // Se mueve antes de mostrarlo para evitar ese salto visual.
+  if (modal.parentElement !== document.body) document.body.appendChild(modal);
+  modal.classList.add('af-viewport-modal');
+  modal.classList.remove('hidden');
+  modal.removeAttribute('hidden');
+  modal.setAttribute('aria-hidden', 'false');
+  modal.scrollTop = 0;
+
+  const card = modal.querySelector('.modal-card, .af-modal-card, .rules-card, .context-dialog');
+  if (card) card.scrollTop = 0;
+
+  document.body.classList.add('modal-open', 'af-dialog-open');
+  document.documentElement.classList.add('af-dialog-open');
+
+  requestAnimationFrame(() => {
+    const firstControl = modal.querySelector('[data-close], input:not([type="hidden"]), select, textarea, button:not([disabled]), a[href]');
+    if (firstControl instanceof HTMLElement) firstControl.focus({ preventScroll: true });
+  });
 }
 
 export function closeModal(selector) {
-  $(selector)?.classList.add('hidden');
-  document.body.classList.remove('modal-open');
+  const modal = $(selector);
+  if (!modal) return;
+
+  modal.classList.add('hidden');
+  modal.setAttribute('aria-hidden', 'true');
+
+  const anotherModalIsOpen = [...document.querySelectorAll('.modal, .af-modal, .rules-modal, .context-modal, .af-viewport-modal')]
+    .some(element => element !== modal
+      && !element.hidden
+      && !element.classList.contains('hidden')
+      && element.getAttribute('aria-hidden') !== 'true'
+      && getComputedStyle(element).display !== 'none');
+
+  if (!anotherModalIsOpen) {
+    document.body.classList.remove('modal-open', 'af-dialog-open');
+    document.documentElement.classList.remove('af-dialog-open');
+  }
 }
 
 export function setLoading(button, loading, text = 'Guardando…') {
