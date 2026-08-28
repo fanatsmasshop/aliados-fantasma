@@ -1,253 +1,448 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sitio oficial de Fantasmas Biker's Shop en Cd. Azteca, Ecatepec.">
-  <meta name="theme-color" content="#07080b">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Fantasmas Biker's Shop | Sitio oficial">
-  <meta property="og:description" content="Accesorios biker, productos exclusivos, rifas y promociones en Cd. Azteca, Ecatepec.">
-  <meta property="og:image" content="logo-shop.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <title>Fantasmas Biker's Shop | Sitio oficial</title>
-  <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
-  <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="logos.css">
-  <link rel="stylesheet" href="dynamic.css">
-  <link rel="stylesheet" href="editor-public.css?v=14">
-  <link rel="stylesheet" href="shop-cart.css">
-  <link rel="stylesheet" href="product-images.css?v=14">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Aliados Fantasma conecta negocios locales de todo México con personas de su zona mediante perfiles digitales, directorio, promociones, QR y herramientas para crecer.">
+  <meta name="theme-color" content="#06080d">
+  <meta property="og:title" content="Aliados Fantasma | La red nacional de negocios locales">
+  <meta property="og:description" content="Descubre y registra negocios locales de cualquier estado de México. Perfiles digitales, directorio, promociones y contacto directo.">
+  <title>Aliados Fantasma | Próximo lanzamiento</title>
+  <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
+  <link rel="stylesheet" href="lanzamiento.css?v=20260827-HOME3">
+  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10.3">
+  <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
+  <link rel="stylesheet" href="af-fantasmas-style.css?v=20260730-FANTASMAS1">
+  <link rel="stylesheet" href="af-modern-2026.css?v=20260801-RC6.2">
+  <link rel="stylesheet" href="prelaunch-v2.css?v=20260827-FOLD1">
+  <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE-RC2">
+  <link rel="stylesheet" href="lo-necesito.css?v=20260820-PRIVADO1">
 </head>
-<body>
-  <header class="encabezado" data-section-key="header">
-    <a class="marca marca-logo" href="#inicio" aria-label="Fantasmas Biker's Shop, inicio">
-      <img src="logo-nombre.png" alt="Fantasmas Biker's Shop">
-    </a>
+<body class="af-page af-page-home">
 
-    <button class="menu-boton" id="menuBoton" aria-label="Abrir menú">☰</button>
-
-    <nav id="menu">
-      <a href="#rifas" data-setting-text="nav_raffles_text" data-setting-href="nav_raffles_url">Rifas</a>
-      <a href="#tienda" data-setting-text="nav_store_text" data-setting-href="nav_store_url">Tienda</a>
-      <a href="#beneficios" data-setting-text="nav_rewards_text" data-setting-href="nav_rewards_url">Beneficios</a>
-      <a href="#aliados" data-setting-text="nav_allies_text" data-setting-href="nav_allies_url">Aliados</a>
-      <a href="pedido.html">Mi pedido</a>
-      <a href="#contacto" data-setting-text="nav_contact_text" data-setting-href="nav_contact_url">Contacto</a>
-    </nav>
-
-    <a class="boton boton-rosa solo-escritorio" href="https://wa.me/525610329215" target="_blank" data-setting-text="header_cta_text" data-setting-href="header_cta_url">WhatsApp</a>
-  </header>
-
-  <main>
-    <section class="portada editable-section" id="inicio" data-section-key="hero">
-      <div class="portada-contenido">
-        <p class="etiqueta" id="heroEyebrow" data-setting-text="hero_eyebrow">SITIO OFICIAL · CD. AZTECA, ECATEPEC</p>
-        <h1><span class="hero-title" id="heroTitle" data-setting-text="hero_title">RODAMOS JUNTOS.</span><br><span id="heroHighlight" data-setting-text="hero_highlight">CELEBRAMOS EN GRANDE.</span></h1>
-        <p class="introduccion" id="heroIntro" data-setting-text="hero_intro">Accesorios biker, artículos exclusivos y personalización con carácter. Este 24 de agosto celebramos nuestro primer aniversario contigo.</p>
-        <div class="acciones">
-          <a class="boton boton-rosa" id="mainCta" href="#rifas" data-setting-text="main_cta_text" data-setting-href="main_cta_url">Ver rifas</a>
-          <a class="boton boton-oscuro" id="catalogCta" href="https://linktr.ee/FANTASMASBIKERSCDAZTECA" target="_blank" data-setting-text="catalog_cta_text" data-setting-href="catalog_cta_url">Ver catálogo</a>
-        </div>
-        <div class="datos-evento" id="countdown" aria-label="Cuenta regresiva">
-          <div><strong id="countdownDays">00</strong><span>Días</span></div>
-          <div><strong id="countdownHours">00</strong><span>Horas</span></div>
-          <div><strong id="countdownMinutes">00</strong><span>Minutos</span></div>
-          <div><strong id="countdownSeconds">00</strong><span>Segundos</span></div>
-        </div>
-      </div>
-      <div class="portada-visual portada-logo">
-        <img src="logo-shop.png" alt="Fantasmas Biker's Shop, logo oficial">
-      </div>
-    </section>
-
-    <div class="franja editable-section ticker ticker-scroll ticker-blue" id="anuncioAdministrable" data-section-key="announcement" aria-label="Anuncios de la tienda">
-      <div class="ticker-track"><span class="ticker-item">ANIVERSARIO 2026</span><i>✦</i><span class="ticker-item">PREMIOS Y PROMOCIONES</span><i>✦</i><span class="ticker-item">COMUNIDAD BIKER</span><i>✦</i><span class="ticker-item">FANTASMAS BIKER'S SHOP</span></div>
+  <section id="launch-reveal" class="launch-reveal" hidden aria-hidden="true" aria-label="Presentación de apertura de Aliados Fantasma">
+    <div class="launch-reveal__curtain launch-reveal__curtain--left" aria-hidden="true"></div>
+    <div class="launch-reveal__curtain launch-reveal__curtain--right" aria-hidden="true"></div>
+    <div class="launch-reveal__ambient" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="launch-reveal__glow" aria-hidden="true"></div>
+    <div class="launch-reveal__network" aria-hidden="true">
+      <svg viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice">
+        <g class="network-lines">
+          <path d="M110 455 L255 350 L410 420 L520 285 L670 360 L855 225"/>
+          <path d="M145 175 L305 245 L455 155 L610 245 L785 145 L900 330"/>
+          <path d="M255 350 L305 245 M410 420 L455 155 M520 285 L610 245 M670 360 L785 145"/>
+        </g>
+        <g class="network-nodes">
+          <circle cx="110" cy="455" r="8"/><circle cx="255" cy="350" r="10"/><circle cx="410" cy="420" r="7"/>
+          <circle cx="520" cy="285" r="13"/><circle cx="670" cy="360" r="8"/><circle cx="855" cy="225" r="10"/>
+          <circle cx="145" cy="175" r="7"/><circle cx="305" cy="245" r="9"/><circle cx="455" cy="155" r="8"/>
+          <circle cx="610" cy="245" r="10"/><circle cx="785" cy="145" r="7"/><circle cx="900" cy="330" r="8"/>
+        </g>
+      </svg>
     </div>
 
-    <section class="promociones-publicas editable-section" id="promocionesPublicas" data-section-key="promotions" hidden>
-      <div class="titulo-seccion">
-        <div><p class="etiqueta" data-setting-text="promotions_eyebrow">PROMOCIONES ACTIVAS</p><h2 data-section-title>OPORTUNIDADES<br>DE LA TIENDA.</h2></div>
-        <p data-section-subtitle>Promociones publicadas directamente por Fantasmas Biker's Shop. Consulta disponibilidad antes de realizar tu pedido.</p>
+    <button id="launch-reveal-skip" class="launch-reveal__skip" type="button">Omitir presentación</button>
+
+    <div class="launch-reveal__timeline" role="status" aria-live="polite">
+      <section class="launch-scene launch-scene--intro" data-scene="intro">
+        <p>EL TIEMPO HA LLEGADO</p>
+        <h1>Ha llegado<br>el momento.</h1>
+      </section>
+
+      <section class="launch-scene launch-scene--story" data-scene="story">
+        <p id="launch-story-line">Cada negocio tiene una historia.</p>
+        <span>Historias locales que merecen ser descubiertas.</span>
+      </section>
+
+      <section class="launch-scene launch-scene--connection" data-scene="connection">
+        <p>INICIANDO LA RED</p>
+        <h2 id="launch-connection-status">Conectando negocios…</h2>
+        <div id="launch-reveal-businesses" class="launch-reveal__businesses" aria-label="Primeros negocios de la red"></div>
+      </section>
+
+      <section class="launch-scene launch-scene--identity" data-scene="identity">
+        <div class="launch-reveal__mark" aria-hidden="true">
+          <span class="launch-reveal__ring launch-reveal__ring--one"></span>
+          <span class="launch-reveal__ring launch-reveal__ring--two"></span>
+          <img src="aliados-fantasma-icono.webp" alt="">
+        </div>
+        <p>ALIADOS FANTASMA</p>
+        <h2>La red de negocios locales.</h2>
+      </section>
+
+      <section class="launch-scene launch-scene--promise" data-scene="promise">
+        <div class="launch-promise-words" aria-label="Descubre, conecta y crece">
+          <strong id="launch-promise-word">Descubre.</strong>
+        </div>
+        <p>Una comunidad construida para crecer juntos.</p>
+      </section>
+
+      <section class="launch-scene launch-scene--count" data-scene="count">
+        <p>LA RED ESTÁ LISTA</p>
+        <strong id="launch-final-count">3</strong>
+      </section>
+
+      <section class="launch-scene launch-scene--final" data-scene="final">
+        <img src="aliados-fantasma-icono.webp" alt="" aria-hidden="true">
+        <p>ALIADOS FANTASMA</p>
+        <h2>La red ha despertado.</h2>
+        <span id="launch-reveal-message">Los negocios locales están listos para ser descubiertos.</span>
+      </section>
+    </div>
+
+    <div class="launch-reveal__footer" aria-hidden="true">
+      <span id="launch-reveal-mode-label">PRESENTACIÓN DE LANZAMIENTO</span>
+      <div class="launch-reveal__progress"><span id="launch-reveal-progress-bar"></span></div>
+      <small id="launch-reveal-time">00:28</small>
+    </div>
+    <div class="launch-reveal__portal" aria-hidden="true"></div>
+  </section>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="orb orb-blue" aria-hidden="true"></div>
+  <div class="orb orb-pink" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Aliados Fantasma, inicio">
+      <img src="aliados-fantasma-icono.webp" alt="">
+      <span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos</small></span>
+    </a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú de navegación">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+    <nav id="main-nav" aria-label="Navegación principal">
+      <div class="drawer-head">
+        <div><small>MENÚ</small><strong>Aliados Fantasma</strong></div>
+        <button class="drawer-close" type="button" aria-label="Cerrar menú">×</button>
       </div>
-      <div class="promociones-grid" id="promocionesDinamicas"></div>
+      <a href="#que-es" class="link" data-mode="prelaunch">Qué es</a>
+      <a href="#como-funciona" class="link" data-mode="prelaunch">Cómo funciona</a>
+      <a href="#beneficios" class="link" data-mode="prelaunch">Beneficios</a>
+      <a href="#ciudades" class="link" data-mode="prelaunch">Ciudades</a>
+      <a href="#live-home" class="link" data-mode="live" hidden>Inicio</a>
+      <a href="#live-categories" class="link" data-mode="live" hidden>Qué buscas</a>
+      <a href="#live-samples" class="link" data-mode="live" hidden>Muestras reales</a>
+      <a href="explorar.html" class="link" data-mode="live" hidden>Directorio</a>
+      <a href="#lo-necesito" class="link">Lo necesito</a>
+      <a href="login.html" class="link">Iniciar sesión</a>
+      <a href="registro.html" class="button button-small">Registrar negocio</a>
+    </nav>
+  </header>
+  <button class="menu-backdrop" type="button" aria-label="Cerrar menú" tabindex="-1"></button>
+
+  <main id="prelaunch-experience" class="pre2-shell">
+    <section class="pre2-hero" id="inicio">
+      <div class="pre2-network" aria-hidden="true">
+        <span class="pre2-line pre2-line-a"></span>
+        <span class="pre2-line pre2-line-b"></span>
+        <span class="pre2-line pre2-line-c"></span>
+        <i class="pre2-node n1"></i><i class="pre2-node n2"></i><i class="pre2-node n3"></i><i class="pre2-node n4"></i><i class="pre2-node n5"></i>
+        <img src="aliados-fantasma-icono.webp" alt="" class="pre2-watermark">
+      </div>
+
+      <div class="pre2-hero-copy reveal">
+        <div class="pre2-kicker-row">
+          <span id="launch-badge-primary" class="pre2-pill pre2-pill-primary"><i></i> Antes del lanzamiento</span>
+          <span class="pre2-pill">Registro anticipado</span>
+        </div>
+        <p class="pre2-eyebrow">NACIMOS EN ECATEPEC · AHORA CRECEMOS POR TODO MÉXICO</p>
+        <h1>La red de <span>negocios locales</span> de México está por despegar.</h1>
+        <p class="pre2-lead">¿Buscas un producto o servicio? Publica lo que necesitas y deja que negocios registrados puedan proponerte una solución. Si tienes negocio, también puedes entrar a la red.</p>
+        <div class="pre2-actions">
+          <a class="pre2-btn pre2-btn-primary" href="#lo-necesito">Necesito algo <b>→</b></a>
+          <a class="pre2-btn pre2-btn-secondary" href="registro.html">Tengo un negocio</a>
+        </div>
+        <div class="pre2-trust">
+          <span>✓ Solicitud gratis</span>
+          <span>✓ Negocios registrados</span>
+          <span>✓ Contacto por WhatsApp</span>
+        </div>
+      </div>
+
+      <aside class="countdown-card pre2-launch-card reveal" aria-label="Información del lanzamiento">
+        <div class="pre2-launch-head">
+          <span class="pre2-live-dot"></span>
+          <div><small id="launch-status-label">LANZAMIENTO OFICIAL</small><strong>Aliados Fantasma</strong></div>
+        </div>
+        <h2 id="launch-date-heading"><span>24 de agosto de 2026</span><br><em>11:00 a. m.</em></h2>
+        <p id="launch-card-message">La red ya puede empezar a convertir necesidades reales en oportunidades para negocios.</p>
+        <p class="pre2-network-proof" id="pre2-network-proof">La red ya tiene negocios registrados.</p>
+        <div class="pre2-launch-list">
+          <div><span>01</span><p><b>Cuenta inmediata</b><small>Verifica tu correo y entra a tu panel.</small></p></div>
+          <div><span>02</span><p><b>Perfil listo</b><small>Completa datos, fotos, horarios y promociones.</small></p></div>
+          <div><span>03</span><p><b>Red en preparación</b><small>Los perfiles aprobados quedarán listos para abrir al público.</small></p></div>
+        </div>
+        <div class="countdown pre2-countdown" id="countdown">
+          <div><strong id="days">00</strong><span>días</span></div>
+          <div><strong id="hours">00</strong><span>hrs</span></div>
+          <div><strong id="minutes">00</strong><span>min</span></div>
+          <div><strong id="seconds">00</strong><span>seg</span></div>
+        </div>
+        <div class="pre2-progress"><span id="launch-progress"></span></div>
+      </aside>
     </section>
 
-    <section class="seccion editable-section" id="rifas" data-section-key="raffles">
-      <div class="titulo-seccion">
+    <section class="need-promo-section" aria-label="Lo necesito">
+      <div class="need-promo-copy">
+        <span>NUEVA FUNCIÓN · LO NECESITO</span>
+        <h2>No encuentres un negocio. Deja que el negocio te encuentre.</h2>
+        <p>Publica lo que buscas, dónde lo necesitas y tu presupuesto. Los negocios registrados pueden convertir tu solicitud en una cotización directa por WhatsApp.</p>
+      </div>
+      <div class="need-promo-actions">
+        <a class="main" href="#lo-necesito">Publicar aquí mismo →</a>
+        <a class="alt" href="login.html?return=oportunidades.html">Soy negocio: ver oportunidades</a>
+      </div>
+    </section>
+
+    <section class="pre2-preview pre2-real-network" id="que-es">
+      <div class="pre2-heading reveal">
+        <div><p class="pre2-eyebrow">MUESTRAS REALES</p><h2>Así se verá lo que puedes descubrir.</h2></div>
+        <span id="pre2-real-summary">Cargando fotografías publicadas…</span>
+      </div>
+      <div class="pre2-real-grid" id="pre2-real-businesses" aria-live="polite">
+        <article class="pre2-real-loading"><span></span><div><b>Cargando muestras…</b><small>Consultando fotografías reales de los perfiles.</small></div></article>
+      </div>
+      <div class="pre2-real-proof reveal">
+        <span><i></i> Fotografías conectadas a perfiles reales</span>
+        <p>Las imágenes fueron publicadas por los propios negocios. En el lanzamiento podrás abrir el perfil, revisar su información y decidir a quién contactar.</p>
+      </div>
+    </section>
+
+    <section class="pre2-benefits" id="beneficios">
+      <article class="reveal"><span>01</span><div><h3>Registro sin espera</h3><p>Verificas tu correo y entras directo a preparar tu negocio.</p></div></article>
+      <article class="reveal"><span>02</span><div><h3>Presencia profesional</h3><p>Información, fotos, contacto, ubicación, horarios y promociones.</p></div></article>
+      <article class="reveal"><span>03</span><div><h3>Descubrimiento local</h3><p>El directorio priorizará negocios según ciudad, municipio y estado.</p></div></article>
+      <article class="reveal"><span>04</span><div><h3>Hecho para México</h3><p>La red acepta negocios de los 32 estados desde esta etapa.</p></div></article>
+    </section>
+
+    <section class="pre2-how" id="como-funciona">
+      <div class="pre2-heading reveal">
+        <div><p class="pre2-eyebrow">TRES PASOS</p><h2>Entrar a Aliados ya no depende de una aprobación.</h2></div>
+        <span>Solo la publicación pública del perfil conserva revisión.</span>
+      </div>
+      <div class="pre2-steps">
+        <article class="reveal"><b>1</b><h3>Crea tu cuenta</h3><p>Datos básicos del negocio y tu correo.</p></article>
+        <article class="reveal"><b>2</b><h3>Verifica y entra</h3><p>Abres el enlace de correo y tu panel queda activo.</p></article>
+        <article class="reveal"><b>3</b><h3>Prepara tu perfil</h3><p>Lo completas a tu ritmo y lo envías a revisión cuando esté listo.</p></article>
+      </div>
+    </section>
+
+    <section class="pre2-national" id="ciudades">
+      <div class="pre2-national-copy reveal">
+        <p class="pre2-eyebrow">COBERTURA NACIONAL</p>
+        <h2>Tu ciudad puede ser de las primeras en aparecer.</h2>
+        <p>Aliados Fantasma nació en Ecatepec, pero el registro ya está abierto para negocios de todo México. Cada nuevo perfil ayuda a construir la red de su propia zona.</p>
+        <a class="pre2-btn pre2-btn-secondary" href="registro.html">Ser de los primeros de mi ciudad</a>
+      </div>
+      <div class="pre2-national-stat reveal"><strong>32</strong><span>estados habilitados</span><small>México · cobertura en expansión</small></div>
+    </section>
+
+    <section class="pre2-faq" id="faq">
+      <div class="pre2-heading reveal"><div><p class="pre2-eyebrow">PREGUNTAS RÁPIDAS</p><h2>Antes de registrarte.</h2></div></div>
+      <div class="pre2-faq-grid">
+        <details class="reveal"><summary>¿Tengo que esperar aprobación para entrar?</summary><p>No. Después de verificar tu correo puedes entrar inmediatamente a tu panel y comenzar tu perfil.</p></details>
+        <details class="reveal"><summary>¿El registro tiene costo?</summary><p>El registro de lanzamiento es gratuito.</p></details>
+        <details class="reveal"><summary>¿Puedo registrarme fuera de Ecatepec?</summary><p>Sí. El registro está abierto para negocios de los 32 estados de México.</p></details>
+        <details class="reveal"><summary>¿Mi perfil aparece inmediatamente?</summary><p>No. La cuenta es inmediata, pero el perfil se revisa antes de publicarse en el directorio.</p></details>
+      </div>
+    </section>
+
+    <section class="pre2-closing reveal">
+      <div><p class="pre2-eyebrow">PREPARA TU NEGOCIO HOY</p><h2>El lanzamiento no tiene que agarrarte empezando desde cero.</h2><p>Verifica tu cuenta, completa tu perfil y llega listo al primer día.</p></div>
+      <div class="pre2-closing-side">
+        <div class="mini-countdown"><strong><span id="days-bottom">00</span> días</strong><i></i><strong><span id="hours-bottom">00</span> horas</strong></div>
+        <a class="pre2-btn pre2-btn-primary" href="registro.html">Registrar mi negocio <b>→</b></a>
+      </div>
+      <span id="closing-eyebrow" hidden>PRÓXIMAMENTE COMIENZA UNA NUEVA ETAPA</span>
+    </section>
+  </main>
+
+  <section id="lo-necesito" class="home-need-section" aria-labelledby="home-need-title">
+    <div class="home-need-shell">
+      <div class="home-need-heading">
         <div>
-          <p class="etiqueta" data-setting-text="raffles_eyebrow">RIFAS DE ANIVERSARIO</p>
-          <h2 data-section-title>ELIGE TU NIVEL.<br>CUATRO GANADORES.</h2>
+          <p class="need-eyebrow">LO NECESITO · SOLICITUD REAL</p>
+          <h2 id="home-need-title">Dinos qué buscas. <span>Aliados lo convierte en oportunidad.</span></h2>
+          <p>No necesitas cuenta. Publicas tu necesidad desde esta misma página y los negocios registrados pueden verla y enviarte una propuesta por WhatsApp.</p>
         </div>
-        <p data-section-subtitle>Cada rifa tiene tres premios secundarios y un premio principal. El premio principal se revela al final y las cuatro personas ganadoras serán diferentes.</p>
-      </div>
-
-      <div class="rifas-grid" id="listaRifas"></div>
-
-      <div class="pasos">
-        <strong data-setting-text="raffles_steps_title">¿Cómo participo?</strong>
-        <span data-setting-text="raffles_step_1">① Elige una rifa</span>
-        <span data-setting-text="raffles_step_2">② Aparta por WhatsApp</span>
-        <span data-setting-text="raffles_step_3">③ Confirma tu pago</span>
-        <span data-setting-text="raffles_step_4">④ Sigue el sorteo oficial</span>
-      </div>
-      <p class="nota" data-setting-text="raffles_note">Si una lista no se completa el 24 de agosto, todos los números pagados continúan vigentes hasta llenarla.</p>
-    </section>
-
-    <section class="aniversario editable-section" id="aniversario" data-section-key="anniversary">
-      <div class="fecha-grande"><b data-setting-text="anniversary_day">24</b> <span data-setting-text="anniversary_date_label">AGOSTO 2026</span></div>
-      <div>
-        <p class="etiqueta etiqueta-negra" data-setting-text="anniversary_eyebrow">GUARDA LA FECHA</p>
-        <h2 data-section-title>NUESTRO ANIVERSARIO<br>SE VIVE EN LA TIENDA.</h2>
-        <p data-section-subtitle>Ven por promociones, rifas y sorpresas de 11:00 a 19:00 h.</p>
-      </div>
-      <a class="boton boton-claro" href="https://maps.app.goo.gl/NqPb7tJ6CNmK2Siq6" target="_blank" data-setting-text="anniversary_cta_text" data-setting-href="anniversary_cta_url">Cómo llegar ↗</a>
-    </section>
-
-    <section class="seccion editable-section" id="tienda" data-section-key="catalog_intro">
-      <div class="titulo-seccion">
-        <div>
-          <p class="etiqueta" data-setting-text="catalog_eyebrow">NUESTRA TIENDA</p>
-          <h2 data-section-title>EQUIPO, ESTILO<br>Y PERSONALIZACIÓN.</h2>
-        </div>
-        <p data-section-subtitle>Artículos para quienes llevan la carretera y su identidad a todas partes. Pregunta por modelos, tallas y existencias.</p>
-      </div>
-
-      <div class="categorias" id="categoriasDinamicas">
-        <article><span>🏍</span><h3>Equipo biker</h3><p>Cascos, chalecos, guantes, protecciones, luces, candados y accesorios.</p></article>
-        <article><span>☠</span><h3>Estilo Fantasmas</h3><p>Gorras, playeras, sudaderas, hebillas, cadenas, anillos y artículos exclusivos.</p></article>
-        <article><span>⚡</span><h3>Personalizados</h3><p>Sublimación, DTF, vinil, diseño e impresión para tus ideas y eventos.</p></article>
-      </div>
-    </section>
-
-    <section class="productos-publicos editable-section" id="productosPublicos" data-section-key="products" hidden>
-      <div class="titulo-seccion">
-        <div><p class="etiqueta" data-setting-text="products_eyebrow">CATÁLOGO ACTUAL</p><h2 data-section-title>PRODUCTOS<br>DISPONIBLES.</h2></div>
-        <p data-section-subtitle>Modelos publicados desde nuestro panel oficial. Las existencias pueden cambiar; confirma por WhatsApp.</p>
-      </div>
-      <div class="catalog-toolbar"><input id="catalogSearch" type="search" placeholder="Buscar en el catálogo..." aria-label="Buscar productos" data-setting-placeholder="products_search_placeholder"><div class="category-filters" id="categoryFilters"></div></div>
-      <div class="productos-grid" id="productosDinamicos"></div>
-      <div class="catalog-load-more" id="catalogLoadMore" aria-live="polite"></div>
-    </section>
-
-    <section class="eventos-publicos editable-section" id="eventosPublicos" data-section-key="events" hidden>
-      <div class="titulo-seccion">
-        <div><p class="etiqueta" data-setting-text="events_eyebrow">AGENDA FANTASMAS</p><h2 data-section-title>PRÓXIMOS<br>EVENTOS.</h2></div>
-        <p data-section-subtitle>Actividades, dinámicas y mini eventos organizados por Fantasmas Biker's Shop.</p>
-      </div>
-      <div class="eventos-grid" id="eventosDinamicos"></div>
-    </section>
-
-    <section class="beneficios editable-section" id="beneficios" data-section-key="rewards">
-      <div>
-        <p class="etiqueta" data-setting-text="rewards_eyebrow">FANTASMAS REWARDS</p>
-        <h2 data-section-title>TU LEALTAD<br>TAMBIÉN RUEDA.</h2>
-        <p class="section-lead" data-section-subtitle>Compra, acumula sellos y recibe beneficios.</p>
-      </div>
-      <div class="premio-sellos"><strong data-setting-text="rewards_count">10</strong><p><b data-setting-text="rewards_title">sellos = $100 de descuento</b><br><span data-setting-text="rewards_text">Obtén un sello por cada $100 de compra. Sin vigencia y canje presencial.</span></p></div>
-      <div class="entregas"><b data-setting-text="delivery_title">ENTREGAS Y ENVÍOS</b><p data-setting-text="delivery_text">Tienda física, Mexibús L1 estación UNITEC y Línea B Cd. Azteca–Buenavista con compra mínima de $300. Envíos nacionales con cotización.</p></div>
-    </section>
-
-    <section class="aliados editable-section" id="aliados" data-section-key="allies">
-      <div class="aliados-logo">
-        <img src="logo-aliados.png" alt="Aliados Fantasma, proyecto impulsado por Fantasmas Biker's Shop">
-      </div>
-      <div class="aliados-contenido">
-        <p class="etiqueta" data-setting-text="allies_eyebrow">UN PROYECTO DE FANTASMAS BIKER'S SHOP</p>
-        <h2 data-section-title>CONECTAMOS NEGOCIOS.<br><span>CRECEMOS JUNTOS.</span></h2>
-        <p data-section-subtitle>Aliados Fantasma forma parte del ecosistema de Fantasmas Biker's Shop: una iniciativa creada para conectar, impulsar y dar visibilidad a los negocios de nuestra comunidad.</p>
-        <p class="proximamente" data-setting-text="allies_notice">PRÓXIMAMENTE CONECTAREMOS AMBAS PLATAFORMAS</p>
-      </div>
-    </section>
-
-    <section class="contacto editable-section" id="contacto" data-section-key="contact">
-      <div>
-        <p class="etiqueta" data-setting-text="contact_eyebrow">VISÍTANOS</p>
-        <h2 data-section-title>ESTA ES TU<br>CASA BIKER.</h2>
-        <p class="section-lead" data-section-subtitle>Visítanos o comunícate con nuestro equipo.</p>
-        <p id="storeAddress" data-setting-text="address">Av. Gobernadora 656, Tolotzin I, Condominio T37, Mz. 003, Ecatepec de Morelos.</p>
-        <p><b>Atención y pedidos:</b> <span id="storeWhatsapp">56 1032 9215</span><br><b>Catálogo:</b> <span id="storeCatalogPhone">56 5153 1820</span><br><b>Diseño e impresión:</b> <span id="storeDesignPhone">55 4557 9857</span></p>
-        <div class="acciones">
-          <a class="boton boton-rosa" id="mapsLink" href="https://maps.app.goo.gl/NqPb7tJ6CNmK2Siq6" target="_blank" data-setting-text="contact_map_text" data-setting-href="maps_url">Abrir mapa</a>
-          <a class="boton boton-oscuro whatsapp-link" href="https://wa.me/525610329215" target="_blank" data-setting-text="contact_whatsapp_text">Escribir ahora</a>
+        <div class="home-need-flow" aria-label="Cómo funciona">
+          <span><b>1</b> Publicas</span><i></i><span><b>2</b> Negocios la ven</span><i></i><span><b>3</b> Te cotizan</span>
         </div>
       </div>
 
-      <div class="redes">
-        <p class="etiqueta">SÍGUENOS</p>
-        <a id="instagramLink" href="https://www.instagram.com/fantasmashop_cdazteca" target="_blank" data-setting-href="instagram_url"><span>Instagram</span><b data-setting-text="instagram_text">@fantasmashop_cdazteca</b></a>
-        <a id="tiktokLink" href="https://www.tiktok.com/@fantasmasbikershop" target="_blank" data-setting-href="tiktok_url"><span>TikTok</span><b data-setting-text="tiktok_text">@fantasmasbikershop</b></a>
-        <a id="youtubeLink" href="https://www.youtube.com/@FANTASMASBIKERSHOPCDAZTECA" target="_blank" data-setting-href="youtube_url"><span>YouTube</span><b data-setting-text="youtube_text">@FANTASMASBIKERSHOPCDAZTECA</b></a>
-        <a id="allLinks" href="https://linktr.ee/FANTASMASBIKERSCDAZTECA" target="_blank" data-setting-href="links_url"><span>Todos los enlaces</span><b>Linktree ↗</b></a>
+      <div class="home-need-layout">
+        <div id="home-need-form-panel" class="need-card need-form-card home-need-form-card">
+          <div class="need-section-head">
+            <div><p class="need-eyebrow">PUBLICAR SIN SALIR DEL INICIO</p><h2>¿Qué necesitas?</h2><p>Da la información suficiente para que un negocio sepa si puede ayudarte.</p></div>
+            <span class="need-step">⚡</span>
+          </div>
+          <div id="home-need-alert" class="need-alert" role="alert"></div>
+          <form id="home-need-form" class="need-form-grid" novalidate>
+            <label class="need-field wide"><span>¿Qué estás buscando? *</span><input name="titulo" maxlength="100" required placeholder="Ej. Busco quien repare un Samsung A55 hoy"></label>
+            <label class="need-field wide"><span>Detalles para cotizar *</span><textarea name="descripcion" maxlength="1500" required placeholder="Modelo, cantidad, medidas, problema, características o cualquier dato que ayude al negocio a darte una opción real."></textarea></label>
+
+            <label class="need-field"><span>Categoría *</span><select id="home-need-category" name="categoria_id" required><option value="">Selecciona una categoría</option></select></label>
+            <label class="need-field"><span>Presupuesto máximo</span><input name="presupuesto_max" type="number" min="0" step="1" inputmode="decimal" placeholder="Ej. 1500"></label>
+
+            <label class="need-field"><span>Estado *</span><select id="home-need-state" name="estado_region" required><option value="">Selecciona tu estado</option></select></label>
+            <label class="need-field"><span>Municipio / alcaldía *</span><input name="municipio" maxlength="100" required placeholder="Ej. Ecatepec de Morelos"></label>
+
+            <div class="need-field wide"><span>¿Qué tan urgente es?</span><div class="need-urgency home-need-urgency">
+              <input id="home-urg-normal" type="radio" name="urgencia" value="normal" checked><label for="home-urg-normal">Sin prisa</label>
+              <input id="home-urg-week" type="radio" name="urgencia" value="esta_semana"><label for="home-urg-week">Esta semana</label>
+              <input id="home-urg-24" type="radio" name="urgencia" value="24_horas"><label for="home-urg-24">24 horas</label>
+              <input id="home-urg-today" type="radio" name="urgencia" value="hoy"><label for="home-urg-today">Hoy</label>
+            </div></div>
+
+            <label class="need-field"><span>Tu nombre *</span><input name="nombre_cliente" maxlength="80" required autocomplete="name" placeholder="Nombre o apodo"></label>
+            <label class="need-field"><span>WhatsApp *</span><input name="whatsapp" inputmode="tel" autocomplete="tel" required placeholder="10 dígitos"></label>
+
+            <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Acepto que Aliados use mi WhatsApp <strong>solo para dar seguimiento a esta solicitud</strong>. Mi número no se publica ni se muestra a los negocios; yo decido cuándo iniciar el contacto.</span></label>
+
+            <div class="need-submit-row">
+              <small>Aliados conecta a las partes; precio, disponibilidad, entrega y pago se acuerdan directamente con el negocio.</small>
+              <button id="home-need-submit" class="need-button primary" type="submit">Buscar una opción <span>→</span></button>
+            </div>
+          </form>
+          <a class="home-need-advanced" href="necesito.html">¿Quieres agregar fecha, colonia y rango de presupuesto? Abrir formulario detallado →</a>
+        </div>
+
+        <div id="home-need-success" class="need-card home-need-success" hidden aria-live="polite">
+          <div class="need-success-icon">✓</div>
+          <p class="need-eyebrow">SOLICITUD PUBLICADA</p>
+          <h2>Aliados ya está buscando por ti.</h2>
+          <p>Aliados consultará opciones compatibles una por una. Tu WhatsApp permanece privado y solo tú decides cuándo iniciar una conversación.</p>
+          <div class="home-need-success-actions"><a id="home-need-track" class="need-button primary" href="seguimiento.html">Abrir mi enlace privado →</a><button id="home-need-copy" class="need-button secondary" type="button">Copiar enlace</button><button id="home-need-another" class="need-button secondary" type="button">Publicar otra</button><a class="need-button ghost" href="explorar.html">Explorar negocios</a></div>
+        </div>
+
+        <aside class="home-need-business-card need-card">
+          <span class="home-need-business-icon">🏪</span>
+          <p class="need-eyebrow">PARA NEGOCIOS</p>
+          <h3>Recibe solo solicitudes compatibles con tu negocio.</h3>
+          <p id="home-need-business-status">Si tienes un negocio, inicia sesión para ver solicitudes de personas que ya están buscando algo.</p>
+          <div class="home-need-business-benefits">
+            <span>✓ Solicitudes con zona</span>
+            <span>✓ Presupuesto cuando existe</span>
+            <span>✓ WhatsApp privado</span>
+            <span>✓ Cotización por WhatsApp</span>
+          </div>
+          <a id="home-need-business-button" class="need-button primary" href="login.html?return=oportunidades.html">Entrar a oportunidades →</a>
+          <small id="home-need-business-meta">Solo negocios vinculados pueden ver los datos de contacto.</small>
+        </aside>
+      </div>
+
+      <div id="home-last-need" class="home-last-need" hidden>
+        <span>◉</span><div><small>TU ÚLTIMA SOLICITUD</small><strong data-last-need-copy>Consultando estado…</strong></div><a id="home-last-need-link" href="seguimiento.html">Ver seguimiento →</a>
+      </div>
+
+      <section class="home-activity-card" aria-labelledby="home-activity-title">
+        <div class="home-activity-heading"><div><p class="need-eyebrow">ACTIVIDAD REAL · EN VIVO</p><h3 id="home-activity-title">Aliados está trabajando ahora.</h3><p id="home-need-activity-status">Consultando actividad real…</p></div><div class="home-activity-kpis"><span><strong id="home-need-activity-total">0</strong><small>abiertas</small></span><span><strong id="home-need-activity-replies">0</strong><small>respuestas</small></span></div></div>
+        <div id="home-need-activity-list" class="home-activity-list" aria-live="polite"><div class="home-activity-empty"><span>◌</span><div><strong>Cargando actividad…</strong><p>Solo mostramos solicitudes reales de la red.</p></div></div></div>
+      </section>
+    </div>
+  </section>
+
+  <main id="live-experience" class="live-home" hidden>
+    <section class="live-hero" id="live-home" aria-labelledby="live-title">
+      <div class="live-hero-copy-new">
+        <span class="live-network-status"><i></i> DIRECTORIO ACTIVO</span>
+        <p class="live-hero-eyebrow">ENCUENTRA · COMPARA · CONTACTA</p>
+        <h1 id="live-title">Encuentra una solución local <span>sin perder tiempo.</span></h1>
+        <p class="live-hero-lead">Busca un producto, servicio o lugar. Revisa muestras reales y contacta directamente al negocio que pueda ayudarte.</p>
+
+        <div class="live-search-box live-search-primary" role="search">
+          <label for="live-search">¿Qué necesitas hoy?</label>
+          <div>
+            <input id="live-search" type="search" placeholder="Ej. galletas, ropa biker, diseño, tacos…" autocomplete="off">
+            <button id="live-search-button" type="button">Buscar en el directorio</button>
+          </div>
+        </div>
+
+        <div class="live-hero-actions">
+          <a class="button button-primary" href="explorar.html">Explorar el directorio <span>→</span></a>
+          <a class="button button-secondary" href="#lo-necesito">Publicar lo que necesito</a>
+        </div>
+        <p id="live-load-status" class="live-load-status">Cargando muestras reales…</p>
+      </div>
+
+      <aside class="live-sample-preview" aria-label="Vista previa de muestras reales">
+        <div class="live-preview-heading">
+          <div><span>MUESTRAS REALES</span><strong>Publicadas en la red</strong></div>
+          <a href="#live-samples">Ver todas ↓</a>
+        </div>
+        <div id="live-preview-grid" class="live-preview-grid" aria-live="polite">
+          <span class="live-preview-skeleton"></span><span class="live-preview-skeleton"></span><span class="live-preview-skeleton"></span>
+        </div>
+        <div class="live-stats" aria-label="Contenido disponible">
+          <article><strong id="live-sample-count">0</strong><span>Muestras</span></article>
+          <article><strong id="live-category-count">0</strong><span>Tipos</span></article>
+          <article><strong id="live-promotion-count">0</strong><span>Promociones</span></article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="live-section live-category-section" id="live-categories">
+      <div class="live-section-heading">
+        <div><p>EMPIEZA POR AQUÍ</p><h2>¿Qué quieres encontrar?</h2><span class="live-section-copy">Elige un tipo de negocio o escribe exactamente lo que necesitas.</span></div>
+        <a href="explorar.html">Abrir directorio →</a>
+      </div>
+      <div class="live-category-list" id="live-category-list"></div>
+    </section>
+
+    <section class="live-section" id="live-samples">
+      <div class="live-section-heading">
+        <div><p>FOTOS PUBLICADAS POR LOS NEGOCIOS</p><h2>Muestras reales de lo que puedes encontrar.</h2><span class="live-section-copy">Cada imagen pertenece a un perfil público de Aliados Fantasma.</span></div>
+        <a href="explorar.html">Ver todos los perfiles →</a>
+      </div>
+      <div class="live-sample-grid" id="live-sample-grid">
+        <div class="live-skeleton"></div><div class="live-skeleton"></div><div class="live-skeleton"></div>
+      </div>
+      <div class="live-empty hidden" id="live-sample-empty">
+        <img src="aliados-fantasma-icono.webp" alt="">
+        <h3>Las primeras muestras están por publicarse.</h3>
+        <p>Mientras tanto, puedes buscar directamente en el directorio.</p>
+      </div>
+    </section>
+
+    <section class="live-section hidden" id="live-promotions-section">
+      <div class="live-section-heading">
+        <div><p>OFERTAS PUBLICADAS</p><h2>Promociones reales y vigentes.</h2></div>
+      </div>
+      <div class="live-promotion-track" id="live-promotion-track"></div>
+    </section>
+
+    <section class="live-section live-next-step" aria-labelledby="live-next-title">
+      <div class="live-section-heading">
+        <div><p>DOS FORMAS DE ENCONTRARLO</p><h2 id="live-next-title">Elige la más fácil para ti.</h2></div>
+      </div>
+      <div class="live-choice-grid">
+        <article><span>1</span><div><p>QUIERO BUSCAR</p><h3>Revisar opciones por mi cuenta</h3><small>Usa filtros sencillos y abre el perfil que te interese.</small></div><a href="explorar.html">Ir al directorio →</a></article>
+        <article><span>2</span><div><p>QUIERO QUE ME ENCUENTREN</p><h3>Publicar lo que necesito</h3><small>Describe tu necesidad y deja que los negocios compatibles respondan.</small></div><a href="#lo-necesito">Publicar gratis →</a></article>
+      </div>
+      <div class="live-directory-cta">
+        <div><span>PARA NEGOCIOS</span><h2>¿Quieres mostrar aquí tu trabajo real?</h2><p>Crea tu perfil, agrega fotografías y envíalo a revisión.</p></div>
+        <a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a>
       </div>
     </section>
   </main>
 
-  <footer id="pie" data-section-key="footer">
-    <div class="marca marca-logo marca-logo-footer"><img src="logo-nombre.png" alt="Fantasmas Biker's Shop"></div>
-    <p data-setting-text="footer_tagline">Rodando desde Cd. Azteca.</p>
-    <small data-setting-text="footer_copyright">© 2026 Fantasmas Biker's Shop · Sitio oficial</small>
+  <footer>
+    <div class="footer-brand"><img src="aliados-fantasma-icono.webp" alt=""><span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos.</small></span></div>
+    <div class="footer-links"><a href="#lo-necesito">Lo necesito</a><a href="terminos.html?from=index">Términos</a><a href="privacidad.html?from=index">Privacidad</a><a href="ayuda.html?from=index">Ayuda</a><a href="registro.html">Registro</a></div>
+    <span class="copyright">© 2026 Aliados Fantasma</span>
   </footer>
 
-  <a class="whatsapp-flotante whatsapp-link" href="https://wa.me/525610329215" target="_blank" aria-label="Contactar por WhatsApp">✆</a>
-
-  <dialog class="product-image-dialog" id="productImageDialog" aria-labelledby="productImageTitle">
-    <header><div><p>VISTA COMPLETA</p><h2 id="productImageTitle">Producto</h2></div><button type="button" id="productImageClose" aria-label="Cerrar imagen">×</button></header>
-    <div class="product-image-stage"><img id="productImageFull" alt=""></div>
-  </dialog>
-
-  <div class="payment-return-notice" id="paymentReturnNotice" hidden><div><b id="paymentReturnTitle"></b><span id="paymentReturnText"></span></div><button type="button" id="closePaymentNotice" aria-label="Cerrar">×</button></div>
-
-  <button class="cart-floating-button" id="cartOpenButton" type="button" aria-label="Abrir carrito"><span>🛒</span><b id="cartCount">0</b><small>Carrito</small></button>
-  <div class="cart-overlay" id="cartOverlay" hidden></div>
-  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Carrito de compras">
-    <header><div><p>TIENDA OFICIAL</p><h2>Tu carrito</h2></div><button type="button" id="cartCloseButton" aria-label="Cerrar carrito">×</button></header>
-    <div class="cart-items" id="cartItems"></div>
-    <footer>
-      <div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
-      <small>El envío se cotiza por separado. También puedes recoger en tienda.</small>
-      <button class="cart-primary" type="button" id="cartCheckoutButton">Finalizar pedido</button>
-      <button class="cart-secondary" type="button" id="cartQuoteButton">Cotizar por WhatsApp</button>
-    </footer>
-  </aside>
-
-  <dialog class="checkout-dialog" id="checkoutDialog">
-    <form id="checkoutForm">
-      <header><div><p>PEDIDO FANTASMAS</p><h2>Finalizar compra</h2></div><button type="button" id="checkoutCloseButton" aria-label="Cerrar">×</button></header>
-      <div class="checkout-grid">
-        <label>Nombre completo<input name="name" required maxlength="120" autocomplete="name"></label>
-        <label>WhatsApp<input name="phone" required inputmode="tel" maxlength="20" autocomplete="tel"></label>
-        <label class="checkout-wide">Correo electrónico<input name="email" type="email" maxlength="160" autocomplete="email" placeholder="Para recibir información del pago"></label>
-        <label class="checkout-wide">Entrega<select name="delivery_method"><option value="pickup">Recoger en Fantasmas Biker's Shop</option><option value="shipping_quote">Cotizar envío</option></select></label>
-        <label class="checkout-wide" id="shippingAddressField" hidden>Zona o dirección de envío<textarea name="delivery_address" rows="3" maxlength="500" placeholder="Alcaldía/municipio, colonia, C.P. y referencias"></textarea></label>
-        <label class="checkout-wide">Notas del pedido<textarea name="notes" rows="3" maxlength="500" placeholder="Modelo, color, horario u otra indicación"></textarea></label>
-        <div class="checkout-wide coupon-field">
-          <label for="couponCodeInput">Código promocional</label>
-          <div class="coupon-entry"><input id="couponCodeInput" name="coupon_code" maxlength="32" autocomplete="off" placeholder="Ej. FANTASMA10"><button type="button" class="cart-secondary coupon-apply-button" id="applyCouponButton">Aplicar</button></div>
-          <small>Las ofertas automáticas y el código se acumulan.</small>
-          <p class="coupon-feedback" id="couponFeedback" aria-live="polite"></p>
-        </div>
-      </div>
-      <fieldset class="payment-methods"><legend>¿Cómo deseas continuar?</legend>
-        <label id="mercadoPagoMethod"><input type="radio" name="payment_method" value="mercadopago" checked><span><b>Pagar en línea</b><small>Tarjeta, saldo y medios disponibles en Mercado Pago.</small></span></label>
-        <label id="transferMethod"><input type="radio" name="payment_method" value="transfer"><span><b>Transferencia</b><small>Genera el pedido y recibe los datos para transferir.</small></span></label>
-        <label id="quoteMethod"><input type="radio" name="payment_method" value="quote"><span><b>Solicitar cotización</b><small>Envía el carrito por WhatsApp sin pagar todavía.</small></span></label>
-      </fieldset>
-      <div class="checkout-summary"><span>Total de productos</span><strong id="checkoutTotal">$0</strong><div class="checkout-discount-lines" id="checkoutDiscountLines"></div><small id="checkoutDeliveryNote">Recoger en tienda · sin costo de envío</small></div>
-      <label class="checkout-accept checkout-email" id="emailNotificationOption" hidden><input type="checkbox" name="email_notifications"> Quiero recibir por correo las actualizaciones de este pedido.</label>
-      <label class="checkout-accept"><input type="checkbox" name="accept" required> Confirmo que mis datos y productos son correctos.</label>
-      <p class="checkout-status" id="checkoutStatus"></p>
-      <div class="checkout-actions"><button type="button" class="cart-secondary" id="checkoutCancelButton">Cancelar</button><button type="submit" class="cart-primary" id="checkoutSubmitButton">Continuar</button></div>
-    </form>
-    <section class="transfer-result" id="transferResult" hidden><p>PEDIDO REGISTRADO</p><h2 id="transferOrderNumber"></h2><div id="bankDetails"></div><p>Envía tu comprobante por WhatsApp para confirmar el pedido.</p><a id="transferWhatsappButton" target="_blank" rel="noopener">Enviar comprobante</a><a id="transferTrackingButton">Consultar mi pedido</a><button type="button" id="transferFinishButton">Terminar</button></section>
-  </dialog>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script src="script.js"></script>
-  <script src="site-editor.js?v=14"></script>
-  <script src="public-data.js?v=14"></script>
-  <script src="shop-cart.js?v=14"></script>
+  <noscript><div class="noscript">Activa JavaScript para ver la cuenta regresiva.</div></noscript>
+  <div class="mobile-cta" aria-label="Acciones rápidas">
+    <a href="#lo-necesito">Lo necesito</a>
+    <a href="login.html?return=oportunidades.html">Oportunidades</a>
+  </div>
+  <script type="module" src="index-necesito.js?v=20260820-PRIVADO1"></script>
+  <script type="module" src="prelaunch-real.js?v=20260827-SAMPLES1"></script>
+  <script type="module" src="lanzamiento.js?v=20260827-HOME3"></script>
+  <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>
+  <script src="af-modern-2026.js?v=20260815-VIEWPORT1" defer></script>
+  <script src="mobile-2026.js?v=20260815-MOBILE-RC2" defer></script>
 </body>
 </html>
