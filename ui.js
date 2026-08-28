@@ -47,9 +47,16 @@ export function shell(profile, user) {
     link.innerHTML = '<span aria-hidden="true">⚡</span>Demanda y MATCH';
     nav.appendChild(link);
   }
+  const routeName = (value) => {
+    const path = new URL(value, location.href).pathname;
+    const last = decodeURIComponent(path.split('/').filter(Boolean).pop() || 'index');
+    return last.replace(/\.html$/i, '');
+  };
   nav?.querySelectorAll('a.nav-link').forEach(link => {
-    const current = new URL(link.href, location.href).pathname.split('/').pop() === location.pathname.split('/').pop();
+    const current = routeName(link.href) === routeName(location.href);
     link.classList.toggle('active', current);
+    if (current) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
   });
   if ($('#user-name')) $('#user-name').textContent = profile.nombre || 'Administrador';
   if ($('#user-email')) $('#user-email').textContent = user.email || '';
@@ -60,6 +67,11 @@ export function shell(profile, user) {
     $('#overlay')?.classList.remove('hidden');
   });
   $('#overlay')?.addEventListener('click', () => {
+    $('#sidebar')?.classList.remove('open');
+    $('#overlay')?.classList.add('hidden');
+  });
+  nav?.addEventListener('click', event => {
+    if (!event.target.closest('a.nav-link')) return;
     $('#sidebar')?.classList.remove('open');
     $('#overlay')?.classList.add('hidden');
   });

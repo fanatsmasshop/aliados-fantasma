@@ -1,6 +1,6 @@
 import { requireAdmin, logout } from './auth.js?v=20260718-120';
 import { supabase } from './supabase-client.js?v=20260718-120';
-import { shell, esc } from './ui.js?v=20260720-600';
+import { shell, esc } from './ui.js?v=20260828-ADMIN3';
 document.body.classList.add('af-page', 'af-page-admin');
 const auth=await requireAdmin();
 if(auth){shell(auth.profile,auth.user);document.querySelector('#logout-button')?.addEventListener('click',logout);document.querySelector('#demand-refresh')?.addEventListener('click',load);await load();}

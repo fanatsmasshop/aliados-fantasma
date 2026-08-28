@@ -1,6 +1,6 @@
 import { requireAdmin, logout } from './auth.js?v=20260717-2';
 import { supabase } from './supabase-client.js?v=20260717-2';
-import { shell, esc, slugify, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260717-2';
+import { shell, esc, slugify, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260828-ADMIN3';
 import { populateStateSelect } from './mexico-geo.js?v=20260814-NACIONAL1';
 
 let businesses = [];

@@ -1,6 +1,6 @@
 import { requireAdmin, logout } from './auth.js?v=20260717-2';
 import { supabase } from './supabase-client.js?v=20260717-2';
-import { shell, esc, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260717-2';
+import { shell, esc, fmt, toast, openModal, closeModal, setLoading } from './ui.js?v=20260828-ADMIN3';
 let rows=[],current=null;const auth=await requireAdmin();
 const labels={en_revision:'En revisión',cambios_solicitados:'Cambios solicitados',aprobado:'Aprobado · en espera',publicado:'Publicado',rechazado:'Rechazado',borrador:'Borrador'};
 function quality(data={}){const checks=[['Nombre',data.nombre],['Categoría',data.categoria],['Descripción corta',data.descripcion_corta],['Descripción completa',data.descripcion],['WhatsApp',data.whatsapp],['Dirección',data.direccion],['Municipio',data.municipio],['Logo',data.logo_url],['Portada',data.portada_url],['Horarios',(data.horarios||[]).some(x=>!x.cerrado&&x.abre&&x.cierra)],['Galería',(data.galeria||[]).length>=1],['Redes',data.facebook||data.instagram||data.tiktok||data.youtube||data.web],['Mapa',data.maps],['Promoción',(data.promociones||[]).length>=1]];const done=checks.filter(x=>Boolean(x[1])).length;return{score:Math.round(done/checks.length*100),missing:checks.filter(x=>!x[1]).map(x=>x[0])}}
