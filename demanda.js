@@ -1,6 +1,7 @@
 import { requireAdmin, logout } from './auth.js?v=20260718-120';
 import { supabase } from './supabase-client.js?v=20260718-120';
 import { shell, esc } from './ui.js?v=20260720-600';
+document.body.classList.add('af-page', 'af-page-admin');
 const auth=await requireAdmin();
 if(auth){shell(auth.profile,auth.user);document.querySelector('#logout-button')?.addEventListener('click',logout);document.querySelector('#demand-refresh')?.addEventListener('click',load);await load();}
 const age=v=>{const min=Math.max(0,Math.floor((Date.now()-new Date(v).getTime())/60000));if(min<60)return`${min} min`;const h=Math.floor(min/60);if(h<24)return`${h} h`;return`${Math.floor(h/24)} d`;};

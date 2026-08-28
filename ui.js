@@ -39,6 +39,18 @@ export function toast(message, type = 'success') {
 }
 
 export function shell(profile, user) {
+  const nav = $('#sidebar .nav-list');
+  if (nav && !nav.querySelector('a[href="demanda.html"]')) {
+    const link = document.createElement('a');
+    link.className = 'nav-link';
+    link.href = 'demanda.html';
+    link.innerHTML = '<span aria-hidden="true">⚡</span>Demanda y MATCH';
+    nav.appendChild(link);
+  }
+  nav?.querySelectorAll('a.nav-link').forEach(link => {
+    const current = new URL(link.href, location.href).pathname.split('/').pop() === location.pathname.split('/').pop();
+    link.classList.toggle('active', current);
+  });
   if ($('#user-name')) $('#user-name').textContent = profile.nombre || 'Administrador';
   if ($('#user-email')) $('#user-email').textContent = user.email || '';
   if ($('#user-initial')) $('#user-initial').textContent = (profile.nombre || 'A').charAt(0).toUpperCase();
