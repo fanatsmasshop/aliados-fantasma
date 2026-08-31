@@ -1,20 +1,30 @@
-HOTFIX URGENTE — MODO ADMINISTRADOR Y CENTRO DE MARKETING
+ALIADOS FANTASMA — HOTFIX URGENTE 2026-08-31
 
-Reemplaza únicamente estos 4 archivos en la raíz del repositorio:
-- panel.js
-- panel.html
-- marketing.js
-- marketing.html
+OBJETIVO
+- Mantener el arreglo de supabase-client.js que evita la pantalla negra.
+- Garantizar que af-ui-stability.js realmente se ejecute.
+- Corregir modales fuera del viewport, scroll viejo, botones inaccesibles,
+  mensajes/toasts fuera de pantalla y overflow horizontal.
+- Evitar que Cloudflare/Chrome mezclen JS/CSS nuevos con versiones viejas.
 
-No ejecutes SQL adicional.
+SUBIR A LA RAÍZ DEL REPOSITORIO (reemplazar si ya existen):
+1. supabase-client.js
+2. af-ui-stability.js
+3. _headers
 
-Después espera el despliegue de Cloudflare Pages y recarga con Ctrl + F5.
+NO SUBIR HTML DE ESTE PAQUETE.
+NO EJECUTAR SQL.
+NO BORRAR config.js.
 
-Correcciones:
-- Evita el error "Cannot read properties of null (reading 'nombre')".
-- Acepta respuestas RPC como objeto o arreglo.
-- Si el RPC no devuelve el negocio, lo consulta directamente por UUID.
-- Carga datos reales del negocio en modo administrador.
-- Conserva el parámetro admin_business al abrir el Centro de Marketing.
-- El Centro de Marketing también carga el negocio administrado.
-- Agrega validaciones para negocio, borrador, galería y promociones nulos.
+PRUEBA DESPUÉS DEL DEPLOY
+1. Ctrl+F5 en escritorio.
+2. Abrir login.
+3. Abrir panel y bajar a media página.
+4. Abrir cualquier modal/revisión: debe aparecer en la pantalla actual.
+5. En móvil, abrir un input dentro de modal: el teclado no debe ocultar acciones.
+6. En consola: afUIAudit()
+
+IMPORTANTE
+Este hotfix NO rediseña todo Aliados ni sustituye el proyecto actual. Es una
+reparación transversal y segura para estabilizar la interfaz mientras se trabaja
+sobre el ZIP completo más reciente.
