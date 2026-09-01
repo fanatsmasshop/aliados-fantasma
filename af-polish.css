@@ -1,0 +1,49 @@
+/* Aliados Fantasma · pulido visual y estados robustos · 2026-08-31 */
+:root{--af-polish-max:1320px}
+html{scroll-padding-top:94px}
+body.af-page-home{overflow-x:hidden}
+body.af-page-home .live-home{width:min(calc(100% - 40px),var(--af-polish-max))!important;padding:26px 0 72px!important}
+body.af-page-home .live-hero{grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr)!important;gap:18px!important;min-height:0!important;align-items:stretch!important}
+body.af-page-home .live-slider-wrap,body.af-page-home .live-discovery-card{min-height:540px!important;border-radius:26px!important;isolation:isolate}
+body.af-page-home .live-slider-wrap{background:radial-gradient(circle at 78% 15%,rgba(70,173,255,.14),transparent 34%),radial-gradient(circle at 18% 88%,rgba(255,61,161,.12),transparent 38%),#090f1a!important}
+body.af-page-home .live-slider{min-height:540px}
+body.af-page-home .live-slide{min-height:540px}
+body.af-page-home .live-slide.active{opacity:1!important;visibility:visible!important}
+body.af-page-home .live-slide-content{opacity:1!important;visibility:visible!important;transform:none!important;max-width:760px!important;padding:48px 44px 82px!important}
+body.af-page-home .live-slide-bg{opacity:.68!important}
+body.af-page-home .live-slide-bg.fallback{opacity:.18!important;object-fit:contain!important;padding:15%!important}
+body.af-page-home .live-slide-logo{margin:16px 0!important}
+body.af-page-home .live-slide h1{font-size:clamp(2.8rem,5.1vw,5.7rem)!important;max-width:12ch!important}
+body.af-page-home .live-discovery-card{padding:34px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+body.af-page-home .live-discovery-card>img{width:150px!important;max-height:118px!important;object-fit:contain!important;margin:16px 0 18px!important}
+body.af-page-home .live-discovery-card h2{font-size:clamp(2.25rem,3.5vw,3.8rem)!important;margin:.15em 0!important}
+body.af-page-home .live-discovery-card>p{margin:10px 0 0!important}
+body.af-page-home .live-stats{margin-top:auto!important}
+body.af-page-home .live-section{padding-top:62px!important}
+body.af-page-home .live-section-heading{margin-bottom:22px!important;align-items:flex-end!important}
+body.af-page-home .live-section-heading h2{font-size:clamp(2.25rem,3.8vw,4rem)!important;line-height:.98!important;text-wrap:balance}
+body.af-page-home .live-featured-grid,body.af-page-home .live-business-grid{gap:16px!important}
+body.af-page-home .live-business-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+body.af-page-home .live-business-card{min-width:0!important}
+body.af-page-home .live-card-media{height:225px!important;background:#0b111c!important}
+body.af-page-home .live-card-cover{object-fit:cover!important}
+body.af-page-home .live-card-cover.fallback{object-fit:contain!important;padding:15%!important;opacity:.34!important}
+body.af-page-home .live-card-body h3{font-size:clamp(1.2rem,2vw,1.55rem)!important;line-height:1.1!important;overflow-wrap:anywhere}
+body.af-page-home .live-skeleton{height:240px!important;animation-duration:1s!important}
+body.af-page-home .live-empty,body.af-page-home .live-load-error{max-width:760px;margin:0 auto;padding:34px 24px!important;background:linear-gradient(145deg,rgba(14,21,35,.75),rgba(8,12,21,.82))!important;border-style:solid!important}
+body.af-page-home .live-empty h3{font-size:1.25rem!important}
+body.af-page-home .live-directory-cta{margin-top:28px!important}
+body.af-page-home .live-category-list{padding-bottom:2px!important}
+body.af-page-home #live-featured-section.hidden,body.af-page-home #live-promotions-section.hidden,body.af-page-home #live-business-grid.hidden{display:none!important}
+body.af-page-home.af-live-empty-network .live-hero,body.af-page-home .live-home.empty-network .live-hero{grid-template-columns:1fr!important;max-width:920px!important;margin-inline:auto!important}
+body.af-page-home.af-live-empty-network .live-slider-wrap,body.af-page-home .live-home.empty-network .live-slider-wrap{display:none!important}
+body.af-page-home.af-live-empty-network #live-categories,body.af-page-home.af-live-empty-network #live-featured-section,body.af-page-home.af-live-empty-network #live-promotions-section{display:none!important}
+body.af-page-home.af-live-empty-network #live-businesses{padding-top:38px!important}
+body.af-page-home .af-growth-strip{width:min(calc(100% - 40px),var(--af-polish-max));max-width:none!important;margin:20px auto 0!important;padding:0!important}
+body.af-page-home .home-need-section{padding-block:42px!important}
+body.af-page-home .home-activity-card{margin-top:18px!important}
+body.af-page-home .need-main-card,body.af-page-home .need-business-card{min-width:0!important}
+body.af-page-home img{max-width:100%}
+@media(max-width:1100px){body.af-page-home .live-hero{grid-template-columns:1fr!important}body.af-page-home .live-slider-wrap,body.af-page-home .live-discovery-card{min-height:0!important}body.af-page-home .live-slider,body.af-page-home .live-slide{min-height:520px}body.af-page-home .live-business-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:760px){body.af-page-home .live-home{width:calc(100% - 18px)!important;padding-top:12px!important}body.af-page-home .af-growth-strip{width:calc(100% - 18px)!important}body.af-page-home .live-slider,body.af-page-home .live-slide{min-height:500px}body.af-page-home .live-slide-content{padding:28px 20px 72px!important}body.af-page-home .live-slider-wrap,body.af-page-home .live-discovery-card{border-radius:20px!important}body.af-page-home .live-discovery-card{padding:24px 20px!important}body.af-page-home .live-section{padding-top:46px!important}body.af-page-home .live-section-heading{align-items:flex-start!important}body.af-page-home .live-section-heading h2{font-size:clamp(2rem,10vw,3rem)!important}body.af-page-home .live-business-grid{grid-template-columns:1fr!important}body.af-page-home .live-card-media{height:230px!important}}
+@media(prefers-reduced-motion:reduce){body.af-page-home *{scroll-behavior:auto!important}.live-slide,.live-business-card,.live-card-cover{transition:none!important}}

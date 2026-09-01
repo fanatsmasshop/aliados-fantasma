@@ -1,0 +1,26 @@
+ALIADOS FANTASMA · REPARACIÓN DE FLUIDEZ / RENDER
+31-08-2026
+
+Este parche se aplica ENCIMA de Aliados-Fantasma-ACTUALIZACION-TOTAL-20260831.
+NO ejecutar SQL. NO modifica Supabase.
+
+Subir los 5 archivos web de este ZIP a la raíz reemplazando los existentes cuando corresponda:
+- index.html
+- home-live.js
+- lanzamiento.js
+- af-polish.css
+- af-polish.js
+
+Corrige:
+- carrusel izquierdo vacío;
+- combinación index nuevo + home-live antiguo/cacheado;
+- 0 negocios mostrado mientras sí existen negocios reales;
+- esqueletos que quedan visibles;
+- secciones vacías con cientos de píxeles desperdiciados;
+- featured/promociones sin datos ocupando espacio;
+- hero demasiado alto y partido;
+- espaciado excesivo entre secciones;
+- fallback de imágenes rotas;
+- adaptación móvil y fluidez visual.
+
+Después de publicar: Ctrl+F5 una vez.

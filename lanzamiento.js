@@ -4,7 +4,7 @@ import {
   formatLaunchDate,
   isAdministrator
 } from './launch-control.js?v=20260730-CINEMA2';
-import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260827-HOME3';
+import { activateLiveHome, deactivateLiveHome } from './home-live.js?v=20260831-POLISH2';
 
 const pad = value => String(Math.max(0, value)).padStart(2, '0');
 const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
@@ -84,14 +84,14 @@ function createRevealBusinessPreview() {
   const message = document.getElementById('launch-reveal-message');
   if (!container) return;
 
-  const cards = [...document.querySelectorAll('#live-sample-grid .live-sample-card')].slice(0, 4);
-  const totalText = document.getElementById('live-sample-count')?.textContent?.trim();
+  const cards = [...document.querySelectorAll('#live-featured-grid .live-business-card')].slice(0, 4);
+  const totalText = document.getElementById('live-business-count')?.textContent?.trim();
   const total = Number.parseInt(totalText || '0', 10);
 
   container.replaceChildren();
   cards.forEach(card => {
-    const image = card.querySelector('.live-sample-image');
-    const heading = card.querySelector('.live-sample-source strong');
+    const image = card.querySelector('.live-card-logo');
+    const heading = card.querySelector('h3');
     if (!image || !heading) return;
 
     const item = document.createElement('span');
@@ -102,14 +102,14 @@ function createRevealBusinessPreview() {
     clone.alt = '';
 
     const name = document.createElement('small');
-    name.textContent = heading.textContent?.trim() || 'Muestra real';
+    name.textContent = heading.textContent?.trim() || 'Negocio aliado';
 
     item.append(clone, name);
     container.append(item);
   });
 
   if (message && Number.isFinite(total) && total > 0) {
-    message.textContent = `${total} muestra${total === 1 ? '' : 's'} real${total === 1 ? '' : 'es'} disponible${total === 1 ? '' : 's'} en la red.`;
+    message.textContent = `${total} negocio${total === 1 ? '' : 's'} ya ${total === 1 ? 'forma' : 'forman'} parte de la red.`;
   }
 }
 
