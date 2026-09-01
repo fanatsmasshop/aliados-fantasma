@@ -1,446 +1,195 @@
 <!doctype html>
-<html lang="es" class="af-postlaunch">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Dinos qué necesitas y Aliados Fantasma encuentra negocios compatibles para ayudarte. Explora la red local, publica una solicitud y recibe propuestas.">
+  <meta name="description" content="Aliados Fantasma conecta personas con negocios locales. Publica lo que necesitas o explora negocios de forma sencilla.">
   <meta name="theme-color" content="#06080d">
-  <meta property="og:title" content="Aliados Fantasma | Dinos qué necesitas">
-  <meta property="og:description" content="MATCH conecta solicitudes reales con negocios compatibles. Publica lo que necesitas y recibe opciones sin buscar uno por uno.">
-  <title>Aliados Fantasma | Encuentra negocios que pueden ayudarte</title>
-  <link rel="icon" href="aliados-fantasma-icono.webp" type="image/webp">
-  <link rel="stylesheet" href="lanzamiento.css?v=20260801-NEON-RC6">
-  <link rel="stylesheet" href="mobile-global.css?v=20260725-RC10.3">
-  <link rel="stylesheet" href="af-pro-unified.css?v=20260730-MASSIVE">
-  <link rel="stylesheet" href="af-fantasmas-style.css?v=20260730-FANTASMAS1">
-  <link rel="stylesheet" href="af-modern-2026.css?v=20260801-RC6.2">
-  <link rel="stylesheet" href="prelaunch-v2.css?v=20260814-STRUCTURAL2">
-  <link rel="stylesheet" href="mobile-2026.css?v=20260815-MOBILE-RC2">
-  <link rel="stylesheet" href="lo-necesito.css?v=20260819-MATCH1">
-  <link rel="stylesheet" href="af-growth.css?v=20260831-G1">
-  <link rel="stylesheet" href="af-polish.css?v=20260831-POLISH2">
+  <meta property="og:title" content="Aliados Fantasma | Fácil de usar">
+  <meta property="og:description" content="Dinos qué necesitas y te conectamos con negocios compatibles. También puedes explorar el directorio o registrar tu negocio.">
+  <title>Aliados Fantasma | Más simple, más claro</title>
+  <link rel="icon" href="aliados-fantasma-icono.png" type="image/png">
+  <link rel="stylesheet" href="af-simple.css?v=20260901-S1">
   <link rel="manifest" href="manifest.webmanifest">
 </head>
-<body class="af-page af-page-home">
-
-  <section id="launch-reveal" class="launch-reveal" hidden aria-hidden="true" aria-label="Presentación de apertura de Aliados Fantasma">
-    <div class="launch-reveal__curtain launch-reveal__curtain--left" aria-hidden="true"></div>
-    <div class="launch-reveal__curtain launch-reveal__curtain--right" aria-hidden="true"></div>
-    <div class="launch-reveal__ambient" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <div class="launch-reveal__glow" aria-hidden="true"></div>
-    <div class="launch-reveal__network" aria-hidden="true">
-      <svg viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice">
-        <g class="network-lines">
-          <path d="M110 455 L255 350 L410 420 L520 285 L670 360 L855 225"/>
-          <path d="M145 175 L305 245 L455 155 L610 245 L785 145 L900 330"/>
-          <path d="M255 350 L305 245 M410 420 L455 155 M520 285 L610 245 M670 360 L785 145"/>
-        </g>
-        <g class="network-nodes">
-          <circle cx="110" cy="455" r="8"/><circle cx="255" cy="350" r="10"/><circle cx="410" cy="420" r="7"/>
-          <circle cx="520" cy="285" r="13"/><circle cx="670" cy="360" r="8"/><circle cx="855" cy="225" r="10"/>
-          <circle cx="145" cy="175" r="7"/><circle cx="305" cy="245" r="9"/><circle cx="455" cy="155" r="8"/>
-          <circle cx="610" cy="245" r="10"/><circle cx="785" cy="145" r="7"/><circle cx="900" cy="330" r="8"/>
-        </g>
-      </svg>
-    </div>
-
-    <button id="launch-reveal-skip" class="launch-reveal__skip" type="button">Omitir presentación</button>
-
-    <div class="launch-reveal__timeline" role="status" aria-live="polite">
-      <section class="launch-scene launch-scene--intro" data-scene="intro">
-        <p>EL TIEMPO HA LLEGADO</p>
-        <h1>Ha llegado<br>el momento.</h1>
-      </section>
-
-      <section class="launch-scene launch-scene--story" data-scene="story">
-        <p id="launch-story-line">Cada negocio tiene una historia.</p>
-        <span>Historias locales que merecen ser descubiertas.</span>
-      </section>
-
-      <section class="launch-scene launch-scene--connection" data-scene="connection">
-        <p>INICIANDO LA RED</p>
-        <h2 id="launch-connection-status">Conectando negocios…</h2>
-        <div id="launch-reveal-businesses" class="launch-reveal__businesses" aria-label="Primeros negocios de la red"></div>
-      </section>
-
-      <section class="launch-scene launch-scene--identity" data-scene="identity">
-        <div class="launch-reveal__mark" aria-hidden="true">
-          <span class="launch-reveal__ring launch-reveal__ring--one"></span>
-          <span class="launch-reveal__ring launch-reveal__ring--two"></span>
-          <img src="aliados-fantasma-icono.webp" alt="">
-        </div>
-        <p>ALIADOS FANTASMA</p>
-        <h2>La red de negocios locales.</h2>
-      </section>
-
-      <section class="launch-scene launch-scene--promise" data-scene="promise">
-        <div class="launch-promise-words" aria-label="Descubre, conecta y crece">
-          <strong id="launch-promise-word">Descubre.</strong>
-        </div>
-        <p>Una comunidad construida para crecer juntos.</p>
-      </section>
-
-      <section class="launch-scene launch-scene--count" data-scene="count">
-        <p>LA RED ESTÁ LISTA</p>
-        <strong id="launch-final-count">3</strong>
-      </section>
-
-      <section class="launch-scene launch-scene--final" data-scene="final">
-        <img src="aliados-fantasma-icono.webp" alt="" aria-hidden="true">
-        <p>ALIADOS FANTASMA</p>
-        <h2>La red ha despertado.</h2>
-        <span id="launch-reveal-message">Los negocios locales están listos para ser descubiertos.</span>
-      </section>
-    </div>
-
-    <div class="launch-reveal__footer" aria-hidden="true">
-      <span id="launch-reveal-mode-label">PRESENTACIÓN DE LANZAMIENTO</span>
-      <div class="launch-reveal__progress"><span id="launch-reveal-progress-bar"></span></div>
-      <small id="launch-reveal-time">00:28</small>
-    </div>
-    <div class="launch-reveal__portal" aria-hidden="true"></div>
-  </section>
-  <div class="page-noise" aria-hidden="true"></div>
-  <div class="orb orb-blue" aria-hidden="true"></div>
-  <div class="orb orb-pink" aria-hidden="true"></div>
+<body>
+  <div class="bg-orb orb-a" aria-hidden="true"></div>
+  <div class="bg-orb orb-b" aria-hidden="true"></div>
 
   <header class="site-header">
-    <a class="brand" href="#inicio" aria-label="Aliados Fantasma, inicio">
-      <img src="aliados-fantasma-icono.webp" alt="">
-      <span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos</small></span>
-    </a>
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú de navegación">
-      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-    </button>
-    <nav id="main-nav" aria-label="Navegación principal">
-      <div class="drawer-head">
-        <div><small>MENÚ</small><strong>Aliados Fantasma</strong></div>
-        <button class="drawer-close" type="button" aria-label="Cerrar menú">×</button>
-      </div>
-      <a href="#que-es" class="link" data-mode="prelaunch">Qué es</a>
-      <a href="#como-funciona" class="link" data-mode="prelaunch">Cómo funciona</a>
-      <a href="#beneficios" class="link" data-mode="prelaunch">Beneficios</a>
-      <a href="#ciudades" class="link" data-mode="prelaunch">Ciudades</a>
-      <a href="#live-home" class="link" data-mode="live" hidden>Inicio</a>
-      <a href="#live-categories" class="link" data-mode="live" hidden>Categorías</a>
-      <a href="#live-businesses" class="link" data-mode="live" hidden>Negocios</a>
-      <a href="explorar.html" class="link" data-mode="live" hidden>Directorio completo</a>
-      <a href="#lo-necesito" class="link">Lo necesito</a>
-      <a href="login.html" class="link">Iniciar sesión</a>
-      <a href="registro.html" class="button button-small">Registrar negocio</a>
-    </nav>
-  </header>
-  <button class="menu-backdrop" type="button" aria-label="Cerrar menú" tabindex="-1"></button>
-
-  <main id="prelaunch-experience" class="pre2-shell">
-    <section class="pre2-hero" id="inicio">
-      <div class="pre2-network" aria-hidden="true">
-        <span class="pre2-line pre2-line-a"></span>
-        <span class="pre2-line pre2-line-b"></span>
-        <span class="pre2-line pre2-line-c"></span>
-        <i class="pre2-node n1"></i><i class="pre2-node n2"></i><i class="pre2-node n3"></i><i class="pre2-node n4"></i><i class="pre2-node n5"></i>
-        <img src="aliados-fantasma-icono.webp" alt="" class="pre2-watermark">
-      </div>
-
-      <div class="pre2-hero-copy reveal">
-        <div class="pre2-kicker-row">
-          <span id="launch-badge-primary" class="pre2-pill pre2-pill-primary"><i></i> Red local activa</span>
-          <span class="pre2-pill">Red abierta</span>
-        </div>
-        <p class="pre2-eyebrow">NACIMOS EN ECATEPEC · CRECEMOS ZONA POR ZONA</p>
-        <h1>Encuentra <span>negocios locales</span> que sí pueden ayudarte.</h1>
-        <p class="pre2-lead">¿Buscas un producto o servicio? Publica lo que necesitas y deja que MATCH encuentre negocios compatibles que puedan proponerte una solución. Si tienes negocio, también puedes entrar a la red.</p>
-        <div class="pre2-actions">
-          <a class="pre2-btn pre2-btn-primary" href="#lo-necesito">Necesito algo <b>→</b></a>
-          <a class="pre2-btn pre2-btn-secondary" href="registro.html">Tengo un negocio</a>
-        </div>
-        <div class="pre2-trust">
-          <span>✓ Solicitud gratis</span>
-          <span>✓ Negocios registrados</span>
-          <span>✓ Contacto por WhatsApp</span>
-        </div>
-      </div>
-
-      <aside class="countdown-card pre2-launch-card reveal" aria-label="Información del lanzamiento">
-        <div class="pre2-launch-head">
-          <span class="pre2-live-dot"></span>
-          <div><small id="launch-status-label">LANZAMIENTO OFICIAL</small><strong>Aliados Fantasma</strong></div>
-        </div>
-        <h2 id="launch-date-heading"><span>24 de agosto de 2026</span><br><em>11:00 a. m.</em></h2>
-        <p id="launch-card-message">La red ya puede empezar a convertir necesidades reales en oportunidades para negocios.</p>
-        <p class="pre2-network-proof" id="pre2-network-proof">La red ya tiene negocios registrados.</p>
-        <div class="pre2-launch-list">
-          <div><span>01</span><p><b>Cuenta inmediata</b><small>Verifica tu correo y entra a tu panel.</small></p></div>
-          <div><span>02</span><p><b>Perfil listo</b><small>Completa datos, fotos, horarios y promociones.</small></p></div>
-          <div><span>03</span><p><b>Red en preparación</b><small>Los perfiles aprobados quedarán listos para abrir al público.</small></p></div>
-        </div>
-        <div class="countdown pre2-countdown" id="countdown">
-          <div><strong id="days">00</strong><span>días</span></div>
-          <div><strong id="hours">00</strong><span>hrs</span></div>
-          <div><strong id="minutes">00</strong><span>min</span></div>
-          <div><strong id="seconds">00</strong><span>seg</span></div>
-        </div>
-        <div class="pre2-progress"><span id="launch-progress"></span></div>
-      </aside>
-    </section>
-
-    <section class="need-promo-section" aria-label="Lo necesito">
-      <div class="need-promo-copy">
-        <span>NUEVA FUNCIÓN · LO NECESITO</span>
-        <h2>No encuentres un negocio. Deja que el negocio te encuentre.</h2>
-        <p>Publica lo que buscas, dónde lo necesitas y tu presupuesto. MATCH la asigna a negocios compatibles; tu WhatsApp se revela solo cuando uno responde.</p>
-      </div>
-      <div class="need-promo-actions">
-        <a class="main" href="#lo-necesito">Publicar aquí mismo →</a>
-        <a class="alt" href="login.html?return=oportunidades.html">Soy negocio: ver oportunidades</a>
-      </div>
-    </section>
-
-    <section class="pre2-preview pre2-real-network" id="que-es">
-      <div class="pre2-heading reveal">
-        <div><p class="pre2-eyebrow">LA RED YA EMPEZÓ</p><h2>Negocios reales que ya forman parte de Aliados.</h2></div>
-        <span id="pre2-real-summary">Cargando negocios registrados…</span>
-      </div>
-      <div class="pre2-real-grid" id="pre2-real-businesses" aria-live="polite">
-        <article class="pre2-real-loading"><span></span><div><b>Cargando la red…</b><small>Consultando negocios registrados.</small></div></article>
-      </div>
-      <div class="pre2-real-proof reveal">
-        <span><i></i> Datos conectados a Aliados Fantasma</span>
-        <p>Estos son negocios reales registrados en Aliados Fantasma. Explora sus perfiles y usa MATCH cuando necesites una solución específica.</p>
-      </div>
-    </section>
-
-    <section class="pre2-benefits" id="beneficios">
-      <article class="reveal"><span>01</span><div><h3>Registro sin espera</h3><p>Verificas tu correo y entras directo a preparar tu negocio.</p></div></article>
-      <article class="reveal"><span>02</span><div><h3>Presencia profesional</h3><p>Información, fotos, contacto, ubicación, horarios y promociones.</p></div></article>
-      <article class="reveal"><span>03</span><div><h3>Descubrimiento local</h3><p>El directorio priorizará negocios según ciudad, municipio y estado.</p></div></article>
-      <article class="reveal"><span>04</span><div><h3>Crece por zonas</h3><p>Priorizamos coincidencias cercanas para que la red tenga utilidad real donde ya hay negocios activos.</p></div></article>
-    </section>
-
-    <section class="pre2-how" id="como-funciona">
-      <div class="pre2-heading reveal">
-        <div><p class="pre2-eyebrow">TRES PASOS</p><h2>Entrar a Aliados ya no depende de una aprobación.</h2></div>
-        <span>Solo la publicación pública del perfil conserva revisión.</span>
-      </div>
-      <div class="pre2-steps">
-        <article class="reveal"><b>1</b><h3>Crea tu cuenta</h3><p>Datos básicos del negocio y tu correo.</p></article>
-        <article class="reveal"><b>2</b><h3>Verifica y entra</h3><p>Abres el enlace de correo y tu panel queda activo.</p></article>
-        <article class="reveal"><b>3</b><h3>Prepara tu perfil</h3><p>Lo completas a tu ritmo y lo envías a revisión cuando esté listo.</p></article>
-      </div>
-    </section>
-
-    <section class="pre2-national" id="ciudades">
-      <div class="pre2-national-copy reveal">
-        <p class="pre2-eyebrow">CRECIMIENTO POR ZONAS</p>
-        <h2>Primero utilidad local, después cobertura.</h2>
-        <p>Aliados nació en Ecatepec y prioriza coincidencias por municipio y estado. El registro puede crecer a nuevas zonas sin sacrificar la relevancia local.</p>
-        <a class="pre2-btn pre2-btn-secondary" href="registro.html">Registrar mi negocio</a>
-      </div>
-      <div class="pre2-national-stat reveal"><strong>LOCAL</strong><span>primero</span><small>Coincidencias por municipio y estado</small></div>
-    </section>
-
-    <section class="pre2-faq" id="faq">
-      <div class="pre2-heading reveal"><div><p class="pre2-eyebrow">PREGUNTAS RÁPIDAS</p><h2>Antes de registrarte.</h2></div></div>
-      <div class="pre2-faq-grid">
-        <details class="reveal"><summary>¿Tengo que esperar aprobación para entrar?</summary><p>No. Después de verificar tu correo puedes entrar inmediatamente a tu panel y comenzar tu perfil.</p></details>
-        <details class="reveal"><summary>¿El registro tiene costo?</summary><p>Actualmente puedes crear tu cuenta y preparar tu perfil sin costo.</p></details>
-        <details class="reveal"><summary>¿Puedo registrarme fuera de Ecatepec?</summary><p>Sí. El registro está abierto para negocios de los 32 estados de México.</p></details>
-        <details class="reveal"><summary>¿Mi perfil aparece inmediatamente?</summary><p>No. La cuenta es inmediata, pero el perfil se revisa antes de publicarse en el directorio.</p></details>
-      </div>
-    </section>
-
-    <section class="pre2-closing reveal">
-      <div><p class="pre2-eyebrow">PREPARA TU NEGOCIO HOY</p><h2>El lanzamiento no tiene que agarrarte empezando desde cero.</h2><p>Verifica tu cuenta, completa tu perfil y llega listo al primer día.</p></div>
-      <div class="pre2-closing-side">
-        <div class="mini-countdown"><strong><span id="days-bottom">00</span> días</strong><i></i><strong><span id="hours-bottom">00</span> horas</strong></div>
-        <a class="pre2-btn pre2-btn-primary" href="registro.html">Registrar mi negocio <b>→</b></a>
-      </div>
-      <span id="closing-eyebrow" hidden>PRÓXIMAMENTE COMIENZA UNA NUEVA ETAPA</span>
-    </section>
-  </main>
-
-  <section id="lo-necesito" class="home-need-section" aria-labelledby="home-need-title">
-    <div class="home-need-shell">
-      <div class="home-need-heading">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Aliados Fantasma, inicio">
+        <img src="aliados-fantasma-icono.png" alt="Aliados Fantasma">
         <div>
-          <p class="need-eyebrow">LO NECESITO · SOLICITUD REAL</p>
-          <h2 id="home-need-title">Dinos qué buscas. <span>Aliados lo convierte en oportunidad.</span></h2>
-          <p>No necesitas cuenta. Publicas tu necesidad y MATCH la muestra solo a negocios compatibles. Tu WhatsApp se revela a un negocio únicamente cuando decide responder.</p>
+          <strong>Aliados Fantasma</strong>
+          <small>Negocios locales, sin complicaciones</small>
         </div>
-        <div class="home-need-flow" aria-label="Cómo funciona">
-          <span><b>1</b> Publicas</span><i></i><span><b>2</b> Negocios la ven</span><i></i><span><b>3</b> Te cotizan</span>
-        </div>
-      </div>
+      </a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#negocios">Negocios</a>
+        <a href="explorar.html">Directorio</a>
+        <a href="login.html">Iniciar sesión</a>
+        <a class="btn btn-primary" href="registro.html">Registrar negocio</a>
+      </nav>
+    </div>
+  </header>
 
-      <div class="home-need-layout">
-        <div id="home-need-form-panel" class="need-card need-form-card home-need-form-card">
-          <div class="need-section-head">
-            <div><p class="need-eyebrow">PUBLICAR SIN SALIR DEL INICIO</p><h2>¿Qué necesitas?</h2><p>Da la información suficiente para que un negocio sepa si puede ayudarte.</p></div>
-            <span class="need-step">⚡</span>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">ALIADOS FANTASMA</span>
+          <h1>Encuentra negocios locales de una forma <span>más fácil</span>.</h1>
+          <p class="lead">Si buscas un producto o servicio, publica tu necesidad y te conectamos con negocios compatibles. Si prefieres, también puedes explorar el directorio por tu cuenta.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="necesito.html">Necesito algo</a>
+            <a class="btn btn-secondary" href="explorar.html">Ver negocios</a>
           </div>
-          <div id="home-need-alert" class="need-alert" role="alert"></div>
-          <form id="home-need-form" class="need-form-grid" novalidate>
-            <label class="need-field wide"><span>¿Qué estás buscando? *</span><input name="titulo" maxlength="100" required placeholder="Ej. Busco quien repare un Samsung A55 hoy"></label>
-            <label class="need-field wide"><span>Detalles para cotizar *</span><textarea name="descripcion" maxlength="1500" required placeholder="Modelo, cantidad, medidas, problema, características o cualquier dato que ayude al negocio a darte una opción real."></textarea></label>
-
-            <label class="need-field"><span>Categoría *</span><select id="home-need-category" name="categoria_id" required><option value="">Selecciona una categoría</option></select></label>
-            <label class="need-field"><span>Presupuesto máximo</span><input name="presupuesto_max" type="number" min="0" step="1" inputmode="decimal" placeholder="Ej. 1500"></label>
-
-            <label class="need-field"><span>Estado *</span><select id="home-need-state" name="estado_region" required><option value="">Selecciona tu estado</option></select></label>
-            <label class="need-field"><span>Municipio / alcaldía *</span><input name="municipio" maxlength="100" required placeholder="Ej. Ecatepec de Morelos"></label>
-
-            <div class="need-field wide"><span>¿Qué tan urgente es?</span><div class="need-urgency home-need-urgency">
-              <input id="home-urg-normal" type="radio" name="urgencia" value="normal" checked><label for="home-urg-normal">Sin prisa</label>
-              <input id="home-urg-week" type="radio" name="urgencia" value="esta_semana"><label for="home-urg-week">Esta semana</label>
-              <input id="home-urg-24" type="radio" name="urgencia" value="24_horas"><label for="home-urg-24">24 horas</label>
-              <input id="home-urg-today" type="radio" name="urgencia" value="hoy"><label for="home-urg-today">Hoy</label>
-            </div></div>
-
-            <label class="need-field"><span>Tu nombre *</span><input name="nombre_cliente" maxlength="80" required autocomplete="name" placeholder="Nombre o apodo"></label>
-            <label class="need-field"><span>WhatsApp *</span><input name="whatsapp" inputmode="tel" autocomplete="tel" required placeholder="10 dígitos"></label>
-
-            <label class="need-consent"><input name="acepta_compartir_contacto" type="checkbox" required><span>Autorizo que mi solicitud sea asignada a <strong>negocios compatibles de Aliados Fantasma</strong> y que mi nombre y WhatsApp se revelen únicamente cuando un negocio responda para ayudarme. La solicitud expira después de 7 días.</span></label>
-
-            <div class="need-submit-row">
-              <small>Aliados conecta a las partes; precio, disponibilidad, entrega y pago se acuerdan directamente con el negocio.</small>
-              <button id="home-need-submit" class="need-button primary" type="submit">Publicar y recibir opciones <span>→</span></button>
-            </div>
-          </form>
-          <a class="home-need-advanced" href="necesito.html">¿Quieres agregar fecha, colonia y rango de presupuesto? Abrir formulario detallado →</a>
+          <div class="hero-note">Tu WhatsApp solo se comparte cuando un negocio decide responder.</div>
         </div>
 
-        <div id="home-need-success" class="need-card home-need-success" hidden aria-live="polite">
-          <div class="need-success-icon">✓</div>
-          <p class="need-eyebrow">SOLICITUD PUBLICADA</p>
-          <h2>Ya está dentro de Aliados.</h2>
-          <p>MATCH la mostrará a negocios compatibles durante los próximos 7 días. Tu contacto permanecerá protegido hasta que un negocio responda.</p>
-          <div class="home-need-success-actions"><a id="home-need-track" class="need-button primary" href="seguimiento.html">Seguir mi solicitud →</a><button id="home-need-another" class="need-button secondary" type="button">Publicar otra</button><a class="need-button ghost" href="explorar.html">Explorar negocios</a></div>
-        </div>
-
-        <aside class="home-need-business-card need-card">
-          <span class="home-need-business-icon">🏪</span>
-          <p class="need-eyebrow">PARA NEGOCIOS</p>
-          <h3>No esperes visitas. Revisa quién ya está buscando.</h3>
-          <p id="home-need-business-status">Si tienes un negocio, inicia sesión para ver solicitudes de personas que ya están buscando algo.</p>
-          <div class="home-need-business-benefits">
-            <span>✓ Solicitudes con zona</span>
-            <span>✓ Presupuesto cuando existe</span>
-            <span>✓ Contacto autorizado</span>
-            <span>✓ Cotización por WhatsApp</span>
+        <aside class="hero-panel">
+          <div class="mini-stats">
+            <article>
+              <strong id="stat-businesses">—</strong>
+              <span>Negocios</span>
+            </article>
+            <article>
+              <strong id="stat-categories">—</strong>
+              <span>Categorías</span>
+            </article>
+            <article>
+              <strong>3</strong>
+              <span>Pasos</span>
+            </article>
           </div>
-          <a id="home-need-business-button" class="need-button primary" href="login.html?return=oportunidades.html">Entrar a oportunidades →</a>
-          <small id="home-need-business-meta">El contacto se libera únicamente después de responder una oportunidad asignada por MATCH.</small>
+          <div class="simple-steps">
+            <article><b>1</b><div><strong>Dinos qué buscas</strong><p>Producto, servicio, zona y urgencia.</p></div></article>
+            <article><b>2</b><div><strong>MATCH revisa</strong><p>Se buscan negocios compatibles.</p></div></article>
+            <article><b>3</b><div><strong>Recibes opciones</strong><p>Tu contacto se comparte solo cuando te responden.</p></div></article>
+          </div>
         </aside>
       </div>
+    </section>
 
-      <div id="home-last-need" class="home-last-need" hidden>
-        <span>◉</span><div><small>TU ÚLTIMA SOLICITUD</small><strong data-last-need-copy>Consultando estado…</strong></div><a id="home-last-need-link" href="seguimiento.html">Ver seguimiento →</a>
+    <section class="quick-actions">
+      <div class="container quick-grid">
+        <a class="action-card" href="necesito.html">
+          <span class="action-number">01</span>
+          <strong>Necesito algo</strong>
+          <p>Publica una solicitud rápida y deja que te encuentren.</p>
+        </a>
+        <a class="action-card" href="explorar.html">
+          <span class="action-number">02</span>
+          <strong>Quiero buscar negocios</strong>
+          <p>Explora categorías, perfiles y promociones disponibles.</p>
+        </a>
+        <a class="action-card" id="business-cta" href="login.html">
+          <span class="action-number">03</span>
+          <strong>Tengo un negocio</strong>
+          <p id="business-cta-copy">Inicia sesión o registra tu negocio para recibir oportunidades.</p>
+        </a>
       </div>
+    </section>
 
-      <section class="home-activity-card" aria-labelledby="home-activity-title">
-        <div class="home-activity-heading"><div><p class="need-eyebrow">ACTIVIDAD REAL · EN VIVO</p><h3 id="home-activity-title">Aliados está trabajando ahora.</h3><p id="home-need-activity-status">Consultando actividad real…</p></div><div class="home-activity-kpis"><span><strong id="home-need-activity-total">0</strong><small>abiertas</small></span><span><strong id="home-need-activity-replies">0</strong><small>respuestas</small></span></div></div>
-        <div id="home-need-activity-list" class="home-activity-list" aria-live="polite"><div class="home-activity-empty"><span>◌</span><div><strong>Cargando actividad…</strong><p>Solo mostramos solicitudes reales de la red.</p></div></div></div>
-      </section>
-    </div>
-  </section>
+    <section class="search-strip">
+      <div class="container search-strip-inner">
+        <div>
+          <span class="eyebrow">BÚSQUEDA RÁPIDA</span>
+          <h2>¿Ya sabes lo que buscas?</h2>
+        </div>
+        <form id="quick-search-form" class="search-form">
+          <input id="quick-search-input" type="search" placeholder="Ej. casco, comida, tatuajes, reparación..." aria-label="Buscar negocio o servicio">
+          <button class="btn btn-primary" type="submit">Buscar</button>
+        </form>
+      </div>
+    </section>
 
-  <main id="live-experience" class="live-home" hidden>
-    <section class="live-hero" id="live-home" aria-label="Negocios destacados">
-      <div class="live-slider-wrap">
-        <div class="live-slider" id="live-slider" aria-live="polite"></div>
-        <div class="live-slider-controls">
-          <button id="live-slider-prev" type="button" aria-label="Banner anterior">←</button>
-          <div id="live-slider-dots" class="live-slider-dots" aria-label="Seleccionar banner"></div>
-          <button id="live-slider-next" type="button" aria-label="Banner siguiente">→</button>
+    <section class="featured-section" id="negocios">
+      <div class="container section-head">
+        <div>
+          <span class="eyebrow">NEGOCIOS DESTACADOS</span>
+          <h2>Opciones reales para empezar.</h2>
+        </div>
+        <a class="text-link" href="explorar.html">Ver directorio completo →</a>
+      </div>
+      <div class="container">
+        <div id="featured-businesses" class="business-grid" aria-live="polite">
+          <div class="empty-card">Cargando negocios...</div>
         </div>
       </div>
+    </section>
 
-      <aside class="live-discovery-card">
-        <span class="live-network-status"><i></i> RED ACTIVA</span>
-        <img src="aliados-fantasma-logo.webp" alt="Aliados Fantasma">
-        <h2>Descubre negocios cerca de ti.</h2>
-        <p id="live-load-status">Cargando negocios de la red…</p>
-        <div class="live-search-box">
-          <label for="live-search">¿Qué estás buscando?</label>
-          <div>
-            <input id="live-search" type="search" placeholder="Comida, moda, servicios…" autocomplete="off">
-            <button id="live-search-button" type="button">Buscar</button>
-          </div>
+    <section class="categories-section">
+      <div class="container section-head compact">
+        <div>
+          <span class="eyebrow">CATEGORÍAS</span>
+          <h2>Explora por tipo de negocio.</h2>
         </div>
-        <a class="live-need-shortcut" href="#lo-necesito"><span>⚡</span><div><strong>¿No quieres buscar uno por uno?</strong><small>Publica lo que necesitas y deja que MATCH encuentre opciones.</small></div><b>→</b></a>
-        <div class="live-stats" aria-label="Resumen de la red">
-          <article><strong id="live-business-count">0</strong><span>Negocios</span></article>
-          <article><strong id="live-category-count">0</strong><span>Categorías</span></article>
-          <article><strong id="live-promotion-count">0</strong><span>Promociones</span></article>
+      </div>
+      <div class="container">
+        <div id="category-chips" class="chip-list" aria-live="polite">
+          <span class="chip muted">Cargando categorías...</span>
         </div>
-      </aside>
+      </div>
     </section>
 
-    <section class="live-section" id="live-categories">
-      <div class="live-section-heading">
-        <div><p>EXPLORA POR CATEGORÍA</p><h2>Encuentra lo que necesitas.</h2></div>
-        <a href="explorar.html">Ver directorio completo →</a>
+    <section class="how-section" id="como-funciona">
+      <div class="container section-head compact">
+        <div>
+          <span class="eyebrow">CÓMO FUNCIONA</span>
+          <h2>Dos caminos, una sola idea.</h2>
+        </div>
       </div>
-      <div class="live-category-list" id="live-category-list"></div>
+      <div class="container how-grid">
+        <article class="how-card">
+          <h3>Si necesitas algo</h3>
+          <ol>
+            <li>Publicas lo que buscas.</li>
+            <li>MATCH busca negocios compatibles.</li>
+            <li>Recibes propuestas.</li>
+          </ol>
+          <a class="btn btn-secondary" href="necesito.html">Publicar solicitud</a>
+        </article>
+        <article class="how-card">
+          <h3>Si tienes un negocio</h3>
+          <ol>
+            <li>Registras tu negocio.</li>
+            <li>Completas tu perfil.</li>
+            <li>Recibes oportunidades.</li>
+          </ol>
+          <a class="btn btn-secondary" href="registro.html">Registrar negocio</a>
+        </article>
+      </div>
     </section>
 
-    <section class="live-section" id="live-featured-section">
-      <div class="live-section-heading">
-        <div><p>RECOMENDADOS</p><h2>Negocios destacados.</h2></div>
-        <a href="explorar.html">Explorar todos →</a>
-      </div>
-      <div class="live-featured-grid" id="live-featured-grid"></div>
-    </section>
-
-    <section class="live-section hidden" id="live-promotions-section">
-      <div class="live-section-heading">
-        <div><p>OPORTUNIDADES DE LA RED</p><h2>Promociones activas.</h2></div>
-      </div>
-      <div class="live-promotion-track" id="live-promotion-track"></div>
-    </section>
-
-    <section class="live-section" id="live-businesses">
-      <div class="live-section-heading live-business-heading">
-        <div><p>NEGOCIOS DE LA RED</p><h2>Opciones disponibles para descubrir.</h2></div>
-        <strong id="live-result-count">0 negocios</strong>
-      </div>
-      <div class="live-business-grid" id="live-business-grid">
-        <div class="live-skeleton"></div>
-        <div class="live-skeleton"></div>
-        <div class="live-skeleton"></div>
-      </div>
-      <div class="live-empty hidden" id="live-empty">
-        <img src="aliados-fantasma-icono.webp" alt="">
-        <h3>No encontramos coincidencias.</h3>
-        <p>Prueba con otra búsqueda o selecciona una categoría diferente.</p>
-      </div>
-      <div class="live-directory-cta">
-        <div><span>¿Quieres aparecer aquí?</span><h2>Registra tu negocio y forma parte de la red.</h2></div>
-        <a class="button button-primary" href="registro.html">Registrar mi negocio <span>→</span></a>
+    <section class="bottom-cta">
+      <div class="container cta-box">
+        <div>
+          <span class="eyebrow">LISTO</span>
+          <h2>Aliados ahora es más claro: pedir, buscar o crecer.</h2>
+          <p>Elige la opción que necesitas y entra sin rodeos.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="necesito.html">Necesito algo</a>
+          <a class="btn btn-secondary" href="registro.html">Tengo un negocio</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-brand"><img src="aliados-fantasma-icono.webp" alt=""><span><strong>Aliados Fantasma</strong><small>Conectamos negocios, crecemos juntos.</small></span></div>
-    <div class="footer-links"><a href="#lo-necesito">Lo necesito</a><a href="terminos.html?from=index">Términos</a><a href="privacidad.html?from=index">Privacidad</a><a href="ayuda.html?from=index">Ayuda</a><a href="registro.html">Registro</a></div>
-    <span class="copyright">© 2026 Aliados Fantasma</span>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 Aliados Fantasma</span>
+      <div>
+        <a href="privacidad.html">Privacidad</a>
+        <a href="terminos.html">Términos</a>
+      </div>
+    </div>
   </footer>
 
-  <noscript><div class="noscript">Activa JavaScript para ver la cuenta regresiva.</div></noscript>
-  <div class="mobile-cta" aria-label="Acciones rápidas">
-    <a href="#lo-necesito">Lo necesito</a>
-    <a href="login.html?return=oportunidades.html">Oportunidades</a>
-  </div>
-  <script type="module" src="index-necesito.js?v=20260819-MATCH1"></script>
-  <script type="module" src="prelaunch-real.js?v=20260814-REAL1"></script>
-  <script type="module" src="lanzamiento.js?v=20260831-POLISH2"></script>
-  <script src="af-fantasmas-home.js?v=20260801-RC6.2"></script>
-  <script src="af-modern-2026.js?v=20260815-VIEWPORT1" defer></script>
-  <script src="mobile-2026.js?v=20260815-MOBILE-RC2" defer></script>
-  <script type="module" src="af-growth.js?v=20260831-G1"></script>
-  <script src="af-polish.js?v=20260831-POLISH2" defer></script>
+  <script type="module" src="index-simple.js?v=20260901-S1"></script>
+  <script type="module" src="push-client.js?v=20260831-PUSH2"></script>
 </body>
 </html>

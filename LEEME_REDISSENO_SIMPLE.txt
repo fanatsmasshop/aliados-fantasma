@@ -1,0 +1,20 @@
+ALIADOS FANTASMA · REDISEÑO SIMPLE
+
+Archivos incluidos:
+- index.html
+- af-simple.css
+- index-simple.js
+
+Qué cambia:
+- Portada mucho más simple y clara.
+- Elimina la estructura confusa/prelanzamiento de la home.
+- Prioriza 3 rutas: Necesito algo, Ver negocios, Tengo negocio.
+- Muestra negocios y categorías sin huecos gigantes.
+- Mantiene compatibilidad con Supabase, perfiles y notificaciones actuales.
+
+Cómo subir:
+1) Reemplaza estos archivos en la raíz de tu proyecto de Aliados.
+2) Espera a que Cloudflare termine el deploy.
+3) Haz Ctrl + F5.
+
+No requiere ejecutar SQL.
