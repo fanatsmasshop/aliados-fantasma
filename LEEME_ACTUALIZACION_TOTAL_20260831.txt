@@ -1,0 +1,34 @@
+ALIADOS FANTASMA — ACTUALIZACIÓN TOTAL 31/08/2026
+================================================
+
+ESTADO DE SUPABASE
+- MATCH 2.0 YA ESTÁ APLICADO en producción.
+- Privacidad de contacto + analítica YA ESTÁN APLICADAS en producción.
+- Hardening de RPC administrativas y RPC privadas de crecimiento YA ESTÁ APLICADO.
+- Los SQL 080/081/082/083 son respaldo; NO necesitas ejecutarlos otra vez.
+
+PUBLICACIÓN WEB
+- Sube TODOS los archivos de este ZIP a la raíz de Cloudflare Pages/GitHub, reemplazando los existentes.
+- No contiene carpetas.
+
+QUÉ CAMBIA
+- "Lo necesito" pasa a ser la acción principal post-lanzamiento.
+- MATCH asigna oportunidades por texto/producto, categoría, ubicación, verificación e historial.
+- "Ecatepec" y "Ecatepec de Morelos" se consideran la misma zona.
+- Negocios ya NO leen libremente todas las necesidades.
+- Oportunidades se obtienen por RPC segura y muestran MATCH XX% + razones.
+- Nombre/WhatsApp del cliente NO se muestran antes de responder.
+- Al responder, el servidor valida autorización, registra el acceso y solo entonces devuelve el WhatsApp.
+- Se elimina "Explorar toda la red" de oportunidades.
+- Panel admin incorpora "Crecimiento real" con solicitudes, cobertura, respuestas, resueltas, contactos y demanda.
+- PWA y notificaciones push comparten el mismo af-sw.js para evitar colisiones de service workers.
+- Caché optimizada: HTML/auth se revalidan; CSS/JS estáticos pueden reutilizarse.
+- robots/sitemap y textos post-lanzamiento actualizados.
+
+PRUEBAS MÍNIMAS
+1. Inicio: "Lo necesito" debe aparecer arriba y el lanzamiento vencido no debe dominar la vista.
+2. Publicar una necesidad con consentimiento.
+3. Iniciar sesión como negocio: solo deben aparecer oportunidades MATCH asignadas, sin nombre ni teléfono del cliente.
+4. Responder una oportunidad: después de registrar la propuesta debe abrir WhatsApp con el contacto autorizado.
+5. Activar notificaciones en el panel y comprobar que af-sw.js queda registrado.
+6. Como admin, abrir crecimiento.html y revisar métricas de 30 días.

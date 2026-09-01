@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /panel.html
+Disallow: /oportunidades.html
+Disallow: /crecimiento.html
+Disallow: /solicitudes.html
+Disallow: /pre-registros.html
+Sitemap: https://aliados-fantasma.pages.dev/sitemap.xml

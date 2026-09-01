@@ -21,6 +21,7 @@ const lightboxCaption = document.querySelector('#lightbox-caption');
 let galleryItems = [];
 let lightboxIndex = 0;
 let currentProfile = null;
+async function trackProfileEvent(type,metadata={}){try{if(!currentProfile?.id)return;await supabase.rpc('registrar_evento_directorio',{p_tipo:type,p_negocio_id:currentProfile.id,p_consulta:null,p_metadata:metadata||{}});}catch{}}
 
 const DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const DB_DAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -111,8 +112,7 @@ function vcard(p){
 }
 
 function renderProfile(p,{isPreview=false}={}){
-  currentProfile=p;
-  currentProfile=p;galleryItems=p.galeria||[];updateSeo(p,isPreview);
+  currentProfile=p;galleryItems=p.galeria||[];updateSeo(p,isPreview);if(!isPreview)trackProfileEvent('profile',{slug:p.slug||null});
   document.documentElement.style.setProperty('--profile-primary',p.color_primario||'#a855f7');
   document.documentElement.style.setProperty('--profile-secondary',p.color_secundario||'#22d3ee');
   previewBanner.classList.toggle('hidden',!isPreview);
@@ -166,6 +166,7 @@ function downloadBlob(content,name,type){const blob=new Blob([content],{type});c
 async function downloadQr(url,name){try{const qr=`https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&margin=24&data=${encodeURIComponent(url)}`;const r=await fetch(qr);if(!r.ok)throw new Error();const blob=await r.blob();const local=URL.createObjectURL(blob);const a=document.createElement('a');a.href=local;a.download=`qr-${slugify(name)}.png`;a.click();URL.revokeObjectURL(local);showToast('QR descargado');}catch{window.open(`https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=${encodeURIComponent(url)}`,'_blank','noopener');}}
 async function shareProfile(){if(!currentProfile)return;const url=currentProfile.slug?new URL(`perfil.html?slug=${encodeURIComponent(currentProfile.slug)}`,location.href).href:location.href;const data={title:currentProfile.nombre,text:currentProfile.descripcion_corta||`Conoce ${currentProfile.nombre} en Aliados Fantasma`,url};try{if(navigator.share){await navigator.share(data);}else{await navigator.clipboard.writeText(url);showToast('Enlace copiado');}}catch(e){if(e?.name!=='AbortError')showToast('No fue posible compartir');}}
 navShare.addEventListener('click',shareProfile);
+document.addEventListener('click',event=>{const a=event.target.closest('a[href]');if(!a||!currentProfile?.id)return;const href=String(a.getAttribute('href')||'');if(href.includes('wa.me/'))trackProfileEvent('whatsapp');else if(/google\.com\/maps|maps\.app\.goo\.gl/i.test(href))trackProfileEvent('maps');else if(/facebook\.com|instagram\.com|tiktok\.com|youtube\.com/i.test(href))trackProfileEvent('red_social',{host:(()=>{try{return new URL(a.href).hostname}catch{return ''}})()});});
 
 function openLightbox(index){if(!galleryItems.length)return;lightboxIndex=Math.max(0,Math.min(index,galleryItems.length-1));const item=galleryItems[lightboxIndex];lightboxImage.src=item.imagen_url;lightboxImage.alt=`Imagen ${lightboxIndex+1} de ${currentProfile?.nombre||'negocio'}`;lightboxCaption.textContent=`${lightboxIndex+1} de ${galleryItems.length}`;lightbox.classList.remove('hidden');document.body.style.overflow='hidden';document.querySelector('#lightbox-close').focus();}
 function closeLightbox(){lightbox.classList.add('hidden');document.body.style.overflow='';}

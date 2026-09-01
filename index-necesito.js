@@ -71,7 +71,7 @@ function validate(payload){
   if(payload.municipio.length<2)return'Escribe tu municipio o alcaldía.';
   if(payload.nombre_cliente.length<2)return'Escribe tu nombre o apodo.';
   if(payload.whatsapp.length<10||payload.whatsapp.length>15)return'Escribe un WhatsApp válido de 10 a 15 dígitos.';
-  if(!form.elements.acepta_compartir_contacto.checked)return'Debes autorizar a Aliados a usar tu WhatsApp para dar seguimiento a esta solicitud.';
+  if(!form.elements.acepta_compartir_contacto.checked)return'Debes autorizar compartir tu contacto con negocios registrados.';
   if(payload.presupuesto_max!=null&&(!Number.isFinite(payload.presupuesto_max)||payload.presupuesto_max<0))return'Escribe un presupuesto válido o déjalo vacío.';
   return'';
 }
@@ -90,15 +90,15 @@ async function publishNeed(event){
   const fd=new FormData(form);const category=selectedCategory();const budgetRaw=String(fd.get('presupuesto_max')||'').trim();
   const payload={categoria_id:category.id,categoria_texto:category.name,nombre_cliente:String(fd.get('nombre_cliente')||'').trim(),whatsapp:cleanPhone(fd.get('whatsapp')),titulo:String(fd.get('titulo')||'').trim(),descripcion:String(fd.get('descripcion')||'').trim(),estado_region:String(fd.get('estado_region')||'').trim(),municipio:String(fd.get('municipio')||'').trim(),colonia:null,presupuesto_min:null,presupuesto_max:budgetRaw?Number(budgetRaw):null,fecha_necesaria:null,urgencia:String(fd.get('urgencia')||'normal')};
   const validationError=validate(payload);if(validationError){showAlert(validationError);return;}
-  submitButton.disabled=true;submitButton.innerHTML='Buscando una opción…';
-  const {data,error}=await supabase.rpc('af_publicar_necesidad',{
-    p_categoria_id:payload.categoria_id,p_categoria_texto:payload.categoria_texto,p_nombre_cliente:payload.nombre_cliente,p_whatsapp:payload.whatsapp,p_titulo:payload.titulo,p_descripcion:payload.descripcion,p_estado_region:payload.estado_region,p_municipio:payload.municipio,p_colonia:payload.colonia,p_presupuesto_min:payload.presupuesto_min,p_presupuesto_max:payload.presupuesto_max,p_fecha_necesaria:payload.fecha_necesaria,p_urgencia:payload.urgencia
+  submitButton.disabled=true;submitButton.innerHTML='Buscando coincidencias…';
+  const {data,error}=await supabase.rpc('af_publicar_necesidad_v2',{
+    p_categoria_id:payload.categoria_id,p_categoria_texto:payload.categoria_texto,p_nombre_cliente:payload.nombre_cliente,p_whatsapp:payload.whatsapp,p_titulo:payload.titulo,p_descripcion:payload.descripcion,p_estado_region:payload.estado_region,p_municipio:payload.municipio,p_colonia:payload.colonia,p_presupuesto_min:payload.presupuesto_min,p_presupuesto_max:payload.presupuesto_max,p_fecha_necesaria:payload.fecha_necesaria,p_urgencia:payload.urgencia,p_acepta_compartir_contacto:true
   });
   submitButton.disabled=false;submitButton.innerHTML='Publicar y recibir opciones <span>→</span>';
   if(error){
     console.error(error);const text=String(error.message||'');
     if(/Límite alcanzado/i.test(text))showAlert('Ya publicaste 3 solicitudes con este WhatsApp en las últimas 24 horas. Intenta de nuevo mañana.');
-    else if(/af_publicar_necesidad|schema cache|permission denied|does not exist/i.test(text))showAlert('El sistema de búsqueda todavía no está disponible en esta publicación. Actualiza los archivos y vuelve a intentar.');
+    else if(/af_publicar_necesidad(?:_v2)?|schema cache|permission denied|does not exist/i.test(text))showAlert('El motor MATCH todavía no está disponible en esta publicación. Actualiza los archivos y vuelve a intentar.');
     else showAlert('No pudimos publicar la solicitud. Revisa los datos e inténtalo nuevamente.');
     return;
   }
@@ -116,7 +116,7 @@ function relativeTime(value){
 function activityState(item){
   if(item.respuestas_count>0)return`✓ ${item.respuestas_count} respuesta${item.respuestas_count===1?'':'s'}`;
   if(item.sin_cobertura)return'👻 Aliados buscando proveedor';
-  if(item.matches_count>0)return'⌕ Aliados está consultando una opción';
+  if(item.matches_count>0)return`⚡ ${item.matches_count} negocio${item.matches_count===1?'':'s'} avisado${item.matches_count===1?'':'s'}`;
   return'⌕ Buscando coincidencias';
 }
 async function loadActivity(){
@@ -137,16 +137,16 @@ async function refreshLastNeed(){
 
 async function setupBusinessEntry(){
   if(!businessButton||!businessStatus)return;
-  businessButton.href='login.html?return=oportunidades.html';businessStatus.textContent='Si tienes un negocio, inicia sesión para recibir oportunidades que coincidan contigo.';businessButton.textContent='Entrar a oportunidades →';if(businessMeta)businessMeta.textContent='Aliados revisa automáticamente qué negocio puede atender mejor cada solicitud.';
+  businessButton.href='login.html?return=oportunidades.html';businessStatus.textContent='Si tienes un negocio, inicia sesión para recibir oportunidades que coincidan contigo.';businessButton.textContent='Entrar a oportunidades →';if(businessMeta)businessMeta.textContent='El motor MATCH prioriza categoría y cercanía, y te avisa cuando haya una coincidencia.';
   if(!supabase)return;
   try{
     const {data:{user}}=await supabase.auth.getUser();if(!user)return;
     const [{data:profile},{data:memberships,error:membershipError}]=await Promise.all([supabase.from('perfiles').select('rol,activo').eq('id',user.id).maybeSingle(),supabase.from('miembros_negocio').select('negocio_id,activo,negocios(id,nombre,estado_operativo)').eq('perfil_id',user.id).eq('activo',true)]);if(membershipError)throw membershipError;
     const activeMembership=(memberships||[]).find(row=>row.negocios&&!['suspendido','eliminacion_programada'].includes(row.negocios.estado_operativo));const isAdmin=profile?.rol==='administrador'&&profile?.activo===true;
-    if(!activeMembership&&!isAdmin){businessStatus.textContent='Tu sesión está activa, pero todavía no encontramos un negocio habilitado para recibir solicitudes.';businessButton.href='panel.html';businessButton.textContent='Completar mi negocio →';return;}
+    if(!activeMembership&&!isAdmin){businessStatus.textContent='Tu sesión está activa, pero todavía no encontramos un negocio habilitado para recibir matches.';businessButton.href='panel.html';businessButton.textContent='Completar mi negocio →';return;}
     if(activeMembership){
-      const biz=activeMembership.negocios;let countLabel='Aliados está listo para avisarte.';
-      try{const {count,error}=await supabase.from('matches_necesidad').select('id',{count:'exact',head:true}).eq('negocio_id',biz.id).eq('turno_estado','activo');if(!error&&Number.isFinite(count))countLabel=count?`${count} solicitud${count===1?'':'es'} esperando respuesta ahora.`:'No tienes solicitudes nuevas ahora; te avisaremos cuando llegue una compatible.';}catch{}
+      const biz=activeMembership.negocios;let countLabel='MATCH está listo para avisarte.';
+      try{const {count,error}=await supabase.from('matches_necesidad').select('id',{count:'exact',head:true}).eq('negocio_id',biz.id).in('estado',['notificado','visto']);if(!error&&Number.isFinite(count))countLabel=count?`${count} oportunidad${count===1?'':'es'} asignada${count===1?'':'s'} ahora.`:'No tienes matches nuevos ahora; te avisaremos cuando llegue uno.';}catch{}
       businessStatus.textContent=`${biz.nombre}: ${countLabel}`;businessButton.href=`oportunidades.html?business=${encodeURIComponent(biz.id)}`;businessButton.textContent='Ver mis oportunidades →';if(businessMeta)businessMeta.textContent='Las nuevas oportunidades aparecen en tu campana en tiempo real.';
     }else if(isAdmin){businessStatus.textContent='Sesión administrativa activa. Revisa demanda sin cobertura y oportunidades.';businessButton.href='demanda.html';businessButton.textContent='Ver demanda de la red →';}
   }catch(error){console.warn('No se pudo personalizar el acceso a oportunidades:',error);}
@@ -155,5 +155,3 @@ async function setupBusinessEntry(){
 if(form){
   form.addEventListener('submit',publishNeed);anotherButton?.addEventListener('click',resetForm);setDefaultLocation();loadCategories();bindIndexLinks();setupBusinessEntry();refreshLastNeed();loadActivity();window.setInterval(loadActivity,30000);
 }
-
-const homeCopy=document.querySelector('#home-need-copy');homeCopy?.addEventListener('click',async()=>{const href=trackingLink?.href;if(!href)return;try{await navigator.clipboard.writeText(new URL(href,location.href).href);homeCopy.textContent='✓ Enlace copiado';setTimeout(()=>homeCopy.textContent='Copiar enlace',1800);}catch{}});

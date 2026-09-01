@@ -1,18 +1,16 @@
 {
-  "name": "Aliados Fantasma",
-  "short_name": "Aliados",
-  "description": "Oportunidades y negocios locales en Aliados Fantasma.",
-  "start_url": "/panel.html",
-  "scope": "/",
-  "display": "standalone",
-  "background_color": "#06080d",
-  "theme_color": "#06080d",
-  "icons": [
-    {
-      "src": "/aliados-fantasma-icono.webp",
-      "sizes": "any",
-      "type": "image/webp",
-      "purpose": "any maskable"
-    }
+  "name":"Aliados Fantasma",
+  "short_name":"Aliados",
+  "description":"MATCH conecta lo que necesitas con negocios compatibles de la red local.",
+  "start_url":"/index.html",
+  "scope":"/",
+  "display":"standalone",
+  "background_color":"#06080d",
+  "theme_color":"#06080d",
+  "icons":[{"src":"/aliados-fantasma-icono.webp","sizes":"any","type":"image/webp","purpose":"any maskable"}],
+  "shortcuts":[
+    {"name":"Lo necesito","short_name":"Necesito","url":"/index.html#lo-necesito"},
+    {"name":"Oportunidades","short_name":"Oportunidades","url":"/oportunidades.html"},
+    {"name":"Explorar negocios","short_name":"Explorar","url":"/explorar.html"}
   ]
 }
