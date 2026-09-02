@@ -1,0 +1,14 @@
+-- RESPALDO / DOCUMENTACIÓN. YA APLICADO EN PRODUCCIÓN EL 02/09/2026.
+-- NO EJECUTAR EN LA INSTANCIA ACTUAL.
+-- Proyecto: aliados-fantasma / cshjnpjqvflwmtypuyvc
+
+-- Cambios aplicados:
+-- - Revocado EXECUTE anónimo en RPC admin_*, propietario_*, usuario_* y RPC privadas de negocio.
+-- - aceptar_invitacion_negocio requiere sesión autenticada.
+-- - af_oportunidades_para_negocio / responder / growth requieren sesión.
+-- - publicar necesidad y seguimiento por token permanecen públicos intencionalmente.
+-- - helpers notificar_* y rls_auto_enable no son RPC directos para anon/authenticated.
+-- - af_slug(text) con search_path public, pg_temp.
+-- - índices operativos en contact_access_log.user_id, historial_negocio.negocio_id e invitaciones_negocio.negocio_id.
+-- - eliminado índice duplicado idx_af_perfiles_borrador_estado.
+-- - configuracion_sistema: modo_lanzamiento='abierto', presentacion_modo='ninguna'.

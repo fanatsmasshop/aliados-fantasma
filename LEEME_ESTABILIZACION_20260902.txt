@@ -1,0 +1,33 @@
+ALIADOS FANTASMA · ESTABILIZACIÓN + MEJORA · 02/09/2026
+
+OBJETIVO
+Mantener la portada simple, hacer que búsqueda/categorías funcionen de punta a punta, simplificar "Lo necesito", panel y oportunidades, y cerrar exposición anónima innecesaria sin romper MATCH.
+
+CAMBIOS PRINCIPALES
+- Aliados queda oficialmente en estado ABIERTO, sin lógica de presentación/prelanzamiento pasada.
+- Búsqueda de la portada (?q=) ahora llega al directorio con el filtro aplicado.
+- Categorías de la portada (?categoria=) ahora se resuelven por slug o nombre.
+- Estado/municipio también pueden abrirse por URL y los filtros sincronizan la URL.
+- "Lo necesito" simplificado: datos esenciales primero; presupuesto/colonia/fecha son opcionales desplegables.
+- Directorio más compacto y centrado en buscar.
+- Panel del negocio y Oportunidades con jerarquía más clara y mejor adaptación móvil.
+- Se conservan MATCH 2.0, privacidad de WhatsApp, push y seguimiento.
+- RPC administrativas/propietario/usuario ya no son ejecutables por visitantes anónimos.
+- Helpers de trigger ya no se exponen como RPC directos.
+- af_slug tiene search_path fijo; se corrigió un índice duplicado y se agregaron índices operativos.
+
+BASE DE DATOS
+Los cambios de Supabase YA FUERON APLICADOS por ChatGPT.
+NO ejecutes el archivo SQL de respaldo en la instancia actual.
+
+PUBLICACIÓN
+1. Sube TODOS los archivos web de este ZIP a la raíz, reemplazando los existentes.
+2. No ejecutes SQL.
+3. Espera a que Cloudflare Pages termine.
+4. Cierra las pestañas de Aliados, abre de nuevo y haz Ctrl+F5 una sola vez.
+
+PRUEBA RÁPIDA
+- En Inicio busca una palabra: debe abrir el Directorio filtrado.
+- Toca una categoría: debe abrir el Directorio en esa categoría.
+- Publica una necesidad de prueba (si quieres, luego ciérrala desde seguimiento).
+- En una cuenta de negocio, abre Oportunidades y Panel.

@@ -57,3 +57,15 @@
 /supabase/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+/directorio.js
+  Cache-Control: no-cache, must-revalidate
+
+/necesito.js
+  Cache-Control: no-cache, must-revalidate
+
+/index-simple.js
+  Cache-Control: no-cache, must-revalidate
+
+/af-simple-pages.css
+  Cache-Control: no-cache, must-revalidate
